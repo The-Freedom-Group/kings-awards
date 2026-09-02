@@ -44,21 +44,42 @@
 
   /* ── split headlines: words for h2, letters for the name ──── */
   function split(el, mode, step) {
-    var parts = mode === "letters"
-      ? el.textContent.split("")
-      : el.textContent.trim().split(/\s+/);
+    if (mode === "letters") {
+      var chars = el.textContent.split("");
+      el.textContent = "";
+      chars.forEach(function (t, i) {
+        if (t === " ") { el.appendChild(document.createTextNode(" ")); return; }
+        var box = document.createElement("span"); box.className = "wa";
+        var ink = document.createElement("i"); ink.textContent = t;
+        ink.style.setProperty("--d", (i * step) + "s");
+        box.appendChild(ink); el.appendChild(box);
+      });
+      return;
+    }
+    /* words: walk the child nodes so <br> and inline elements survive */
+    var nodes = Array.prototype.slice.call(el.childNodes), out = [];
+    nodes.forEach(function (nd) {
+      if (nd.nodeType === 3) {
+        nd.textContent.split(/(\s+)/).forEach(function (tk) {
+          if (!tk) return;
+          if (/^\s+$/.test(tk)) { out.push(document.createTextNode(" ")); return; }
+          var box = document.createElement("span"); box.className = "wa";
+          var ink = document.createElement("i"); ink.textContent = tk;
+          box.appendChild(ink); out.push(box);
+        });
+      } else { out.push(nd); }
+    });
     el.textContent = "";
-    parts.forEach(function (t, i) {
-      if (mode === "letters" && t === " ") { el.appendChild(document.createTextNode(" ")); return; }
-      var box = document.createElement("span"); box.className = "wa";
-      var ink = document.createElement("i"); ink.textContent = t;
-      ink.style.setProperty("--d", (i * step) + "s");
-      box.appendChild(ink); el.appendChild(box);
-      if (mode !== "letters" && i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+    var wi = 0;
+    out.forEach(function (nd) {
+      el.appendChild(nd);
+      if (nd.classList && nd.classList.contains("wa")) {
+        nd.firstChild.style.setProperty("--d", (wi * step) + "s"); wi++;
+      }
     });
   }
   if (!reduce) {
-    $$(".ch h2, .rec-head h2, .slab h2").forEach(function (el) { split(el, "words", 0.055); });
+    $$(".ch h2, .slab h2").forEach(function (el) { split(el, "words", 0.055); });
   }
 
   /* ── topographic contours behind every panel ──────────────── */
@@ -223,14 +244,14 @@
     var heroPrefix = "", heroExit = null;
     if (heroEl) {
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
-      var yMain  = hT + hH * 0.775;          // the long horizontal
+      var yMain  = hT + hH * 0.81;           // the long horizontal
       var yTop   = hT + hH * 0.545;          // the lifted horizontal
       var xLift  = W * 0.665;                // where it starts to rise
       var xTrunk = W * 0.822;                // the descending trunk
       var xTerm  = W * 0.886;                // spur terminals
       var yExit  = hT + hH * 0.985;          // where it leaves the hero
       var r = Math.min(34, W * 0.022);
-      var bys = [0.712, 0.769, 0.826, 0.883].map(function (f) { return hT + hH * f; });
+      var bys = [0.748, 0.803, 0.858, 0.913].map(function (f) { return hT + hH * f; });
 
       heroPrefix =
         "M " + LX.toFixed(1) + " " + yMain.toFixed(1) +
@@ -561,6 +582,9 @@
   var mE = $("#mExplore"), mR = $("#mRecord"), wipe = $("#wipe");
   function applyView(v) {
     document.body.dataset.view = v;
+    if (v === "record") {
+      $$("#record .rv").forEach(function (e) { e.classList.add("in"); });
+    }
     mE.setAttribute("aria-pressed", v === "explore");
     mR.setAttribute("aria-pressed", v === "record");
     if (v === "record") document.body.classList.remove("dark-chrome");
