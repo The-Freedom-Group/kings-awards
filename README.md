@@ -23,7 +23,7 @@ is inline or local.
 then. That is one week from today. If you intend to apply this cycle, the placeholder content
 below needs filling in the next few days.
 
-**2. Categories: the STAFF site supports a Promoting Opportunity (social mobility) application. The founder page's category is still to be confirmed.**
+**2. Categories: the STAFF site supports a Promoting Opportunity (social mobility) application. The FOUNDER page supports a Young Founder application.**
 Young Founder is out regardless — Companies House records Tom's DOB as April 1996, making
 him 31 on 6 May 2027, past the 18–30 limit.
 
@@ -39,7 +39,11 @@ The social mobility criteria the sites now mirror:
 
 Where this lives: the staff site's **chapter 07 — The Open Door** is the programme page
 (four criteria activities + the four proofs + the two-year test, all with evidence slots).
-The founder page is untouched by this category pending its own.
+The founder page carries the Young Founder gates in its Verified Record: actively
+leading 6 May 2026 - 8 Sept 2027 (already evidenced by the register), the 18-30 age test
+(WARNING - UNRESOLVED: the register says April 1996 -> 31 on 6 May 2027; settle this before
+anything else), and the commercial threshold (250k GBP turnover or 500k GBP external
+funding, evidence outstanding).
 
 ⚠️ **The two-year test is a hard gate.** If the programme cannot show a start date ≥2
 years before submission with a dated record behind it, this category must wait a cycle —
