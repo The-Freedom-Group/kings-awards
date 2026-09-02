@@ -1,10 +1,10 @@
 /* ══════════════════════════════════════════════════════════════════
-   THE PEOPLE — engine
-   Vertical scroll walks the page sideways through nine bays. Poster
-   words drift at their own depth, each bay's content parallaxes
-   against the track, the track leans with your speed, embers answer
-   the cursor, and the training-room quiz keeps score. Mobile and
-   reduced-motion get the same bays stacked vertically.
+   THE PEOPLE — engine (vertical)
+   Conventional scrolling, maximal surface: per-section contours and
+   tinted atmospheres, poster words sliding against the scroll, a
+   velocity marquee, cursor-stirred embers, spotlight, magnetics and
+   tilt, the scroll-lit ladder in The Open Door, the scored quiz, the
+   drill, and the protecting-since ticker.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -19,81 +19,13 @@
   var lerp  = function (a, b, t) { return a + (b - a) * t; };
   var pad2  = function (x) { return x < 10 ? "0" + x : "" + x; };
 
-  var horizontal = function () { return window.innerWidth > 900 && !reduce; };
-
   /* ── entrance ─────────────────────────────────────────────── */
   function ready() { document.body.classList.add("ready"); }
   if (reduce) { ready(); }
   else if (document.readyState === "complete") { setTimeout(ready, 1300); }
   else { window.addEventListener("load", function () { setTimeout(ready, 1300); }); }
 
-  /* ── geometry ─────────────────────────────────────────────── */
-  var walk = $("#walk"), track = $("#track"), bays = $$(".bayp");
-  var trackW = 0, maxX = 0, scrollLen = 0;
-
-  function layout() {
-    if (!walk || !track) return;
-    if (!horizontal()) { walk.style.height = ""; track.style.transform = ""; return; }
-    trackW = track.scrollWidth;
-    maxX = Math.max(0, trackW - window.innerWidth);
-    scrollLen = maxX + window.innerHeight;
-    walk.style.height = scrollLen + "px";
-  }
-  function progress() {
-    var y = window.pageYOffset || document.documentElement.scrollTop;
-    return maxX ? clamp(y / (scrollLen - window.innerHeight), 0, 1) : 0;
-  }
-  function bayX(i) {
-    var x = 0;
-    for (var k = 0; k < i; k++) x += bays[k].offsetWidth;
-    return x;
-  }
-  function goBay(i) {
-    i = clamp(i, 0, bays.length - 1);
-    if (horizontal()) {
-      var x = Math.min(bayX(i), maxX);
-      window.scrollTo({ top: maxX ? x / maxX * (scrollLen - window.innerHeight) : 0,
-                        behavior: reduce ? "auto" : "smooth" });
-    } else {
-      bays[i].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-    }
-  }
-  function bayAt(p) {
-    var cx = p * maxX + window.innerWidth * 0.5, acc = 0;
-    for (var i = 0; i < bays.length; i++) {
-      acc += bays[i].offsetWidth;
-      if (cx <= acc) return i;
-    }
-    return bays.length - 1;
-  }
-
-  /* ── HUD ──────────────────────────────────────────────────── */
-  var hudBay = $("#hudBay"), hudN = $("#hudN"), hudT = $("#hudT"), hudFill = $("#hudFill");
-  var dots = $("#dots"), dotEls = [];
-  if (hudT) hudT.textContent = pad2(bays.length);
-  bays.forEach(function (b, i) {
-    var d = document.createElement("button");
-    d.type = "button";
-    d.setAttribute("data-lb", pad2(i + 1) + " · " + b.getAttribute("data-bay"));
-    d.setAttribute("aria-label", "Go to " + b.getAttribute("data-bay"));
-    d.addEventListener("click", function () { goBay(i); });
-    dots.appendChild(d); dotEls.push(d);
-  });
-  function hud(p) {
-    if (hudFill) hudFill.style.width = (p * 100).toFixed(2) + "%";
-    var cur;
-    if (horizontal()) { cur = bayAt(p); }
-    else {
-      var vm = (window.pageYOffset || 0) + window.innerHeight * 0.4;
-      cur = 0;
-      for (var k = 0; k < bays.length; k++) if (vm >= bays[k].offsetTop) cur = k;
-    }
-    if (hudBay) hudBay.textContent = bays[cur].getAttribute("data-bay");
-    if (hudN) hudN.textContent = pad2(cur + 1);
-    dotEls.forEach(function (d, di) { d.classList.toggle("on", di === cur); });
-  }
-
-  /* ── per-bay furniture: contours, poster word, spotlight ──── */
+  /* ── per-section furniture: contours, poster word, spotlight ─ */
   function rnd(seed) {
     return function () {
       seed = (seed * 1103515245 + 12345) & 0x7fffffff;
@@ -121,8 +53,9 @@
     }
     return g + "</g>";
   }
+  var sections = $$("main section");
   var pws = [];
-  bays.forEach(function (b, i) {
+  sections.forEach(function (sec, i) {
     var rand = rnd(83 + i * 173);
     var fx = document.createElement("div");
     fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
@@ -131,25 +64,28 @@
       contourGroup(200 + rand() * 180, 140 + rand() * 120, 150 + rand() * 70, 5, rand, anim[0]) +
       contourGroup(700 + rand() * 200, 380 + rand() * 150, 180 + rand() * 80, 6, rand,
                    anim[1] + (i % 3 === 1 ? " hot" : "")) + "</svg>";
-    b.insertBefore(fx, b.firstChild);
+    sec.insertBefore(fx, sec.firstChild);
 
-    var w = document.createElement("span");
-    w.className = "pw"; w.setAttribute("aria-hidden", "true");
-    w.textContent = b.getAttribute("data-word") || "";
-    b.insertBefore(w, b.firstChild.nextSibling);
-    pws.push({ el: w, bay: b });
+    var word = sec.getAttribute("data-word");
+    if (word) {
+      var w = document.createElement("span");
+      w.className = "pw"; w.setAttribute("aria-hidden", "true");
+      w.textContent = word;
+      sec.insertBefore(w, sec.firstChild.nextSibling);
+      pws.push({ el: w, sec: sec });
+    }
 
     if (fine && !reduce) {
       var sp = document.createElement("div");
       sp.className = "spot"; sp.setAttribute("aria-hidden", "true");
-      b.appendChild(sp);
-      b.addEventListener("mousemove", (function (spx, bb) {
+      sec.appendChild(sp);
+      sec.addEventListener("mousemove", (function (spx, ss) {
         return function (e) {
-          var r = bb.getBoundingClientRect();
+          var r = ss.getBoundingClientRect();
           spx.style.setProperty("--sx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
           spx.style.setProperty("--sy", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
         };
-      })(sp, b), { passive: true });
+      })(sp, sec), { passive: true });
     }
   });
 
@@ -160,7 +96,7 @@
   } else {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
-    }, { rootMargin: "0px -6% 0px -6%", threshold: 0.05 });
+    }, { rootMargin: "-4% 0px -8% 0px", threshold: 0.05 });
     watched.forEach(function (e) { io.observe(e); });
   }
 
@@ -232,7 +168,7 @@
     window.addEventListener("mousemove", function (e) {
       mx = e.clientX; my = e.clientY; curSeen = true;
       var hot = e.target.closest &&
-        e.target.closest("a,button,[data-mag],.card,.ext,.dots button");
+        e.target.closest("a,button,[data-mag],.card,.ext,.spine a");
       cur.classList.toggle("big", !!hot);
     }, { passive: true });
     document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
@@ -270,6 +206,22 @@
     });
   }
 
+  /* ── marquee ──────────────────────────────────────────────── */
+  var marquees = [];
+  $$(".mq-t").forEach(function (t) {
+    var base = t.getAttribute("data-base") || "";
+    var html = "";
+    for (var i = 0; i < 6; i++) html += "<span>" + base + "</span>";
+    t.innerHTML = html;
+    marquees.push({ el: t, x: 0, dir: +(t.getAttribute("data-mq") || 1), w: 0 });
+  });
+  function measureMarquees() {
+    marquees.forEach(function (m) {
+      var first = m.el.firstElementChild;
+      m.w = first ? first.offsetWidth : 0;
+    });
+  }
+
   /* ── the drill ────────────────────────────────────────────── */
   var drillBtn = $("#drillBtn"), toast = $("#toast"), drillLock = false;
   function say(msg) {
@@ -293,8 +245,6 @@
       }, 2550);
     });
   }
-  var walkBtn = $("#walkBtn");
-  if (walkBtn) walkBtn.addEventListener("click", function () { goBay(1); });
 
   /* ── know your fire ───────────────────────────────────────── */
   var FIRE = {
@@ -394,17 +344,10 @@
     tS.textContent = pad2(s % 60);
   }
 
-  /* ── keyboard ─────────────────────────────────────────────── */
-  window.addEventListener("keydown", function (e) {
-    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-    if (e.target && /INPUT|TEXTAREA|BUTTON/.test(e.target.tagName)) return;
-    e.preventDefault();
-    goBay(bayAt(progress()) + (e.key === "ArrowRight" ? 1 : -1));
-  });
-
   /* ── master loop ──────────────────────────────────────────── */
-  var lastY = -1, velY = 0, laneFill = $("#laneFill"), stopEls = $$("#stops .stop"),
-      stopsEl = $("#stops");
+  var chrome = $("#chrome"), progFill = $("#progFill"), spine = $$(".spine a");
+  var laneFill = $("#laneFill"), stepEls = $$("#steps .step"), stepsEl = $("#steps");
+  var lastY = -1, velY = 0;
 
   function frame(ts) {
     var y = window.pageYOffset || document.documentElement.scrollTop;
@@ -421,69 +364,88 @@
     embers(ts || 0);
     ticker();
 
-    var p = progress();
-    if (horizontal()) {
-      /* the track leans into your speed */
-      var skew = clamp(-velY * 0.02, -3.4, 3.4);
-      track.style.transform = "translate3d(" + (-p * maxX).toFixed(1) + "px,0,0)" +
-        " skewX(" + skew.toFixed(2) + "deg)";
-    }
-    hud(p);
-
-    if (horizontal() && !reduce) {
-      var vw = window.innerWidth;
-      for (var i = 0; i < bays.length; i++) {
-        var r = bays[i].getBoundingClientRect();
-        if (r.right < -160 || r.left > vw + 160) continue;
-        var mid = (r.left + r.right) / 2 - vw / 2;
-        /* poster word drifts deeper than the track */
-        pws[i].el.style.transform = "translate3d(" + (mid * 0.24).toFixed(1) + "px,-50%,0)";
-        /* the bay's content eases slightly against travel */
-        var inner = bays[i].querySelector(".inner");
-        if (inner) inner.style.transform = "translate3d(" + (mid * -0.045).toFixed(1) + "px,0,0)";
-      }
-      if (heroShot) {
-        var hp = clamp(p * 6, 0, 1);
-        heroShot.style.transform = "translate3d(" + (hp * 60).toFixed(1) + "px,0,0) scale(1.05)";
-      }
-      if (laneFill && stopsEl) {
-        var sr = stopsEl.getBoundingClientRect();
-        var lp = clamp((vw * 0.9 - sr.left) / (sr.width + vw * 0.4), 0, 1);
-        laneFill.style.width = (lp * 100).toFixed(1) + "%";
-        for (var s2 = 0; s2 < stopEls.length; s2++) {
-          stopEls[s2].classList.toggle("lit", lp >= (s2 + 0.6) / stopEls.length);
-        }
-      }
-      $$("[data-drift]").forEach(function (img) {
-        var fr = img.getBoundingClientRect();
-        var fp = clamp((vw - fr.left) / (vw + fr.width), 0, 1);
-        img.style.transform = "translate3d(" + ((fp - 0.5) * 40).toFixed(1) + "px,0,0) scale(1.1)";
+    if (!reduce) {
+      marquees.forEach(function (m) {
+        if (!m.w) return;
+        m.x -= m.dir * (0.55 + Math.min(6, Math.abs(velY) * 0.12));
+        if (m.x <= -m.w) m.x += m.w;
+        if (m.x > 0) m.x -= m.w;
+        m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
       });
-    } else if (!horizontal() && laneFill) {
-      laneFill.style.width = "100%";
-      stopEls.forEach(function (s) { s.classList.add("lit"); });
     }
 
+    if (moved || velY !== 0) {
+      if (chrome) chrome.classList.toggle("stuck", y > 40);
+      if (progFill) {
+        var mx3 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+        progFill.style.width = (clamp(y / mx3, 0, 1) * 100).toFixed(2) + "%";
+      }
+
+      /* spine tracking */
+      var vm = y + window.innerHeight * 0.42, cur2 = null;
+      sections.forEach(function (s) {
+        if (vm >= s.offsetTop && vm < s.offsetTop + s.offsetHeight) cur2 = s.id;
+      });
+      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+
+      if (!reduce) {
+        var vh = window.innerHeight;
+        /* poster words slide against the scroll, and lean with speed */
+        for (var i = 0; i < pws.length; i++) {
+          var ps = pws[i].sec;
+          var pp = (y + vh - ps.offsetTop) / (vh + ps.offsetHeight);
+          if (pp > -0.1 && pp < 1.1) {
+            pws[i].el.style.transform = "translate3d(" +
+              ((pp - 0.5) * -window.innerWidth * 0.2).toFixed(1) + "px,-50%,0)" +
+              " skewX(" + clamp(-velY * 0.06, -4, 4).toFixed(2) + "deg)";
+          }
+        }
+        /* hero photo settles */
+        if (heroShot) {
+          var hp = clamp(y / (vh || 1), 0, 1);
+          heroShot.style.transform = "translate3d(0," + (hp * -40).toFixed(1) + "px,0) scale(1.04)";
+        }
+        /* the ladder draws as it enters */
+        if (laneFill && stepsEl) {
+          var sr = stepsEl.getBoundingClientRect();
+          var lp = clamp((vh * 0.88 - sr.top) / (sr.height + vh * 0.3), 0, 1);
+          laneFill.style.width = (lp * 100).toFixed(1) + "%";
+          for (var s2 = 0; s2 < stepEls.length; s2++) {
+            stepEls[s2].classList.toggle("lit", lp >= (s2 + 0.6) / stepEls.length);
+          }
+        }
+        /* photographs drift inside their crops */
+        $$("[data-drift]").forEach(function (img) {
+          var fr = img.getBoundingClientRect();
+          var fp = clamp((vh - fr.top) / (vh + fr.height), 0, 1);
+          img.style.transform = "translate3d(0," + ((fp - 0.5) * 42).toFixed(1) + "px,0) scale(1.1)";
+        });
+      }
+    }
     requestAnimationFrame(frame);
   }
 
   if (reduce) {
     if (laneFill) laneFill.style.width = "100%";
-    stopEls.forEach(function (s) { s.classList.add("lit"); });
-    hud(0);
+    stepEls.forEach(function (s) { s.classList.add("lit"); });
+    function still() {
+      var y = window.pageYOffset || 0;
+      if (chrome) chrome.classList.toggle("stuck", y > 40);
+      var vm = y + window.innerHeight * 0.42, cur2 = null;
+      sections.forEach(function (s) {
+        if (vm >= s.offsetTop && vm < s.offsetTop + s.offsetHeight) cur2 = s.id;
+      });
+      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+    }
+    window.addEventListener("scroll", still, { passive: true });
+    still();
     setInterval(ticker, 1000);
   } else {
     requestAnimationFrame(frame);
   }
 
-  /* ── relayout ─────────────────────────────────────────────── */
-  var rt = null;
-  function relayout() {
-    clearTimeout(rt);
-    rt = setTimeout(function () { emberSize(); layout(); }, 120);
-  }
-  window.addEventListener("resize", relayout);
-  window.addEventListener("load", relayout);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
-  layout(); emberSize();
+  window.addEventListener("resize", function () { emberSize(); measureMarquees(); });
+  window.addEventListener("load", function () { emberSize(); measureMarquees(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureMarquees);
+  measureMarquees();
 })();

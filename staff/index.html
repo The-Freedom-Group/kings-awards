@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The People — Freedom Fire &amp; Safety</title>
-<meta name="description" content="Walk through Freedom Fire &amp; Safety — the engineers, assessors and office team keeping homes and businesses safe across the UK.">
+<meta name="description" content="The engineers, assessors and office team of Freedom Fire &amp; Safety — and the open door that crews them: paid work, funded tickets and a certified trade, no degree required.">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0B0B0B">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The People — Freedom Fire &amp; Safety">
-<meta property="og:description" content="The people behind the paperwork.">
+<meta property="og:description" content="The people behind the paperwork — and the open door that crews them.">
 <meta property="og:image" content="../assets/team.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B0B0B'/%3E%3Cpath d='M16 5c3 4 1 6 3 8s3 1 3 4a6 6 0 1 1-12 0c0-4 5-6 6-12z' fill='%23C40000'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,13 @@
 <style>
 /* ══════════════════════════════════════════════════════════════════
    THE PEOPLE — Freedom Fire & Safety
-   One horizontal world. Vertical scroll walks the page sideways
-   through nine bays, each with its own atmosphere: a tinted glow, a
-   giant outline poster word drifting at its own depth, glass cards,
-   embers answering the cursor, and the track leaning with your speed.
-   Store DNA throughout: #C40000→#FF4B2B, black, pills, Inter 800.
-   Mobile and reduced-motion get the same bays stacked vertically.
+   A vertical site built to carry the Promoting Opportunity (social
+   mobility) application. Fire safety business first; The Open Door is
+   the centrepiece, structured on the award's own tests — the four
+   qualifying activities, the two-year gate, and provable benefit to
+   four groups. Store DNA throughout: #C40000→#FF4B2B on black, pills,
+   glass cards, Inter 800. Every section owns a tinted atmosphere;
+   embers answer the cursor; the training-room quiz keeps score.
    ══════════════════════════════════════════════════════════════════ */
 :root{
   --black:#0B0B0B; --pit:#070707; --glass:rgba(255,255,255,.035);
@@ -31,27 +32,30 @@
   --text:#FFFFFF; --dim:rgba(255,255,255,.66); --dim-2:rgba(255,255,255,.42);
   --red:#C40000; --red-2:#FF4B2B; --gold:#C9A24B; --green:#16A34A; --blue:#1D3686;
   --grad:linear-gradient(90deg,#C40000 0%,#FF4B2B 100%);
+  --ggrad:linear-gradient(90deg,#C9A24B 0%,#E8D08A 100%);
   --disp:'Wise Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --body:'DM Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --pill:999px; --card:16px;
-  --gut:clamp(22px,4vw,64px);
+  --wrap:1240px; --gut:clamp(22px,4.4vw,64px);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 html.cur-on,html.cur-on body,html.cur-on a,html.cur-on button{cursor:none}
 body{margin:0;background:var(--black);color:var(--text);
-  font-family:var(--body);font-size:16.5px;line-height:1.6;
-  -webkit-font-smoothing:antialiased}
+  font-family:var(--body);font-size:16.5px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
 h1,h2,h3,h4{margin:0;font-family:var(--disp);font-weight:800;line-height:.92;
-  letter-spacing:-.015em;text-wrap:balance}
+  letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--gut)}
 ::selection{background:var(--red);color:#fff}
 .gradtx{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.outl{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
-@supports not (-webkit-text-stroke:1px black){.outl{color:rgba(255,255,255,.35)}}
+.goldtx{background:var(--ggrad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.thin{color:transparent;-webkit-text-stroke:1.6px #fff}
+@supports not (-webkit-text-stroke:1px black){.thin{color:rgba(255,255,255,.5)}}
 
-/* film grain over everything */
+/* film grain */
 body::after{content:"";position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.05;
   mix-blend-mode:overlay;background-repeat:repeat;background-size:170px 170px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -67,7 +71,6 @@ html.cur-on .cur{display:block}
 .cur.big .ring{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:var(--red-2);
   background:rgba(255,75,43,.08)}
 
-/* ── embers ─────────────────────────────────────────────────── */
 .emberfx{position:fixed;inset:0;z-index:3;pointer-events:none}
 
 /* ── entrance ───────────────────────────────────────────────── */
@@ -90,72 +93,53 @@ body.ready .enter{opacity:0;visibility:hidden}
 @keyframes riseUp{to{transform:none}}
 @keyframes eDraw{to{stroke-dashoffset:0}}
 
-/* ── HUD ────────────────────────────────────────────────────── */
-.hud{position:fixed;inset:0 0 auto 0;z-index:90;display:flex;align-items:center;
-  gap:18px;height:64px;padding-inline:clamp(16px,2.6vw,36px);
-  background:linear-gradient(to bottom, rgba(7,7,7,.92), rgba(7,7,7,0));pointer-events:none}
-.hud>*{pointer-events:auto}
-.hud .logo{height:22px;width:auto}
-.hud .mid{margin-inline:auto;display:flex;align-items:baseline;gap:12px;
-  font-family:var(--disp);font-weight:800}
-.hud .mid .name{font-size:clamp(14px,1.8vw,19px);letter-spacing:.04em;text-transform:uppercase}
-.hud .mid .sep{width:26px;height:2px;background:var(--grad);align-self:center;border-radius:2px}
-.hud .idx{font-family:var(--disp);font-weight:800;font-size:clamp(16px,2vw,22px);
-  font-variant-numeric:tabular-nums}
-.hud .idx b{background:var(--grad);-webkit-background-clip:text;background-clip:text;
-  color:transparent}
-.hud .idx span{color:var(--dim-2);font-size:.72em}
-.hudline{position:fixed;left:0;right:0;top:64px;height:2px;z-index:90;
-  background:rgba(255,255,255,.08)}
-.hudline i{display:block;height:100%;width:0;background:var(--grad);
+/* ── chrome ─────────────────────────────────────────────────── */
+.chrome{position:fixed;inset:0 0 auto 0;z-index:90;border-bottom:1px solid transparent;
+  transition:background .35s,border-color .35s}
+.chrome.stuck{background:rgba(7,7,7,.86);backdrop-filter:blur(14px) saturate(150%);
+  border-bottom-color:var(--line)}
+.chrome .wrap{display:flex;align-items:center;gap:clamp(14px,3vw,40px);height:66px;
+  max-width:none;padding-inline:clamp(16px,2.6vw,36px)}
+.chrome .logo{height:22px;width:auto}
+.chrome nav{margin-left:auto;display:flex;gap:clamp(14px,2vw,30px)}
+.chrome nav a{font-size:13px;font-weight:600;color:var(--dim);transition:color .2s}
+.chrome nav a:hover,.chrome nav a:focus-visible{color:var(--red-2)}
+.chrome nav a.hot{color:#fff;background:var(--grad);padding:8px 18px;border-radius:var(--pill);
+  font-weight:700}
+.chrome nav a.hot:hover{color:#fff;filter:brightness(1.1)}
+@media(max-width:900px){.chrome nav a:not(.hot){display:none}}
+.prog{position:fixed;left:0;right:0;top:66px;height:2px;z-index:90;
+  background:rgba(255,255,255,.07)}
+.prog i{display:block;height:100%;width:0;background:var(--grad);
   box-shadow:0 0 10px rgba(255,75,43,.6)}
 
-/* bay dots */
-.dots{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:90;
-  display:flex;gap:10px;padding:9px 14px;border-radius:var(--pill);
-  background:rgba(7,7,7,.72);border:1px solid var(--line);backdrop-filter:blur(10px)}
-.dots button{position:relative;width:9px;height:9px;border-radius:50%;border:0;
-  background:rgba(255,255,255,.22);cursor:pointer;padding:0;
-  transition:background .25s,transform .25s}
-.dots button.on{background:var(--red-2);transform:scale(1.35)}
-.dots button::after{content:attr(data-lb);position:absolute;left:50%;bottom:18px;
-  transform:translate(-50%,4px);white-space:nowrap;background:var(--pit);color:#fff;
-  font-family:var(--body);font-size:10.5px;font-weight:600;letter-spacing:.04em;
-  padding:5px 11px;border-radius:var(--pill);border:1px solid var(--line);
+/* spine */
+.spine{position:fixed;left:clamp(12px,1.8vw,30px);top:50%;transform:translateY(-50%);z-index:80;
+  display:flex;flex-direction:column;gap:12px}
+.spine a{position:relative;width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,.2);transition:background .25s,transform .25s}
+.spine a.on{background:var(--red-2);transform:scale(1.4)}
+.spine a::after{content:attr(data-lb);position:absolute;left:20px;top:50%;
+  transform:translate(-6px,-50%);white-space:nowrap;background:var(--pit);color:#fff;
+  font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:5px 11px;
+  border-radius:var(--pill);border:1px solid var(--line);
   opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
-.dots button:hover::after{opacity:1;transform:translate(-50%,0)}
-.keys{position:fixed;right:clamp(14px,2vw,30px);bottom:18px;z-index:90;
-  font-family:var(--body);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  font-weight:600;color:var(--dim-2)}
-@media(max-width:900px){.keys{display:none}}
+.spine a:hover::after{opacity:1;transform:translate(0,-50%)}
+@media(max-width:1100px){.spine{display:none}}
 
-/* ── the walk: sticky stage + horizontal track ──────────────── */
-#walk{position:relative}
-.stage{position:sticky;top:0;height:100vh;overflow:hidden}
-.track{display:flex;height:100vh;width:max-content;will-change:transform}
-.bayp{position:relative;height:100vh;flex:0 0 auto;overflow:hidden;
-  display:flex;align-items:center;padding:92px var(--gut) 84px}
-.bayp .inner{position:relative;z-index:4;width:100%;will-change:transform}
-
-/* per-bay atmosphere: a tinted glow owned by each bay */
-.bayp::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+/* ── sections ───────────────────────────────────────────────── */
+section{position:relative;overflow:hidden;padding:clamp(72px,10vw,140px) 0}
+section::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(90% 80% at 76% 10%, var(--tint,rgba(196,0,0,.2)), transparent 58%),
-    radial-gradient(70% 60% at 8% 96%, var(--tint2,rgba(255,75,43,.1)), transparent 62%)}
-.bayp{border-right:1px solid rgba(255,255,255,.06)}
-
-/* baseline hairline */
-.bayp .inner::after{content:none}
-
-/* poster word per bay */
-.pw{position:absolute;top:50%;left:3vw;z-index:1;transform:translateY(-50%);
+    radial-gradient(90% 75% at 78% 6%, var(--tint,rgba(196,0,0,.16)), transparent 58%),
+    radial-gradient(70% 60% at 6% 98%, var(--tint2,rgba(255,75,43,.08)), transparent 62%)}
+section>.wrap{position:relative;z-index:4}
+.pw{position:absolute;top:50%;left:0;z-index:1;transform:translate3d(0,-50%,0);
   font-family:var(--disp);font-weight:800;text-transform:uppercase;line-height:1;
-  white-space:nowrap;pointer-events:none;font-size:clamp(160px,34vh,380px);
-  letter-spacing:-.01em;color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.09);
+  white-space:nowrap;pointer-events:none;font-size:clamp(130px,26vw,380px);
+  letter-spacing:-.01em;color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.08);
   will-change:transform}
-@supports not (-webkit-text-stroke:1px black){.pw{color:rgba(255,255,255,.045)}}
-
-/* contours */
+@supports not (-webkit-text-stroke:1px black){.pw{color:rgba(255,255,255,.04)}}
 .topo{position:absolute;inset:-6%;pointer-events:none;z-index:0;overflow:hidden}
 .topo svg{width:100%;height:100%;display:block}
 .topo path{fill:none;stroke:currentColor;stroke-width:1;vector-effect:non-scaling-stroke}
@@ -165,28 +149,25 @@ body.ready .enter{opacity:0;visibility:hidden}
 .topo g.b{animation:topoB 116s ease-in-out infinite alternate}
 @keyframes topoA{from{transform:none}to{transform:translate3d(2%,-2.4%,0) rotate(2.2deg) scale(1.05)}}
 @keyframes topoB{from{transform:scale(1.03)}to{transform:translate3d(-2.2%,1.8%,0) rotate(-2deg)}}
-
-/* spotlight */
 .spot{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s;
   background:radial-gradient(430px 430px at var(--sx,50%) var(--sy,45%),
-    rgba(255,75,43,.13),transparent 70%)}
-.bayp:hover .spot{opacity:1}
+    rgba(255,75,43,.12),transparent 70%)}
+section:hover .spot{opacity:1}
 
-/* ── shared atoms ───────────────────────────────────────────── */
-.chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:700;
+/* ── atoms ──────────────────────────────────────────────────── */
+.chip{display:inline-flex;align-items:center;gap:8px;font-weight:700;
   font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:#fff;
   background:rgba(196,0,0,.26);border:1px solid rgba(255,75,43,.5);
-  padding:7px 15px;border-radius:var(--pill);margin-bottom:18px;
-  backdrop-filter:blur(6px)}
+  padding:7px 15px;border-radius:var(--pill);margin-bottom:18px;backdrop-filter:blur(6px)}
 .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-2)}
-.h-b{font-size:clamp(36px,5.6vw,84px);max-width:15ch;margin-bottom:16px;text-transform:uppercase}
-.h-b .thin{color:transparent;-webkit-text-stroke:1.6px #fff}
-@supports not (-webkit-text-stroke:1px black){.h-b .thin{color:rgba(255,255,255,.5)}}
-.lede{font-size:clamp(16px,1.8vw,19px);color:var(--dim);max-width:52ch;font-weight:400;margin:0}
+.chip.gold{background:rgba(201,162,75,.18);border-color:rgba(201,162,75,.55)}
+.chip.gold::before{background:var(--gold)}
+.h-b{font-size:clamp(34px,5.6vw,80px);max-width:16ch;margin-bottom:16px}
+.lede{font-size:clamp(16px,1.8vw,19px);color:var(--dim);max-width:56ch;font-weight:400;margin:0}
 .lede b{color:#fff;font-weight:700}
-.pillbtn{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:700;
+.pillbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;
   font-size:14.5px;padding:13px 30px;border-radius:var(--pill);position:relative;overflow:hidden;
-  border:0;cursor:pointer;will-change:transform;transition:transform .25s}
+  border:0;cursor:pointer;will-change:transform;transition:transform .25s;font-family:var(--body)}
 .pillbtn.solid{background:var(--grad);color:#fff;box-shadow:0 8px 26px rgba(196,0,0,.35)}
 .pillbtn.ghosty{background:rgba(255,255,255,.04);color:#fff;
   border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(6px)}
@@ -197,51 +178,86 @@ body.ready .enter{opacity:0;visibility:hidden}
 .pillbtn:hover::after{transform:translateX(120%)}
 .tk{display:block;margin:20px 0 0;padding:16px 18px;border:1px dashed rgba(201,162,75,.6);
   background:rgba(201,162,75,.08);border-radius:12px;font-size:14px;line-height:1.55;
-  color:var(--dim);max-width:64ch;backdrop-filter:blur(4px)}
+  color:var(--dim);max-width:66ch;backdrop-filter:blur(4px)}
 .tk b{display:block;font-weight:700;font-size:10.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--gold);margin-bottom:6px}
 .tk i{font-style:normal;font-weight:600;color:#fff}
 .tk-in{background:rgba(201,162,75,.16);border-bottom:1px dashed rgba(201,162,75,.6);
   padding:1px 6px;border-radius:3px}
-
-/* glass cards */
 .card{background:var(--glass);border:1px solid var(--line);border-radius:var(--card);
   padding:24px 22px;position:relative;backdrop-filter:blur(8px);
   transition-property:transform,border-color,box-shadow,opacity,filter;transition-duration:.35s}
 .card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;border-radius:16px 16px 0 0;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent)}
 .card:hover{border-color:rgba(255,75,43,.55);
-  box-shadow:0 18px 44px rgba(0,0,0,.55),0 0 0 1px rgba(255,75,43,.2),
-             0 0 40px rgba(196,0,0,.15)}
-.card h3{font-size:20px;margin-bottom:8px;text-transform:uppercase}
+  box-shadow:0 18px 44px rgba(0,0,0,.55),0 0 40px rgba(196,0,0,.15)}
+.card h3{font-size:20px;margin-bottom:8px}
 .card p{margin:0;font-size:14.5px;color:var(--dim);line-height:1.55}
 .card svg{width:30px;height:30px;margin-bottom:14px;stroke:var(--red-2);fill:none;
   stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .tilting{transition:opacity .35s,filter .35s!important}
+.grid{display:grid;gap:16px}
 .grid:hover .card:not(:hover){opacity:.5;filter:saturate(.8)}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.duo{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(28px,4.6vw,72px);align-items:center}
+@media(max-width:920px){.duo{grid-template-columns:1fr;gap:26px}}
 
-/* ── bay 1 · welcome ────────────────────────────────────────── */
-.bay-in .media{position:absolute;inset:0;z-index:0}
-.bay-in .media img{width:100%;height:100%;object-fit:cover;object-position:50% 24%;
+/* ── hero ───────────────────────────────────────────────────── */
+.hero{min-height:100svh;display:flex;align-items:center;padding-top:66px;
+  --tint:rgba(196,0,0,.26);--tint2:rgba(255,75,43,.12)}
+.hero .media{position:absolute;inset:0;z-index:0}
+.hero .media img{width:100%;height:112%;object-fit:cover;object-position:50% 22%;
   opacity:0;transition:opacity 1.2s ease;will-change:transform}
-.bay-in .media img.on{opacity:1}
-.bay-in .media::after{content:"";position:absolute;inset:0;background:
-  linear-gradient(to right, rgba(7,7,7,.95) 8%, rgba(7,7,7,.66) 45%, rgba(7,7,7,.3) 75%),
-  linear-gradient(to top, rgba(7,7,7,.95) 6%, transparent 45%)}
-.bay-in h1{font-size:clamp(50px,9vw,140px);max-width:10ch;margin-bottom:20px;
-  text-transform:uppercase}
-.bay-in .go{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+.hero .media img.on{opacity:1}
+.hero .media::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(to right, rgba(7,7,7,.95) 6%, rgba(7,7,7,.68) 44%, rgba(7,7,7,.3) 74%),
+  linear-gradient(to top, rgba(7,7,7,1) 4%, transparent 42%)}
+.hero h1{font-size:clamp(48px,9vw,140px);max-width:10ch;margin-bottom:20px}
+.hero .go{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
 .scrollcue{margin-top:34px;display:inline-flex;align-items:center;gap:12px;
   font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--dim-2)}
-.scrollcue i{display:inline-block;width:40px;height:1.5px;background:var(--grad);
-  transform-origin:left;animation:cue 2s ease-in-out infinite}
-@keyframes cue{0%,100%{transform:scaleX(.4);opacity:.5}50%{transform:scaleX(1);opacity:1}}
+.scrollcue i{display:inline-block;width:1.5px;height:34px;background:var(--grad);
+  transform-origin:top;animation:cue 2s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.4);opacity:.5}50%{transform:scaleY(1);opacity:1}}
 
-/* grids */
-.duo{display:grid;grid-template-columns:minmax(340px,44vw) minmax(420px,1fr);
-  gap:clamp(28px,4vw,70px);align-items:center}
-.row4{display:grid;grid-template-columns:repeat(4,minmax(240px,300px));gap:16px}
-.crewgrid{display:grid;grid-template-columns:repeat(4,minmax(215px,250px));gap:14px}
+/* stat strip */
+.strip{background:var(--pit);border-block:1px solid var(--line);position:relative;z-index:5;
+  padding:0}
+.strip::before{content:none}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.strip .st{padding:22px 12px;text-align:center;border-left:1px solid var(--line)}
+.strip .st:first-child{border-left:0}
+.strip .v{font-family:var(--disp);font-weight:800;font-size:clamp(24px,3.4vw,40px);line-height:1;
+  font-variant-numeric:tabular-nums}
+.strip .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim-2);
+  font-weight:600;margin-top:6px}
+@media(max-width:820px){.strip .wrap{grid-template-columns:1fr 1fr}
+  .strip .st:nth-child(3){border-left:0}
+  .strip .st:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* marquee */
+.mq{background:var(--pit);color:#fff;overflow:hidden;position:relative;z-index:5;
+  padding:clamp(13px,1.8vw,22px) 0;border-block:1px solid var(--line)}
+.mq::before{content:none}
+.mq-t{display:flex;white-space:nowrap;will-change:transform;width:max-content}
+.mq-t span{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(26px,4.6vw,56px);line-height:1;padding-right:.55em}
+.mq-t span i{font-style:normal;background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;color:transparent;padding-right:.55em}
+
+/* photo plate */
+.plate{position:relative;border-radius:20px;overflow:hidden;height:min(62vh,540px);
+  box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.plate img{width:100%;height:100%;object-fit:cover;will-change:transform}
+.plate::after{content:"";position:absolute;inset:0;border-radius:20px;
+  background:linear-gradient(to top, rgba(0,0,0,.55), transparent 45%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.plate figcaption{position:absolute;left:16px;bottom:12px;z-index:2;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#fff}
+
+/* crew */
+.crewgrid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
 .person{padding:0}
 .person .ph{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
   border-bottom:1px solid var(--line);border-radius:var(--card) var(--card) 0 0;
@@ -254,22 +270,64 @@ body.ready .enter{opacity:0;visibility:hidden}
   color:var(--red-2);margin-bottom:7px}
 .person p{font-size:13px}
 
-/* photo plate */
-.plate{position:relative;border-radius:20px;overflow:hidden;height:min(64vh,560px);
-  box-shadow:0 24px 60px rgba(0,0,0,.5)}
-.plate img{width:100%;height:100%;object-fit:cover;will-change:transform}
-.plate::after{content:"";position:absolute;inset:0;border-radius:20px;
-  background:linear-gradient(to top, rgba(0,0,0,.55), transparent 45%);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-.plate figcaption{position:absolute;left:16px;bottom:12px;z-index:2;font-size:10.5px;
-  letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#fff}
+/* ── THE OPEN DOOR — the centrepiece ────────────────────────── */
+.door{--tint:rgba(201,162,75,.16);--tint2:rgba(196,0,0,.1)}
+.door .h-b .goldish{background:var(--ggrad);-webkit-background-clip:text;
+  background-clip:text;color:transparent}
+.door .lead-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,4.6vw,72px);
+  align-items:start;margin-bottom:clamp(36px,5vw,64px)}
+@media(max-width:920px){.door .lead-grid{grid-template-columns:1fr}}
+.doorfact{display:flex;gap:14px;align-items:flex-start;margin-top:18px}
+.doorfact .ic{flex:0 0 auto;width:38px;height:38px;border-radius:12px;background:var(--grad);
+  display:grid;place-content:center;font-family:var(--disp);font-weight:800;font-size:16px}
+.doorfact p{margin:0;font-size:14.5px;color:var(--dim)}
+.doorfact p b{color:#fff}
 
-/* training room */
+/* the ladder */
+.ladder{margin:clamp(36px,5vw,60px) 0}
+.ladder .lhead{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  color:var(--gold);margin-bottom:16px}
+.lane{position:relative;padding-top:22px}
+.laneline{position:absolute;left:0;right:0;top:0;height:3px;border-radius:2px;
+  background:rgba(255,255,255,.1)}
+.laneline i{display:block;height:100%;width:0;background:var(--ggrad);border-radius:2px;
+  box-shadow:0 0 12px rgba(201,162,75,.5)}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:920px){.steps{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}}
+.step{opacity:.35;transform:translateY(10px);
+  transition:opacity .5s,transform .5s cubic-bezier(.2,.8,.25,1);
+  background:var(--glass);border:1px solid var(--line);border-radius:var(--card);
+  padding:18px 16px;backdrop-filter:blur(6px)}
+.step.lit{opacity:1;transform:none}
+.step .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
+  border-radius:50%;background:var(--ggrad);color:#0B0B0B;font-weight:800;font-size:12px;
+  margin-bottom:10px}
+.step h3{font-size:16px;margin-bottom:6px}
+.step p{margin:0;font-size:12.5px;color:var(--dim-2);line-height:1.5}
+
+/* two-year gate */
+.gate{border:1px solid rgba(201,162,75,.5);background:rgba(201,162,75,.07);
+  border-radius:var(--card);padding:clamp(20px,3vw,30px);backdrop-filter:blur(6px);
+  margin:clamp(30px,4vw,48px) 0}
+.gate h3{font-size:clamp(19px,2.2vw,26px);margin-bottom:10px}
+.gate h3 b{background:var(--ggrad);-webkit-background-clip:text;background-clip:text;
+  color:transparent}
+.gate p{margin:0;font-size:14.5px;color:var(--dim);max-width:70ch}
+.gate p i{font-style:normal;font-weight:700;color:#fff}
+
+/* the four proofs */
+.proofs .ph-head{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  color:var(--gold);margin:clamp(30px,4vw,48px) 0 16px}
+.proof .num{font-family:var(--disp);font-weight:800;font-size:36px;line-height:1;
+  background:var(--ggrad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:10px}
+
+/* training */
 .fireui{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:20px;
-  padding:clamp(20px,2.6vw,34px);max-width:min(88vw,1080px);backdrop-filter:blur(10px);
-  box-shadow:0 24px 60px rgba(0,0,0,.4)}
+  padding:clamp(20px,2.8vw,36px);backdrop-filter:blur(10px);
+  box-shadow:0 24px 60px rgba(0,0,0,.4);margin-top:clamp(28px,4vw,44px)}
 .fmode{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.fm{font-family:var(--body);font-weight:700;font-size:13px;color:#fff;cursor:pointer;
+.fm{font-weight:700;font-size:13px;color:#fff;cursor:pointer;font-family:var(--body);
   background:transparent;border:1px solid rgba(255,255,255,.3);padding:8px 18px;
   border-radius:var(--pill);transition:background .25s,border-color .25s,color .25s}
 .fm.on{background:#fff;color:var(--black);border-color:#fff}
@@ -277,19 +335,19 @@ body.ready .enter{opacity:0;visibility:hidden}
 .fq{margin:0 0 14px;font-weight:600;font-size:16px;color:#fff}
 .fq b{color:var(--red-2)}
 .fclasses{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px}
-.fc{font-family:var(--body);font-weight:700;font-size:12.5px;color:#fff;cursor:pointer;
+.fc{font-weight:700;font-size:12.5px;color:#fff;cursor:pointer;font-family:var(--body);
   background:transparent;border:1px solid rgba(255,255,255,.28);padding:9px 18px;
   border-radius:var(--pill);transition:background .25s,border-color .25s,transform .2s}
 .fc:hover{border-color:var(--red-2);transform:translateY(-1px)}
 .fc.on{background:var(--grad);border-color:transparent;box-shadow:0 6px 20px rgba(196,0,0,.35)}
 body.ftest .fclasses{display:none}
-.exts{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:11px}
-@media(max-width:900px){.exts{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}}
+.exts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px}
 .ext{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:var(--card);
   padding:0 14px 15px;overflow:hidden;
   transition:transform .3s cubic-bezier(.2,.8,.25,1),border-color .3s,opacity .3s,filter .3s}
 .ext .eb{display:block;height:7px;margin:0 -14px 12px;background:var(--band)}
-.ext h4{font-size:15.5px;margin-bottom:5px;text-transform:uppercase}
+.ext h4{font-size:15.5px;margin-bottom:5px;font-family:var(--disp);font-weight:800;
+  text-transform:uppercase}
 .ext p{margin:0;font-size:11.5px;line-height:1.45;color:var(--dim-2)}
 .ext.hit{transform:translateY(-4px);border-color:var(--red-2);
   box-shadow:0 10px 24px rgba(196,0,0,.25)}
@@ -302,46 +360,46 @@ body.ftest .ext{cursor:pointer}
 .fnote{margin:14px 0 0;font-size:13px;color:var(--dim);font-weight:500}
 .fnote b{color:#fff}
 
-/* freight lane */
-.lane{position:relative;padding-top:26px}
-.laneline{position:absolute;left:0;right:0;top:0;height:3px;border-radius:2px;
-  background:rgba(255,255,255,.1)}
-.laneline i{display:block;height:100%;width:0;background:var(--grad);border-radius:2px;
-  box-shadow:0 0 12px rgba(196,0,0,.5)}
-.stops{display:grid;grid-template-columns:repeat(4,minmax(230px,280px));gap:14px}
-.stop{opacity:.35;transform:translateY(10px);
-  transition:opacity .5s,transform .5s cubic-bezier(.2,.8,.25,1)}
-.stop.lit{opacity:1;transform:none}
-.stop .n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
-  border-radius:50%;background:var(--grad);color:#fff;font-weight:700;font-size:12px;
-  margin-bottom:10px}
+/* build (firestorm + freight) */
+.buildgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:clamp(28px,4vw,44px)}
+@media(max-width:920px){.buildgrid{grid-template-columns:1fr}}
+.bcard{padding:clamp(22px,3vw,32px)}
+.bcard .mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.bcard .mini span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  border:1px solid var(--line-2);border-radius:var(--pill);padding:6px 13px;color:var(--dim)}
+.bcard img{max-height:120px;width:auto;margin:6px 0 14px}
 
 /* the code */
-.val .n{font-family:var(--disp);font-weight:800;font-size:40px;line-height:1;margin-bottom:10px}
+.val .n{font-family:var(--disp);font-weight:800;font-size:38px;line-height:1;margin-bottom:10px}
 
 /* join */
-.bay-out .jumbo{display:flex;flex-direction:column;line-height:.82;margin-bottom:26px}
-.bay-out .jumbo span{font-family:var(--disp);font-weight:800;text-transform:uppercase;
-  font-size:clamp(56px,9.6vw,150px);letter-spacing:-.01em;white-space:nowrap;
+.join{--tint:rgba(196,0,0,.24);--tint2:rgba(255,75,43,.12);text-align:left}
+.jumbo{display:flex;flex-direction:column;line-height:.82;margin-bottom:26px}
+.jumbo span{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(56px,10.5vw,170px);letter-spacing:-.01em;white-space:nowrap;
   color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.25)}
-.bay-out .jumbo span:last-child{background:var(--grad);-webkit-background-clip:text;
+.jumbo span:last-child{background:var(--grad);-webkit-background-clip:text;
   background-clip:text;-webkit-text-stroke:0}
-@supports not (-webkit-text-stroke:1px black){.bay-out .jumbo span{color:rgba(255,255,255,.14)}}
+@supports not (-webkit-text-stroke:1px black){.jumbo span{color:rgba(255,255,255,.14)}}
 .tickrow{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:22px 0 0;
   font-variant-numeric:tabular-nums}
 .tickrow .tl{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
   color:var(--dim-2)}
 .tickrow .tv{font-family:var(--disp);font-weight:800;font-size:clamp(20px,2.4vw,28px)}
-.foot{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;
-  color:var(--dim-2);max-width:64ch}
 
-/* drill */
+footer{background:var(--pit);border-top:1px solid var(--line);padding:38px 0 52px;
+  color:var(--dim-2);font-size:13px;position:relative;z-index:5}
+footer .wrap{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;
+  align-items:center}
+footer img{height:24px;width:auto;opacity:.7}
+
+/* drill + toast */
 .drill{position:fixed;inset:0;z-index:210;pointer-events:none;opacity:0;
   background:radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(196,0,0,.55) 100%);
   box-shadow:inset 0 0 0 4px rgba(255,75,43,.8)}
 body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
 @keyframes klaxon{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
-.toast{position:fixed;left:50%;bottom:64px;transform:translate(-50%,20px);z-index:220;
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:220;
   background:var(--pit);color:#fff;border:1px solid rgba(255,75,43,.55);
   border-radius:var(--pill);padding:11px 22px;font-weight:600;font-size:13.5px;opacity:0;
   pointer-events:none;transition:opacity .35s,transform .35s;
@@ -349,45 +407,29 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
 /* reveals */
-.rv{opacity:0;transform:translateY(26px);filter:blur(5px);
-  transition:opacity .75s cubic-bezier(.22,.72,.24,1),transform .75s cubic-bezier(.22,.72,.24,1),
-             filter .75s cubic-bezier(.22,.72,.24,1);transition-delay:var(--d,0s)}
+.rv{opacity:0;transform:translateY(28px);filter:blur(5px);
+  transition:opacity .78s cubic-bezier(.22,.72,.24,1),transform .78s cubic-bezier(.22,.72,.24,1),
+             filter .78s cubic-bezier(.22,.72,.24,1);transition-delay:var(--d,0s)}
 .rv.in{opacity:1;transform:none;filter:blur(0)}
 :focus-visible{outline:2px solid var(--red-2);outline-offset:3px}
 
-/* ── vertical fallback ──────────────────────────────────────── */
-@media(max-width:900px),(prefers-reduced-motion:reduce){
-  .stage{position:static;height:auto;overflow:visible}
-  .track{flex-direction:column;height:auto;width:100%!important;transform:none!important}
-  .bayp{width:100%!important;height:auto;min-height:0;padding:84px var(--gut) 72px;
-    border-right:0;border-bottom:1px solid rgba(255,255,255,.06)}
-  .duo{grid-template-columns:1fr;gap:26px}
-  .row4,.crewgrid,.stops{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-  .pw{font-size:clamp(90px,22vw,170px);left:2vw;top:8%;transform:none}
-  .plate{height:min(52vh,420px)}
-  .keys,.dots{display:none}
-  #walk{height:auto!important}
-  .bayp .inner{transform:none!important}
-}
 @media(prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;filter:none;transition:none}
   .enter,.cur,.emberfx,.drill,.toast{display:none!important}
-  .topo g{animation:none}
-  .stop{opacity:1;transform:none}
+  .topo g,.scrollcue i{animation:none}
+  .step{opacity:1;transform:none}
   .laneline i{width:100%!important}
   .ext.wrong{animation:none}
-  .bay-in .media img{opacity:1;transition:none}
+  .hero .media img{opacity:1;transition:none}
   .grid:hover .card:not(:hover){opacity:1;filter:none}
   .spot{display:none}
-  .scrollcue i{animation:none}
   body::after{display:none}
+  html{scroll-behavior:auto}
 }
 @media print{
-  .hud,.hudline,.dots,.keys,.cur,.emberfx,.enter,.drill,.toast,.pw,.topo,.spot{display:none}
+  .chrome,.prog,.spine,.cur,.emberfx,.enter,.drill,.toast,.pw,.topo,.spot,.mq{display:none}
   body{background:#fff;color:#000}
   body::after{display:none}
-  .stage{position:static;height:auto}.track{flex-direction:column;transform:none!important;width:100%}
-  .bayp{width:100%!important;height:auto}
   .rv{opacity:1;transform:none;filter:none}
 }
 </style>
@@ -405,372 +447,430 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
   <svg viewBox="0 0 300 2" preserveAspectRatio="none"><path d="M0 1 H300"/></svg>
 </div>
 
-<header class="hud" aria-label="Navigation">
-  <a href="#top" data-mag><img class="logo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></a>
-  <div class="mid" aria-hidden="true">
-    <span class="name" id="hudBay">Welcome</span>
-    <span class="sep"></span>
+<header class="chrome" id="chrome">
+  <div class="wrap">
+    <a href="#top" data-mag><img class="logo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></a>
+    <nav>
+      <a href="#who">Who we are</a><a href="#work">The work</a><a href="#crew">The crew</a>
+      <a href="#training">Training</a><a href="#build">What we're building</a>
+      <a href="#code">The code</a><a class="hot" href="#door">The Open Door</a>
+    </nav>
   </div>
-  <div class="idx" aria-hidden="true"><b id="hudN">01</b><span> / <span id="hudT">09</span></span></div>
 </header>
-<div class="hudline" aria-hidden="true"><i id="hudFill"></i></div>
+<div class="prog" aria-hidden="true"><i id="progFill"></i></div>
 
-<nav class="dots" id="dots" aria-label="Sections"></nav>
-<div class="keys" aria-hidden="true">← → keys work too</div>
+<aside class="spine" id="spine">
+  <a href="#who" data-t="who" data-lb="Who we are"></a>
+  <a href="#work" data-t="work" data-lb="The work"></a>
+  <a href="#crew" data-t="crew" data-lb="The crew"></a>
+  <a href="#door" data-t="door" data-lb="The Open Door"></a>
+  <a href="#training" data-t="training" data-lb="Training room"></a>
+  <a href="#build" data-t="build" data-lb="What we're building"></a>
+  <a href="#code" data-t="code" data-lb="The code"></a>
+  <a href="#join" data-t="join" data-lb="Join us"></a>
+</aside>
 
-<div id="walk">
-  <div class="stage">
-    <div class="track" id="track">
+<main>
 
-      <!-- 01 · WELCOME -->
-      <section class="bayp bay-in" id="top" data-bay="Welcome" data-word="PEOPLE"
-        style="width:100vw;--tint:rgba(196,0,0,.24);--tint2:rgba(255,75,43,.12)">
-        <div class="media" aria-hidden="true">
-          <img id="heroShot" src="../assets/team.jpg"
-               srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w"
-               sizes="100vw" width="1200" height="1396" alt="" decoding="async">
-        </div>
-        <div class="inner">
-          <div class="chip rv">Freedom Fire &amp; Safety · Bury · Nationwide</div>
-          <h1 class="rv" style="--d:.06s">The people behind<br>the
-            <span class="gradtx">paperwork</span></h1>
-          <p class="lede rv" style="--d:.12s">Anyone can sell an extinguisher. It takes a team to
-          make sure the alarm sounds, the lights come on, the assessment is honest and the
-          certificate means something. <b>Scroll — the page walks sideways.</b></p>
-          <div class="go rv" style="--d:.18s">
-            <button class="pillbtn solid" id="walkBtn" type="button" data-mag>Take the tour →</button>
-            <button class="pillbtn ghosty" id="drillBtn" type="button" data-mag>Sound the drill</button>
-          </div>
-          <div class="scrollcue rv" style="--d:.24s"><i></i>Keep scrolling</div>
-        </div>
-      </section>
-
-      <!-- 02 · WHO WE ARE -->
-      <section class="bayp" data-bay="Who we are" data-word="FREEDOM"
-        style="width:110vw;--tint:rgba(196,0,0,.16);--tint2:rgba(255,255,255,.05)">
-        <div class="inner duo">
-          <div>
-            <div class="chip rv">02 · Who we are</div>
-            <h2 class="h-b rv" style="--d:.06s">A fire safety company that
-              <span class="thin">shows its working</span></h2>
-            <p class="lede rv" style="--d:.12s">Founded in Bury in August 2021, protecting homes and
-            businesses across the UK. We supply, fit, service and certify the equipment fire safety
-            law requires — and keep <b>the records that prove it was done properly</b>.</p>
-          </div>
-          <div class="rv" style="--d:.18s">
-            <p class="lede" style="font-size:14.5px;color:var(--dim-2)">Company no. 13589467 ·
-            SIC 84250<br>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>
-            Part of The Freedom Group.</p>
-            <span class="tk"><b>Team to expand</b>
-            Two or three paragraphs in the company's own voice about what it is actually like here.
-            What the engineers do on a normal Tuesday, what the office handles, how a job goes from
-            first call to certificate. Written plainly — this page is about the people, not the
-            sales pitch.</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- 03 · THE WORK -->
-      <section class="bayp" data-bay="The work" data-word="WORK"
-        style="width:170vw;--tint:rgba(255,75,43,.14);--tint2:rgba(196,0,0,.1)">
-        <div class="inner">
-          <div class="duo" style="grid-template-columns:minmax(320px,36vw) 1fr;align-items:center">
-            <div>
-              <div class="chip rv">03 · The work</div>
-              <h2 class="h-b rv" style="--d:.06s">What we fit, test and
-                <span class="thin">certify</span></h2>
-              <p class="lede rv" style="--d:.12s">Four disciplines, one chain of responsibility.
-              Miss a link and the whole thing fails when it matters.</p>
-              <span class="tk rv" style="--d:.18s"><b>Team to confirm</b>
-              Do these four match the real service list? Add fire doors, passive fire protection,
-              sprinklers or dry risers if you cover them — and cut anything you don't.</span>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr minmax(300px,34vw);gap:16px;align-items:center">
-              <div class="grid row4 rv" style="--d:.1s;grid-template-columns:repeat(2,minmax(230px,1fr))">
-                <div class="card">
-                  <svg viewBox="0 0 24 24"><path d="M9 3h6v3H9zM10 6v14a2 2 0 0 0 2 2 2 2 0 0 0 2-2V6M7 9h3M17 3v3"/></svg>
-                  <h3>Extinguishers</h3>
-                  <p>Supply, installation, annual servicing — the right type in the right place,
-                  certified at every visit.</p>
-                </div>
-                <div class="card">
-                  <svg viewBox="0 0 24 24"><path d="M12 3a5 5 0 0 0-5 5v5l-2 3h14l-2-3V8a5 5 0 0 0-5-5zM10 19a2 2 0 0 0 4 0"/><path d="M4 6 2 4M20 6l2-2"/></svg>
-                  <h3>Alarm systems</h3>
-                  <p>Designed, installed, commissioned and maintained — the building warns its
-                  people before anyone smells smoke.</p>
-                </div>
-                <div class="card">
-                  <svg viewBox="0 0 24 24"><path d="M12 2v3M4.2 6.2 6.3 8.3M2 14h3M19 14h3M17.7 8.3l2.1-2.1"/><path d="M8 20h8M9 17h6M12 8a5 5 0 0 0-3 9h6a5 5 0 0 0-3-9z"/></svg>
-                  <h3>Emergency lighting</h3>
-                  <p>Installed, tested, certificated — an orderly exit instead of a stairwell in
-                  the dark.</p>
-                </div>
-                <div class="card">
-                  <svg viewBox="0 0 24 24"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13l2 2 4-4"/></svg>
-                  <h3>Assessment &amp; training</h3>
-                  <p>Fire risk assessments to the Fire Safety Order, plus warden, marshal and
-                  extinguisher training on site.</p>
-                </div>
-              </div>
-              <figure class="plate rv" style="--d:.16s;margin:0">
-                <img data-drift src="../assets/floor.jpg"
-                     srcset="../assets/floor-sm.jpg 600w, ../assets/floor.jpg 1200w"
-                     sizes="34vw" width="1200" height="1395"
-                     alt="A Freedom Fire and Safety worker overlooking the production floor"
-                     loading="lazy" decoding="async">
-                <figcaption>The floor · archive</figcaption>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 04 · TRAINING ROOM -->
-      <section class="bayp" data-bay="Training room" data-word="TRAIN"
-        style="width:120vw;--tint:rgba(201,162,75,.16);--tint2:rgba(196,0,0,.1)">
-        <div class="inner" style="display:flex;justify-content:center">
-          <div class="fireui" id="fireui">
-            <div class="chip">04 · Training room</div>
-            <h2 class="h-b" style="font-size:clamp(26px,3vw,44px)">Know your fire</h2>
-            <p class="lede" style="font-size:15px;margin-bottom:16px">Pick what's burning — we'll
-            show you what puts it out. Or test yourself: six callouts, scored.</p>
-            <div class="fmode" role="group" aria-label="Mode">
-              <button type="button" class="fm on" id="fmLearn" aria-pressed="true">Learn</button>
-              <button type="button" class="fm" id="fmTest" aria-pressed="false">Test yourself</button>
-              <span class="fscore gradtx" id="fscore" hidden>0 / 6</span>
-            </div>
-            <p class="fq" id="fq" hidden></p>
-            <div class="fclasses" role="tablist" aria-label="Fire classes">
-              <button type="button" class="fc on" data-cls="a" aria-pressed="true">A · Solids</button>
-              <button type="button" class="fc" data-cls="b" aria-pressed="false">B · Liquids</button>
-              <button type="button" class="fc" data-cls="c" aria-pressed="false">C · Gases</button>
-              <button type="button" class="fc" data-cls="e" aria-pressed="false">E · Electrical</button>
-              <button type="button" class="fc" data-cls="f" aria-pressed="false">F · Cooking oils</button>
-            </div>
-            <div class="exts">
-              <div class="ext" data-ok="a" style="--band:#C40000"><span class="eb"></span>
-                <h4>Water</h4><p>Wood, paper, textiles. Never near live electrics.</p></div>
-              <div class="ext" data-ok="a b" style="--band:#F1E9D2"><span class="eb"></span>
-                <h4>Foam</h4><p>Solids and flammable liquids — smothers the surface.</p></div>
-              <div class="ext" data-ok="b e" style="--band:#2A2A2A"><span class="eb"></span>
-                <h4>CO₂</h4><p>Liquids and live electrical — leaves no residue.</p></div>
-              <div class="ext" data-ok="a b c e" style="--band:#1D3686"><span class="eb"></span>
-                <h4>Dry powder</h4><p>A, B, C and electrical — not in enclosed spaces.</p></div>
-              <div class="ext" data-ok="f a" style="--band:#FFB300"><span class="eb"></span>
-                <h4>Wet chemical</h4><p>Cooking oils and fats — the chip-pan specialist.</p></div>
-            </div>
-            <p class="fnote" id="fnote" aria-live="polite">Class A — wood, paper, textiles.
-            Water, foam, powder or wet chemical will do it.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 05 · THE CREW -->
-      <section class="bayp" data-bay="The crew" data-word="CREW"
-        style="width:180vw;--tint:rgba(196,0,0,.2);--tint2:rgba(255,75,43,.1)">
-        <div class="inner" style="display:grid;grid-template-columns:minmax(320px,38vw) 1fr;gap:clamp(28px,4vw,64px);align-items:center">
-          <div>
-            <div class="chip rv">05 · The crew</div>
-            <h2 class="h-b rv" style="--d:.06s">Faces, not <span class="thin">job titles</span></h2>
-            <p class="lede rv" style="--d:.12s">The people who turn up, fit it properly and sign
-            their name to it.</p>
-            <span class="tk rv" style="--d:.18s"><b>Tom &amp; team to supply — names and photographs</b>
-            For each person: name, role, one or two sentences, and a square photo (minimum
-            800×800px), same background and framing for everyone. Duplicate or delete cards to
-            match the real headcount. <i>Get written consent before publishing anyone's photograph
-            and name, and skip anyone who would rather not appear.</i></span>
-          </div>
-          <div class="grid crewgrid rv" style="--d:.1s">
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3>Tom Letcher</h3><div class="r">Founder &amp; Director</div>
-              <p>Founded the company in 2021 and still picks up the phone.
-              <span class="tk-in">TK — one line</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Operations</div>
-              <p><span class="tk-in">TK — one line about what they run</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Lead engineer</div>
-              <p><span class="tk-in">TK — years in the trade, tickets held</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Fire risk assessor</div>
-              <p><span class="tk-in">TK — qualifications and patch covered</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Service engineer</div>
-              <p><span class="tk-in">TK — one line</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Scheduling &amp; office</div>
-              <p><span class="tk-in">TK — the person who knows where everyone is</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Accounts</div>
-              <p><span class="tk-in">TK — one line</span></p></div>
-            </article>
-            <article class="card person">
-              <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-              <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Apprentice</div>
-              <p><span class="tk-in">TK — what they're training towards</span></p></div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- 06 · FIRESTORM -->
-      <section class="bayp" data-bay="Firestorm" data-word="STORM"
-        style="width:120vw;--tint:rgba(158,0,0,.3);--tint2:rgba(196,0,0,.14)">
-        <div class="inner duo">
-          <div>
-            <div class="chip rv">06 · Our own brand</div>
-            <h2 class="h-b rv" style="--d:.06s">Fire<span class="gradtx">storm</span></h2>
-            <p class="lede rv" style="--d:.12s">A registered Freedom Fire brand — our own line,
-            specified by us, sourced through our own supply chain rather than bought off a
-            wholesaler's shelf.</p>
-            <span class="tk rv" style="--d:.18s"><b>Team to supply — Firestorm detail</b>
-            What sits under the Firestorm name: which products, what makes the specification
-            different, when the brand launched, and the trademark registration number. Product
-            photography would carry this bay better than the wordmark alone.</span>
-          </div>
-          <div class="card rv" style="--d:.14s;display:flex;align-items:center;justify-content:center;
-            min-height:300px;background:rgba(0,0,0,.45)">
-            <img src="../assets/FireStorm.png" alt="Firestorm — a registered Freedom Fire brand"
-                 style="max-height:170px;width:auto" loading="lazy" decoding="async">
-          </div>
-        </div>
-      </section>
-
-      <!-- 07 · FREIGHT -->
-      <section class="bayp" data-bay="Freight" data-word="FREIGHT"
-        style="width:150vw;--tint:rgba(29,54,134,.32);--tint2:rgba(196,0,0,.1)">
-        <div class="inner">
-          <div class="chip rv">07 · Freedom Freight</div>
-          <h2 class="h-b rv" style="--d:.06s">We watch our own <span class="thin">supply
-            chain</span></h2>
-          <p class="lede rv" style="--d:.12s">Most firms our size order from a wholesaler and hope.
-          We went upstream — <b>vetting suppliers ourselves</b>, working with production partners
-          overseas, and following every order from the factory floor to the warehouse in Bury.</p>
-          <div class="lane rv" style="--d:.16s;margin-top:26px">
-            <div class="laneline"><i id="laneFill"></i></div>
-            <div class="stops" id="stops" style="padding-top:22px">
-              <div class="card stop"><div class="n">01</div><h3>Origin</h3>
-                <p>More than thirty vetted suppliers feeding our production partners.</p></div>
-              <div class="card stop"><div class="n">02</div><h3>Production</h3>
-                <p>Manufactured to our own specification, not a catalogue's.</p></div>
-              <div class="card stop"><div class="n">03</div><h3>Sea freight</h3>
-                <p>Tracked container by container, the whole way across.</p></div>
-              <div class="card stop"><div class="n">04</div><h3>Customs &amp; delivery</h3>
-                <p>Cleared, received into the UK warehouse, out on the vans.</p></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 08 · THE OPEN DOOR -->
-      <section class="bayp" data-bay="The Open Door" data-word="DOOR"
-        style="width:200vw;--tint:rgba(22,163,74,.2);--tint2:rgba(196,0,0,.1)">
-        <div class="inner" style="display:grid;grid-template-columns:minmax(320px,36vw) 1fr minmax(320px,38vw);gap:clamp(26px,3.4vw,56px);align-items:center">
-          <div>
-            <div class="chip rv">08 · The Open Door</div>
-            <h2 class="h-b rv" style="--d:.06s">Where you start doesn't decide
-              <span class="thin">where you finish</span></h2>
-            <p class="lede rv" style="--d:.12s">We're a fire safety business first — the open door
-            is how we crew it. No degree required, no connections needed: <b>paid work, funded
-            tickets, and a certified trade</b> for people the job market usually passes over.</p>
-          </div>
-          <div class="grid row4 rv" style="--d:.1s;grid-template-columns:repeat(2,minmax(240px,1fr))">
-            <div class="card">
-              <svg viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14M4 19h16M9 7h6M9 11h6"/></svg>
-              <h3>Work experience &amp; careers advice</h3>
-              <p><span class="tk-in">TK — what you run: placements, school visits, open days.
-              Dates, numbers, and who with.</span></p>
-            </div>
-            <div class="card">
-              <svg viewBox="0 0 24 24"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20a6 6 0 0 1 12 0M16 8a3 3 0 1 1 0 6M15 20a6 6 0 0 1 7-5.6"/></svg>
-              <h3>Mentoring on the vans</h3>
-              <p><span class="tk-in">TK — how new starters are paired with experienced engineers,
-              and for how long.</span></p>
-            </div>
-            <div class="card">
-              <svg viewBox="0 0 24 24"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 12h6M9 16h4"/></svg>
-              <h3>Interview &amp; job-ready training</h3>
-              <p><span class="tk-in">TK — CV help, interview practice, tickets funded before day
-              one. Name the qualifications.</span></p>
-            </div>
-            <div class="card">
-              <svg viewBox="0 0 24 24"><path d="M12 3v18M5 10l7-7 7 7M8 21h8"/></svg>
-              <h3>Recruitment open to everyone</h3>
-              <p><span class="tk-in">TK — how the hiring process removes barriers: no degree
-              filter, no experience wall, what you actually screen for.</span></p>
-            </div>
-          </div>
-          <div>
-            <span class="tk rv" style="--d:.14s"><b>Tom to supply — the four proofs</b>
-            <i>One short, dated, evidenced piece for each. Case studies need written consent.</i>
-            <br><br><i>1 · For the people.</i> Who came through the door and where they are now —
-            wage then and now, tickets gained, a first-person line from at least one of them.
-            <br><br><i>2 · For the business.</i> Roles filled, retention against industry norm,
-            work won because the team is certified.
-            <br><br><i>3 · For the team.</i> What mentoring does for the mentors.
-            <br><br><i>4 · For the community.</i> Local hires, school partnerships, families with
-            a trade wage coming in that wasn't before.</span>
-            <span class="tk rv" style="--d:.2s"><b>Tom to confirm — the two-year test</b>
-            The award requires the programme to have run for at least two years. <i>State the
-            start date and point at the earliest record</i> — first apprentice's contract, first
-            funded course invoice, first placement letter. If it is younger than two years, this
-            category must wait a cycle — say so now, not in the application.</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- 09 · JOIN US -->
-      <section class="bayp bay-out" data-bay="Join us" data-word="JOIN"
-        style="width:120vw;--tint:rgba(196,0,0,.26);--tint2:rgba(255,75,43,.12)">
-        <div class="inner duo">
-          <div>
-            <div class="chip rv">09 · Join us</div>
-            <div class="jumbo rv" style="--d:.06s" aria-hidden="true">
-              <span>Freedom</span><span>Fire</span>
-            </div>
-            <h2 class="h-b rv" style="--d:.1s;font-size:clamp(26px,3.4vw,50px)">Fancy a proper
-            trade?</h2>
-            <p class="lede rv" style="--d:.14s">Fire safety is not going away, the work is real,
-            and the people who do it well are never short of it. If you want to learn it properly,
-            we will train you.</p>
-            <div class="go rv" style="--d:.18s;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
-              <a class="pillbtn solid" href="tel:+443337722723" data-mag>0333 772 2723</a>
-              <a class="pillbtn ghosty" href="https://www.freedom-fire.co.uk" data-mag>freedom-fire.co.uk</a>
-            </div>
-            <div class="tickrow rv" style="--d:.22s">
-              <span class="tl">Protecting for</span>
-              <span class="tv gradtx"><b id="tD">0</b>d <b id="tH">00</b>:<b id="tM">00</b>:<b id="tS">00</b></span>
-              <span class="tl">since 27·08·2021</span>
-            </div>
-          </div>
-          <div>
-            <span class="tk rv" style="--d:.12s"><b>Team to supply</b>
-            A careers email address, any open roles, and what you offer — training funded, van,
-            tickets, progression. This bay is also your evidence for the staff development
-            themes, so it is worth writing properly.</span>
-            <p class="foot rv" style="--d:.18s">Freedom Fire &amp; Safety Ltd · Company
-            no. 13589467 · Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE ·
-            0333 772 2723 · Part of The Freedom Group.</p>
-          </div>
-        </div>
-      </section>
-
+<!-- HERO -->
+<section class="hero" id="top" data-word="PEOPLE">
+  <div class="media" aria-hidden="true">
+    <img id="heroShot" src="../assets/team.jpg"
+         srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w"
+         sizes="100vw" width="1200" height="1396" alt="" decoding="async">
+  </div>
+  <div class="wrap">
+    <div class="chip rv">Freedom Fire &amp; Safety · Bury · Nationwide</div>
+    <h1 class="rv" style="--d:.06s">The people behind the <span class="gradtx">paperwork</span></h1>
+    <p class="lede rv" style="--d:.12s">Anyone can sell an extinguisher. It takes a team to make
+    sure the alarm sounds, the lights come on, the assessment is honest and the certificate means
+    something. And most of that team <b>walked in through an open door</b> — no degree, no
+    connections, trained from day one.</p>
+    <div class="go rv" style="--d:.18s">
+      <a class="pillbtn solid" href="#door" data-mag>The Open Door →</a>
+      <button class="pillbtn ghosty" id="drillBtn" type="button" data-mag>Sound the drill</button>
     </div>
+    <div class="scrollcue rv" style="--d:.24s"><i></i>Scroll</div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="st"><div class="v gradtx">2021</div><div class="k">Founded, 27 August</div></div>
+    <div class="st"><div class="v gradtx">11–50</div><div class="k">Engineers, assessors, office</div></div>
+    <div class="st"><div class="v gradtx">UK</div><div class="k">Coverage, from Bury</div></div>
+    <div class="st"><div class="v gradtx"><span id="tD">0</span>d <span id="tH">00</span>:<span id="tM">00</span>:<span id="tS">00</span></div>
+      <div class="k">Protecting since day one</div></div>
   </div>
 </div>
+
+<!-- 01 WHO WE ARE -->
+<section id="who" data-word="FREEDOM" style="--tint:rgba(196,0,0,.15);--tint2:rgba(255,255,255,.04)">
+  <div class="wrap">
+    <div class="duo">
+      <div>
+        <div class="chip rv">01 · Who we are</div>
+        <h2 class="h-b rv" style="--d:.06s">A fire safety company that
+          <span class="thin">shows its working</span></h2>
+        <p class="lede rv" style="--d:.12s">Founded in Bury in August 2021, protecting homes and
+        businesses across the UK. We supply, fit, service and certify the equipment fire safety
+        law requires — and keep <b>the records that prove it was done properly</b>. Fire safety is
+        the business; everything on this page exists to do it well.</p>
+      </div>
+      <div class="rv" style="--d:.18s">
+        <p class="lede" style="font-size:14.5px;color:var(--dim-2)">Company no. 13589467 ·
+        SIC 84250<br>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>
+        Part of The Freedom Group.</p>
+        <span class="tk"><b>Team to expand</b>
+        Two or three paragraphs in the company's own voice about what it is actually like here.
+        What the engineers do on a normal Tuesday, what the office handles, how a job goes from
+        first call to certificate. Written plainly — this page is about the people, not the sales
+        pitch.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 THE WORK -->
+<section id="work" data-word="WORK" style="--tint:rgba(255,75,43,.13);--tint2:rgba(196,0,0,.08)">
+  <div class="wrap">
+    <div class="chip rv">02 · The work</div>
+    <h2 class="h-b rv" style="--d:.06s">What we fit, test and <span class="thin">certify</span></h2>
+    <p class="lede rv" style="--d:.12s">Four disciplines, one chain of responsibility. Miss a link
+    and the whole thing fails when it matters.</p>
+    <div class="duo" style="margin-top:clamp(28px,4vw,44px);align-items:stretch">
+      <div class="grid g2 rv" style="--d:.1s">
+        <div class="card">
+          <svg viewBox="0 0 24 24"><path d="M9 3h6v3H9zM10 6v14a2 2 0 0 0 2 2 2 2 0 0 0 2-2V6M7 9h3M17 3v3"/></svg>
+          <h3>Extinguishers</h3>
+          <p>Supply, installation, annual servicing — the right type in the right place, certified
+          at every visit.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24"><path d="M12 3a5 5 0 0 0-5 5v5l-2 3h14l-2-3V8a5 5 0 0 0-5-5zM10 19a2 2 0 0 0 4 0"/><path d="M4 6 2 4M20 6l2-2"/></svg>
+          <h3>Alarm systems</h3>
+          <p>Designed, installed, commissioned and maintained — the building warns its people
+          before anyone smells smoke.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24"><path d="M12 2v3M4.2 6.2 6.3 8.3M2 14h3M19 14h3M17.7 8.3l2.1-2.1"/><path d="M8 20h8M9 17h6M12 8a5 5 0 0 0-3 9h6a5 5 0 0 0-3-9z"/></svg>
+          <h3>Emergency lighting</h3>
+          <p>Installed, tested, certificated — an orderly exit instead of a stairwell in the
+          dark.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 13l2 2 4-4"/></svg>
+          <h3>Assessment &amp; training</h3>
+          <p>Fire risk assessments to the Fire Safety Order, plus warden, marshal and extinguisher
+          training on site.</p>
+        </div>
+      </div>
+      <figure class="plate rv" style="--d:.16s;margin:0">
+        <img data-drift src="../assets/floor.jpg"
+             srcset="../assets/floor-sm.jpg 600w, ../assets/floor.jpg 1200w"
+             sizes="(max-width:920px) 92vw, 44vw" width="1200" height="1395"
+             alt="A Freedom Fire and Safety worker overlooking the production floor"
+             loading="lazy" decoding="async">
+        <figcaption>The floor · archive</figcaption>
+      </figure>
+    </div>
+    <span class="tk rv" style="--d:.2s"><b>Team to confirm</b>
+    Do these four match the real service list? Add fire doors, passive fire protection, sprinklers
+    or dry risers if you cover them — and cut anything you don't.</span>
+  </div>
+</section>
+
+<!-- 03 THE CREW -->
+<section id="crew" data-word="CREW" style="--tint:rgba(196,0,0,.18);--tint2:rgba(255,75,43,.09)">
+  <div class="wrap">
+    <div class="chip rv">03 · The crew</div>
+    <h2 class="h-b rv" style="--d:.06s">Faces, not <span class="thin">job titles</span></h2>
+    <p class="lede rv" style="--d:.12s">The people who turn up, fit it properly and sign their
+    name to it.</p>
+    <div class="grid crewgrid rv" style="--d:.1s;margin-top:clamp(28px,4vw,44px)">
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3>Tom Letcher</h3><div class="r">Founder &amp; Director</div>
+        <p>Founded the company in 2021 and still picks up the phone.
+        <span class="tk-in">TK — one line</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Operations</div>
+        <p><span class="tk-in">TK — one line about what they run</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Lead engineer</div>
+        <p><span class="tk-in">TK — years in the trade, tickets held</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Fire risk assessor</div>
+        <p><span class="tk-in">TK — qualifications and patch covered</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Service engineer</div>
+        <p><span class="tk-in">TK — one line</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Scheduling &amp; office</div>
+        <p><span class="tk-in">TK — the person who knows where everyone is</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Accounts</div>
+        <p><span class="tk-in">TK — one line</span></p></div>
+      </article>
+      <article class="card person">
+        <div class="ph"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="b"><h3><span class="tk-in">TK — name</span></h3><div class="r">Apprentice</div>
+        <p><span class="tk-in">TK — what they're training towards</span></p></div>
+      </article>
+    </div>
+    <span class="tk rv" style="--d:.16s"><b>Tom &amp; team to supply — names and photographs</b>
+    For each person: name, role, one or two sentences, and a square photo (minimum 800×800px),
+    same background and framing for everyone. Duplicate or delete cards to match the real
+    headcount. <i>Get written consent before publishing anyone's photograph and name, and skip
+    anyone who would rather not appear.</i></span>
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mq-t" data-mq="1"
+  data-base="OPEN TO EVERYONE <i>—</i> NO DEGREE REQUIRED <i>—</i> PAID WHILE YOU LEARN <i>—</i> "></div></div>
+
+<!-- 04 THE OPEN DOOR — the centrepiece -->
+<section id="door" class="door" data-word="DOOR">
+  <div class="wrap">
+    <div class="lead-grid">
+      <div>
+        <div class="chip gold rv">04 · The Open Door</div>
+        <h2 class="h-b rv" style="--d:.06s">Where you start doesn't decide
+          <span class="goldish">where you finish</span></h2>
+        <p class="lede rv" style="--d:.12s">We're a fire safety business first — the open door is
+        how we crew it. No degree required, no connections needed: <b>paid work, funded tickets,
+        and a certified trade</b> for people the job market usually passes over.</p>
+      </div>
+      <div class="rv" style="--d:.16s">
+        <div class="doorfact"><div class="ic">1</div>
+          <p><b>It's how we hire, not a side project.</b> The crew in section 03 is the output of
+          this door — which is exactly why it can't be the company's "main focus": the main focus
+          is fire safety, done properly.</p></div>
+        <div class="doorfact"><div class="ic">2</div>
+          <p><b>Everything below carries an evidence slot.</b> Dates, numbers and documents to be
+          filled by the team — nothing on this page is asserted without them.</p></div>
+      </div>
+    </div>
+
+    <div class="grid g4 rv" style="--d:.08s">
+      <div class="card">
+        <svg viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14M4 19h16M9 7h6M9 11h6"/></svg>
+        <h3>Work experience &amp; careers advice</h3>
+        <p><span class="tk-in">TK — what you run: placements, school visits, open days. Dates,
+        numbers, and who with.</span></p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20a6 6 0 0 1 12 0M16 8a3 3 0 1 1 0 6M15 20a6 6 0 0 1 7-5.6"/></svg>
+        <h3>Mentoring on the vans</h3>
+        <p><span class="tk-in">TK — how new starters are paired with experienced engineers, and
+        for how long.</span></p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5M9 12h6M9 16h4"/></svg>
+        <h3>Interview &amp; job-ready training</h3>
+        <p><span class="tk-in">TK — CV help, interview practice, tickets funded before day one.
+        Name the qualifications.</span></p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><path d="M12 3v18M5 10l7-7 7 7M8 21h8"/></svg>
+        <h3>Recruitment open to everyone</h3>
+        <p><span class="tk-in">TK — how the hiring process removes barriers: no degree filter, no
+        experience wall, what you actually screen for.</span></p>
+      </div>
+    </div>
+
+    <div class="ladder rv" style="--d:.1s">
+      <div class="lhead">The ladder — how a starter becomes an engineer</div>
+      <div class="lane">
+        <div class="laneline"><i id="laneFill"></i></div>
+        <div class="steps" id="steps" style="padding-top:20px">
+          <div class="step"><div class="n">1</div><h3>Day one</h3>
+            <p>Paid from the start. <span class="tk-in">TK — starting package</span></p></div>
+          <div class="step"><div class="n">2</div><h3>First tickets</h3>
+            <p>Qualifications funded by the company. <span class="tk-in">TK — which</span></p></div>
+          <div class="step"><div class="n">3</div><h3>On the vans</h3>
+            <p>Mentored by an experienced engineer on real jobs.</p></div>
+          <div class="step"><div class="n">4</div><h3>Certified</h3>
+            <p>Signing their own work. <span class="tk-in">TK — time to qualify</span></p></div>
+          <div class="step"><div class="n">5</div><h3>The mentor</h3>
+            <p>Training the next one through the same door.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gate rv" style="--d:.08s">
+      <h3>The <b>two-year test</b> — settle this first</h3>
+      <p>The award requires the programme to have run for at least two years. <i>State the start
+      date and point at the earliest record</i> — first apprentice's contract, first funded course
+      invoice, first placement letter. If it is younger than two years, this category must wait a
+      cycle — say so now, not in the application.</p>
+    </div>
+
+    <div class="proofs">
+      <div class="ph-head rv">The proof it works — for four groups</div>
+      <div class="grid g4 rv" style="--d:.08s">
+        <div class="card proof"><div class="num">01</div><h3>The people supported</h3>
+          <p><span class="tk-in">TK — who came through the door and where they are now: wage then
+          and now, tickets gained, a first-person line from at least one of them (with written
+          consent).</span></p></div>
+        <div class="card proof"><div class="num">02</div><h3>The organisation</h3>
+          <p><span class="tk-in">TK — roles filled, retention against industry norm, work won
+          because the team is certified.</span></p></div>
+        <div class="card proof"><div class="num">03</div><h3>Our employees</h3>
+          <p><span class="tk-in">TK — what mentoring does for the mentors: supervisory experience,
+          qualifications, pride worth quoting.</span></p></div>
+        <div class="card proof"><div class="num">04</div><h3>The wider community</h3>
+          <p><span class="tk-in">TK — local hires, school partnerships, families with a trade wage
+          coming in that wasn't before.</span></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 TRAINING ROOM -->
+<section id="training" data-word="TRAIN" style="--tint:rgba(201,162,75,.13);--tint2:rgba(196,0,0,.09)">
+  <div class="wrap">
+    <div class="chip rv">05 · Training room</div>
+    <h2 class="h-b rv" style="--d:.06s">Know your <span class="thin">fire</span></h2>
+    <p class="lede rv" style="--d:.12s">Every starter learns this in week one. Pick what's
+    burning — we'll show you what puts it out. Or test yourself: six callouts, scored.</p>
+    <div class="fireui rv" style="--d:.1s" id="fireui">
+      <div class="fmode" role="group" aria-label="Mode">
+        <button type="button" class="fm on" id="fmLearn" aria-pressed="true">Learn</button>
+        <button type="button" class="fm" id="fmTest" aria-pressed="false">Test yourself</button>
+        <span class="fscore gradtx" id="fscore" hidden>0 / 6</span>
+      </div>
+      <p class="fq" id="fq" hidden></p>
+      <div class="fclasses" role="tablist" aria-label="Fire classes">
+        <button type="button" class="fc on" data-cls="a" aria-pressed="true">A · Solids</button>
+        <button type="button" class="fc" data-cls="b" aria-pressed="false">B · Liquids</button>
+        <button type="button" class="fc" data-cls="c" aria-pressed="false">C · Gases</button>
+        <button type="button" class="fc" data-cls="e" aria-pressed="false">E · Electrical</button>
+        <button type="button" class="fc" data-cls="f" aria-pressed="false">F · Cooking oils</button>
+      </div>
+      <div class="exts">
+        <div class="ext" data-ok="a" style="--band:#C40000"><span class="eb"></span>
+          <h4>Water</h4><p>Wood, paper, textiles. Never near live electrics.</p></div>
+        <div class="ext" data-ok="a b" style="--band:#F1E9D2"><span class="eb"></span>
+          <h4>Foam</h4><p>Solids and flammable liquids — smothers the surface.</p></div>
+        <div class="ext" data-ok="b e" style="--band:#2A2A2A"><span class="eb"></span>
+          <h4>CO₂</h4><p>Liquids and live electrical — leaves no residue.</p></div>
+        <div class="ext" data-ok="a b c e" style="--band:#1D3686"><span class="eb"></span>
+          <h4>Dry powder</h4><p>A, B, C and electrical — not in enclosed spaces.</p></div>
+        <div class="ext" data-ok="f a" style="--band:#FFB300"><span class="eb"></span>
+          <h4>Wet chemical</h4><p>Cooking oils and fats — the chip-pan specialist.</p></div>
+      </div>
+      <p class="fnote" id="fnote" aria-live="polite">Class A — wood, paper, textiles. Water, foam,
+      powder or wet chemical will do it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 WHAT WE'RE BUILDING -->
+<section id="build" data-word="BUILD" style="--tint:rgba(29,54,134,.22);--tint2:rgba(158,0,0,.14)">
+  <div class="wrap">
+    <div class="chip rv">06 · What we're building</div>
+    <h2 class="h-b rv" style="--d:.06s">The business the door <span class="thin">feeds</span></h2>
+    <p class="lede rv" style="--d:.12s">The people who come through the open door build more than
+    jobs — they build the company's own brands and its own supply chain.</p>
+    <div class="buildgrid rv" style="--d:.1s">
+      <div class="card bcard">
+        <img src="../assets/FireStorm.png" alt="Firestorm — a registered Freedom Fire brand"
+             loading="lazy" decoding="async">
+        <h3>Fire<span class="gradtx">storm</span> — our own brand</h3>
+        <p>A registered Freedom Fire brand: our own line, specified by us, sourced through our own
+        supply chain rather than bought off a wholesaler's shelf.</p>
+        <span class="tk"><b>Team to supply</b>
+        Which products sit under the Firestorm name, what the specification does differently, the
+        launch date and the trademark registration number.</span>
+      </div>
+      <div class="card bcard">
+        <h3>Freedom <span class="gradtx">Freight</span> — our own supply chain</h3>
+        <p>Most firms our size order from a wholesaler and hope. We went upstream — vetting
+        suppliers ourselves, working with production partners overseas, and following every order
+        from the factory floor to the warehouse in Bury.</p>
+        <div class="mini">
+          <span>Origin — 30+ vetted suppliers</span><span>Production — our spec</span>
+          <span>Sea freight — tracked</span><span>Delivery — out on the vans</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 THE CODE -->
+<section id="code" data-word="CODE" style="--tint:rgba(196,0,0,.16);--tint2:rgba(255,75,43,.08)">
+  <div class="wrap">
+    <div class="chip rv">07 · The code</div>
+    <h2 class="h-b rv" style="--d:.06s">Four things we don't <span class="thin">bend on</span></h2>
+    <div class="grid g4 rv" style="--d:.1s;margin-top:clamp(26px,3.6vw,40px)">
+      <div class="card val"><div class="n gradtx">01</div><h3>Certified, or not at all</h3>
+        <p>If it cannot be certified and documented, it does not get signed off. The paperwork is
+        the product as much as the hardware is.</p></div>
+      <div class="card val"><div class="n gradtx">02</div><h3>Say the real date</h3>
+        <p>Because we track our own stock from origin, we can give a delivery date we actually
+        believe — and say so plainly when it slips.</p></div>
+      <div class="card val"><div class="n gradtx">03</div><h3>Explain it properly</h3>
+        <p>Most clients did not choose to become the responsible person. Part of the job is making
+        the duty understandable rather than frightening.</p></div>
+      <div class="card val"><div class="n gradtx">04</div><h3>Keep the door open</h3>
+        <p>Hire on attitude, fund the tickets, mentor on the vans — so the trade has engineers in
+        ten years' time. <a href="#door" style="color:var(--red-2);text-decoration:underline">Section
+        04</a> is how.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 JOIN -->
+<section id="join" class="join" data-word="JOIN">
+  <div class="wrap">
+    <div class="duo">
+      <div>
+        <div class="chip rv">08 · Join us</div>
+        <div class="jumbo rv" style="--d:.06s" aria-hidden="true">
+          <span>Freedom</span><span>Fire</span>
+        </div>
+        <h2 class="h-b rv" style="--d:.1s;font-size:clamp(26px,3.4vw,50px)">Fancy a proper
+        trade?</h2>
+        <p class="lede rv" style="--d:.14s">Fire safety is not going away, the work is real, and
+        the people who do it well are never short of it. If you want to learn it properly, we will
+        train you.</p>
+        <div class="go rv" style="--d:.18s;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+          <a class="pillbtn solid" href="tel:+443337722723" data-mag>0333 772 2723</a>
+          <a class="pillbtn ghosty" href="https://www.freedom-fire.co.uk" data-mag>freedom-fire.co.uk</a>
+        </div>
+      </div>
+      <div>
+        <span class="tk rv" style="--d:.12s"><b>Team to supply</b>
+        A careers email address, any open roles, and what you offer — training funded, van,
+        tickets, progression. This section is also your evidence for the staff development
+        themes, so it is worth writing properly.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety">
+    <div>Freedom Fire &amp; Safety Ltd · Company no. 13589467 · Unit 19, Pilsworth Industrial
+    Estate, Bury, BL9 8RE · 0333 772 2723 · Part of The Freedom Group.</div>
+  </div>
+</footer>
 
 <script src="engine.js"></script>
 </body>
