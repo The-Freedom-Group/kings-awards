@@ -114,16 +114,17 @@
       live    = $("#tLive"),
       head    = $("#tHead");
 
+  /* L and R ride the empty margin outside the text column, so the
+     line never crosses a word. C is the centre. */
   var PLAN = [
-    { id: "top",  x: 0.10, y: 0.72 },
-    { id: "ones", x: 0.50, y: 0.50, noKnot: true },
-    { id: "c01",  x: 0.14, y: 0.42 },
-    { id: "c02",  x: 0.86, y: 0.42 },
-    { id: "c03",  x: 0.16, y: 0.42 },
-    { id: "c04",  x: 0.50, y: 0.40 },
-    { id: "c05",  x: 0.84, y: 0.42 },
-    { id: "c06",  x: 0.15, y: 0.42 },
-    { id: "c07",  x: 0.50, y: 0.52 }
+    { id: "ones", side: "C", y: 0.50, noKnot: true },
+    { id: "c01",  side: "L", y: 0.42 },
+    { id: "c02",  side: "R", y: 0.42 },
+    { id: "c03",  side: "L", y: 0.42 },
+    { id: "c04",  side: "C", y: 0.40 },
+    { id: "c05",  side: "R", y: 0.42 },
+    { id: "c06",  side: "L", y: 0.42 },
+    { id: "c07",  side: "C", y: 0.52 }
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [];
@@ -136,15 +137,38 @@
     var W = explore.offsetWidth, H = explore.offsetHeight;
     if (!W || !H) return false;
 
+    /* find the text column so the line can run outside it */
+    var col = explore.querySelector(".ch .wrap") || explore.querySelector(".wrap");
+    var cr = col ? col.getBoundingClientRect() : { left: 0, right: W };
+    var LX = Math.max(18, cr.left - 34);
+    var RX = Math.min(W - 18, cr.right + 34);
+    var CX = W * 0.5;
+    var SIDE = { L: LX, R: RX, C: CX };
+
     pts = [];
+
+    /* the line opens as the horizontal run across the hero, then turns
+       down — one stroke, no second graphic */
+    var heroEl = document.getElementById("top");
+    if (heroEl) {
+      var hy = heroEl.offsetTop + heroEl.offsetHeight * 0.689;
+      pts.push({ x: LX, y: hy, id: "top", el: heroEl, noKnot: false });
+      pts.push({ x: W * 0.74, y: hy, id: "turn", el: heroEl, noKnot: true });
+      var lbl = document.getElementById("hlStart");
+      if (lbl) {
+        lbl.style.left = LX + "px";
+        lbl.style.top = (hy - heroEl.offsetTop) + "px";
+      }
+    }
+
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
-      pts.push({ x: W * p.x, y: el.offsetTop + el.offsetHeight * p.y,
+      pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y,
                  id: p.id, el: el, noKnot: !!p.noKnot });
     });
     if (pts.length < 2) return false;
-    pts.push({ x: W * 0.5, y: H + 40, id: "beyond", el: null, noKnot: true });
+    pts.push({ x: CX, y: H + 40, id: "beyond", el: null, noKnot: true });
 
     var d = "M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1);
     for (var i = 0; i < pts.length - 1; i++) {
