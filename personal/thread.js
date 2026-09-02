@@ -320,14 +320,6 @@
         }
       }
 
-      /* floor image drifts inside its crop */
-      var floor = $("#floorShot");
-      if (floor && !reduce) {
-        var fr = floor.getBoundingClientRect();
-        var fp = clamp((window.innerHeight - fr.top) / (window.innerHeight + fr.height), 0, 1);
-        floor.style.transform = "translate3d(0," + ((fp - 0.5) * 46).toFixed(1) + "px,0) scale(1.08)";
-      }
-
       /* chrome tone + spine */
       var mid = y + 90, dark = false, cur2 = null;
       chapters.forEach(function (s) {

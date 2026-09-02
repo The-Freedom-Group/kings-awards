@@ -158,22 +158,26 @@ body[data-view="record"] .spine{display:none}
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
   padding-top:78px;overflow:hidden;background:var(--porcelain)}
 .hero .wrap{position:relative;width:100%;z-index:3}
-.hero-stage{position:relative;display:grid;align-items:center;min-height:min(72vh,700px)}
+.hero-stage{position:relative;display:grid;align-items:center;min-height:min(58vh,540px);
+  padding-bottom:clamp(8px,4vh,44px)}
 .hero-type{position:relative;z-index:3;pointer-events:none}
-.hero-type h1{font-size:clamp(64px,15.4vw,232px);line-height:.8}
-.hero-type h1 span{display:block;will-change:transform}
-.hero-shot{position:absolute;right:calc(var(--gut) * -.35);bottom:-8%;
-  width:clamp(300px,46vw,700px);z-index:2;will-change:transform;
+.hero-sub{position:relative;z-index:5}
+.hero-type h1{font-size:clamp(34px,12.6vw,188px);line-height:.9;white-space:nowrap}
+.hero-type h1 span{display:inline-block;will-change:transform}
+.hero-type h1 span:first-child{margin-right:.19em}
+.hero-shot{position:absolute;right:calc(var(--gut) * -.18);bottom:0;
+  height:min(56vh,540px);aspect-ratio:682/897;width:auto;z-index:4;will-change:transform;
   -webkit-mask-image:linear-gradient(to bottom,#000 54%,transparent 97%),
     linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 54%,transparent 97%),
     linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%);
   -webkit-mask-composite:source-in;mask-composite:intersect}
-.hero-shot img{width:100%;opacity:0;transition:opacity 1s ease}
+.hero-shot img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
 .hero-shot img.on{opacity:1}
 @media(max-width:820px){
-  .hero-shot{position:relative;right:auto;bottom:auto;width:88%;margin:10px -6% -8% auto}
-  .hero-type h1{font-size:clamp(54px,17vw,120px)}}
+  .hero-shot{position:relative;right:auto;bottom:auto;height:min(38vh,330px);
+    margin:14px -4% 0 auto}
+  .hero-type h1{font-size:clamp(30px,12.4vw,96px)}}
 .hero-sub{position:relative;z-index:4;margin-top:clamp(18px,3vw,34px);max-width:34ch}
 .hero-sub p{margin:0;font-size:clamp(13px,1.35vw,15.5px);letter-spacing:.13em;text-transform:uppercase;
   font-weight:500;line-height:1.75}
@@ -643,14 +647,6 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
         Number of SKUs. Which sales channels you run and when each opened. Headcount by year.</span>
       </div>
     </div>
-    <figure class="plate wide crop rv">
-      <img id="floorShot" src="../assets/arch-floor.jpg"
-           srcset="../assets/arch-floor-sm.jpg 600w, ../assets/arch-floor.jpg 1200w"
-           sizes="100vw" width="1200" height="1395"
-           alt="A Freedom Fire and Safety worker in a hi-vis vest looking out over a production and warehouse floor"
-           loading="lazy" decoding="async">
-      <figcaption>The floor. Freedom Fire &amp; Safety archive.</figcaption>
-    </figure>
   </div>
 </section>
 
