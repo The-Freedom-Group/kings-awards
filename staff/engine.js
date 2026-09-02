@@ -117,7 +117,7 @@
   stagger(".stops", ".stop", 0.09);
 
   /* ── two-way reveals ──────────────────────────────────────── */
-  var watched = $$(".rv, .plate, .team, .cards, .vals, .stops, .route .routeline");
+  var watched = $$(".rv, .plate, .team, .cards, .vals");
   if (!("IntersectionObserver" in window) || reduce) {
     watched.forEach(function (e) { e.classList.add("in"); });
   } else {
@@ -207,6 +207,7 @@
   /* ── master loop ──────────────────────────────────────────── */
   var chapters = $$("#main .ch, #main .hero");
   var chrome = $("#chrome"), spine = $$(".spine a"), prog = $("#prog");
+  var routeFill = $("#routeFill"), stopsEl = $("#stops"), stopEls = $$("#stops .stop");
   var lastY = -1, velY = 0;
 
   function frame() {
@@ -246,9 +247,21 @@
                    (window.innerHeight + ps.offsetHeight);
           if (pp > -0.1 && pp < 1.1) {
             pws[pi].el.style.transform = "translate3d(" +
-              ((pp - 0.5) * -window.innerWidth * 0.22).toFixed(1) + "px,-50%,0)";
+              ((pp - 0.5) * -window.innerWidth * 0.22).toFixed(1) + "px,-50%,0)" +
+              " skewX(" + clamp(-velY * 0.08, -5, 5).toFixed(2) + "deg)";
           }
         }
+        /* the freight route draws with the scroll, lighting each stop */
+        if (routeFill && stopsEl) {
+          var sr = stopsEl.getBoundingClientRect();
+          var rpp = clamp((window.innerHeight * 0.88 - sr.top) /
+                          (sr.height + window.innerHeight * 0.3), 0, 1);
+          routeFill.style.width = (rpp * 100).toFixed(1) + "%";
+          for (var si2 = 0; si2 < stopEls.length; si2++) {
+            stopEls[si2].classList.toggle("lit", rpp >= (si2 + 0.6) / stopEls.length);
+          }
+        }
+
         /* photographs drift inside their crops */
         $$("[data-drift]").forEach(function (img) {
           var fr = img.getBoundingClientRect();
@@ -368,7 +381,7 @@
       setTimeout(function () {
         document.body.classList.remove("drill-on");
         var secs = ((performance.now() - t0) / 1000).toFixed(1);
-        say("Drill complete in " + secs + "s — you'd be first out. ⚡");
+        say("Drill complete in " + secs + "s. Muscle memory matters.");
         drillLock = false;
       }, 2550);
     });
@@ -425,14 +438,30 @@
   /* ── 3D tilt on every card ────────────────────────────────── */
   if (fine && !reduce) {
     $$(".cardx, .person, .stop, .val").forEach(function (el) {
+      el.addEventListener("mouseenter", function () { el.classList.add("tilting"); });
       el.addEventListener("mousemove", function (e) {
         var r = el.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width - 0.5;
         var py = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = "translateY(-5px) rotateX(" + (-py * 7).toFixed(2) +
-          "deg) rotateY(" + (px * 7).toFixed(2) + "deg)";
+        el.style.transform = "translateY(-4px) rotateX(" + (-py * 4).toFixed(2) +
+          "deg) rotateY(" + (px * 4).toFixed(2) + "deg)";
       });
-      el.addEventListener("mouseleave", function () { el.style.transform = ""; });
+      el.addEventListener("mouseleave", function () {
+        el.classList.remove("tilting");
+        el.style.transform = "";
+      });
+    });
+
+    /* cursor spotlight over the dark panels */
+    $$("#main .ch.deep, #main .ch.join, #main .hero").forEach(function (sec) {
+      var sp = document.createElement("div");
+      sp.className = "spot"; sp.setAttribute("aria-hidden", "true");
+      sec.appendChild(sp);
+      sec.addEventListener("mousemove", function (e) {
+        var r = sec.getBoundingClientRect();
+        sp.style.setProperty("--sx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+        sp.style.setProperty("--sy", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+      }, { passive: true });
     });
   }
 

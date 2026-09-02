@@ -487,6 +487,29 @@ body.drill-on .mq-t{animation:none}
 .cards,.team,.stops,.vals{perspective:900px}
 .cards .cardx,.team .person,.stops .stop,.vals .val{transform-style:preserve-3d}
 
+/* ── immersion: spotlight, focus-dim, live route ──────────── */
+.spot{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
+  transition:opacity .5s ease;
+  background:radial-gradient(380px 380px at var(--sx,50%) var(--sy,40%),
+    rgba(255,75,43,.14), transparent 70%)}
+.deep:hover .spot,.join:hover .spot,.hero:hover .spot{opacity:1}
+
+.team:hover .person:not(:hover),
+.cards:hover .cardx:not(:hover),
+.stops:hover .stop:not(:hover),
+.vals:hover .val:not(:hover){opacity:.55;filter:saturate(.8)}
+.person,.cardx,.stop,.val{transition-property:transform,border-color,box-shadow,opacity,filter}
+
+.tilting{transition:opacity .35s,filter .35s!important}
+
+.stops .stop{opacity:0;transform:translateY(14px);
+  transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.25,1),
+             border-color .3s,box-shadow .3s,filter .35s}
+.stops .stop.lit{opacity:1;transform:none}
+.stops:hover .stop.lit:not(:hover){opacity:.55}
+.stop.lit .n{box-shadow:0 0 0 4px rgba(196,0,0,.15)}
+.routeline i{transition:none}
+
 /* ── motion ─────────────────────────────────────────────────── */
 .rv{opacity:0;transform:translateY(30px) scale(.986);filter:blur(5px);
   transition:opacity .8s cubic-bezier(.22,.72,.24,1),transform .8s cubic-bezier(.22,.72,.24,1),
@@ -512,7 +535,11 @@ body.drill-on .mq-t{animation:none}
   .pw{opacity:.03}
   .team.in .person,.cards.in .cardx,.vals.in .val,.stops.in .stop{animation:none}
   .plate img{clip-path:none;transition:none}
-  .routeline i{width:100%;transition:none}
+  .routeline i{width:100%!important;transition:none}
+  .stops .stop{opacity:1;transform:none}
+  .spot{display:none}
+  .team:hover .person:not(:hover),.cards:hover .cardx:not(:hover),
+  .stops:hover .stop:not(:hover),.vals:hover .val:not(:hover){opacity:1;filter:none}
   .follow i{animation:none}
   .follow::after,.btn::after{display:none}
   .sheet li{opacity:1;transform:none;transition:none}
@@ -692,7 +719,7 @@ body.drill-on .mq-t{animation:none}
         <button type="button" class="fc on" data-cls="a" aria-pressed="true">A · Solids</button>
         <button type="button" class="fc" data-cls="b" aria-pressed="false">B · Liquids</button>
         <button type="button" class="fc" data-cls="c" aria-pressed="false">C · Gases</button>
-        <button type="button" class="fc" data-cls="e" aria-pressed="false">⚡ Electrical</button>
+        <button type="button" class="fc" data-cls="e" aria-pressed="false">E · Electrical</button>
         <button type="button" class="fc" data-cls="f" aria-pressed="false">F · Cooking oils</button>
       </div>
       <div class="exts">
@@ -822,8 +849,8 @@ body.drill-on .mq-t{animation:none}
       in Bury.</p>
     </div>
     <div class="route rv">
-      <div class="routeline"><i></i></div>
-      <div class="stops">
+      <div class="routeline" id="routeline"><i id="routeFill"></i></div>
+      <div class="stops" id="stops">
         <div class="stop"><div class="n">01</div><h3>Origin</h3>
           <p>More than thirty vetted suppliers feeding our production partners.</p></div>
         <div class="stop"><div class="n">02</div><h3>Production</h3>
