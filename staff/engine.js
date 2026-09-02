@@ -37,6 +37,10 @@
 
   /* ── header progress + file tabs ──────────────────────────── */
   var progFill = $("#progFill"), tabs = $$(".tabs a");
+  var docLine = $("#docLine");
+  var SHEETS = { top: "Cover", who: "Who we are", work: "The work", crew: "The crew",
+    door: "The Open Door", training: "Training room", build: "What we're building",
+    code: "The code", join: "Join us" };
   var sections = $$("main section");
   var ticking = false;
   function onScroll() {
@@ -50,6 +54,15 @@
       if (vm >= s.offsetTop && vm < s.offsetTop + s.offsetHeight) cur = s.id;
     });
     tabs.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur); });
+
+    /* the letterhead names the sheet you are on */
+    if (docLine) {
+      var idx = 0;
+      for (var si = 0; si < sections.length; si++) if (sections[si].id === cur) idx = si;
+      var nm = SHEETS[cur] || "The People";
+      var line = "Dossier · " + nm + " · Sheet " + (idx + 1) + " of " + sections.length;
+      if (docLine.textContent !== line) docLine.textContent = line;
+    }
 
     /* the ladder ticks with the scroll, in both directions */
     if (rows.length) {
@@ -202,6 +215,55 @@
   if (fmL && fmT) {
     fmL.addEventListener("click", function () { setFMode(false); });
     fmT.addEventListener("click", function () { setFMode(true); });
+  }
+
+  /* ── the signature pad: red ink provided ──────────────────── */
+  var sig = $("#sigPad"), sigClear = $("#sigClear"), sigMsg = $("#sigMsg");
+  if (sig && sig.getContext) {
+    var sctx = sig.getContext("2d"), drawing = false, signed = false, lx = 0, ly = 0;
+    function sigSize() {
+      var w = sig.clientWidth || sig.parentElement.clientWidth;
+      if (!w) return;
+      var keep = null;
+      if (signed) { try { keep = sctx.getImageData(0, 0, sig.width, sig.height); } catch (e) {} }
+      sig.width = w; sig.height = 92;
+      sctx.lineWidth = 2.2; sctx.lineCap = "round"; sctx.lineJoin = "round";
+      sctx.strokeStyle = "#C40000";
+      if (keep) sctx.putImageData(keep, 0, 0);
+    }
+    function pos(e) {
+      var r = sig.getBoundingClientRect();
+      var p = e.touches ? e.touches[0] : e;
+      return [p.clientX - r.left, p.clientY - r.top];
+    }
+    function start(e) {
+      drawing = true;
+      var p = pos(e); lx = p[0]; ly = p[1];
+      e.preventDefault();
+    }
+    function move(e) {
+      if (!drawing) return;
+      var p = pos(e);
+      sctx.beginPath(); sctx.moveTo(lx, ly); sctx.lineTo(p[0], p[1]); sctx.stroke();
+      lx = p[0]; ly = p[1];
+      if (!signed) { signed = true; if (sigMsg) sigMsg.textContent = "That'll do nicely."; }
+      e.preventDefault();
+    }
+    function end() { drawing = false; }
+    sig.addEventListener("mousedown", start);
+    sig.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", end);
+    sig.addEventListener("touchstart", start, { passive: false });
+    sig.addEventListener("touchmove", move, { passive: false });
+    sig.addEventListener("touchend", end);
+    if (sigClear) sigClear.addEventListener("click", function () {
+      sctx.clearRect(0, 0, sig.width, sig.height);
+      signed = false;
+      if (sigMsg) sigMsg.textContent = "Go on — sign it. Red ink provided.";
+    });
+    window.addEventListener("resize", sigSize);
+    window.addEventListener("load", sigSize);
+    sigSize();
   }
 
   /* ── protecting-since counters (both instances) ───────────── */

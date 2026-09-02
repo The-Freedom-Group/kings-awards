@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23F1EDE5'/%3E%3Crect x='4' y='4' width='24' height='24' fill='none' stroke='%23131313' stroke-width='2'/%3E%3Cpath d='M16 8c2.4 3.2.8 4.8 2.4 6.4s2.4.8 2.4 3.2a4.8 4.8 0 1 1-9.6 0c0-3.2 4-4.8 4.8-9.6z' fill='%23C40000'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════════════════
    THE PEOPLE — Freedom Fire & Safety
@@ -50,9 +50,71 @@ h1,h2,h3,h4{margin:0;font-family:var(--disp);font-weight:400;line-height:.95;
 ::selection{background:var(--red);color:#fff}
 .mono{font-family:var(--mono)}
 
-/* highlighter swipe */
+/* paper grain over everything */
+body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5;
+  mix-blend-mode:multiply;background-repeat:repeat;background-size:240px 240px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.93 0 0 0 0 0.91 0 0 0 0 0.87 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
+main,header,footer,.strip,.mq,.hz{position:relative;z-index:2}
+
+/* highlighter swipe — draws itself when the sheet lands */
 .mark{background:linear-gradient(transparent 55%, rgba(196,0,0,.32) 55%, rgba(196,0,0,.32) 92%,
-  transparent 92%);padding:0 .06em}
+  transparent 92%) no-repeat left center;background-size:0% 100%;padding:0 .06em;
+  transition:background-size .9s cubic-bezier(.25,.7,.25,1) .35s}
+.rv.in .mark,.in .mark{background-size:100% 100%}
+
+/* stamps press themselves as their sheet lands */
+.rv .stamp{opacity:0;transform:rotate(-4deg) scale(1.7)}
+.rv.in .stamp{opacity:1;transform:rotate(-4deg) scale(1);
+  transition:opacity .3s .45s,transform .3s .45s cubic-bezier(.2,1.5,.4,1)}
+
+/* red-pen marginalia */
+.note{position:absolute;font-family:'Caveat',cursive;font-weight:700;color:var(--red);
+  font-size:clamp(19px,2vw,26px);line-height:1.05;transform:rotate(var(--rot,-3deg));
+  z-index:5;pointer-events:none;white-space:nowrap;
+  opacity:0;transition:opacity .5s .6s}
+.rv.in .note,.in .note,section.noted .note{opacity:1}
+
+/* staples */
+.staple{position:absolute;left:16px;top:-7px;width:26px;height:14px;z-index:5}
+.staple::before,.staple::after{content:"";position:absolute;top:0;width:2.5px;height:14px;
+  background:var(--ink);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.staple::before{left:0;transform:rotate(6deg)}
+.staple::after{right:0;transform:rotate(-5deg)}
+
+/* punch holes down the left margin */
+.holes{position:fixed;left:clamp(10px,1.6vw,26px);top:50%;transform:translateY(-50%);
+  z-index:60;display:flex;flex-direction:column;gap:38vh;pointer-events:none}
+.holes i{width:22px;height:22px;border-radius:50%;background:var(--paper-2);
+  box-shadow:inset 2px 2px 4px rgba(0,0,0,.28), inset -1px -1px 2px rgba(255,255,255,.7),
+    0 0 0 1px rgba(0,0,0,.1)}
+@media(max-width:1100px){.holes{display:none}}
+
+/* torn top edge on the exhibit sheet */
+.tear{position:absolute;left:0;right:0;top:-1px;height:16px;z-index:3;
+  background:
+    linear-gradient(-135deg,var(--white) 8px,transparent 0) 0 0/24px 16px repeat-x,
+    linear-gradient(135deg,var(--white) 8px,transparent 0) 12px 0/24px 16px repeat-x;
+  filter:drop-shadow(0 -2px 1px rgba(0,0,0,.08))}
+
+/* signature pad — sign the application */
+.sig{margin-top:20px}
+.sig .sl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:6px}
+.sig .sl button{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;background:none;border:0;color:var(--red);cursor:pointer;
+  text-decoration:underline;padding:0}
+.sig canvas{display:block;width:100%;height:92px;background:var(--white);
+  border:var(--rule);border-style:dashed;cursor:crosshair;touch-action:none}
+.sig .sx{font-family:'Caveat',cursive;color:var(--ink-3);font-size:15px;margin-top:4px}
+
+/* barcode */
+.bars{display:flex;align-items:flex-end;gap:14px;margin-left:auto}
+.bars i{width:120px;height:26px;background:repeating-linear-gradient(90deg,
+  var(--paper) 0 2px, transparent 2px 4px, var(--paper) 4px 5px, transparent 5px 9px,
+  var(--paper) 9px 12px, transparent 12px 14px)}
+.bars b{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.2em}
+@media(max-width:820px){.bars{display:none}}
 .redtx{color:var(--red)}
 
 /* hazard stripe */
@@ -389,13 +451,17 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
 
 @media(prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
+  .mark{background-size:100% 100%;transition:none}
+  .rv .stamp{opacity:1;transform:rotate(-4deg) scale(1);transition:none}
+  .note{opacity:1;transition:none}
   .enter{display:none!important}
   .crow .box i::before{transition:none}
   .drill,.toast{display:none!important}
   html{scroll-behavior:auto}
 }
 @media print{
-  .chrome,.prog,.tabs,.enter,.drill,.toast,.mq,.ghost{display:none}
+  .chrome,.prog,.tabs,.enter,.drill,.toast,.mq,.ghost,.holes,.note,.sig,.bars{display:none}
+  body::before{display:none}
   .rv{opacity:1;transform:none}
   .form,.id,.check,.exam,.slip,.clauses{box-shadow:none}
   body{background:#fff}
@@ -406,6 +472,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
 
 <div class="drill" id="drill" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="holes" aria-hidden="true"><i></i><i></i></div>
 
 <div class="enter" id="enter" aria-hidden="true">
   <img src="../assets/ff_logo_black.png" alt="">
@@ -417,7 +484,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
 <header class="chrome" id="chrome">
   <div class="wrap">
     <a href="#top"><img class="logo" src="../assets/ff_logo_black.png" alt="Freedom Fire &amp; Safety"></a>
-    <span class="doc">Dossier · The People · Ref 13589467</span>
+    <span class="doc" id="docLine">Dossier · The People · Ref 13589467</span>
     <nav>
       <a href="#who">01 Who</a><a href="#work">02 Work</a><a href="#crew">03 Crew</a>
       <a href="#training">05 Training</a><a href="#build">06 Building</a>
@@ -464,6 +531,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
              srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w"
              sizes="(max-width:920px) 92vw, 46vw" width="1200" height="1396"
              alt="The Freedom Fire and Safety team at the Bury office" decoding="async">
+        <span class="note" style="right:-6px;top:-40px;--rot:-5deg">the whole team →</span>
         <figcaption class="cap">Fig. 1 — The team, Bury · company archive</figcaption>
       </figure>
     </div>
@@ -633,6 +701,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
 
 <!-- 04 THE OPEN DOOR -->
 <section id="door" class="door">
+  <div class="tear" aria-hidden="true"></div>
   <span class="ghost" aria-hidden="true">04</span>
   <div class="wrap">
     <div class="dochead rv"><span class="sec">SEC. 04 — EXHIBIT</span>
@@ -640,8 +709,9 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
       <span class="pg">Sheet 4 of 8</span></div>
     <div class="duo" style="align-items:start">
       <div>
-        <h2 class="h-b rv" style="--d:.05s">Where you start doesn't decide
-          <span class="mark">where you finish</span></h2>
+        <h2 class="h-b rv" style="--d:.05s;position:relative">Where you start doesn't decide
+          <span class="mark">where you finish</span>
+          <span class="note" style="right:-10px;top:-30px;--rot:4deg">← the exhibit</span></h2>
         <p class="lede rv" style="--d:.1s">We're a fire safety business first — the open door is
         how we crew it. No degree required, no connections needed: <b>paid work, funded tickets,
         and a certified trade</b> for people the job market usually passes over.</p>
@@ -676,6 +746,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
     </div>
 
     <div class="check rv" style="--d:.1s">
+      <i class="staple" aria-hidden="true"></i>
       <div class="ch-h"><span>The ladder — starter to engineer</span><b>ticks as you scroll</b></div>
       <div class="crow" id="cr0"><div class="box"><i></i></div><h3>Day one</h3>
         <p>Paid from the start. <span class="tk-in">TK — starting package</span></p></div>
@@ -689,7 +760,8 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
         <p>Training the next one through the same door.</p></div>
     </div>
 
-    <div class="gate rv" style="--d:.08s">
+    <div class="gate rv" style="--d:.08s;position:relative">
+      <span class="note" style="right:14px;top:-34px;--rot:3deg">⚠ date first!</span>
       <h3>The two-year test — settle this first</h3>
       <p>The award requires the programme to have run for at least two years. <i>State the start
       date and point at the earliest record</i> — first apprentice's contract, first funded course
@@ -731,6 +803,8 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
     burning — we'll show you what puts it out. Or sit the paper: six callouts, scored in red
     pen.</p>
     <div class="exam rv" style="--d:.1s">
+      <i class="staple" aria-hidden="true"></i>
+      <span class="note" style="right:20px;top:-32px;--rot:-3deg">no cheating.</span>
       <div class="ex-h">
         <span class="t">Assessment sheet FF-01 · Fire classes &amp; extinguishing media</span>
         <div class="fmode" role="group" aria-label="Mode">
@@ -816,6 +890,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
       <span class="pg">Sheet 7 of 8</span></div>
     <h2 class="h-b rv" style="--d:.05s">Four things we don't bend on</h2>
     <div class="clauses rv" style="--d:.1s">
+      <i class="staple" aria-hidden="true"></i>
       <div class="clause"><div class="cn">01</div><div class="cb">
         <h3>Certified, or not at all</h3>
         <p>If it cannot be certified and documented, it does not get signed off. The paperwork is
@@ -844,7 +919,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
       <span class="pg">Sheet 8 of 8</span></div>
     <div class="duo" style="align-items:start">
       <div class="rv" style="--d:.05s">
-        <div class="bigword">Fancy a<span class="redtx">proper trade?</span></div>
+        <div class="bigword" style="position:relative">Fancy a<span class="redtx">proper trade?</span><span class="note" style="right:4px;bottom:-10px;--rot:-4deg">sign below ↘</span></div>
         <p class="lede">Fire safety is not going away, the work is real, and the people who do it
         well are never short of it. If you want to learn it properly, we will train you.</p>
         <div class="tickrow">
@@ -864,6 +939,12 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
         A careers email address, any open roles, and what you offer — training funded, van,
         tickets, progression. This slip is also your evidence for the staff development themes,
         so it is worth writing properly.</span>
+        <div class="sig">
+          <div class="sl"><span>Applicant signature</span>
+            <button type="button" id="sigClear">Clear</button></div>
+          <canvas id="sigPad" width="10" height="92" aria-label="Signature pad — draw your signature"></canvas>
+          <div class="sx" id="sigMsg">Go on — sign it. Red ink provided.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -878,6 +959,7 @@ body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
     <img src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety">
     <div>FREEDOM FIRE &amp; SAFETY LTD · CO. 13589467 · UNIT 19, PILSWORTH INDUSTRIAL ESTATE,
     BURY, BL9 8RE · 0333 772 2723 · PART OF THE FREEDOM GROUP</div>
+    <div class="bars" aria-hidden="true"><i></i><b>REF·13589467</b></div>
   </div>
 </footer>
 
