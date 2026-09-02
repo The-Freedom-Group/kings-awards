@@ -19,7 +19,17 @@
   var lerp  = function (a, b, t) { return a + (b - a) * t; };
 
   /* ── entrance ─────────────────────────────────────────────── */
-  function ready() { document.body.classList.add("ready"); }
+  function ready() {
+    document.body.classList.add("ready");
+    if (reduce) { heroIn = 1; return; }
+    var t0 = null;
+    requestAnimationFrame(function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / 1500);
+      heroIn = 1 - Math.pow(1 - k, 3);
+      if (k < 1) requestAnimationFrame(step);
+    });
+  }
   if (reduce) { ready(); }
   else if (document.readyState === "complete") { setTimeout(ready, 900); }
   else { window.addEventListener("load", function () { setTimeout(ready, 900); }); }
@@ -49,6 +59,16 @@
   }
   if (!reduce) {
     $$(".ch h2, .rec-head h2").forEach(function (el) { split(el, "words", 0.055); });
+  }
+
+  /* ── drifting orbital patterns behind every panel ─────────── */
+  if (!reduce) {
+    $$("#explore .hero, #explore .ch, #explore .scene").forEach(function (sec) {
+      var fx = document.createElement("div");
+      fx.className = "bgfx"; fx.setAttribute("aria-hidden", "true");
+      fx.innerHTML = "<i></i><i></i><i></i>";
+      sec.insertBefore(fx, sec.firstChild);
+    });
   }
 
   /* ── stagger groups ───────────────────────────────────────── */
@@ -127,7 +147,7 @@
     { id: "c07",  side: "C", y: 0.52 }
   ];
 
-  var pts = [], knots = [], totalLen = 0, knotAt = [];
+  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0;
 
   function buildPath() {
     if (!explore || !thread || !svg) return false;
@@ -147,18 +167,64 @@
 
     pts = [];
 
-    /* the line opens as the horizontal run across the hero, then turns
-       down — one stroke, no second graphic */
+    /* ── the hero bend, to the reference proportions ──────────
+       Runs in from the left, lifts over the portrait, turns down the
+       right and continues as the page thread. Four spurs peel off the
+       descending trunk. One stroke; the spurs hang from it. */
     var heroEl = document.getElementById("top");
+    var heroPrefix = "", heroExit = null;
     if (heroEl) {
-      var hy = heroEl.offsetTop + heroEl.offsetHeight * 0.689;
-      pts.push({ x: LX, y: hy, id: "top", el: heroEl, noKnot: false });
-      pts.push({ x: W * 0.74, y: hy, id: "turn", el: heroEl, noKnot: true });
+      var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
+      var yMain  = hT + hH * 0.717;          // the long horizontal
+      var yTop   = hT + hH * 0.526;          // the lifted horizontal
+      var xLift  = W * 0.665;                // where it starts to rise
+      var xTrunk = W * 0.822;                // the descending trunk
+      var xTerm  = W * 0.886;                // spur terminals
+      var yExit  = hT + hH * 0.985;          // where it leaves the hero
+      var r = Math.min(34, W * 0.022);
+      var bys = [0.691, 0.750, 0.809, 0.868].map(function (f) { return hT + hH * f; });
+
+      heroPrefix =
+        "M " + LX.toFixed(1) + " " + yMain.toFixed(1) +
+        " H " + (xLift - r).toFixed(1) +
+        " Q " + xLift.toFixed(1) + " " + yMain.toFixed(1) +
+        " "   + xLift.toFixed(1) + " " + (yMain - r).toFixed(1) +
+        " V " + (yTop + r).toFixed(1) +
+        " Q " + xLift.toFixed(1) + " " + yTop.toFixed(1) +
+        " "   + (xLift + r).toFixed(1) + " " + yTop.toFixed(1) +
+        " H " + (xTrunk - r).toFixed(1) +
+        " Q " + xTrunk.toFixed(1) + " " + yTop.toFixed(1) +
+        " "   + xTrunk.toFixed(1) + " " + (yTop + r).toFixed(1) +
+        " V " + yExit.toFixed(1);
+
+      heroExit = { x: xTrunk, y: yExit, id: "top", el: heroEl, noKnot: true };
+
+      /* spurs + their terminals */
+      for (var bi = 0; bi < 4; bi++) {
+        var by = bys[bi], sp = document.getElementById("sp" + bi);
+        if (sp) {
+          var d2 = "M " + xTrunk.toFixed(1) + " " + (by - 30).toFixed(1) +
+                   " C " + xTrunk.toFixed(1) + " " + (by - 6).toFixed(1) +
+                   ", "  + (xTrunk + 14).toFixed(1) + " " + by.toFixed(1) +
+                   ", "  + (xTrunk + 42).toFixed(1) + " " + by.toFixed(1) +
+                   " H " + xTerm.toFixed(1);
+          sp.setAttribute("d", d2);
+          var L2 = 300; try { L2 = sp.getTotalLength(); } catch (e) {}
+          sp.style.setProperty("--l", L2);
+        }
+        var nd = document.getElementById("hn" + bi);
+        if (nd) {
+          nd.style.left = (xTerm - 6.5) + "px";
+          nd.style.top  = (by - hT) + "px";
+        }
+      }
+
       var lbl = document.getElementById("hlStart");
       if (lbl) {
         lbl.style.left = LX + "px";
-        lbl.style.top = (hy - heroEl.offsetTop) + "px";
+        lbl.style.top = (yMain - hT) + "px";
       }
+      pts.push(heroExit);
     }
 
     PLAN.forEach(function (p) {
@@ -170,7 +236,7 @@
     if (pts.length < 2) return false;
     pts.push({ x: CX, y: H + 40, id: "beyond", el: null, noKnot: true });
 
-    var d = "M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1);
+    var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
     for (var i = 0; i < pts.length - 1; i++) {
       var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5;
       d += " C " + a.x.toFixed(1) + " " + (a.y + dy).toFixed(1) +
@@ -184,6 +250,17 @@
 
     try { totalLen = live.getTotalLength(); } catch (e) { totalLen = 0; }
     if (!totalLen) return false;
+
+    /* how much of the stroke is the hero bend? it should never be
+       half-drawn while the reader is still looking at it */
+    heroFrac = 0;
+    if (heroPrefix) {
+      var probe = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      probe.setAttribute("d", heroPrefix);
+      svg.appendChild(probe);
+      try { heroFrac = probe.getTotalLength() / totalLen; } catch (e) { heroFrac = 0; }
+      svg.removeChild(probe);
+    }
     live.style.strokeDasharray = totalLen;
     live.style.strokeDashoffset = totalLen;
 
@@ -214,6 +291,7 @@
     if (!totalLen || thread.style.display === "none") return;
     var h = explore.offsetHeight || 1;
     var p = clamp((y + window.innerHeight * 0.62) / h, 0, 1);
+    p = Math.max(p, heroFrac * heroIn);
     live.style.strokeDashoffset = totalLen * (1 - p);
     thread.classList.toggle("on", p > 0.004 && p < 0.999);
     if (p > 0.004) {

@@ -141,6 +141,13 @@ body[data-view="record"] .spine{display:none}
 .thread{position:absolute;inset:0;z-index:5;pointer-events:none}
 .thread svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .thread .track{fill:none;stroke:rgba(255,45,141,.13);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.thread .spur{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
+  stroke-linecap:round;stroke-dasharray:var(--l,300);stroke-dashoffset:var(--l,300);
+  transition:stroke-dashoffset 1s cubic-bezier(.25,.6,.25,1)}
+body.ready .thread #sp0{stroke-dashoffset:0;transition-delay:1.0s}
+body.ready .thread #sp1{stroke-dashoffset:0;transition-delay:1.15s}
+body.ready .thread #sp2{stroke-dashoffset:0;transition-delay:1.3s}
+body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .live{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
   stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
 .thread .head{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
@@ -187,7 +194,34 @@ body[data-view="record"] .spine{display:none}
 body.ready .hl-start{opacity:1}
 .hl-start span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
   color:var(--pink);white-space:nowrap}
-@media(max-width:820px){.hl-start{display:none}}
+.hl-node{position:absolute;display:flex;align-items:center;gap:12px;transform:translateY(-50%);
+  z-index:6;opacity:0;transition:opacity .6s ease}
+body.ready .hl-node{opacity:1}
+.hl-node#hn0{transition-delay:1.25s}.hl-node#hn1{transition-delay:1.4s}
+.hl-node#hn2{transition-delay:1.55s}.hl-node#hn3{transition-delay:1.7s}
+.hl-node b{width:13px;height:13px;border-radius:50%;border:1.8px solid var(--pink);flex:0 0 auto;
+  background:var(--porcelain)}
+.hl-node span{font-size:12.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
+  white-space:nowrap}
+@media(max-width:820px){.hl-start,.hl-node{display:none}}
+
+/* ── drifting orbital patterns ──────────────────────────────── */
+.bgfx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;
+  background-image:radial-gradient(currentColor .9px,transparent .9px);
+  background-size:38px 38px;opacity:.05;animation:grain 46s linear infinite}
+@keyframes grain{to{background-position:38px 38px}}
+.bgfx i{position:absolute;border:1px solid currentColor;border-radius:50%;opacity:.09;
+  will-change:transform}
+.bgfx i:nth-child(1){width:62vw;height:41vw;left:-16vw;top:-13vw;
+  animation:orb1 104s linear infinite}
+.bgfx i:nth-child(2){width:46vw;height:31vw;right:-12vw;bottom:-15vw;
+  border-color:var(--pink);opacity:.13;animation:orb2 128s linear infinite}
+.bgfx i:nth-child(3){width:23vw;height:23vw;left:58%;top:14%;
+  animation:hover3 19s ease-in-out infinite}
+@keyframes orb1{to{transform:rotate(360deg)}}
+@keyframes orb2{to{transform:rotate(-360deg)}}
+@keyframes hover3{0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  50%{transform:translate3d(-2.4vw,-3.2vw,0) rotate(180deg)}}
 
 .bar{background:var(--carbon);color:var(--porcelain);position:relative;z-index:6}
 .bar .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -444,6 +478,8 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .map svg{opacity:1}.orbit{animation:none}
   .map.in .node[data-s="operating"]{animation:none}
   .metrics.in .metric,.grp-list.in li{animation:none}
+  .bgfx,.bgfx i{animation:none}
+  .thread .spur{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
   .plate img{clip-path:none;transition:none}
   .follow i{animation:none}
   .enter,.cur,.wipe{display:none!important}
@@ -509,6 +545,10 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <section class="hero" id="top">
   <div class="hl-start" id="hlStart"><span>2021 — One Unit</span></div>
+  <div class="hl-node" id="hn0" aria-hidden="true"><b></b><span>Fire</span></div>
+  <div class="hl-node" id="hn1" aria-hidden="true"><b></b><span>Global</span></div>
+  <div class="hl-node" id="hn2" aria-hidden="true"><b></b><span>Distribution</span></div>
+  <div class="hl-node" id="hn3" aria-hidden="true"><b></b><span>Facilities</span></div>
 
   <div class="wrap">
     <div class="hero-stage">
@@ -863,6 +903,8 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   <svg id="threadSvg" preserveAspectRatio="none">
     <path class="track" id="tTrack"></path>
     <path class="live" id="tLive"></path>
+    <path class="spur" id="sp0"></path><path class="spur" id="sp1"></path>
+    <path class="spur" id="sp2"></path><path class="spur" id="sp3"></path>
   </svg>
   <i class="head" id="tHead"></i>
 </div>
