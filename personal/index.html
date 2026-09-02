@@ -187,6 +187,16 @@ body.ready .thread #sp2{stroke-dashoffset:0;transition-delay:1.3s}
 body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .live{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
   stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
+.thread .head::before,.thread .head::after{content:"";position:absolute;inset:0;
+  border-radius:50%;border:1.5px solid var(--pink);opacity:0}
+.thread.landed .head::before{animation:beacon 2.6s ease-out infinite}
+.thread.landed .head::after{animation:beacon 2.6s ease-out 1.3s infinite}
+@keyframes beacon{0%{opacity:.8;transform:scale(1)}70%,100%{opacity:0;transform:scale(4.4)}}
+.thread .endnote{position:absolute;font-family:var(--serif);font-style:italic;
+  font-size:16px;color:var(--pink);white-space:nowrap;pointer-events:none;z-index:6;
+  opacity:0;transform:translate(-8px,-50%);transition:opacity .9s ease .35s,
+  transform .9s ease .35s}
+.thread.landed .endnote{opacity:1;transform:translate(0,-50%)}
 .thread .head{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
   background:var(--pink);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6);
   opacity:0;transition:opacity .4s;left:-99px;top:-99px}
@@ -555,6 +565,8 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .wa i{transform:none;transition:none}
   .draw{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
   .map .node{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
+  .thread.landed .head::before,.thread.landed .head::after{animation:none}
+  .thread .endnote{transition:none}
   .map svg{opacity:1}.orbit{animation:none}
   .map.in .node[data-s="operating"]{animation:none}
   .metrics.in .metric,.grp-list.in li{animation:none}

@@ -217,6 +217,7 @@
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0;
+  var endPt = null, endFrac = 1, endNote = null;
 
   function buildPath() {
     if (!explore || !thread || !svg) return false;
@@ -353,6 +354,24 @@
       thread.appendChild(k);
       knots.push(k); knotAt.push(best.l / totalLen);
     });
+
+    /* where the head lands: the last point of the line still on the page */
+    endPt = null; endFrac = 1;
+    for (var e2 = 0; e2 < samples.length; e2++) {
+      if (samples[e2].y >= H - 90) {
+        endPt = samples[e2];
+        endFrac = samples[e2].l / totalLen;
+        break;
+      }
+    }
+    if (!endPt) { endPt = samples[samples.length - 1]; endFrac = 0.99; }
+    if (endNote) endNote.remove();
+    endNote = document.createElement("span");
+    endNote.className = "endnote";
+    endNote.textContent = "— still drawing";
+    endNote.style.left = (endPt.x + 20) + "px";
+    endNote.style.top = endPt.y + "px";
+    thread.appendChild(endNote);
     return true;
   }
 
@@ -362,9 +381,13 @@
     var p = clamp((y + window.innerHeight * 0.62) / h, 0, 1);
     p = Math.max(p, heroFrac * heroIn);
     live.style.strokeDashoffset = totalLen * (1 - p);
-    thread.classList.toggle("on", p > 0.004 && p < 0.999);
+    thread.classList.toggle("on", p > 0.004);
+
+    /* the head rides the line, then settles at the page's edge and beacons */
+    var landed = p >= endFrac - 0.002;
+    thread.classList.toggle("landed", landed);
     if (p > 0.004) {
-      var pt = live.getPointAtLength(totalLen * p);
+      var pt = landed && endPt ? endPt : live.getPointAtLength(totalLen * p);
       head.style.left = pt.x + "px";
       head.style.top  = pt.y + "px";
     }
