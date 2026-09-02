@@ -49,7 +49,6 @@
   }
   if (!reduce) {
     $$(".ch h2, .rec-head h2").forEach(function (el) { split(el, "words", 0.055); });
-    $$(".hero-type h1 span").forEach(function (el) { split(el, "letters", 0.045); });
   }
 
   /* ── stagger groups ───────────────────────────────────────── */
@@ -271,9 +270,7 @@
   }
 
   /* ══ HERO CHOREOGRAPHY ════════════════════════════════════ */
-  var hero = $(".hero"), heroSpans = $$(".hero-type h1 span"),
-      heroSub = $(".hero-sub"), followBtn = $(".follow");
-  var tiltX = 0, tiltY = 0;
+  var hero = $(".hero");
 
   /* ══ MASTER LOOP ══════════════════════════════════════════ */
   var chapters = $$("#explore .ch, #explore .hero, #explore .scene");
@@ -307,17 +304,10 @@
     if (moved || velY !== 0) {
       if (chrome) chrome.classList.toggle("stuck", y > 40);
 
-      /* hero: name lines drift apart, sub fades, portrait parallax + tilt */
-      if (hero && !reduce) {
+      /* hero: portrait drifts against the scroll */
+      if (hero && !reduce && shotWrap) {
         var hp = clamp(y / (hero.offsetHeight || 1), 0, 1);
-        if (heroSpans[0]) heroSpans[0].style.transform = "translate3d(" + (hp * -40) + "px," + (hp * -70) + "px,0)";
-        if (heroSpans[1]) heroSpans[1].style.transform = "translate3d(" + (hp * 40) + "px," + (hp * -34) + "px,0)";
-        if (heroSub) heroSub.style.opacity = String(1 - hp * 1.6);
-        if (followBtn) followBtn.style.opacity = String(1 - hp * 2);
-        if (shotWrap) {
-          shotWrap.style.transform = "translate3d(" + tiltX.toFixed(1) + "px," +
-            (hp * -46 + tiltY).toFixed(1) + "px,0)";
-        }
+        shotWrap.style.transform = "translate3d(0," + (hp * -46).toFixed(1) + "px,0)";
       }
 
       /* chrome tone + spine */
@@ -335,14 +325,6 @@
       if (exploring) { drawThread(y); runScene(y); }
     }
     requestAnimationFrame(frame);
-  }
-
-  /* portrait mouse tilt */
-  if (fine && !reduce) {
-    window.addEventListener("mousemove", function (e) {
-      tiltX = (e.clientX / innerWidth - 0.5) * 14;
-      tiltY = (e.clientY / innerHeight - 0.5) * 10;
-    }, { passive: true });
   }
 
   /* fall back to plain scroll handling when reduced motion is on */
