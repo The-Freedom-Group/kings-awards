@@ -23,22 +23,28 @@ is inline or local.
 then. That is one week from today. If you intend to apply this cycle, the placeholder content
 below needs filling in the next few days.
 
-**2. Tom may not be eligible for the Young Founder category.** That category requires the
-founder to be *aged between 18 and 30 on 6 May 2027*. Companies House records Tom's date of
-birth as **April 1996**, which would make him **31** on that date. Worth confirming against his
-actual DOB before building an application around this category.
+**2. The category is decided: Promoting Opportunity through social mobility.**
+Young Founder is out regardless — Companies House records Tom's DOB as April 1996, making
+him 31 on 6 May 2027, past the 18–30 limit.
 
-The other four categories have no age limit and may fit better:
+The social mobility criteria the sites now mirror:
 
-| Category | Fit for Freedom Fire |
-|---|---|
-| **Innovation** | The in-house supply chain tracking system is a genuine, unusual, demonstrable innovation for a firm this size |
-| **Sustainability** | Would need evidence — fleet, extinguisher recycling, packaging |
-| **Promoting opportunity** (social mobility) | Strong if apprenticeships and funded qualifications are real and documented |
-| **International trade** | Unlikely — this category is about *exports*; Freedom Fire imports |
+- A programme supporting people from disadvantaged backgrounds into work — running **at
+  least 2 years** — via one or more of: work experience/careers advice, mentoring,
+  interview and job-related training, recruitment open to everyone
+- **Provable benefit to four groups**: the people supported, the organisation, employees,
+  the wider community
+- Social mobility must NOT be the organisation's main focus (Freedom Fire is a fire safety
+  company — this fits, and both sites now say so explicitly)
 
-General eligibility applies to all: UK-based, at least 2 full-time UK employees, self-contained
-accounts, good compliance with HMRC and other departments, and strong ESG practices.
+Where this lives: the staff site's **chapter 07 — The Open Door** is the programme page
+(four criteria activities + the four proofs + the two-year test, all with evidence slots);
+the founder page's chapter 05 and Verified Record carry the founder's side and the
+evidence checklist.
+
+⚠️ **The two-year test is a hard gate.** If the programme cannot show a start date ≥2
+years before submission with a dated record behind it, this category must wait a cycle —
+establish that before writing another word of the application.
 
 Sources: [King's Awards for Enterprise](https://www.gov.uk/kings-awards-for-enterprise) ·
 [eligibility](https://www.gov.uk/kings-awards-for-enterprise/eligibility) ·
@@ -77,7 +83,7 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 | 01 Profile | Two or three paragraphs on your route into fire safety — what you did before 2021, why you started rather than stayed employed |
 | 02 The business | Confirm the three service pillars match reality; add fire doors / passive / sprinklers / dry risers if applicable |
 | 03 Trajectory | 2022 headline; 2023–24 headcount, coverage, accreditations (BAFE SP101/SP203, FIA, SafeContractor, CHAS, ISO 9001, NSI, SSAIB), apprenticeships |
-| 04 Leadership | **The whole section** — four short pieces: fresh thinking, growth and influence, long-term vision, resilience. This is what the panel scores |
+| 04 Leadership | **The whole section** — four short pieces; under the social mobility category, piece 4 (why you hire the way you hire) matters most |
 | Pull quote | One sentence in your own voice on why the work matters |
 | 05 Governance | HMRC and filing status, accreditation reference numbers, insurance, engineer training and re-certification, environmental measures, community work |
 | 07 Contact | Direct email, and mobile if you want it public |
@@ -92,6 +98,7 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 | Firestorm | What products sit under the brand, what the specification does differently, launch date, trademark number, product photography |
 | How we work | Confirm value 04 — apprenticeships and funded qualifications |
 | Join us | Careers email, open roles, what you offer (training, van, tickets, progression) |
+| **07 The Open Door** | **The award chapter.** Four criteria activities with dates and numbers; the four proofs (people/business/team/community); the programme start date for the two-year test — with documents |
 
 **Get written consent** from every member of staff before publishing their name and photograph,
 and leave out anyone who would rather not appear.
