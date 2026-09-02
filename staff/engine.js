@@ -23,6 +23,14 @@
   else if (document.readyState === "complete") { setTimeout(ready, 850); }
   else { window.addEventListener("load", function () { setTimeout(ready, 850); }); }
 
+  /* ── the hero photograph arrives ──────────────────────────── */
+  var heroShot = $("#heroShot");
+  if (heroShot) {
+    var hlit = function () { heroShot.classList.add("on"); };
+    heroShot.complete ? hlit()
+      : (heroShot.addEventListener("load", hlit), heroShot.addEventListener("error", hlit));
+  }
+
   /* ── heat contours behind every panel ─────────────────────── */
   function rnd(seed) {
     return function () {
@@ -262,6 +270,13 @@
           }
         }
 
+        /* the hero photograph settles as the page leaves it */
+        var hs = $("#heroShot");
+        if (hs) {
+          var hp2 = clamp(y / (window.innerHeight || 1), 0, 1);
+          hs.style.transform = "translate3d(0," + (hp2 * -34).toFixed(1) + "px,0) scale(1.04)";
+        }
+
         /* photographs drift inside their crops */
         $$("[data-drift]").forEach(function (img) {
           var fr = img.getBoundingClientRect();
@@ -308,11 +323,12 @@
   /* ── ember canvas: they rise, and they get out of your way ── */
   var efx = $("#emberfx"), ectx = null, EP = [], eBurst = 0;
   var eW = 0, eH = 0, emx = -1e4, emy = -1e4;
+  var darkEls = [];
   function emberSize() {
     if (!efx) return;
-    var hero = efx.parentElement;
-    eW = efx.width = hero.clientWidth;
-    eH = efx.height = hero.clientHeight;
+    eW = efx.width = window.innerWidth;
+    eH = efx.height = window.innerHeight;
+    darkEls = $$("#main .hero, #main .ch.deep, #main .ch.join, .scene, .bar, .mq, .jumbo, .tick, footer");
   }
   if (efx && !reduce && efx.getContext) {
     ectx = efx.getContext("2d");
@@ -325,17 +341,23 @@
                 r: 0.8 + Math.random() * 1.7, ph: Math.random() * 6.28,
                 hot: Math.random() < 0.5 });
     }
-    efx.parentElement.addEventListener("mousemove", function (e) {
-      var r = efx.getBoundingClientRect();
-      emx = e.clientX - r.left; emy = e.clientY - r.top;
+    window.addEventListener("mousemove", function (e) {
+      emx = e.clientX; emy = e.clientY;
     }, { passive: true });
-    efx.parentElement.addEventListener("mouseleave", function () {
+    document.addEventListener("mouseleave", function () {
       emx = -1e4; emy = -1e4;
     });
   }
+  var darkRects = [];
   function embers(ts) {
     if (!ectx || !eW) return;
     ectx.clearRect(0, 0, eW, eH);
+    darkRects.length = 0;
+    for (var dr = 0; dr < darkEls.length; dr++) {
+      var rr = darkEls[dr].getBoundingClientRect();
+      if (rr.bottom > -40 && rr.top < eH + 40) darkRects.push(rr);
+    }
+    if (!darkRects.length) { eBurst *= 0.9; return; }
     for (var i = 0; i < EP.length; i++) {
       var p = EP[i];
       p.ph += 0.012;
@@ -352,6 +374,12 @@
         p.x = Math.random() * eW; p.y = eH + 6;
         p.vy = -(0.25 + Math.random() * 0.6); p.vx = 0;
       }
+      var sx = p.x % (eW + 16), onDark = false;
+      for (var dk = 0; dk < darkRects.length; dk++) {
+        var R = darkRects[dk];
+        if (sx >= R.left && sx <= R.right && p.y >= R.top && p.y <= R.bottom) { onDark = true; break; }
+      }
+      if (!onDark) continue;
       var tw = 0.55 + 0.45 * Math.sin(ts / 300 + p.ph * 5);
       ectx.beginPath();
       ectx.arc(p.x % (eW + 16), p.y, p.r, 0, 6.283);
@@ -396,11 +424,20 @@
     sceneTop = r.top + (window.pageYOffset || document.documentElement.scrollTop);
     sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight);
   }
+  var scH = $("#scH"), scM = $("#scM"), sPh = $("#sphrase");
+  var TDAY = [[492, "Van loaded."], [647, "Panel tested."],
+              [785, "Assessment walked."], [990, "Certificate signed."]];
   function runScene(y) {
     if (!scene || reduce || window.innerWidth <= 820) return;
     var p = clamp((y - sceneTop) / sceneRange, 0, 1);
-    var idx = Math.min(phrases.length - 1, Math.floor(p * phrases.length));
-    phrases.forEach(function (ph, i) { ph.classList.toggle("on", i === idx); });
+    var span = TDAY.length - 1;
+    var seg = Math.min(span - 1, Math.floor(p * span));
+    var k = clamp(p * span - seg, 0, 1);
+    var mins = Math.round(TDAY[seg][0] + (TDAY[seg + 1][0] - TDAY[seg][0]) * k);
+    if (scH) scH.textContent = ("0" + Math.floor(mins / 60)).slice(-2);
+    if (scM) scM.textContent = ("0" + (mins % 60)).slice(-2);
+    var pi2 = Math.min(span, Math.round(p * span));
+    if (sPh && sPh.textContent !== TDAY[pi2][1]) sPh.textContent = TDAY[pi2][1];
   }
   window.addEventListener("resize", measureScene);
   window.addEventListener("load", measureScene);
@@ -434,6 +471,65 @@
     b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); });
   });
   if (fcs.length) pickFire("a");
+
+  /* test yourself: six callouts, answered with the extinguisher cards */
+  var QUIZ = [
+    { q: "Waste-paper bin alight in an office.", cls: "a" },
+    { q: "Overheated fuse board — still live.", cls: "e" },
+    { q: "Chip-pan fire in the staff kitchen.", cls: "f" },
+    { q: "Petrol spill ignited in the yard.", cls: "b" },
+    { q: "Gas cylinder burning at the valve.", cls: "c" },
+    { q: "Laptop charger smoking on a desk.", cls: "e" }
+  ];
+  var fmL = $("#fmLearn"), fmT = $("#fmTest"), fq = $("#fq"), fsc = $("#fscore");
+  var qi = 0, qScore = 0, qLock = false;
+  function setFMode(test) {
+    document.body.classList.toggle("ftest", test);
+    fmL.classList.toggle("on", !test); fmT.classList.toggle("on", test);
+    fmL.setAttribute("aria-pressed", !test); fmT.setAttribute("aria-pressed", test);
+    fq.hidden = !test; fsc.hidden = !test;
+    exts.forEach(function (x) { x.classList.remove("hit", "miss", "right", "wrong"); });
+    if (test) { qi = 0; qScore = 0; qLock = false; askQ(); }
+    else { pickFire("a"); }
+  }
+  function askQ() {
+    fsc.textContent = qScore + " / " + QUIZ.length;
+    if (qi >= QUIZ.length) {
+      fq.innerHTML = "<b>" + qScore + " out of " + QUIZ.length + ".</b> " +
+        (qScore === QUIZ.length ? "Full marks — you'd pass our induction."
+          : "Switch to Learn and have another look, then go again.");
+      if (fnote) fnote.textContent = "Tap Test yourself to run it again.";
+      return;
+    }
+    fq.innerHTML = "Callout " + (qi + 1) + " of " + QUIZ.length + " — <b>" +
+      QUIZ[qi].q + "</b> Which extinguisher?";
+    if (fnote) fnote.textContent = "Pick a card.";
+  }
+  exts.forEach(function (x) {
+    x.setAttribute("tabindex", "0");
+    function answer() {
+      if (!document.body.classList.contains("ftest") || qLock || qi >= QUIZ.length) return;
+      qLock = true;
+      var cls = QUIZ[qi].cls;
+      var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
+      x.classList.add(ok ? "right" : "wrong");
+      if (ok) qScore++;
+      if (fnote) fnote.textContent = (ok ? "Right. " : "Not that one. ") + FIRE[cls];
+      fsc.textContent = qScore + " / " + QUIZ.length;
+      setTimeout(function () {
+        x.classList.remove("right", "wrong");
+        qi++; qLock = false; askQ();
+      }, 1400);
+    }
+    x.addEventListener("click", answer);
+    x.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); answer(); }
+    });
+  });
+  if (fmL && fmT) {
+    fmL.addEventListener("click", function () { setFMode(false); });
+    fmT.addEventListener("click", function () { setFMode(true); });
+  }
 
   /* ── 3D tilt on every card ────────────────────────────────── */
   if (fine && !reduce) {

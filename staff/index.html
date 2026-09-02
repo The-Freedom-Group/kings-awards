@@ -171,11 +171,16 @@ body.ready .enter{opacity:0;visibility:hidden}
 
 /* ── hero — the store's dark media block ────────────────────── */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;
-  justify-content:center;padding-top:70px;overflow:hidden;color:#fff;
+  justify-content:center;padding-top:70px;overflow:hidden;color:#fff;background:var(--black)}
+.hero-media{position:absolute;inset:0;z-index:0}
+.hero-media img{width:100%;height:112%;object-fit:cover;object-position:50% 24%;
+  will-change:transform;opacity:0;transition:opacity 1.2s ease}
+.hero-media img.on{opacity:1}
+.hero-media::after{content:"";position:absolute;inset:0;
   background:
-    radial-gradient(110% 75% at 80% 4%, rgba(196,0,0,.32), transparent 56%),
-    radial-gradient(85% 65% at 6% 100%, rgba(255,75,43,.16), transparent 60%),
-    var(--black)}
+    linear-gradient(to right, rgba(11,11,11,.94) 0%, rgba(11,11,11,.72) 38%, rgba(11,11,11,.28) 70%, rgba(11,11,11,.5) 100%),
+    linear-gradient(to top, rgba(11,11,11,.96) 4%, transparent 40%),
+    linear-gradient(to bottom, rgba(11,11,11,.8) 0%, transparent 26%)}
 .hero .wrap{position:relative;z-index:3;padding-block:clamp(40px,7vh,80px)}
 .hero .logo{height:clamp(38px,5.6vw,58px);width:auto;margin-bottom:clamp(26px,4.5vh,44px)}
 .kick{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:700;
@@ -395,7 +400,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
 footer img{height:24px;width:auto;opacity:.75}
 
 /* ── interactive: embers, drill, scene, matcher, ticker ──── */
-.emberfx{position:absolute;inset:0;z-index:1;pointer-events:none}
+.emberfx{position:fixed;inset:0;z-index:40;pointer-events:none}
 .emberfx.on ~ .embers,.emberfx.on + .embers{display:none}
 .hero:has(.emberfx.on) .embers{display:none}
 .ghost{display:inline-flex;align-items:center;gap:8px;margin-left:12px;font-family:var(--body);
@@ -487,6 +492,59 @@ body.drill-on .mq-t{animation:none}
 .cards,.team,.stops,.vals{perspective:900px}
 .cards .cardx,.team .person,.stops .stop,.vals .val{transform-style:preserve-3d}
 
+/* ── the scene clock ────────────────────────────────────────── */
+.sclock{font-family:var(--disp);font-weight:800;line-height:1;
+  font-size:clamp(90px,17vw,260px);color:#fff;font-variant-numeric:tabular-nums;
+  display:flex;align-items:baseline;justify-content:center}
+.sclock i{font-style:normal;background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;color:transparent;transform:translateY(-.04em);
+  animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.25}}
+.sphrase{margin-top:clamp(14px,3vh,26px);font-family:var(--disp);font-weight:800;
+  font-size:clamp(22px,4vw,52px);color:rgba(255,255,255,.82);min-height:1.2em}
+.scene .phs{display:none}
+@media(max-width:820px),(prefers-reduced-motion:reduce){
+  .sclock,.sphrase{display:none}
+  .scene .phs{display:grid}
+}
+
+/* ── matcher test mode ──────────────────────────────────────── */
+.fmode{display:flex;align-items:center;gap:10px;margin:0 0 16px}
+.fm{font-family:var(--body);font-weight:700;font-size:13px;color:#fff;cursor:pointer;
+  background:transparent;border:1px solid rgba(255,255,255,.3);padding:9px 20px;
+  border-radius:var(--r-pill);transition:background .25s,border-color .25s}
+.fm.on{background:#fff;color:var(--black);border-color:#fff}
+.fscore{margin-left:auto;font-family:var(--disp);font-weight:800;font-size:20px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fq{margin:0 0 16px;font-family:var(--body);font-weight:600;font-size:16.5px;color:#fff}
+.fq b{color:var(--red-2)}
+body.ftest .fclasses{display:none}
+body.ftest .ext{cursor:pointer}
+.ext.right{border-color:#16A34A;box-shadow:0 0 0 1px #16A34A,0 10px 26px rgba(22,163,74,.25);
+  transform:translateY(-5px)}
+.ext.wrong{border-color:var(--red);animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}
+  75%{transform:translateX(6px)}}
+
+/* ── jumbo sign-off ─────────────────────────────────────────── */
+.jumbo{background:var(--black);overflow:hidden;padding:clamp(30px,5vw,64px) 0 0;
+  display:flex;flex-direction:column;align-items:center;line-height:.82;
+  position:relative;z-index:5}
+.jumbo span{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(80px,17.5vw,280px);letter-spacing:-.01em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.22)}
+.jumbo span:last-child{background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;-webkit-text-stroke:0;color:transparent}
+@supports not (-webkit-text-stroke:1px black){.jumbo span{color:rgba(255,255,255,.12)}}
+
+/* ── spine tooltips ─────────────────────────────────────────── */
+.spine a::after{content:attr(data-lb);position:absolute;left:26px;top:50%;
+  transform:translate(-6px,-50%);white-space:nowrap;background:var(--black);color:#fff;
+  font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.04em;
+  padding:5px 11px;border-radius:var(--r-pill);border:1px solid rgba(255,255,255,.16);
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.spine a:hover::after{opacity:1;transform:translate(0,-50%)}
+
 /* ── immersion: spotlight, focus-dim, live route ──────────── */
 .spot{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
   transition:opacity .5s ease;
@@ -544,12 +602,15 @@ body.drill-on .mq-t{animation:none}
   .follow::after,.btn::after{display:none}
   .sheet li{opacity:1;transform:none;transition:none}
   .emberfx,.ghost,.drill,.toast{display:none!important}
+  .hero-media img{opacity:1;transition:none}
+  .sclock i{animation:none}
+  .ext.wrong{animation:none}
   .ext,.fc{transition:none}
   html{scroll-behavior:auto}
 }
 @media print{
   .chrome,.spine,.sheet,.enter,.cur,.prog,.mq,.embers,.topo,.pw,.follow,
-  .emberfx,.ghost,.drill,.toast,.scene,.tick{display:none}
+  .emberfx,.ghost,.drill,.toast,.scene,.tick,.jumbo,.hero-media,.fmode,.fq{display:none}
   body{background:#fff;color:#000}
   .rv{opacity:1;transform:none}
 }
@@ -558,6 +619,7 @@ body.drill-on .mq-t{animation:none}
 <body>
 
 <div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"></i></div>
+<canvas class="emberfx" id="emberfx" aria-hidden="true"></canvas>
 <div class="prog" id="prog" aria-hidden="true"></div>
 <div class="drill" id="drill" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -597,17 +659,21 @@ body.drill-on .mq-t{animation:none}
 </div>
 
 <aside class="spine" id="spine">
-  <a href="#c01" data-t="c01">01</a><a href="#c02" data-t="c02">02</a>
-  <a href="#c03" data-t="c03">03</a><a href="#c04" data-t="c04">04</a>
-  <a href="#c05" data-t="c05">05</a><a href="#c06" data-t="c06">06</a>
-  <a href="#c07" data-t="c07">07</a><a href="#c08" data-t="c08">08</a>
+  <a href="#c01" data-t="c01" data-lb="Who we are">01</a><a href="#c02" data-t="c02" data-lb="The work">02</a>
+  <a href="#c03" data-t="c03" data-lb="The crew">03</a><a href="#c04" data-t="c04" data-lb="Firestorm">04</a>
+  <a href="#c05" data-t="c05" data-lb="Freight">05</a><a href="#c06" data-t="c06" data-lb="The code">06</a>
+  <a href="#c07" data-t="c07" data-lb="The Open Door">07</a><a href="#c08" data-t="c08" data-lb="Join us">08</a>
 </aside>
 
 <main id="main">
 
 <header class="hero" id="top">
+  <div class="hero-media" aria-hidden="true">
+    <img id="heroShot" src="../assets/team.jpg"
+         srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w"
+         sizes="100vw" width="1200" height="1396" alt="" decoding="async">
+  </div>
   <div class="embers" aria-hidden="true"></div>
-  <canvas class="emberfx" id="emberfx" aria-hidden="true"></canvas>
   <div class="wrap">
     <img class="logo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety Ltd">
     <div class="kick">Bury · Greater Manchester · Nationwide</div>
@@ -661,6 +727,10 @@ body.drill-on .mq-t{animation:none}
 <section class="scene" id="tuesday" aria-label="A Tuesday, somewhere in the UK">
   <div class="stick">
     <div class="syr">A Tuesday, somewhere in the UK</div>
+    <div class="sclock" id="sclock" aria-hidden="true">
+      <span id="scH">08</span><i>:</i><span id="scM">12</span>
+    </div>
+    <div class="sphrase" id="sphrase" aria-hidden="true">Van loaded.</div>
     <div class="phs" id="phs">
       <div class="ph on"><h3>08:12 <em>Van loaded.</em></h3></div>
       <div class="ph"><h3>10:47 <em>Panel tested.</em></h3></div>
@@ -715,6 +785,12 @@ body.drill-on .mq-t{animation:none}
         <p>Pick what's burning — we'll show you what puts it out. The bit of our training
         everyone remembers.</p>
       </div>
+      <div class="fmode" role="group" aria-label="Mode">
+        <button type="button" class="fm on" id="fmLearn" aria-pressed="true">Learn</button>
+        <button type="button" class="fm" id="fmTest" aria-pressed="false">Test yourself</button>
+        <span class="fscore" id="fscore" hidden>0 / 6</span>
+      </div>
+      <p class="fq" id="fq" hidden></p>
       <div class="fclasses" role="tablist" aria-label="Fire classes">
         <button type="button" class="fc on" data-cls="a" aria-pressed="true">A · Solids</button>
         <button type="button" class="fc" data-cls="b" aria-pressed="false">B · Liquids</button>
@@ -755,14 +831,6 @@ body.drill-on .mq-t{animation:none}
       <h2>Faces, not job titles</h2>
       <p class="stand">The people who turn up, fit it properly and sign their name to it.</p>
     </div>
-    <figure class="plate crop rv">
-      <img data-drift src="../assets/team.jpg"
-           srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w"
-           sizes="(max-width:920px) 92vw, 1200px" width="1200" height="1396"
-           alt="Five members of the Freedom Fire and Safety team in company shirts at the Bury office"
-           loading="lazy" decoding="async">
-      <figcaption>The team, Bury. Freedom Fire &amp; Safety archive.</figcaption>
-    </figure>
     <span class="tk rv"><b>Tom &amp; team to supply — names and photographs</b>
     For each person below: name, role, one or two sentences, and a square photo (minimum
     800×800px). Same background and framing for everyone makes the grid look deliberate.
@@ -982,6 +1050,8 @@ body.drill-on .mq-t{animation:none}
 </section>
 
 </main>
+
+<div class="jumbo" aria-hidden="true"><span>Freedom</span><span>Fire</span></div>
 
 <div class="tick" aria-label="Time protecting">
   <div class="wrap">
