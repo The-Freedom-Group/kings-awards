@@ -430,21 +430,44 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
   margin-top:clamp(24px,3.4vw,44px);align-items:center}
 @media(max-width:1080px){.grp{grid-template-columns:1fr}}
 .map{position:relative;aspect-ratio:1.32/1;min-height:400px}
-.map svg{position:absolute;inset:0;width:100%;height:100%}
-.map svg line,.map svg ellipse{vector-effect:non-scaling-stroke}
-.node{position:absolute;transform:translate(-50%,-50%);border-radius:50%;display:grid;
-  place-content:center;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,.17);
-  background:radial-gradient(120% 120% at 32% 22%,#242424,#0d0d0d 72%);color:var(--pale);padding:8px;
-  font-family:var(--disp);text-transform:uppercase;line-height:1.02}
-.node .st{display:block;font-family:var(--sans);font-size:8.5px;letter-spacing:.14em;font-weight:500;
-  margin-top:6px;color:var(--pale-3)}
-.node .st b{display:inline-block;width:5px;height:5px;border-radius:50%;background:#555;
-  margin-right:4px;vertical-align:middle}
-.node[data-s="operating"] .st,.node[data-s="launching"] .st{color:var(--pink)}
-.node[data-s="operating"] .st b,.node[data-s="launching"] .st b{background:var(--pink)}
-.node.core{background:radial-gradient(120% 120% at 32% 22%,#2b2b2b,#111 74%);
-  border-color:rgba(255,255,255,.28)}
-.node.sel{border-color:var(--pink);box-shadow:0 0 0 1px var(--pink),0 0 34px 4px rgba(255,45,141,.42)}
+.map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.map svg ellipse{fill:none;vector-effect:non-scaling-stroke}
+.map .tape{stroke:url(#mgp);stroke-width:2.4}
+.map .tapeGlow{stroke:url(#mgp);stroke-width:7;opacity:.26;filter:blur(3px);
+  animation:tapepulse 6s ease-in-out infinite}
+@keyframes tapepulse{50%{opacity:.42}}
+.map .ringB{stroke:rgba(255,61,154,.45);stroke-width:1.2}
+.map .ringC{stroke:rgba(255,255,255,.14);stroke-width:1;stroke-dasharray:1.5 3}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;
+  align-items:center;gap:8px;cursor:pointer;background:none;border:0;padding:6px;
+  color:var(--pale);font-family:var(--disp);text-transform:uppercase;line-height:1.05;
+  text-align:center}
+.node .orb{position:relative;border-radius:50%;width:var(--os);height:var(--os);flex:0 0 auto;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255,255,255,.95), rgba(255,255,255,0) 30%),
+    radial-gradient(circle at 36% 32%, var(--p1), var(--p2) 58%, var(--p3) 100%);
+  box-shadow:inset -8px -10px 16px rgba(0,0,0,.5), inset 3px 4px 8px rgba(255,255,255,.22),
+    0 12px 28px rgba(0,0,0,.55);
+  transition:transform .35s cubic-bezier(.2,.8,.25,1),box-shadow .35s}
+.node .orb::after{content:"";position:absolute;left:23%;top:17%;width:16%;height:11%;
+  border-radius:50%;background:rgba(255,255,255,.85);filter:blur(1px);
+  transform:rotate(-24deg)}
+.node .lbl{font-size:clamp(10px,1.05vw,14px)}
+.node .st{font-family:var(--sans);font-size:8.5px;letter-spacing:.16em;font-weight:500;
+  color:var(--pink);text-transform:uppercase}
+.node.core{--os:clamp(74px,9vw,104px);--p1:#ff9dcb;--p2:#ff3d9a;--p3:#8f0b55}
+.node.core .lbl{font-size:clamp(12px,1.35vw,17px)}
+.node[data-s="operating"]{--os:clamp(50px,6.4vw,68px)}
+.node[data-k="fire"]{--p1:#ffc37a;--p2:#fb4d12;--p3:#8f1802}
+.node[data-k="global"]{--p1:#8fd0ff;--p2:#0097f6;--p3:#053a75}
+.node[data-k="dist"]{--p1:#86f5c6;--p2:#00c07c;--p3:#04513a}
+.node[data-s="launching"]{--os:clamp(38px,4.8vw,50px);--p1:#ff9dcb;--p2:#ff3d9a;--p3:#8f0b55}
+.node[data-s="future"]{--os:clamp(24px,3.2vw,32px);--p1:#8d96b0;--p2:#3d4459;--p3:#161b28}
+.node[data-s="future"] .lbl{color:var(--pale-3);font-size:clamp(9px,.95vw,12px)}
+.node:hover .orb{transform:scale(1.1)}
+.node.sel .orb{box-shadow:inset -8px -10px 16px rgba(0,0,0,.5),
+  inset 3px 4px 8px rgba(255,255,255,.22),
+  0 0 0 2px #fff, 0 0 0 4.5px var(--pink), 0 0 40px 8px rgba(255,45,141,.5)}
 .panel{border:1px solid rgba(255,45,141,.45);background:#0b0b0b;padding:30px 26px 28px}
 .panel h3{font-size:clamp(21px,2.1vw,27px);margin-bottom:14px}
 .panel hr{border:0;border-top:1.5px solid var(--pink);width:46px;margin:0 0 18px}
@@ -539,16 +562,12 @@ footer .fg{color:var(--pale)}
   transition:opacity .6s ease,transform .95s cubic-bezier(.2,.92,.24,1),
              border-color .3s,box-shadow .3s;transition-delay:var(--d,0s)}
 .map.in .node{opacity:1;transform:translate(-50%,-50%) scale(1)}
-.map.in .node:hover{transform:translate(-50%,-50%) scale(1.05);border-color:rgba(255,45,141,.55)}
 .map svg{opacity:0;transition:opacity 1.1s ease .35s}
 .map.in svg{opacity:1}
-.orbit{transform-origin:50% 50%;animation:spin 52s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.map.in .node[data-s="operating"]{animation:breath 4.5s ease-in-out infinite;
+.map.in .node[data-s="operating"] .orb{animation:breath 4.5s ease-in-out infinite;
   animation-delay:calc(var(--d,0s) + 1s)}
-@keyframes breath{0%,100%{box-shadow:0 0 0 0 rgba(255,45,141,0)}
-  50%{box-shadow:0 0 22px 2px rgba(255,45,141,.28)}}
-.map.in .node.sel[data-s="operating"]{animation:none}
+@keyframes breath{0%,100%{filter:brightness(1)}50%{filter:brightness(1.22)}}
+.map.in .node.sel .orb{animation:none}
 .grp-list.in li{animation:row .7s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
 @keyframes row{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
 .plate img{clip-path:inset(0 0 100% 0);transition:clip-path 1.15s cubic-bezier(.25,.7,.25,1)}
@@ -567,7 +586,8 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .map .node{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
   .thread.landed .head::before,.thread.landed .head::after{animation:none}
   .thread .endnote{transition:none}
-  .map svg{opacity:1}.orbit{animation:none}
+  .map svg{opacity:1}.tapeGlow{animation:none}
+  .map.in .node[data-s="operating"] .orb{animation:none}
   .map.in .node[data-s="operating"]{animation:none}
   .metrics.in .metric,.grp-list.in li{animation:none}
   .hl{background-size:100% 100%;transition:none}
@@ -876,48 +896,52 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
     <div class="grp rv">
       <div class="map" id="map">
         <svg viewBox="0 0 100 76" preserveAspectRatio="none" aria-hidden="true">
-          <g class="orbit" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1">
-            <ellipse cx="50" cy="38" rx="34" ry="26"/><ellipse cx="50" cy="38" rx="45" ry="34"/>
-          </g>
-          <g stroke="#FF2D8D" stroke-width="1.3" fill="none">
-            <line x1="50" y1="38" x2="27" y2="21"/><line x1="50" y1="38" x2="74" y2="21"/>
-            <line x1="50" y1="38" x2="31" y2="60"/>
-          </g>
-          <g stroke="rgba(255,45,141,.55)" stroke-width="1.1" fill="none">
-            <line x1="50" y1="38" x2="70" y2="59"/><line x1="70" y1="59" x2="83" y2="70"/>
-          </g>
-          <g stroke="rgba(255,255,255,.16)" stroke-width="1" stroke-dasharray="1.4 2.4" fill="none">
-            <line x1="50" y1="38" x2="49" y2="16"/><line x1="50" y1="38" x2="16" y2="43"/>
-            <line x1="50" y1="38" x2="86" y2="43"/><line x1="50" y1="38" x2="49" y2="72"/>
+          <defs>
+            <linearGradient id="mgp" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff74b8"/>
+              <stop offset=".45" stop-color="#ff3d9a"/>
+              <stop offset="1" stop-color="#c60f6e"/>
+            </linearGradient>
+          </defs>
+          <g transform="rotate(-16 50 38)">
+            <ellipse class="tapeGlow" cx="50" cy="38" rx="33" ry="13"/>
+            <ellipse class="tape" cx="50" cy="38" rx="33" ry="13"/>
+            <ellipse class="ringB" cx="50" cy="38" rx="43" ry="20.5"/>
+            <ellipse class="ringC" cx="50" cy="38" rx="51" ry="28"/>
           </g>
         </svg>
-        <button class="node core" style="left:50%;top:50%;width:26%;aspect-ratio:1;font-size:clamp(13px,1.5vw,19px)"
-          data-k="group" data-s="core">Freedom<br>Group</button>
-        <button class="node sel" style="left:27%;top:27.6%;width:20%;aspect-ratio:1;font-size:clamp(10px,1.15vw,14px)"
-          data-k="fire" data-s="operating">Freedom<br>Fire &amp; Safety<span class="st"><b></b>Operating</span></button>
-        <button class="node" style="left:74%;top:27.6%;width:19%;aspect-ratio:1;font-size:clamp(10px,1.15vw,14px)"
-          data-k="global" data-s="operating">Freedom<br>Global<span class="st"><b></b>Operating</span></button>
-        <button class="node" style="left:31%;top:79%;width:19%;aspect-ratio:1;font-size:clamp(10px,1.1vw,13.5px)"
-          data-k="dist" data-s="operating">Freedom<br>Distribution<span class="st"><b></b>Operating</span></button>
-        <button class="node" style="left:70%;top:77.6%;width:18%;aspect-ratio:1;font-size:clamp(10px,1.1vw,13.5px)"
-          data-k="fac" data-s="launching">Freedom<br>Facilities<span class="st"><b></b>Launching</span></button>
-        <button class="node" style="left:83%;top:92%;width:14%;aspect-ratio:1;font-size:clamp(9px,.95vw,11.5px)"
-          data-k="hepa" data-s="launching">Hepa<br>Fellas<span class="st"><b></b>Launching</span></button>
-        <button class="node" style="left:49%;top:21%;width:13.5%;aspect-ratio:1;font-size:clamp(9px,.95vw,11.5px)"
-          data-k="firestorm" data-s="future">Firestorm<span class="st"><b></b>Future</span></button>
-        <button class="node" style="left:16%;top:56.6%;width:13.5%;aspect-ratio:1;font-size:clamp(9px,.95vw,11.5px)"
-          data-k="voltz" data-s="future">Voltz<span class="st"><b></b>Future</span></button>
-        <button class="node" style="left:86%;top:56.6%;width:13.5%;aspect-ratio:1;font-size:clamp(9px,.95vw,11.5px)"
-          data-k="kunergy" data-s="future">Kunergy<span class="st"><b></b>Future</span></button>
-        <button class="node" style="left:49%;top:94.7%;width:12.5%;aspect-ratio:1;font-size:clamp(9px,.95vw,11.5px)"
-          data-k="t3" data-s="future">T3<span class="st"><b></b>Future</span></button>
+        <button class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0">
+          <span class="orb"></span><span class="lbl">Freedom<br>Group</span></button>
+        <button class="node" data-k="fire" data-s="operating" data-ring="A" data-ang="205">
+          <span class="orb"></span><span class="lbl">Fire &amp; Safety</span>
+          <span class="st">Operating</span></button>
+        <button class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
+          <span class="orb"></span><span class="lbl">Global</span>
+          <span class="st">Operating</span></button>
+        <button class="node" data-k="dist" data-s="operating" data-ring="A" data-ang="80">
+          <span class="orb"></span><span class="lbl">Distribution</span>
+          <span class="st">Operating</span></button>
+        <button class="node" data-k="fac" data-s="launching" data-ring="B" data-ang="25">
+          <span class="orb"></span><span class="lbl">Facilities</span>
+          <span class="st">Launching</span></button>
+        <button class="node" data-k="hepa" data-s="launching" data-ring="B" data-ang="148">
+          <span class="orb"></span><span class="lbl">Hepa Fellas</span>
+          <span class="st">Launching</span></button>
+        <button class="node" data-k="firestorm" data-s="future" data-ring="C" data-ang="293">
+          <span class="orb"></span><span class="lbl">Firestorm</span></button>
+        <button class="node" data-k="voltz" data-s="future" data-ring="C" data-ang="178">
+          <span class="orb"></span><span class="lbl">Voltz</span></button>
+        <button class="node" data-k="kunergy" data-s="future" data-ring="C" data-ang="8">
+          <span class="orb"></span><span class="lbl">Kunergy</span></button>
+        <button class="node" data-k="t3" data-s="future" data-ring="C" data-ang="68">
+          <span class="orb"></span><span class="lbl">T3</span></button>
       </div>
       <div class="panel" id="panel" aria-live="polite">
-        <h3 id="pName">Freedom Fire &amp; Safety</h3><hr>
-        <div class="tagline" id="pTag">The business that started it.</div>
-        <p id="pBody">Fire safety products, installation and compliance — serving homes and
-        businesses across the UK.</p>
-        <span class="go" id="pGo">Explore business ↗</span>
+        <h3 id="pName">Freedom Group</h3><hr>
+        <div class="tagline" id="pTag">The holding structure.</div>
+        <p id="pBody">One group, built so each venture is a separate operating company rather
+        than another department. Select a planet.</p>
+        <span class="go" id="pGo" style="display:none">Explore business ↗</span>
       </div>
     </div>
 

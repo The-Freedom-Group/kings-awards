@@ -149,6 +149,25 @@
   stagger(".grp-list", "li", 0.05);
   stagger(".map", ".node", 0.07);
 
+  /* planets sit ON the drawn rings: same ellipses, same rotation */
+  function placeOrbits() {
+    var RINGS = { A: [33, 13], B: [43, 20.5], C: [51, 28] };
+    var PHI = -16 * Math.PI / 180, CX = 50, CY = 38;
+    $$(".map .node").forEach(function (nd) {
+      var ring = nd.getAttribute("data-ring");
+      var x = CX, y = CY;
+      if (ring !== "0" && RINGS[ring]) {
+        var th = (+nd.getAttribute("data-ang") || 0) * Math.PI / 180;
+        var ex = RINGS[ring][0] * Math.cos(th), ey = RINGS[ring][1] * Math.sin(th);
+        x = CX + ex * Math.cos(PHI) - ey * Math.sin(PHI);
+        y = CY + ex * Math.sin(PHI) + ey * Math.cos(PHI);
+      }
+      nd.style.left = x + "%";
+      nd.style.top = (y / 76 * 100) + "%";
+    });
+  }
+  placeOrbits();
+
   /* ── hero branch lines ────────────────────────────────────── */
   $$(".draw").forEach(function (p) {
     var L = 2000; try { L = p.getTotalLength(); } catch (e) {}
@@ -592,7 +611,7 @@
   function rebuild() {
     clearTimeout(rebuildTimer);
     rebuildTimer = setTimeout(function () {
-      buildPath(); measureScene(); measureMarquees(); lastY = -1;
+      buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
     }, 140);
   }
   window.addEventListener("resize", rebuild);
