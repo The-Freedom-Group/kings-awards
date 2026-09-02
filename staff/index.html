@@ -394,6 +394,99 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   align-items:center}
 footer img{height:24px;width:auto;opacity:.75}
 
+/* ── interactive: embers, drill, scene, matcher, ticker ──── */
+.emberfx{position:absolute;inset:0;z-index:1;pointer-events:none}
+.emberfx.on ~ .embers,.emberfx.on + .embers{display:none}
+.hero:has(.emberfx.on) .embers{display:none}
+.ghost{display:inline-flex;align-items:center;gap:8px;margin-left:12px;font-family:var(--body);
+  font-weight:700;font-size:14px;color:#fff;background:transparent;
+  border:1px solid rgba(255,255,255,.45);padding:13px 26px;border-radius:var(--r-pill);
+  cursor:pointer;transition:border-color .25s,background .25s;vertical-align:middle;
+  will-change:transform}
+.ghost:hover{border-color:var(--red-2);background:rgba(196,0,0,.14)}
+@media(max-width:560px){.ghost{margin:12px 0 0}}
+
+.drill{position:fixed;inset:0;z-index:210;pointer-events:none;opacity:0;
+  background:
+    radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(196,0,0,.55) 100%);
+  box-shadow:inset 0 0 0 4px rgba(255,75,43,.8)}
+body.drill-on .drill{animation:klaxon .42s steps(2,end) 6}
+@keyframes klaxon{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+body.drill-on .mq-t{animation:none}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);z-index:220;
+  background:var(--black);color:#fff;border:1px solid rgba(255,75,43,.55);
+  border-radius:var(--r-pill);padding:12px 24px;font-family:var(--body);font-weight:600;
+  font-size:14px;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;
+  box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.scene{position:relative;height:320vh;background:var(--black);color:#fff}
+.scene .stick{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;
+  place-content:center;text-align:center}
+.syr{display:inline-flex;align-items:center;gap:8px;margin:0 auto clamp(16px,3vh,30px);
+  font-family:var(--body);font-weight:700;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#fff;background:rgba(196,0,0,.26);
+  border:1px solid rgba(255,75,43,.45);padding:7px 15px;border-radius:var(--r-pill)}
+.syr::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-2)}
+.scene .phs{position:relative;min-height:clamp(80px,20vh,200px);min-width:min(88vw,980px)}
+.scene .ph{position:absolute;inset:0;display:grid;place-content:center;opacity:0;
+  transform:scale(.94);filter:blur(9px);
+  transition:opacity .5s ease,transform .5s ease,filter .5s ease}
+.scene .ph.on{opacity:1;transform:none;filter:none}
+.scene .ph h3{font-size:clamp(40px,8.6vw,130px);line-height:.92;color:#fff}
+.scene .ph h3 em{font-style:normal;display:block;font-size:.42em;margin-top:14px;
+  color:rgba(255,255,255,.66);font-weight:800}
+.scnt{margin-top:clamp(16px,3.6vh,32px);font-family:var(--body);font-size:13px;
+  letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--slate-2)}
+.scnt b{background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent}
+@media(max-width:820px),(prefers-reduced-motion:reduce){
+  .scene{height:auto;padding:clamp(64px,11vw,120px) 0}
+  .scene .stick{position:static;height:auto;overflow:visible}
+  .scene .phs{min-height:0;min-width:0;display:grid;gap:clamp(16px,3.6vw,30px)}
+  .scene .ph{position:static;opacity:1;transform:none;filter:none}
+  .scene .ph h3{font-size:clamp(34px,9vw,84px)}
+}
+
+.fireui{margin-top:clamp(30px,4.6vw,54px);background:var(--black-2);
+  border:1px solid var(--line-d);border-radius:var(--r-big);
+  padding:clamp(22px,3.4vw,40px)}
+.fh h3{font-size:clamp(24px,3vw,36px);color:#fff;margin-bottom:8px}
+.fh p{margin:0 0 20px;color:var(--slate-2);font-size:15px;max-width:56ch}
+.fclasses{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.fc{font-family:var(--body);font-weight:700;font-size:13.5px;color:#fff;cursor:pointer;
+  background:transparent;border:1px solid rgba(255,255,255,.28);padding:10px 20px;
+  border-radius:var(--r-pill);transition:background .25s,border-color .25s,transform .2s}
+.fc:hover{border-color:var(--red-2);transform:translateY(-1px)}
+.fc.on{background:var(--grad);border-color:transparent;
+  box-shadow:0 6px 20px rgba(196,0,0,.35)}
+.exts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.ext{background:#161616;border:1px solid var(--line-d);border-radius:var(--r-card);
+  padding:0 16px 18px;transition:transform .35s cubic-bezier(.2,.8,.25,1),
+  border-color .3s,opacity .35s,filter .35s;overflow:hidden}
+.ext .eb{display:block;height:8px;margin:0 -16px 14px;background:var(--band)}
+.ext h4{font-size:17px;color:#fff;margin-bottom:6px}
+.ext p{margin:0;font-size:12.5px;line-height:1.5;color:var(--slate-2)}
+.ext.hit{transform:translateY(-5px);border-color:var(--red-2);
+  box-shadow:0 10px 26px rgba(196,0,0,.22)}
+.ext.miss{opacity:.28;filter:grayscale(.7)}
+.fnote{margin:18px 0 0;font-size:13.5px;color:var(--slate-2);font-weight:500}
+.fnote b{color:#fff}
+
+.tick{background:var(--black);border-top:1px solid var(--line-d);color:#fff;
+  position:relative;z-index:5}
+.tick .wrap{display:flex;align-items:baseline;justify-content:center;gap:14px;
+  flex-wrap:wrap;padding-block:20px}
+.tick .tl{font-family:var(--body);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;color:var(--slate-2)}
+.tick .tv{font-family:var(--disp);font-weight:800;font-size:clamp(20px,2.6vw,30px)}
+.tick .tv b{background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* tilt owns the card transform; grids give it depth */
+.cards,.team,.stops,.vals{perspective:900px}
+.cards .cardx,.team .person,.stops .stop,.vals .val{transform-style:preserve-3d}
+
 /* ── motion ─────────────────────────────────────────────────── */
 .rv{opacity:0;transform:translateY(30px) scale(.986);filter:blur(5px);
   transition:opacity .8s cubic-bezier(.22,.72,.24,1),transform .8s cubic-bezier(.22,.72,.24,1),
@@ -404,7 +497,7 @@ footer img{height:24px;width:auto;opacity:.75}
   transition:transform .85s cubic-bezier(.2,.78,.22,1);transition-delay:var(--d,0s)}
 .in .wa i,.hero-h.in .wa i{transform:none}
 .team.in .person{animation:pop .7s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
-@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1}}
 .cards.in .cardx,.vals.in .val,.stops.in .stop{animation:pop .7s cubic-bezier(.2,.8,.25,1) both;
   animation-delay:var(--d,0s)}
 .plate img{clip-path:inset(0 0 100% 0);transition:clip-path 1.1s cubic-bezier(.25,.7,.25,1)}
@@ -423,10 +516,13 @@ footer img{height:24px;width:auto;opacity:.75}
   .follow i{animation:none}
   .follow::after,.btn::after{display:none}
   .sheet li{opacity:1;transform:none;transition:none}
+  .emberfx,.ghost,.drill,.toast{display:none!important}
+  .ext,.fc{transition:none}
   html{scroll-behavior:auto}
 }
 @media print{
-  .chrome,.spine,.sheet,.enter,.cur,.prog,.mq,.embers,.topo,.pw,.follow{display:none}
+  .chrome,.spine,.sheet,.enter,.cur,.prog,.mq,.embers,.topo,.pw,.follow,
+  .emberfx,.ghost,.drill,.toast,.scene,.tick{display:none}
   body{background:#fff;color:#000}
   .rv{opacity:1;transform:none}
 }
@@ -436,6 +532,8 @@ footer img{height:24px;width:auto;opacity:.75}
 
 <div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"></i></div>
 <div class="prog" id="prog" aria-hidden="true"></div>
+<div class="drill" id="drill" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="enter" id="enter" aria-hidden="true">
   <img src="../assets/ff_logo.png" alt="">
@@ -481,6 +579,7 @@ footer img{height:24px;width:auto;opacity:.75}
 
 <header class="hero" id="top">
   <div class="embers" aria-hidden="true"></div>
+  <canvas class="emberfx" id="emberfx" aria-hidden="true"></canvas>
   <div class="wrap">
     <img class="logo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety Ltd">
     <div class="kick">Bury · Greater Manchester · Nationwide</div>
@@ -489,6 +588,7 @@ footer img{height:24px;width:auto;opacity:.75}
     come on, the assessment is honest and the certificate means something at three in the
     morning.</p>
     <a class="follow" href="#c01" data-mag>Meet the team <i>↓</i></a>
+    <button class="ghost" id="drillBtn" data-mag type="button">Sound the drill</button>
   </div>
 </header>
 
@@ -530,6 +630,19 @@ footer img{height:24px;width:auto;opacity:.75}
   </div>
 </section>
 
+<section class="scene" id="tuesday" aria-label="A Tuesday, somewhere in the UK">
+  <div class="stick">
+    <div class="syr">A Tuesday, somewhere in the UK</div>
+    <div class="phs" id="phs">
+      <div class="ph on"><h3>08:12 <em>Van loaded.</em></h3></div>
+      <div class="ph"><h3>10:47 <em>Panel tested.</em></h3></div>
+      <div class="ph"><h3>13:05 <em>Assessment walked.</em></h3></div>
+      <div class="ph"><h3>16:30 <em>Certificate signed.</em></h3></div>
+    </div>
+    <div class="scnt">Boring? Good. <b>Boring means safe.</b></div>
+  </div>
+</section>
+
 <section class="ch deep" id="c02" data-word="WORK">
   <div class="wrap">
     <div class="rv">
@@ -567,6 +680,35 @@ footer img{height:24px;width:auto;opacity:.75}
     <span class="tk rv"><b>Team to confirm</b>
     Do these four match the real service list? Add fire doors, passive fire protection, sprinklers
     or dry risers if you cover them — and cut anything you don't.</span>
+
+    <div class="fireui rv" id="fireui">
+      <div class="fh">
+        <h3>Know your fire</h3>
+        <p>Pick what's burning — we'll show you what puts it out. The bit of our training
+        everyone remembers.</p>
+      </div>
+      <div class="fclasses" role="tablist" aria-label="Fire classes">
+        <button type="button" class="fc on" data-cls="a" aria-pressed="true">A · Solids</button>
+        <button type="button" class="fc" data-cls="b" aria-pressed="false">B · Liquids</button>
+        <button type="button" class="fc" data-cls="c" aria-pressed="false">C · Gases</button>
+        <button type="button" class="fc" data-cls="e" aria-pressed="false">⚡ Electrical</button>
+        <button type="button" class="fc" data-cls="f" aria-pressed="false">F · Cooking oils</button>
+      </div>
+      <div class="exts">
+        <div class="ext" data-ok="a" style="--band:#C40000"><span class="eb"></span>
+          <h4>Water</h4><p>Wood, paper, textiles. Never near live electrics.</p></div>
+        <div class="ext" data-ok="a b" style="--band:#F1E9D2"><span class="eb"></span>
+          <h4>Foam</h4><p>Solids and flammable liquids — smothers the surface.</p></div>
+        <div class="ext" data-ok="b e" style="--band:#111111"><span class="eb"></span>
+          <h4>CO₂</h4><p>Liquids and live electrical — leaves no residue.</p></div>
+        <div class="ext" data-ok="a b c e" style="--band:#1D3686"><span class="eb"></span>
+          <h4>Dry powder</h4><p>A, B, C and electrical — not in enclosed spaces.</p></div>
+        <div class="ext" data-ok="f a" style="--band:#FFB300"><span class="eb"></span>
+          <h4>Wet chemical</h4><p>Cooking oils and fats — the chip-pan specialist.</p></div>
+      </div>
+      <p class="fnote" id="fnote" aria-live="polite">Class A — wood, paper, textiles.
+      Water, foam, powder or wet chemical will do it.</p>
+    </div>
     <figure class="plate wide crop rv">
       <img data-drift src="../assets/floor.jpg"
            srcset="../assets/floor-sm.jpg 600w, ../assets/floor.jpg 1200w" sizes="100vw"
@@ -745,6 +887,14 @@ footer img{height:24px;width:auto;opacity:.75}
 </section>
 
 </main>
+
+<div class="tick" aria-label="Time protecting">
+  <div class="wrap">
+    <span class="tl">Protecting homes and businesses for</span>
+    <span class="tv"><b id="tD">0</b> days <b id="tH">00</b>:<b id="tM">00</b>:<b id="tS">00</b></span>
+    <span class="tl">since 27·08·2021</span>
+  </div>
+</div>
 
 <footer>
   <div class="wrap">

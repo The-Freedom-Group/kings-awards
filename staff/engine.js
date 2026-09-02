@@ -290,6 +290,180 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureMarquees);
   measureMarquees();
 
+  /* ══ INTERACTIVE LAYER ═══════════════════════════════════ */
+
+  /* ── ember canvas: they rise, and they get out of your way ── */
+  var efx = $("#emberfx"), ectx = null, EP = [], eBurst = 0;
+  var eW = 0, eH = 0, emx = -1e4, emy = -1e4;
+  function emberSize() {
+    if (!efx) return;
+    var hero = efx.parentElement;
+    eW = efx.width = hero.clientWidth;
+    eH = efx.height = hero.clientHeight;
+  }
+  if (efx && !reduce && efx.getContext) {
+    ectx = efx.getContext("2d");
+    efx.classList.add("on");
+    emberSize();
+    window.addEventListener("resize", emberSize);
+    for (var ei = 0; ei < 110; ei++) {
+      EP.push({ x: Math.random() * 2000, y: Math.random() * 1200,
+                vx: 0, vy: -(0.25 + Math.random() * 0.6),
+                r: 0.8 + Math.random() * 1.7, ph: Math.random() * 6.28,
+                hot: Math.random() < 0.5 });
+    }
+    efx.parentElement.addEventListener("mousemove", function (e) {
+      var r = efx.getBoundingClientRect();
+      emx = e.clientX - r.left; emy = e.clientY - r.top;
+    }, { passive: true });
+    efx.parentElement.addEventListener("mouseleave", function () {
+      emx = -1e4; emy = -1e4;
+    });
+  }
+  function embers(ts) {
+    if (!ectx || !eW) return;
+    ectx.clearRect(0, 0, eW, eH);
+    for (var i = 0; i < EP.length; i++) {
+      var p = EP[i];
+      p.ph += 0.012;
+      p.x += p.vx + Math.sin(p.ph + i) * 0.22;
+      p.y += p.vy - eBurst * (0.5 + Math.random());
+      p.vx *= 0.94;
+      var dx = p.x - emx, dy = p.y - emy, dd = dx * dx + dy * dy;
+      if (dd < 14400) {                 /* 120px — the cursor stirs them */
+        var d = Math.sqrt(dd) || 1, f = (120 - d) / 120 * 1.6;
+        p.vx += (dx / d) * f; p.vy -= f * 0.12;
+      }
+      p.vy = Math.min(-0.2, p.vy + 0.006);
+      if (p.y < -8 || p.x < -8 || p.x > eW + 8) {
+        p.x = Math.random() * eW; p.y = eH + 6;
+        p.vy = -(0.25 + Math.random() * 0.6); p.vx = 0;
+      }
+      var tw = 0.55 + 0.45 * Math.sin(ts / 300 + p.ph * 5);
+      ectx.beginPath();
+      ectx.arc(p.x % (eW + 16), p.y, p.r, 0, 6.283);
+      ectx.fillStyle = p.hot
+        ? "rgba(255,75,43," + (0.5 * tw).toFixed(2) + ")"
+        : "rgba(196,0,0," + (0.42 * tw).toFixed(2) + ")";
+      ectx.fill();
+    }
+    eBurst *= 0.9;
+  }
+
+  /* ── the drill ────────────────────────────────────────────── */
+  var drillBtn = $("#drillBtn"), toast = $("#toast"), drillLock = false;
+  function say(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("on");
+    setTimeout(function () { toast.classList.remove("on"); }, 3600);
+  }
+  if (drillBtn) {
+    drillBtn.addEventListener("click", function () {
+      if (drillLock) return;
+      drillLock = true;
+      var t0 = performance.now();
+      document.body.classList.add("drill-on");
+      eBurst = 3.2;
+      setTimeout(function () {
+        document.body.classList.remove("drill-on");
+        var secs = ((performance.now() - t0) / 1000).toFixed(1);
+        say("Drill complete in " + secs + "s — you'd be first out. ⚡");
+        drillLock = false;
+      }, 2550);
+    });
+  }
+
+  /* ── the Tuesday scrub ────────────────────────────────────── */
+  var scene = $("#tuesday"), phrases = $$("#phs .ph");
+  var sceneTop = 0, sceneRange = 1;
+  function measureScene() {
+    if (!scene) return;
+    var r = scene.getBoundingClientRect();
+    sceneTop = r.top + (window.pageYOffset || document.documentElement.scrollTop);
+    sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight);
+  }
+  function runScene(y) {
+    if (!scene || reduce || window.innerWidth <= 820) return;
+    var p = clamp((y - sceneTop) / sceneRange, 0, 1);
+    var idx = Math.min(phrases.length - 1, Math.floor(p * phrases.length));
+    phrases.forEach(function (ph, i) { ph.classList.toggle("on", i === idx); });
+  }
+  window.addEventListener("resize", measureScene);
+  window.addEventListener("load", measureScene);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureScene);
+  measureScene();
+
+  /* ── know your fire ───────────────────────────────────────── */
+  var FIRE = {
+    a: "Class A — wood, paper, textiles. Water, foam, powder or wet chemical will do it.",
+    b: "Class B — petrol, paint, solvents. Foam, CO₂ or powder. Never water.",
+    c: "Class C — flammable gases. Dry powder only, once the supply is isolated.",
+    e: "Live electrical — CO₂ or dry powder. Water and foam conduct.",
+    f: "Class F — cooking oils and fats. Wet chemical, purpose-built for the job."
+  };
+  var fnote = $("#fnote");
+  var fcs = $$(".fc"), exts = $$(".ext");
+  function pickFire(cls) {
+    fcs.forEach(function (b) {
+      var on = b.getAttribute("data-cls") === cls;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on);
+    });
+    exts.forEach(function (x) {
+      var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
+      x.classList.toggle("hit", ok);
+      x.classList.toggle("miss", !ok);
+    });
+    if (fnote) fnote.textContent = FIRE[cls] || "";
+  }
+  fcs.forEach(function (b) {
+    b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); });
+  });
+  if (fcs.length) pickFire("a");
+
+  /* ── 3D tilt on every card ────────────────────────────────── */
+  if (fine && !reduce) {
+    $$(".cardx, .person, .stop, .val").forEach(function (el) {
+      el.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = "translateY(-5px) rotateX(" + (-py * 7).toFixed(2) +
+          "deg) rotateY(" + (px * 7).toFixed(2) + "deg)";
+      });
+      el.addEventListener("mouseleave", function () { el.style.transform = ""; });
+    });
+  }
+
+  /* ── protecting-since ticker ──────────────────────────────── */
+  var tD = $("#tD"), tH = $("#tH"), tM = $("#tM"), tS = $("#tS");
+  var EPOCH = new Date(2021, 7, 27).getTime();   /* 27 August 2021 */
+  var lastSec = -1;
+  function pad(x) { return x < 10 ? "0" + x : "" + x; }
+  function ticker() {
+    var s = Math.floor((Date.now() - EPOCH) / 1000);
+    if (s === lastSec || !tD) return;
+    lastSec = s;
+    tD.textContent = Math.floor(s / 86400);
+    tH.textContent = pad(Math.floor(s / 3600) % 24);
+    tM.textContent = pad(Math.floor(s / 60) % 60);
+    tS.textContent = pad(s % 60);
+  }
+  ticker();
+
+  /* ── the interactive frame loop ───────────────────────────── */
+  if (!reduce) {
+    (function iloop(ts) {
+      embers(ts || 0);
+      runScene(window.pageYOffset || document.documentElement.scrollTop);
+      ticker();
+      requestAnimationFrame(iloop);
+    })(0);
+  } else {
+    setInterval(ticker, 1000);
+  }
+
   /* ── menu sheet ───────────────────────────────────────────── */
   var burger = $("#burger"), sheet = $("#sheet");
   function sheetOn(o) {
