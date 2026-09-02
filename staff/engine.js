@@ -1,9 +1,10 @@
 /* ══════════════════════════════════════════════════════════════════
-   THE PEOPLE OF FREEDOM FIRE — engine
-   Night-and-ember sister of the founder page's engine: heat contours,
-   poster words sliding against the scroll, velocity marquees, an ember
-   cursor, magnetic controls, two-way reveals and counters. Native
-   scrolling; prefers-reduced-motion collapses it all.
+   THE NIGHT SHIFT — engine
+   Vertical scroll drives a horizontal walk through the depot. The HUD
+   clock interpolates 18:00 → 06:00 across the journey, time markers
+   parallax through each bay, embers drift and answer the cursor, and
+   the training-room quiz keeps score. Mobile and reduced-motion get
+   the same bays as a vertical page.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -16,22 +17,92 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   var lerp  = function (a, b, t) { return a + (b - a) * t; };
+  var pad2  = function (x) { return x < 10 ? "0" + x : "" + x; };
+
+  var horizontal = function () { return window.innerWidth > 900 && !reduce; };
 
   /* ── entrance ─────────────────────────────────────────────── */
   function ready() { document.body.classList.add("ready"); }
   if (reduce) { ready(); }
-  else if (document.readyState === "complete") { setTimeout(ready, 850); }
-  else { window.addEventListener("load", function () { setTimeout(ready, 850); }); }
+  else if (document.readyState === "complete") { setTimeout(ready, 1350); }
+  else { window.addEventListener("load", function () { setTimeout(ready, 1350); }); }
 
-  /* ── the hero photograph arrives ──────────────────────────── */
-  var heroShot = $("#heroShot");
-  if (heroShot) {
-    var hlit = function () { heroShot.classList.add("on"); };
-    heroShot.complete ? hlit()
-      : (heroShot.addEventListener("load", hlit), heroShot.addEventListener("error", hlit));
+  /* ── the shift geometry ───────────────────────────────────── */
+  var shift = $("#shift"), track = $("#track"), bays = $$(".bayp");
+  var trackW = 0, maxX = 0, scrollLen = 0;
+
+  function layout() {
+    if (!shift || !track) return;
+    if (!horizontal()) { shift.style.height = ""; track.style.transform = ""; return; }
+    trackW = track.scrollWidth;
+    maxX = Math.max(0, trackW - window.innerWidth);
+    scrollLen = maxX + window.innerHeight;
+    shift.style.height = scrollLen + "px";
   }
 
-  /* ── heat contours behind every panel ─────────────────────── */
+  function progress() {
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    return maxX ? clamp(y / (scrollLen - window.innerHeight), 0, 1) : 0;
+  }
+
+  /* jump helper: bay index → scroll position */
+  function bayX(i) {
+    var x = 0;
+    for (var k = 0; k < i; k++) x += bays[k].offsetWidth;
+    return x;
+  }
+  function goBay(i) {
+    i = clamp(i, 0, bays.length - 1);
+    if (horizontal()) {
+      var x = Math.min(bayX(i), maxX);
+      window.scrollTo({ top: maxX ? x / maxX * (scrollLen - window.innerHeight) : 0,
+                        behavior: reduce ? "auto" : "smooth" });
+    } else {
+      bays[i].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }
+  }
+
+  /* ── HUD: clock, bay name, progress, dots ─────────────────── */
+  var hudH = $("#hudH"), hudM = $("#hudM"), hudBay = $("#hudBay"), hudFill = $("#hudFill");
+  var dots = $("#dots"), dotEls = [];
+  bays.forEach(function (b, i) {
+    var d = document.createElement("button");
+    d.type = "button";
+    d.setAttribute("data-lb", b.getAttribute("data-time") + " · " + b.getAttribute("data-bay"));
+    d.setAttribute("aria-label", "Go to " + b.getAttribute("data-bay"));
+    d.addEventListener("click", function () { goBay(i); });
+    dots.appendChild(d); dotEls.push(d);
+  });
+
+  var SHIFT_START = 18 * 60, SHIFT_LEN = 12 * 60;   /* 18:00 → 06:00 */
+  function hud(p) {
+    var mins = Math.round(SHIFT_START + p * SHIFT_LEN) % (24 * 60);
+    if (hudH) hudH.textContent = pad2(Math.floor(mins / 60));
+    if (hudM) hudM.textContent = pad2(mins % 60);
+    if (hudFill) hudFill.style.width = (p * 100).toFixed(2) + "%";
+
+    var cx = horizontal()
+      ? p * maxX + window.innerWidth * 0.5
+      : null;
+    var cur = 0;
+    if (cx !== null) {
+      var acc = 0;
+      for (var i = 0; i < bays.length; i++) {
+        acc += bays[i].offsetWidth;
+        if (cx <= acc) { cur = i; break; }
+        cur = i;
+      }
+    } else {
+      var vm = (window.pageYOffset || 0) + window.innerHeight * 0.4;
+      for (var k = 0; k < bays.length; k++) {
+        if (vm >= bays[k].offsetTop) cur = k;
+      }
+    }
+    if (hudBay) hudBay.textContent = bays[cur].getAttribute("data-bay");
+    dotEls.forEach(function (d, di) { d.classList.toggle("on", di === cur); });
+  }
+
+  /* ── time markers + contours + spotlight per bay ──────────── */
   function rnd(seed) {
     return function () {
       seed = (seed * 1103515245 + 12345) & 0x7fffffff;
@@ -46,137 +117,139 @@
       var th = i / 56 * Math.PI * 2;
       var rr = r * (1 + a1 * Math.sin(2 * th + p1) + a2 * Math.sin(3 * th + p2) +
                         a3 * Math.sin(5 * th + p3));
-      var x = cx + Math.cos(th) * rr * 1.35, y = cy + Math.sin(th) * rr;
-      d += (i ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
+      d += (i ? " L " : "M ") + (cx + Math.cos(th) * rr * 1.35).toFixed(1) + " " +
+           (cy + Math.sin(th) * rr).toFixed(1);
     }
     return d + " Z";
   }
   function contourGroup(cx, cy, r, rings, rand, cls) {
     var g = '<g class="' + cls + '">';
     for (var k = 0; k < rings; k++) {
-      var s = 1 - k * .17;
-      g += '<path d="' + blobPath(cx + k * 6 * (rand() - .5) * 4,
-                                  cy + k * 5 * (rand() - .5) * 4,
-                                  r * s, rand) + '"/>';
+      g += '<path d="' + blobPath(cx + (rand() - .5) * 40, cy + (rand() - .5) * 34,
+                                  r * (1 - k * .17), rand) + '"/>';
     }
     return g + "</g>";
   }
-  $$("#main .hero, #main .ch").forEach(function (sec, si) {
-    var rand = rnd(211 + si * 149);
+  var tmarks = [];
+  bays.forEach(function (b, i) {
+    /* contours */
+    var rand = rnd(83 + i * 173);
     var fx = document.createElement("div");
     fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
     var anim = reduce ? ["", ""] : ["a", "b"];
-    fx.innerHTML =
-      '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
-      contourGroup(180 + rand() * 160, 130 + rand() * 120, 150 + rand() * 70, 5, rand, anim[0]) +
-      contourGroup(720 + rand() * 180, 400 + rand() * 140, 180 + rand() * 80, 6, rand,
-                   anim[1] + (si % 3 === 1 ? " hot" : "")) +
-      "</svg>";
-    sec.insertBefore(fx, sec.firstChild);
+    fx.innerHTML = '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
+      contourGroup(200 + rand() * 180, 140 + rand() * 120, 150 + rand() * 70, 5, rand, anim[0]) +
+      contourGroup(700 + rand() * 200, 380 + rand() * 150, 180 + rand() * 80, 6, rand,
+                   anim[1] + (i % 3 === 1 ? " hot" : "")) + "</svg>";
+    b.insertBefore(fx, b.firstChild);
+
+    /* time marker */
+    var tm = document.createElement("span");
+    tm.className = "tmark"; tm.setAttribute("aria-hidden", "true");
+    tm.textContent = b.getAttribute("data-time");
+    b.insertBefore(tm, b.firstChild.nextSibling);
+    tmarks.push({ el: tm, bay: b });
+
+    /* spotlight */
+    if (fine && !reduce) {
+      var sp = document.createElement("div");
+      sp.className = "spot"; sp.setAttribute("aria-hidden", "true");
+      b.appendChild(sp);
+      b.addEventListener("mousemove", (function (spx, bb) {
+        return function (e) {
+          var r = bb.getBoundingClientRect();
+          spx.style.setProperty("--sx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
+          spx.style.setProperty("--sy", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+        };
+      })(sp, b), { passive: true });
+    }
   });
 
-  /* ── one poster word per chapter ──────────────────────────── */
-  var pws = [];
-  $$("#main .ch[data-word]").forEach(function (sec) {
-    var w = document.createElement("span");
-    w.className = "pw"; w.textContent = sec.getAttribute("data-word");
-    w.setAttribute("aria-hidden", "true");
-    sec.insertBefore(w, sec.firstChild);
-    pws.push({ el: w, sec: sec });
-  });
-
-  /* ── headlines assemble word by word ──────────────────────── */
-  function split(el, step) {
-    var nodes = Array.prototype.slice.call(el.childNodes), out = [];
-    nodes.forEach(function (nd) {
-      if (nd.nodeType === 3) {
-        nd.textContent.split(/(\s+)/).forEach(function (tk) {
-          if (!tk) return;
-          if (/^\s+$/.test(tk)) { out.push(document.createTextNode(" ")); return; }
-          var box = document.createElement("span"); box.className = "wa";
-          var ink = document.createElement("i"); ink.textContent = tk;
-          box.appendChild(ink); out.push(box);
-        });
-      } else { out.push(nd); }   /* keep .flame spans whole */
-    });
-    el.textContent = "";
-    var wi = 0;
-    out.forEach(function (nd) {
-      el.appendChild(nd);
-      if (nd.classList && (nd.classList.contains("wa") || nd.classList.contains("flame"))) {
-        var tgt = nd.classList.contains("wa") ? nd.firstChild : nd;
-        tgt.style.setProperty("--d", (wi * step) + "s"); wi++;
-      }
-    });
-  }
-  if (!reduce) {
-    $$("#main .ch h2, .hero h1").forEach(function (el) { split(el, 0.055); });
-  }
-
-  /* ── stagger the grids ────────────────────────────────────── */
-  function stagger(sel, child, step) {
-    $$(sel).forEach(function (g) {
-      $$(child, g).forEach(function (c, i) { c.style.setProperty("--d", (i * step) + "s"); });
-    });
-  }
-  stagger(".team", ".person", 0.06);
-  stagger(".cards", ".cardx", 0.08);
-  stagger(".vals", ".val", 0.08);
-  stagger(".stops", ".stop", 0.09);
-
-  /* ── two-way reveals ──────────────────────────────────────── */
-  var watched = $$(".rv, .plate, .team, .cards, .vals");
+  /* ── reveals ──────────────────────────────────────────────── */
+  var watched = $$(".rv");
   if (!("IntersectionObserver" in window) || reduce) {
     watched.forEach(function (e) { e.classList.add("in"); });
   } else {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
-    }, { rootMargin: "-4% 0px -10% 0px", threshold: 0.06 });
+    }, { rootMargin: "0px -6% 0px -6%", threshold: 0.05 });
     watched.forEach(function (e) { io.observe(e); });
   }
-  var heroH = $("#heroH");
-  if (heroH) {
-    reduce ? heroH.classList.add("in")
-           : setTimeout(function () { heroH.classList.add("in"); }, 1150);
+
+  /* ── hero photograph ──────────────────────────────────────── */
+  var heroShot = $("#heroShot");
+  if (heroShot) {
+    var hlit = function () { heroShot.classList.add("on"); };
+    heroShot.complete ? hlit()
+      : (heroShot.addEventListener("load", hlit), heroShot.addEventListener("error", hlit));
   }
 
-  /* ── counters in the stat bar ─────────────────────────────── */
-  var counters = $$("[data-count]");
-  function countUp(v) {
-    var to = +v.getAttribute("data-count"), t0 = null, dur = 1200;
-    if (reduce) { v.textContent = to; return; }
-    (function step(ts) {
-      if (!t0) t0 = ts;
-      var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-      v.textContent = Math.round(to * e);
-      if (k < 1) requestAnimationFrame(step);
-    })(performance.now());
+  /* ── embers: the whole depot breathes ─────────────────────── */
+  var efx = $("#emberfx"), ectx = null, EP = [], eBurst = 0;
+  var eW = 0, eH = 0, emx = -1e4, emy = -1e4;
+  function emberSize() {
+    if (!efx) return;
+    eW = efx.width = window.innerWidth;
+    eH = efx.height = window.innerHeight;
   }
-  if ("IntersectionObserver" in window && !reduce) {
-    var ioc = new IntersectionObserver(function (es) {
-      es.forEach(function (en) {
-        if (en.isIntersecting) countUp(en.target);
-        else en.target.textContent = "0";
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(function (v) { v.textContent = "0"; ioc.observe(v); });
+  if (efx && !reduce && efx.getContext) {
+    ectx = efx.getContext("2d");
+    emberSize();
+    for (var ei = 0; ei < 100; ei++) {
+      EP.push({ x: Math.random() * 2000, y: Math.random() * 1200,
+                vx: 0, vy: -(0.22 + Math.random() * 0.55),
+                r: 0.8 + Math.random() * 1.6, ph: Math.random() * 6.28,
+                hot: Math.random() < 0.5 });
+    }
+    window.addEventListener("mousemove", function (e) {
+      emx = e.clientX; emy = e.clientY;
+    }, { passive: true });
+    document.addEventListener("mouseleave", function () { emx = -1e4; emy = -1e4; });
+  }
+  function embers(ts) {
+    if (!ectx || !eW) return;
+    ectx.clearRect(0, 0, eW, eH);
+    for (var i = 0; i < EP.length; i++) {
+      var p = EP[i];
+      p.ph += 0.012;
+      p.x += p.vx + Math.sin(p.ph + i) * 0.2;
+      p.y += p.vy - eBurst * (0.5 + Math.random());
+      p.vx *= 0.94;
+      var dx = p.x - emx, dy = p.y - emy, dd = dx * dx + dy * dy;
+      if (dd < 14400) {
+        var d = Math.sqrt(dd) || 1, f = (120 - d) / 120 * 1.6;
+        p.vx += (dx / d) * f; p.vy -= f * 0.12;
+      }
+      p.vy = Math.min(-0.18, p.vy + 0.006);
+      if (p.y < -8 || p.x < -20 || p.x > eW + 20) {
+        p.x = Math.random() * eW; p.y = eH + 6;
+        p.vy = -(0.22 + Math.random() * 0.55); p.vx = 0;
+      }
+      var tw = 0.5 + 0.5 * Math.sin(ts / 300 + p.ph * 5);
+      ectx.beginPath();
+      ectx.arc(p.x, p.y, p.r, 0, 6.283);
+      ectx.fillStyle = p.hot
+        ? "rgba(255,75,43," + (0.42 * tw).toFixed(2) + ")"
+        : "rgba(196,0,0," + (0.36 * tw).toFixed(2) + ")";
+      ectx.fill();
+    }
+    eBurst *= 0.9;
   }
 
-  /* ── cursor ───────────────────────────────────────────────── */
+  /* ── cursor + magnetics ───────────────────────────────────── */
   var cur = $("#cur"), curDot = $("#curDot"), curRing = $("#curRing");
-  var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, curSeen = false;
+  var mx = innerWidth / 2, my = innerHeight / 2, rx2 = mx, ry2 = my, curSeen = false;
   if (fine && !reduce && cur) {
     document.documentElement.classList.add("cur-on");
     window.addEventListener("mousemove", function (e) {
       mx = e.clientX; my = e.clientY; curSeen = true;
-      var hot = e.target.closest && e.target.closest("a,button,summary,[data-mag],.person,.cardx");
+      var hot = e.target.closest &&
+        e.target.closest("a,button,[data-mag],.card,.ext,.dots button");
       cur.classList.toggle("big", !!hot);
     }, { passive: true });
     document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
     document.addEventListener("mouseenter", function () { cur.style.opacity = "1"; });
   }
-
-  /* ── magnetic controls ────────────────────────────────────── */
   if (fine && !reduce) {
     $$("[data-mag]").forEach(function (el) {
       var tx = 0, ty = 0, cx = 0, cy = 0, on = false, raf = null;
@@ -188,207 +261,26 @@
       }
       el.addEventListener("mousemove", function (e) {
         var r = el.getBoundingClientRect();
-        tx = (e.clientX - r.left - r.width / 2) * 0.32;
-        ty = (e.clientY - r.top - r.height / 2) * 0.32;
+        tx = (e.clientX - r.left - r.width / 2) * 0.3;
+        ty = (e.clientY - r.top - r.height / 2) * 0.3;
         on = true; if (!raf) raf = requestAnimationFrame(tick);
       });
       el.addEventListener("mouseleave", function () { tx = 0; ty = 0; on = false; });
     });
-  }
-
-  /* ── marquees ─────────────────────────────────────────────── */
-  var marquees = [];
-  $$(".mq-t").forEach(function (t) {
-    var base = t.getAttribute("data-base") || "";
-    var html = "";
-    for (var i = 0; i < 6; i++) html += "<span>" + base + "</span>";
-    t.innerHTML = html;
-    marquees.push({ el: t, x: 0, dir: +(t.getAttribute("data-mq") || 1), w: 0 });
-  });
-  function measureMarquees() {
-    marquees.forEach(function (m) {
-      var first = m.el.firstElementChild;
-      m.w = first ? first.offsetWidth : 0;
+    /* tilt on cards */
+    $$(".card").forEach(function (el) {
+      el.addEventListener("mouseenter", function () { el.classList.add("tilting"); });
+      el.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = "translateY(-3px) rotateX(" + (-py * 4).toFixed(2) +
+          "deg) rotateY(" + (px * 4).toFixed(2) + "deg)";
+      });
+      el.addEventListener("mouseleave", function () {
+        el.classList.remove("tilting"); el.style.transform = "";
+      });
     });
-  }
-
-  /* ── master loop ──────────────────────────────────────────── */
-  var chapters = $$("#main .ch, #main .hero");
-  var chrome = $("#chrome"), spine = $$(".spine a"), prog = $("#prog");
-  var routeFill = $("#routeFill"), stopsEl = $("#stops"), stopEls = $$("#stops .stop");
-  var lastY = -1, velY = 0;
-
-  function frame() {
-    var y = window.pageYOffset || document.documentElement.scrollTop;
-    var moved = y !== lastY;
-    velY = lerp(velY, moved ? y - lastY : 0, 0.12);
-    lastY = y;
-
-    if (fine && !reduce && curSeen) {
-      curDot.style.transform = "translate(" + mx + "px," + my + "px)";
-      rx = lerp(rx, mx, 0.16); ry = lerp(ry, my, 0.16);
-      curRing.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
-    }
-
-    if (!reduce) {
-      marquees.forEach(function (m) {
-        if (!m.w) return;
-        m.x -= m.dir * (0.55 + Math.min(6, Math.abs(velY) * 0.12));
-        if (m.x <= -m.w) m.x += m.w;
-        if (m.x > 0) m.x -= m.w;
-        m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
-      });
-    }
-
-    if (moved || velY !== 0) {
-      if (chrome) chrome.classList.toggle("stuck", y > 40);
-      if (prog) {
-        var mx2 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-        prog.style.transform = "scaleX(" + clamp(y / mx2, 0, 1).toFixed(4) + ")";
-      }
-
-      /* poster words slide against the scroll */
-      if (!reduce) {
-        for (var pi = 0; pi < pws.length; pi++) {
-          var ps = pws[pi].sec;
-          var pp = (y + window.innerHeight - ps.offsetTop) /
-                   (window.innerHeight + ps.offsetHeight);
-          if (pp > -0.1 && pp < 1.1) {
-            pws[pi].el.style.transform = "translate3d(" +
-              ((pp - 0.5) * -window.innerWidth * 0.22).toFixed(1) + "px,-50%,0)" +
-              " skewX(" + clamp(-velY * 0.08, -5, 5).toFixed(2) + "deg)";
-          }
-        }
-        /* the freight route draws with the scroll, lighting each stop */
-        if (routeFill && stopsEl) {
-          var sr = stopsEl.getBoundingClientRect();
-          var rpp = clamp((window.innerHeight * 0.88 - sr.top) /
-                          (sr.height + window.innerHeight * 0.3), 0, 1);
-          routeFill.style.width = (rpp * 100).toFixed(1) + "%";
-          for (var si2 = 0; si2 < stopEls.length; si2++) {
-            stopEls[si2].classList.toggle("lit", rpp >= (si2 + 0.6) / stopEls.length);
-          }
-        }
-
-        /* the hero photograph settles as the page leaves it */
-        var hs = $("#heroShot");
-        if (hs) {
-          var hp2 = clamp(y / (window.innerHeight || 1), 0, 1);
-          hs.style.transform = "translate3d(0," + (hp2 * -34).toFixed(1) + "px,0) scale(1.04)";
-        }
-
-        /* photographs drift inside their crops */
-        $$("[data-drift]").forEach(function (img) {
-          var fr = img.getBoundingClientRect();
-          var fp = clamp((window.innerHeight - fr.top) / (window.innerHeight + fr.height), 0, 1);
-          img.style.transform = "translate3d(0," + ((fp - 0.5) * 44).toFixed(1) + "px,0) scale(1.08)";
-        });
-      }
-
-      /* spine */
-      var cur2 = null;
-      chapters.forEach(function (s) {
-        var top = s.offsetTop, bot = top + s.offsetHeight;
-        if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
-      });
-      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
-    }
-    requestAnimationFrame(frame);
-  }
-
-  if (reduce) {
-    function still() {
-      var y = window.pageYOffset || document.documentElement.scrollTop;
-      if (chrome) chrome.classList.toggle("stuck", y > 40);
-      var cur2 = null;
-      chapters.forEach(function (s) {
-        var top = s.offsetTop, bot = top + s.offsetHeight;
-        if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
-      });
-      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
-    }
-    window.addEventListener("scroll", still, { passive: true });
-    still();
-  } else {
-    requestAnimationFrame(frame);
-  }
-
-  window.addEventListener("load", measureMarquees);
-  window.addEventListener("resize", measureMarquees);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureMarquees);
-  measureMarquees();
-
-  /* ══ INTERACTIVE LAYER ═══════════════════════════════════ */
-
-  /* ── ember canvas: they rise, and they get out of your way ── */
-  var efx = $("#emberfx"), ectx = null, EP = [], eBurst = 0;
-  var eW = 0, eH = 0, emx = -1e4, emy = -1e4;
-  var darkEls = [];
-  function emberSize() {
-    if (!efx) return;
-    eW = efx.width = window.innerWidth;
-    eH = efx.height = window.innerHeight;
-    darkEls = $$("#main .hero, #main .ch.deep, #main .ch.join, .scene, .bar, .mq, .jumbo, .tick, footer");
-  }
-  if (efx && !reduce && efx.getContext) {
-    ectx = efx.getContext("2d");
-    efx.classList.add("on");
-    emberSize();
-    window.addEventListener("resize", emberSize);
-    for (var ei = 0; ei < 110; ei++) {
-      EP.push({ x: Math.random() * 2000, y: Math.random() * 1200,
-                vx: 0, vy: -(0.25 + Math.random() * 0.6),
-                r: 0.8 + Math.random() * 1.7, ph: Math.random() * 6.28,
-                hot: Math.random() < 0.5 });
-    }
-    window.addEventListener("mousemove", function (e) {
-      emx = e.clientX; emy = e.clientY;
-    }, { passive: true });
-    document.addEventListener("mouseleave", function () {
-      emx = -1e4; emy = -1e4;
-    });
-  }
-  var darkRects = [];
-  function embers(ts) {
-    if (!ectx || !eW) return;
-    ectx.clearRect(0, 0, eW, eH);
-    darkRects.length = 0;
-    for (var dr = 0; dr < darkEls.length; dr++) {
-      var rr = darkEls[dr].getBoundingClientRect();
-      if (rr.bottom > -40 && rr.top < eH + 40) darkRects.push(rr);
-    }
-    if (!darkRects.length) { eBurst *= 0.9; return; }
-    for (var i = 0; i < EP.length; i++) {
-      var p = EP[i];
-      p.ph += 0.012;
-      p.x += p.vx + Math.sin(p.ph + i) * 0.22;
-      p.y += p.vy - eBurst * (0.5 + Math.random());
-      p.vx *= 0.94;
-      var dx = p.x - emx, dy = p.y - emy, dd = dx * dx + dy * dy;
-      if (dd < 14400) {                 /* 120px — the cursor stirs them */
-        var d = Math.sqrt(dd) || 1, f = (120 - d) / 120 * 1.6;
-        p.vx += (dx / d) * f; p.vy -= f * 0.12;
-      }
-      p.vy = Math.min(-0.2, p.vy + 0.006);
-      if (p.y < -8 || p.x < -8 || p.x > eW + 8) {
-        p.x = Math.random() * eW; p.y = eH + 6;
-        p.vy = -(0.25 + Math.random() * 0.6); p.vx = 0;
-      }
-      var sx = p.x % (eW + 16), onDark = false;
-      for (var dk = 0; dk < darkRects.length; dk++) {
-        var R = darkRects[dk];
-        if (sx >= R.left && sx <= R.right && p.y >= R.top && p.y <= R.bottom) { onDark = true; break; }
-      }
-      if (!onDark) continue;
-      var tw = 0.55 + 0.45 * Math.sin(ts / 300 + p.ph * 5);
-      ectx.beginPath();
-      ectx.arc(p.x % (eW + 16), p.y, p.r, 0, 6.283);
-      ectx.fillStyle = p.hot
-        ? "rgba(255,75,43," + (0.5 * tw).toFixed(2) + ")"
-        : "rgba(196,0,0," + (0.42 * tw).toFixed(2) + ")";
-      ectx.fill();
-    }
-    eBurst *= 0.9;
   }
 
   /* ── the drill ────────────────────────────────────────────── */
@@ -408,41 +300,14 @@
       eBurst = 3.2;
       setTimeout(function () {
         document.body.classList.remove("drill-on");
-        var secs = ((performance.now() - t0) / 1000).toFixed(1);
-        say("Drill complete in " + secs + "s. Muscle memory matters.");
+        say("Drill complete in " + ((performance.now() - t0) / 1000).toFixed(1) +
+            "s. Muscle memory matters.");
         drillLock = false;
       }, 2550);
     });
   }
-
-  /* ── the Tuesday scrub ────────────────────────────────────── */
-  var scene = $("#tuesday"), phrases = $$("#phs .ph");
-  var sceneTop = 0, sceneRange = 1;
-  function measureScene() {
-    if (!scene) return;
-    var r = scene.getBoundingClientRect();
-    sceneTop = r.top + (window.pageYOffset || document.documentElement.scrollTop);
-    sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight);
-  }
-  var scH = $("#scH"), scM = $("#scM"), sPh = $("#sphrase");
-  var TDAY = [[492, "Van loaded."], [647, "Panel tested."],
-              [785, "Assessment walked."], [990, "Certificate signed."]];
-  function runScene(y) {
-    if (!scene || reduce || window.innerWidth <= 820) return;
-    var p = clamp((y - sceneTop) / sceneRange, 0, 1);
-    var span = TDAY.length - 1;
-    var seg = Math.min(span - 1, Math.floor(p * span));
-    var k = clamp(p * span - seg, 0, 1);
-    var mins = Math.round(TDAY[seg][0] + (TDAY[seg + 1][0] - TDAY[seg][0]) * k);
-    if (scH) scH.textContent = ("0" + Math.floor(mins / 60)).slice(-2);
-    if (scM) scM.textContent = ("0" + (mins % 60)).slice(-2);
-    var pi2 = Math.min(span, Math.round(p * span));
-    if (sPh && sPh.textContent !== TDAY[pi2][1]) sPh.textContent = TDAY[pi2][1];
-  }
-  window.addEventListener("resize", measureScene);
-  window.addEventListener("load", measureScene);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureScene);
-  measureScene();
+  var walkBtn = $("#walkBtn");
+  if (walkBtn) walkBtn.addEventListener("click", function () { goBay(1); });
 
   /* ── know your fire ───────────────────────────────────────── */
   var FIRE = {
@@ -452,18 +317,15 @@
     e: "Live electrical — CO₂ or dry powder. Water and foam conduct.",
     f: "Class F — cooking oils and fats. Wet chemical, purpose-built for the job."
   };
-  var fnote = $("#fnote");
-  var fcs = $$(".fc"), exts = $$(".ext");
+  var fnote = $("#fnote"), fcs = $$(".fc"), exts = $$(".ext");
   function pickFire(cls) {
     fcs.forEach(function (b) {
       var on = b.getAttribute("data-cls") === cls;
-      b.classList.toggle("on", on);
-      b.setAttribute("aria-pressed", on);
+      b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
     });
     exts.forEach(function (x) {
       var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
-      x.classList.toggle("hit", ok);
-      x.classList.toggle("miss", !ok);
+      x.classList.toggle("hit", ok); x.classList.toggle("miss", !ok);
     });
     if (fnote) fnote.textContent = FIRE[cls] || "";
   }
@@ -472,7 +334,6 @@
   });
   if (fcs.length) pickFire("a");
 
-  /* test yourself: six callouts, answered with the extinguisher cards */
   var QUIZ = [
     { q: "Waste-paper bin alight in an office.", cls: "a" },
     { q: "Overheated fuse board — still live.", cls: "e" },
@@ -531,77 +392,114 @@
     fmT.addEventListener("click", function () { setFMode(true); });
   }
 
-  /* ── 3D tilt on every card ────────────────────────────────── */
-  if (fine && !reduce) {
-    $$(".cardx, .person, .stop, .val").forEach(function (el) {
-      el.addEventListener("mouseenter", function () { el.classList.add("tilting"); });
-      el.addEventListener("mousemove", function (e) {
-        var r = el.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = "translateY(-4px) rotateX(" + (-py * 4).toFixed(2) +
-          "deg) rotateY(" + (px * 4).toFixed(2) + "deg)";
-      });
-      el.addEventListener("mouseleave", function () {
-        el.classList.remove("tilting");
-        el.style.transform = "";
-      });
-    });
-
-    /* cursor spotlight over the dark panels */
-    $$("#main .ch.deep, #main .ch.join, #main .hero").forEach(function (sec) {
-      var sp = document.createElement("div");
-      sp.className = "spot"; sp.setAttribute("aria-hidden", "true");
-      sec.appendChild(sp);
-      sec.addEventListener("mousemove", function (e) {
-        var r = sec.getBoundingClientRect();
-        sp.style.setProperty("--sx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
-        sp.style.setProperty("--sy", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
-      }, { passive: true });
-    });
-  }
-
-  /* ── protecting-since ticker ──────────────────────────────── */
+  /* ── ticker ───────────────────────────────────────────────── */
   var tD = $("#tD"), tH = $("#tH"), tM = $("#tM"), tS = $("#tS");
-  var EPOCH = new Date(2021, 7, 27).getTime();   /* 27 August 2021 */
+  var EPOCH = new Date(2021, 7, 27).getTime();
   var lastSec = -1;
-  function pad(x) { return x < 10 ? "0" + x : "" + x; }
   function ticker() {
+    if (!tD) return;
     var s = Math.floor((Date.now() - EPOCH) / 1000);
-    if (s === lastSec || !tD) return;
+    if (s === lastSec) return;
     lastSec = s;
     tD.textContent = Math.floor(s / 86400);
-    tH.textContent = pad(Math.floor(s / 3600) % 24);
-    tM.textContent = pad(Math.floor(s / 60) % 60);
-    tS.textContent = pad(s % 60);
+    tH.textContent = pad2(Math.floor(s / 3600) % 24);
+    tM.textContent = pad2(Math.floor(s / 60) % 60);
+    tS.textContent = pad2(s % 60);
   }
-  ticker();
 
-  /* ── the interactive frame loop ───────────────────────────── */
-  if (!reduce) {
-    (function iloop(ts) {
-      embers(ts || 0);
-      runScene(window.pageYOffset || document.documentElement.scrollTop);
-      ticker();
-      requestAnimationFrame(iloop);
-    })(0);
-  } else {
+  /* ── keyboard: arrow keys walk the bays ───────────────────── */
+  window.addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    if (e.target && /INPUT|TEXTAREA|BUTTON/.test(e.target.tagName)) return;
+    var p = progress(), cx = p * maxX + window.innerWidth * 0.5, acc = 0, cur2 = 0;
+    for (var i = 0; i < bays.length; i++) {
+      acc += bays[i].offsetWidth;
+      if (cx <= acc) { cur2 = i; break; }
+      cur2 = i;
+    }
+    e.preventDefault();
+    goBay(cur2 + (e.key === "ArrowRight" ? 1 : -1));
+  });
+
+  /* ── master loop ──────────────────────────────────────────── */
+  var lastY = -1, velY = 0, laneFill = $("#laneFill"), stopEls = $$("#stops .stop"),
+      stopsEl = $("#stops");
+
+  function frame(ts) {
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    var moved = y !== lastY;
+    velY = lerp(velY, moved ? y - lastY : 0, 0.12);
+    lastY = y;
+
+    if (fine && !reduce && curSeen) {
+      curDot.style.transform = "translate(" + mx + "px," + my + "px)";
+      rx2 = lerp(rx2, mx, 0.16); ry2 = lerp(ry2, my, 0.16);
+      curRing.style.transform = "translate(" + rx2.toFixed(1) + "px," + ry2.toFixed(1) + "px)";
+    }
+
+    embers(ts || 0);
+    ticker();
+
+    var p = progress();
+    if (horizontal()) {
+      track.style.transform = "translate3d(" + (-p * maxX).toFixed(1) + "px,0,0)";
+    }
+    hud(p);
+
+    /* time markers drift slower than the track — depth */
+    if (horizontal() && !reduce) {
+      for (var i = 0; i < tmarks.length; i++) {
+        var r = tmarks[i].bay.getBoundingClientRect();
+        if (r.right < -100 || r.left > window.innerWidth + 100) continue;
+        var off = (r.left - window.innerWidth * 0.5) * 0.22;
+        tmarks[i].el.style.transform = "translate3d(" + off.toFixed(1) + "px,-50%,0)";
+      }
+      /* hero photo eases as you walk away */
+      if (heroShot) {
+        var hp = clamp(p * 6, 0, 1);
+        heroShot.style.transform = "translate3d(" + (hp * 60).toFixed(1) + "px,0,0) scale(1.05)";
+      }
+      /* the freight lane draws as its bay crosses the screen */
+      if (laneFill && stopsEl) {
+        var sr = stopsEl.getBoundingClientRect();
+        var lp = clamp((window.innerWidth * 0.9 - sr.left) / (sr.width + window.innerWidth * 0.4), 0, 1);
+        laneFill.style.width = (lp * 100).toFixed(1) + "%";
+        for (var s2 = 0; s2 < stopEls.length; s2++) {
+          stopEls[s2].classList.toggle("lit", lp >= (s2 + 0.6) / stopEls.length);
+        }
+      }
+      /* photographs drift inside their crops */
+      $$("[data-drift]").forEach(function (img) {
+        var fr = img.getBoundingClientRect();
+        var fp = clamp((window.innerWidth - fr.left) / (window.innerWidth + fr.width), 0, 1);
+        img.style.transform = "translate3d(" + ((fp - 0.5) * 40).toFixed(1) + "px,0,0) scale(1.1)";
+      });
+    } else if (!horizontal() && laneFill) {
+      laneFill.style.width = "100%";
+      stopEls.forEach(function (s) { s.classList.add("lit"); });
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  if (reduce) {
+    /* still page: ticker + lane lit */
+    if (laneFill) laneFill.style.width = "100%";
+    stopEls.forEach(function (s) { s.classList.add("lit"); });
+    hud(0);
     setInterval(ticker, 1000);
+  } else {
+    requestAnimationFrame(frame);
   }
 
-  /* ── menu sheet ───────────────────────────────────────────── */
-  var burger = $("#burger"), sheet = $("#sheet");
-  function sheetOn(o) {
-    sheet.classList.toggle("on", o);
-    burger.setAttribute("aria-expanded", o);
-    document.documentElement.style.overflow = o ? "hidden" : "";
+  /* ── relayout ─────────────────────────────────────────────── */
+  var rt = null;
+  function relayout() {
+    clearTimeout(rt);
+    rt = setTimeout(function () { emberSize(); layout(); }, 120);
   }
-  if (burger && sheet) {
-    burger.addEventListener("click", function () { sheetOn(!sheet.classList.contains("on")); });
-    $("#sheetClose").addEventListener("click", function () { sheetOn(false); });
-    sheet.addEventListener("click", function (e) {
-      if (e.target.tagName === "A" || e.target === sheet) sheetOn(false);
-    });
-    window.addEventListener("keydown", function (e) { if (e.key === "Escape") sheetOn(false); });
-  }
+  window.addEventListener("resize", relayout);
+  window.addEventListener("load", relayout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+  layout(); emberSize();
 })();
