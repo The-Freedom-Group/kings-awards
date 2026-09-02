@@ -61,15 +61,62 @@
     $$(".ch h2, .rec-head h2, .slab h2").forEach(function (el) { split(el, "words", 0.055); });
   }
 
-  /* ── drifting orbital patterns behind every panel ─────────── */
-  if (!reduce) {
-    $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab").forEach(function (sec) {
-      var fx = document.createElement("div");
-      fx.className = "bgfx"; fx.setAttribute("aria-hidden", "true");
-      fx.innerHTML = "<i></i><i></i><i></i>";
-      sec.insertBefore(fx, sec.firstChild);
-    });
+  /* ── topographic contours behind every panel ──────────────── */
+  function rnd(seed) {           /* deterministic, so layouts are stable */
+    return function () {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+      return seed / 0x7fffffff;
+    };
   }
+  function blobPath(cx, cy, r, rand) {
+    var a1 = .16 + rand() * .1, a2 = .08 + rand() * .08, a3 = .05 + rand() * .05;
+    var p1 = rand() * 6.28, p2 = rand() * 6.28, p3 = rand() * 6.28;
+    var d = "";
+    for (var i = 0; i <= 56; i++) {
+      var th = i / 56 * Math.PI * 2;
+      var rr = r * (1 + a1 * Math.sin(2 * th + p1) + a2 * Math.sin(3 * th + p2) +
+                        a3 * Math.sin(5 * th + p3));
+      var x = cx + Math.cos(th) * rr * 1.35, y = cy + Math.sin(th) * rr;
+      d += (i ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
+    }
+    return d + " Z";
+  }
+  function contourGroup(cx, cy, r, rings, rand, cls) {
+    var g = '<g class="' + cls + '">';
+    for (var k = 0; k < rings; k++) {
+      var s = 1 - k * .17;
+      g += '<path d="' + blobPath(cx + k * 6 * (rand() - .5) * 4,
+                                  cy + k * 5 * (rand() - .5) * 4,
+                                  r * s, rand) + '"/>';
+    }
+    return g + "</g>";
+  }
+  $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab").forEach(function (sec, si) {
+    var rand = rnd(97 + si * 131);
+    var fx = document.createElement("div");
+    fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
+    var anim = reduce ? ["", ""] : ["a", "b"];
+    fx.innerHTML =
+      '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
+      contourGroup(180 + rand() * 160, 120 + rand() * 130, 150 + rand() * 70, 5, rand, anim[0]) +
+      contourGroup(720 + rand() * 180, 400 + rand() * 140, 180 + rand() * 80, 6, rand,
+                   anim[1] + (si % 3 === 1 ? " pk" : "")) +
+      "</svg>";
+    sec.insertBefore(fx, sec.firstChild);
+  });
+
+  /* ── poster words, one per chapter ────────────────────────── */
+  var PW = { c01: "UNIT", c02: "BUILD", c03: "MOMENTUM", c04: "GROUP",
+             c05: "METHOD", c06: "RECORD", c07: "NEXT" };
+  var pws = [];
+  Object.keys(PW).forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (!sec) return;
+    var w = document.createElement("span");
+    w.className = "pw"; w.textContent = PW[id]; w.setAttribute("aria-hidden", "true");
+    sec.insertBefore(w, sec.firstChild);
+    pws.push({ el: w, sec: sec });
+  });
 
   /* ── stagger groups ───────────────────────────────────────── */
   function stagger(sel, child, step) {
@@ -377,6 +424,8 @@
 
   /* ══ MASTER LOOP ══════════════════════════════════════════ */
   var chapters = $$("#explore .ch, #explore .hero, #explore .scene, #explore .slab");
+  var yrail = $("#yrail"), c03El = document.getElementById("c03");
+  function W() { return explore ? explore.offsetWidth : window.innerWidth; }
   var chrome = $("#chrome"), spine = $$(".spine a");
   var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
   var TITLES = { top:["00","Tom Letcher"], ones:["00","One Unit"], c01:["01","One Unit"],
@@ -444,6 +493,26 @@
           lastCard = cur2; cardN.textContent = meta[0]; cardT.textContent = meta[1];
         }
         card.classList.toggle("away", y < window.innerHeight * 0.45);
+      }
+
+      /* poster words slide against the scroll */
+      if (!reduce) {
+        for (var pi = 0; pi < pws.length; pi++) {
+          var ps = pws[pi].sec;
+          var pp = (y + window.innerHeight - ps.offsetTop) /
+                   (window.innerHeight + ps.offsetHeight);
+          if (pp > -0.1 && pp < 1.1) {
+            pws[pi].el.style.transform = "translate3d(" +
+              ((pp - 0.5) * -W() * 0.22).toFixed(1) + "px,-50%,0)";
+          }
+        }
+        /* the years rail drags with the scroll */
+        if (yrail && c03El) {
+          var rp = clamp((y + window.innerHeight * 0.8 - c03El.offsetTop) /
+                         (c03El.offsetHeight * 0.9), 0, 1);
+          var over = Math.max(0, yrail.scrollWidth - yrail.parentElement.clientWidth);
+          yrail.style.transform = "translate3d(" + (-rp * over).toFixed(1) + "px,0,0)";
+        }
       }
 
       if (exploring) { drawThread(y); runScene(y); }

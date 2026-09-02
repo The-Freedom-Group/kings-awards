@@ -242,23 +242,51 @@ body.ready .hl-node{opacity:1}
   white-space:nowrap}
 @media(max-width:820px){.hl-start,.hl-node{display:none}}
 
-/* ── drifting orbital patterns ──────────────────────────────── */
-.bgfx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;
-  background-image:radial-gradient(currentColor .9px,transparent .9px);
-  background-size:38px 38px;opacity:.05;animation:grain 46s linear infinite}
-@keyframes grain{to{background-position:38px 38px}}
-.bgfx i{position:absolute;border:1px solid currentColor;border-radius:50%;opacity:.09;
-  will-change:transform}
-.bgfx i:nth-child(1){width:62vw;height:41vw;left:-16vw;top:-13vw;
-  animation:orb1 104s linear infinite}
-.bgfx i:nth-child(2){width:46vw;height:31vw;right:-12vw;bottom:-15vw;
-  border-color:var(--pink);opacity:.13;animation:orb2 128s linear infinite}
-.bgfx i:nth-child(3){width:23vw;height:23vw;left:58%;top:14%;
-  animation:hover3 19s ease-in-out infinite}
-@keyframes orb1{to{transform:rotate(360deg)}}
-@keyframes orb2{to{transform:rotate(-360deg)}}
-@keyframes hover3{0%,100%{transform:translate3d(0,0,0) rotate(0)}
-  50%{transform:translate3d(-2.4vw,-3.2vw,0) rotate(180deg)}}
+/* ── topographic contours ───────────────────────────────────── */
+.topo{position:absolute;inset:-6% -4%;pointer-events:none;z-index:0;overflow:hidden}
+.topo svg{width:100%;height:100%;display:block}
+.topo path{fill:none;stroke:currentColor;stroke-width:1;vector-effect:non-scaling-stroke;
+  stroke-linejoin:round}
+.topo g{opacity:.075;transform-origin:50% 50%;will-change:transform}
+.topo g.pk{opacity:.10;color:var(--pink)}
+.topo g.a{animation:topoA 90s ease-in-out infinite alternate}
+.topo g.b{animation:topoB 116s ease-in-out infinite alternate}
+@keyframes topoA{from{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+  to{transform:translate3d(2.2%,-2.6%,0) rotate(2.4deg) scale(1.05)}}
+@keyframes topoB{from{transform:translate3d(0,0,0) rotate(0deg) scale(1.03)}
+  to{transform:translate3d(-2.4%,2%,0) rotate(-2deg) scale(.98)}}
+
+/* ── poster words ───────────────────────────────────────────── */
+.pw{position:absolute;top:50%;left:0;z-index:0;pointer-events:none;user-select:none;
+  font-family:var(--disp);text-transform:uppercase;white-space:nowrap;line-height:1;
+  font-size:clamp(140px,27vw,430px);letter-spacing:.015em;
+  transform:translate3d(0,-50%,0);will-change:transform;
+  color:transparent;-webkit-text-stroke:1.2px currentColor;opacity:.085}
+@supports not (-webkit-text-stroke:1px black){.pw{color:currentColor;opacity:.04}}
+
+/* ── script accents ─────────────────────────────────────────── */
+.scr{position:absolute;z-index:3;pointer-events:none;font-family:var(--serif);
+  font-style:italic;color:var(--pink);line-height:1;text-transform:none;
+  font-size:clamp(44px,7.4vw,120px);transform:rotate(-7deg);
+  text-shadow:0 0 34px rgba(255,45,141,.28)}
+
+/* ── the years rail ─────────────────────────────────────────── */
+.years{margin-top:clamp(34px,5vw,58px);overflow:hidden;position:relative}
+.yhead{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:var(--pale-3);margin-bottom:16px}
+.yrail{display:flex;gap:1px;background:var(--rule-d);border:1px solid var(--rule-d);
+  width:max-content;will-change:transform}
+.ycard{background:var(--carbon);min-width:clamp(210px,24vw,300px);padding:24px 22px 28px;
+  position:relative}
+.ycard .y{font-family:var(--disp);font-size:clamp(46px,6vw,74px);line-height:.9;
+  margin-bottom:12px}
+.ycard.live .y{color:var(--pink)}
+.ycard .l{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  margin-bottom:9px}
+.ycard .s{font-size:13.5px;line-height:1.55;color:var(--pale-3);font-weight:300}
+.ycard .vtag{position:absolute;top:20px;right:18px;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:600;color:var(--pink);
+  border:1px solid rgba(255,45,141,.5);padding:3px 7px;border-radius:2px}
 
 .bar{background:var(--carbon);color:var(--porcelain);position:relative;z-index:6}
 .bar .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -304,9 +332,7 @@ body.ready .hl-node{opacity:1}
 /* ── chapters ───────────────────────────────────────────────── */
 .ch{padding:clamp(76px,11vw,168px) 0;position:relative;overflow:hidden}
 .ch.dark{background:var(--carbon);color:var(--pale)}
-.ch::before{content:attr(data-n);position:absolute;right:-2vw;top:-3vw;font-family:var(--disp);
-  font-size:34vw;line-height:.72;color:var(--ink);opacity:.028;pointer-events:none;z-index:0}
-.ch.dark::before{color:var(--pale);opacity:.032}
+.ch::before{content:none}
 .ch .wrap{position:relative;z-index:2}
 .ch-tag{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
   color:var(--pink);margin-bottom:clamp(18px,2.6vw,30px)}
@@ -535,7 +561,9 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .hl{background-size:100% 100%;transition:none}
   .sheet li{opacity:1;transform:none;transition:none}
   .prog,.card{transition:none}
-  .bgfx,.bgfx i{animation:none}
+  .topo g{animation:none}
+  .pw{opacity:.05}
+  .scr{transform:rotate(-7deg)}
   .thread .spur{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
   .plate img{clip-path:none;transition:none}
   .follow i{animation:none}
@@ -658,6 +686,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
     <div class="rv">
       <div class="ch-tag">01 — One Unit</div>
       <h2>It started with one key and one industrial unit.</h2>
+      <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
       <p class="stand">Bury, Greater Manchester. August 2021. One director, one address, and a sector
       that does not hand anything to newcomers.</p>
     </div>
@@ -732,6 +761,28 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
       <p class="stand">Every figure states the period it covers and what it actually measures, with
       the evidence one click away. Nothing here is a vanity statistic.</p>
     </div>
+
+    <div class="years rv" aria-label="Year by year">
+      <div class="yhead">Year by year — drag of the scroll</div>
+      <div class="yrail" id="yrail">
+        <div class="ycard live"><div class="y">2021</div><div class="l">Incorporated</div>
+          <div class="s">Company 13589467, registered 27 August. One director, aged 25.</div>
+          <span class="vtag">Verified</span></div>
+        <div class="ycard"><div class="y">2022</div><div class="l">First full year</div>
+          <div class="s"><span class="tk-in">TK — the milestone that defined 2022.</span></div></div>
+        <div class="ycard"><div class="y">2023</div><div class="l">Building</div>
+          <div class="s"><span class="tk-in">TK — headcount, coverage, accreditation.</span></div></div>
+        <div class="ycard"><div class="y">2024</div><div class="l">Scaling</div>
+          <div class="s"><span class="tk-in">TK — the decisive moment of 2024.</span></div></div>
+        <div class="ycard"><div class="y">2025</div><div class="l">Upstream</div>
+          <div class="s">Into the supply chain — vetted suppliers, overseas production, tracking
+          built in-house.</div></div>
+        <div class="ycard"><div class="y">2026</div><div class="l">The group</div>
+          <div class="s">The holding structure forms. Operating companies separate from planned
+          ones.</div></div>
+      </div>
+    </div>
+
     <div class="metrics rv">
       <div class="metric">
         <div class="v">2021</div><div class="k">Incorporated</div>
@@ -790,6 +841,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
         <div>
           <div class="ch-tag">04 — The Freedom Group</div>
           <h2>Not a collection of logos. One operating system.</h2>
+          <em class="scr" aria-hidden="true" style="right:2%;top:52%">system.</em>
         </div>
         <div class="vt" role="group" aria-label="Group view">
           <button type="button" id="vMap" aria-pressed="true">Map</button><s>/</s>
@@ -919,6 +971,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   <div class="in-w">
     <div class="k">Five years</div>
     <h2>From one unit<br>to a group.</h2>
+    <em class="scr" aria-hidden="true" style="right:-4%;bottom:8%;position:absolute">group.</em>
     <div class="f">Bury · 2021 — present</div>
   </div>
 </section>
