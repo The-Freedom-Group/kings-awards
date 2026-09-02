@@ -23,7 +23,7 @@ is inline or local.
 then. That is one week from today. If you intend to apply this cycle, the placeholder content
 below needs filling in the next few days.
 
-**2. The category is decided: Promoting Opportunity through social mobility.**
+**2. Categories: the STAFF site supports a Promoting Opportunity (social mobility) application. The founder page's category is still to be confirmed.**
 Young Founder is out regardless — Companies House records Tom's DOB as April 1996, making
 him 31 on 6 May 2027, past the 18–30 limit.
 
@@ -38,9 +38,8 @@ The social mobility criteria the sites now mirror:
   company — this fits, and both sites now say so explicitly)
 
 Where this lives: the staff site's **chapter 07 — The Open Door** is the programme page
-(four criteria activities + the four proofs + the two-year test, all with evidence slots);
-the founder page's chapter 05 and Verified Record carry the founder's side and the
-evidence checklist.
+(four criteria activities + the four proofs + the two-year test, all with evidence slots).
+The founder page is untouched by this category pending its own.
 
 ⚠️ **The two-year test is a hard gate.** If the programme cannot show a start date ≥2
 years before submission with a dated record behind it, this category must wait a cycle —
@@ -83,7 +82,7 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 | 01 Profile | Two or three paragraphs on your route into fire safety — what you did before 2021, why you started rather than stayed employed |
 | 02 The business | Confirm the three service pillars match reality; add fire doors / passive / sprinklers / dry risers if applicable |
 | 03 Trajectory | 2022 headline; 2023–24 headcount, coverage, accreditations (BAFE SP101/SP203, FIA, SafeContractor, CHAS, ISO 9001, NSI, SSAIB), apprenticeships |
-| 04 Leadership | **The whole section** — four short pieces; under the social mobility category, piece 4 (why you hire the way you hire) matters most |
+| 04 Leadership | **The whole section** — four short pieces: fresh thinking, growth and influence, long-term vision, resilience |
 | Pull quote | One sentence in your own voice on why the work matters |
 | 05 Governance | HMRC and filing status, accreditation reference numbers, insurance, engineer training and re-certification, environmental measures, community work |
 | 07 Contact | Direct email, and mobile if you want it public |
