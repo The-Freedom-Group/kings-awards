@@ -1,10 +1,10 @@
 /* ══════════════════════════════════════════════════════════════════
-   THE NIGHT SHIFT — engine
-   Vertical scroll drives a horizontal walk through the depot. The HUD
-   clock interpolates 18:00 → 06:00 across the journey, time markers
-   parallax through each bay, embers drift and answer the cursor, and
-   the training-room quiz keeps score. Mobile and reduced-motion get
-   the same bays as a vertical page.
+   THE PEOPLE — engine
+   Vertical scroll walks the page sideways through nine bays. Poster
+   words drift at their own depth, each bay's content parallaxes
+   against the track, the track leans with your speed, embers answer
+   the cursor, and the training-room quiz keeps score. Mobile and
+   reduced-motion get the same bays stacked vertically.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -24,28 +24,25 @@
   /* ── entrance ─────────────────────────────────────────────── */
   function ready() { document.body.classList.add("ready"); }
   if (reduce) { ready(); }
-  else if (document.readyState === "complete") { setTimeout(ready, 1350); }
-  else { window.addEventListener("load", function () { setTimeout(ready, 1350); }); }
+  else if (document.readyState === "complete") { setTimeout(ready, 1300); }
+  else { window.addEventListener("load", function () { setTimeout(ready, 1300); }); }
 
-  /* ── the shift geometry ───────────────────────────────────── */
-  var shift = $("#shift"), track = $("#track"), bays = $$(".bayp");
+  /* ── geometry ─────────────────────────────────────────────── */
+  var walk = $("#walk"), track = $("#track"), bays = $$(".bayp");
   var trackW = 0, maxX = 0, scrollLen = 0;
 
   function layout() {
-    if (!shift || !track) return;
-    if (!horizontal()) { shift.style.height = ""; track.style.transform = ""; return; }
+    if (!walk || !track) return;
+    if (!horizontal()) { walk.style.height = ""; track.style.transform = ""; return; }
     trackW = track.scrollWidth;
     maxX = Math.max(0, trackW - window.innerWidth);
     scrollLen = maxX + window.innerHeight;
-    shift.style.height = scrollLen + "px";
+    walk.style.height = scrollLen + "px";
   }
-
   function progress() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
     return maxX ? clamp(y / (scrollLen - window.innerHeight), 0, 1) : 0;
   }
-
-  /* jump helper: bay index → scroll position */
   function bayX(i) {
     var x = 0;
     for (var k = 0; k < i; k++) x += bays[k].offsetWidth;
@@ -61,48 +58,42 @@
       bays[i].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     }
   }
+  function bayAt(p) {
+    var cx = p * maxX + window.innerWidth * 0.5, acc = 0;
+    for (var i = 0; i < bays.length; i++) {
+      acc += bays[i].offsetWidth;
+      if (cx <= acc) return i;
+    }
+    return bays.length - 1;
+  }
 
-  /* ── HUD: clock, bay name, progress, dots ─────────────────── */
-  var hudH = $("#hudH"), hudM = $("#hudM"), hudBay = $("#hudBay"), hudFill = $("#hudFill");
+  /* ── HUD ──────────────────────────────────────────────────── */
+  var hudBay = $("#hudBay"), hudN = $("#hudN"), hudT = $("#hudT"), hudFill = $("#hudFill");
   var dots = $("#dots"), dotEls = [];
+  if (hudT) hudT.textContent = pad2(bays.length);
   bays.forEach(function (b, i) {
     var d = document.createElement("button");
     d.type = "button";
-    d.setAttribute("data-lb", b.getAttribute("data-time") + " · " + b.getAttribute("data-bay"));
+    d.setAttribute("data-lb", pad2(i + 1) + " · " + b.getAttribute("data-bay"));
     d.setAttribute("aria-label", "Go to " + b.getAttribute("data-bay"));
     d.addEventListener("click", function () { goBay(i); });
     dots.appendChild(d); dotEls.push(d);
   });
-
-  var SHIFT_START = 18 * 60, SHIFT_LEN = 12 * 60;   /* 18:00 → 06:00 */
   function hud(p) {
-    var mins = Math.round(SHIFT_START + p * SHIFT_LEN) % (24 * 60);
-    if (hudH) hudH.textContent = pad2(Math.floor(mins / 60));
-    if (hudM) hudM.textContent = pad2(mins % 60);
     if (hudFill) hudFill.style.width = (p * 100).toFixed(2) + "%";
-
-    var cx = horizontal()
-      ? p * maxX + window.innerWidth * 0.5
-      : null;
-    var cur = 0;
-    if (cx !== null) {
-      var acc = 0;
-      for (var i = 0; i < bays.length; i++) {
-        acc += bays[i].offsetWidth;
-        if (cx <= acc) { cur = i; break; }
-        cur = i;
-      }
-    } else {
+    var cur;
+    if (horizontal()) { cur = bayAt(p); }
+    else {
       var vm = (window.pageYOffset || 0) + window.innerHeight * 0.4;
-      for (var k = 0; k < bays.length; k++) {
-        if (vm >= bays[k].offsetTop) cur = k;
-      }
+      cur = 0;
+      for (var k = 0; k < bays.length; k++) if (vm >= bays[k].offsetTop) cur = k;
     }
     if (hudBay) hudBay.textContent = bays[cur].getAttribute("data-bay");
+    if (hudN) hudN.textContent = pad2(cur + 1);
     dotEls.forEach(function (d, di) { d.classList.toggle("on", di === cur); });
   }
 
-  /* ── time markers + contours + spotlight per bay ──────────── */
+  /* ── per-bay furniture: contours, poster word, spotlight ──── */
   function rnd(seed) {
     return function () {
       seed = (seed * 1103515245 + 12345) & 0x7fffffff;
@@ -130,9 +121,8 @@
     }
     return g + "</g>";
   }
-  var tmarks = [];
+  var pws = [];
   bays.forEach(function (b, i) {
-    /* contours */
     var rand = rnd(83 + i * 173);
     var fx = document.createElement("div");
     fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
@@ -143,14 +133,12 @@
                    anim[1] + (i % 3 === 1 ? " hot" : "")) + "</svg>";
     b.insertBefore(fx, b.firstChild);
 
-    /* time marker */
-    var tm = document.createElement("span");
-    tm.className = "tmark"; tm.setAttribute("aria-hidden", "true");
-    tm.textContent = b.getAttribute("data-time");
-    b.insertBefore(tm, b.firstChild.nextSibling);
-    tmarks.push({ el: tm, bay: b });
+    var w = document.createElement("span");
+    w.className = "pw"; w.setAttribute("aria-hidden", "true");
+    w.textContent = b.getAttribute("data-word") || "";
+    b.insertBefore(w, b.firstChild.nextSibling);
+    pws.push({ el: w, bay: b });
 
-    /* spotlight */
     if (fine && !reduce) {
       var sp = document.createElement("div");
       sp.className = "spot"; sp.setAttribute("aria-hidden", "true");
@@ -184,7 +172,7 @@
       : (heroShot.addEventListener("load", hlit), heroShot.addEventListener("error", hlit));
   }
 
-  /* ── embers: the whole depot breathes ─────────────────────── */
+  /* ── embers ───────────────────────────────────────────────── */
   var efx = $("#emberfx"), ectx = null, EP = [], eBurst = 0;
   var eW = 0, eH = 0, emx = -1e4, emy = -1e4;
   function emberSize() {
@@ -236,7 +224,7 @@
     eBurst *= 0.9;
   }
 
-  /* ── cursor + magnetics ───────────────────────────────────── */
+  /* ── cursor + magnetics + tilt ────────────────────────────── */
   var cur = $("#cur"), curDot = $("#curDot"), curRing = $("#curRing");
   var mx = innerWidth / 2, my = innerHeight / 2, rx2 = mx, ry2 = my, curSeen = false;
   if (fine && !reduce && cur) {
@@ -267,7 +255,6 @@
       });
       el.addEventListener("mouseleave", function () { tx = 0; ty = 0; on = false; });
     });
-    /* tilt on cards */
     $$(".card").forEach(function (el) {
       el.addEventListener("mouseenter", function () { el.classList.add("tilting"); });
       el.addEventListener("mousemove", function (e) {
@@ -407,18 +394,12 @@
     tS.textContent = pad2(s % 60);
   }
 
-  /* ── keyboard: arrow keys walk the bays ───────────────────── */
+  /* ── keyboard ─────────────────────────────────────────────── */
   window.addEventListener("keydown", function (e) {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
     if (e.target && /INPUT|TEXTAREA|BUTTON/.test(e.target.tagName)) return;
-    var p = progress(), cx = p * maxX + window.innerWidth * 0.5, acc = 0, cur2 = 0;
-    for (var i = 0; i < bays.length; i++) {
-      acc += bays[i].offsetWidth;
-      if (cx <= acc) { cur2 = i; break; }
-      cur2 = i;
-    }
     e.preventDefault();
-    goBay(cur2 + (e.key === "ArrowRight" ? 1 : -1));
+    goBay(bayAt(progress()) + (e.key === "ArrowRight" ? 1 : -1));
   });
 
   /* ── master loop ──────────────────────────────────────────── */
@@ -442,36 +423,40 @@
 
     var p = progress();
     if (horizontal()) {
-      track.style.transform = "translate3d(" + (-p * maxX).toFixed(1) + "px,0,0)";
+      /* the track leans into your speed */
+      var skew = clamp(-velY * 0.02, -3.4, 3.4);
+      track.style.transform = "translate3d(" + (-p * maxX).toFixed(1) + "px,0,0)" +
+        " skewX(" + skew.toFixed(2) + "deg)";
     }
     hud(p);
 
-    /* time markers drift slower than the track — depth */
     if (horizontal() && !reduce) {
-      for (var i = 0; i < tmarks.length; i++) {
-        var r = tmarks[i].bay.getBoundingClientRect();
-        if (r.right < -100 || r.left > window.innerWidth + 100) continue;
-        var off = (r.left - window.innerWidth * 0.5) * 0.22;
-        tmarks[i].el.style.transform = "translate3d(" + off.toFixed(1) + "px,-50%,0)";
+      var vw = window.innerWidth;
+      for (var i = 0; i < bays.length; i++) {
+        var r = bays[i].getBoundingClientRect();
+        if (r.right < -160 || r.left > vw + 160) continue;
+        var mid = (r.left + r.right) / 2 - vw / 2;
+        /* poster word drifts deeper than the track */
+        pws[i].el.style.transform = "translate3d(" + (mid * 0.24).toFixed(1) + "px,-50%,0)";
+        /* the bay's content eases slightly against travel */
+        var inner = bays[i].querySelector(".inner");
+        if (inner) inner.style.transform = "translate3d(" + (mid * -0.045).toFixed(1) + "px,0,0)";
       }
-      /* hero photo eases as you walk away */
       if (heroShot) {
         var hp = clamp(p * 6, 0, 1);
         heroShot.style.transform = "translate3d(" + (hp * 60).toFixed(1) + "px,0,0) scale(1.05)";
       }
-      /* the freight lane draws as its bay crosses the screen */
       if (laneFill && stopsEl) {
         var sr = stopsEl.getBoundingClientRect();
-        var lp = clamp((window.innerWidth * 0.9 - sr.left) / (sr.width + window.innerWidth * 0.4), 0, 1);
+        var lp = clamp((vw * 0.9 - sr.left) / (sr.width + vw * 0.4), 0, 1);
         laneFill.style.width = (lp * 100).toFixed(1) + "%";
         for (var s2 = 0; s2 < stopEls.length; s2++) {
           stopEls[s2].classList.toggle("lit", lp >= (s2 + 0.6) / stopEls.length);
         }
       }
-      /* photographs drift inside their crops */
       $$("[data-drift]").forEach(function (img) {
         var fr = img.getBoundingClientRect();
-        var fp = clamp((window.innerWidth - fr.left) / (window.innerWidth + fr.width), 0, 1);
+        var fp = clamp((vw - fr.left) / (vw + fr.width), 0, 1);
         img.style.transform = "translate3d(" + ((fp - 0.5) * 40).toFixed(1) + "px,0,0) scale(1.1)";
       });
     } else if (!horizontal() && laneFill) {
@@ -483,7 +468,6 @@
   }
 
   if (reduce) {
-    /* still page: ticker + lane lit */
     if (laneFill) laneFill.style.width = "100%";
     stopEls.forEach(function (s) { s.classList.add("lit"); });
     hud(0);
