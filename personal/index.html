@@ -73,6 +73,37 @@ body.ready .enter{opacity:0;visibility:hidden}
 .wipe{position:fixed;inset:0;z-index:220;background:var(--pink);transform:scaleY(0);
   transform-origin:bottom;pointer-events:none}
 
+/* ── scroll progress hairline ───────────────────────────────── */
+.prog{position:fixed;left:0;top:0;height:2px;width:100%;z-index:72;
+  transform:scaleX(0);transform-origin:left;background:var(--pink);
+  box-shadow:0 0 12px rgba(255,45,141,.6)}
+
+/* ── persistent corner card ─────────────────────────────────── */
+.card{position:fixed;left:clamp(14px,2vw,30px);bottom:clamp(14px,2vw,30px);z-index:64;
+  width:186px;padding:15px 16px 16px;border:1px solid var(--rule);background:rgba(244,241,235,.72);
+  backdrop-filter:blur(12px) saturate(150%);transition:opacity .4s,transform .4s,
+  background .35s,border-color .35s}
+body.dark-chrome .card{background:rgba(16,16,16,.68);border-color:var(--rule-d)}
+.card .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:500}
+body.dark-chrome .card .k{color:var(--pale-3)}
+.card .n{font-family:var(--disp);font-size:44px;line-height:.9;margin:8px 0 2px;color:var(--pink)}
+.card .t{font-family:var(--disp);text-transform:uppercase;font-size:17px;line-height:1;
+  color:var(--ink)}
+body.dark-chrome .card .t{color:var(--pale)}
+.card .d{margin-top:11px;padding-top:9px;border-top:1px solid var(--rule);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+body.dark-chrome .card .d{border-top-color:var(--rule-d);color:var(--pale-3)}
+.card.away{opacity:0;transform:translateY(14px);pointer-events:none}
+@media(max-width:1180px){.card{display:none}}
+body[data-view="record"] .card{display:none}
+
+/* ── accent sweep ───────────────────────────────────────────── */
+.hl{background:linear-gradient(var(--pink),var(--pink)) no-repeat left center/0% 100%;
+  padding:0 .14em;margin:0 -.06em;transition:background-size .95s cubic-bezier(.25,.7,.25,1) .25s,
+  color .5s ease .5s}
+.in .hl{background-size:100% 100%;color:#fff}
+
 /* ── chrome ─────────────────────────────────────────────────── */
 .chrome{position:fixed;inset:0 0 auto 0;z-index:70;border-bottom:1px solid transparent;
   transition:background .35s,border-color .35s}
@@ -108,7 +139,13 @@ body.dark-chrome .burger i{background:var(--pale)}
   transition:opacity .35s,visibility .35s}
 .sheet.on{opacity:1;visibility:visible}
 .sheet ol{list-style:none;margin:0;padding:0;text-align:center}
-.sheet li{margin:clamp(5px,1.3vh,13px) 0}
+.sheet li{margin:clamp(5px,1.3vh,13px) 0;opacity:0;transform:translateY(26px);
+  transition:opacity .5s cubic-bezier(.2,.8,.25,1),transform .5s cubic-bezier(.2,.8,.25,1)}
+.sheet.on li{opacity:1;transform:none}
+.sheet.on li:nth-child(1){transition-delay:.06s}.sheet.on li:nth-child(2){transition-delay:.11s}
+.sheet.on li:nth-child(3){transition-delay:.16s}.sheet.on li:nth-child(4){transition-delay:.21s}
+.sheet.on li:nth-child(5){transition-delay:.26s}.sheet.on li:nth-child(6){transition-delay:.31s}
+.sheet.on li:nth-child(7){transition-delay:.36s}.sheet.on li:nth-child(8){transition-delay:.41s}
 .sheet a{font-family:var(--disp);text-transform:uppercase;font-size:clamp(26px,5.6vw,54px);
   line-height:1;color:var(--pale);transition:color .2s,letter-spacing .3s}
 .sheet a:hover{color:var(--pink);letter-spacing:.02em}
@@ -312,7 +349,11 @@ body.ready .hl-node{opacity:1}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:1px;
   background:var(--rule-d);border:1px solid var(--rule-d);margin-top:clamp(34px,5vw,58px)}
 .ch:not(.dark) .metrics{background:var(--rule);border-color:var(--rule)}
-.metric{background:var(--carbon);padding:28px 24px 24px;transform-origin:50% 100%}
+.metric{background:var(--carbon);padding:28px 24px 24px;transform-origin:50% 100%;
+  position:relative;transition:background .35s}
+.metric::after{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--pink);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.25,.7,.25,1)}
+.metric:hover::after{transform:scaleX(1)}
 .ch:not(.dark) .metric{background:var(--porcelain)}
 .metric .v{font-family:var(--disp);font-size:clamp(40px,5.4vw,68px);line-height:.9;margin-bottom:12px}
 .metric .k{font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
@@ -380,7 +421,10 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
   text-transform:uppercase;font-weight:500;color:var(--pale-3)}
 .grp-list ul{list-style:none;margin:14px 0 0;padding:0}
 .grp-list li{display:flex;gap:18px;align-items:baseline;padding:17px 0;
-  border-bottom:1px solid var(--rule-d)}
+  border-bottom:1px solid var(--rule-d);transition:padding-left .4s cubic-bezier(.25,.7,.25,1)}
+.grp-list li:hover{padding-left:14px}
+.grp-list li:hover .nm{color:var(--pink)}
+.grp-list .nm{transition:color .3s}
 .grp-list .nm{font-family:var(--disp);text-transform:uppercase;font-size:21px;flex:0 0 auto;
   min-width:min(46%,290px)}
 .grp-list .ds{font-size:15px;color:var(--pale-2);font-weight:300}
@@ -388,6 +432,16 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
 body:not([data-grp="list"]) .grp-list{display:none}
 body[data-grp="list"] .grp{display:none}
 @media(max-width:760px){.grp{display:none!important}.grp-list{display:block!important}}
+
+/* ── full-bleed statement ───────────────────────────────────── */
+.slab{position:relative;min-height:100svh;display:grid;place-content:center;text-align:center;
+  background:var(--carbon);color:var(--pale);overflow:hidden;padding:0 var(--gut)}
+.slab .in-w{position:relative;z-index:2}
+.slab .k{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--pink);
+  margin-bottom:clamp(20px,4.5vh,44px);font-weight:500}
+.slab h2{font-size:clamp(48px,12.4vw,206px);line-height:.83;max-width:none}
+.slab .f{margin-top:clamp(22px,4.5vh,44px);font-size:clamp(13px,1.4vw,16px);letter-spacing:.15em;
+  text-transform:uppercase;color:var(--pale-3);font-weight:500}
 
 /* ── 07 ─────────────────────────────────────────────────────── */
 .next{text-align:center}
@@ -478,6 +532,9 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .map svg{opacity:1}.orbit{animation:none}
   .map.in .node[data-s="operating"]{animation:none}
   .metrics.in .metric,.grp-list.in li{animation:none}
+  .hl{background-size:100% 100%;transition:none}
+  .sheet li{opacity:1;transform:none;transition:none}
+  .prog,.card{transition:none}
   .bgfx,.bgfx i{animation:none}
   .thread .spur{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
   .plate img{clip-path:none;transition:none}
@@ -487,7 +544,8 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   html{scroll-behavior:auto}
 }
 @media print{
-  .chrome,.spine,.sheet,.hl-start,.follow,.thread,.enter,.cur,.wipe,.mq,.scene{display:none}
+  .chrome,.spine,.sheet,.hl-start,.hl-node,.follow,.thread,.enter,.cur,.wipe,.mq,.scene,
+  .prog,.card,.slab{display:none}
   body,#record{background:#fff}
   #explore{display:none}#record{display:block!important}
   .rv{opacity:1;transform:none}
@@ -498,6 +556,14 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"></i></div>
 <div class="wipe" id="wipe" aria-hidden="true"></div>
+<div class="prog" id="prog" aria-hidden="true"></div>
+
+<aside class="card" id="card" aria-hidden="true">
+  <div class="k">Chapter</div>
+  <div class="n" id="cardN">00</div>
+  <div class="t" id="cardT">Tom Letcher</div>
+  <div class="d">Company 13589467</div>
+</aside>
 
 <div class="enter" id="enter" aria-hidden="true">
   <div class="m">TL</div>
@@ -609,8 +675,8 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
         <p>The business sits in an unglamorous corner of the economy where the consequences of
         cutting corners are measured in lives. Extinguishers that have not been serviced. Alarm
         panels nobody has tested. Risk assessments written to be filed rather than acted upon. It
-        was built on the opposite proposition: <b>certified work, documented properly, that stands
-        up when an inspector or an insurer asks.</b></p>
+        was built on the opposite proposition: <b><span class="hl">certified work, documented
+        properly</span>, that stands up when an inspector or an insurer asks.</b></p>
         <span class="tk"><b>Tom to supply — the genuine beginnings</b>
         <i>The chapter needs your detail, not a summary.</i> The first premises and what it actually
         looked like. The first stock you bought and what it cost. The first order and who it was for.
@@ -635,8 +701,9 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
       </aside>
       <div class="body rv">
         <p>Rather than resell from a wholesaler and compete on price, the company went upstream:
-        <b>vetting its own suppliers, specifying its own products, and tracking every consignment
-        from factory floor to the UK warehouse</b> through a system built in-house. That vertical
+        <b><span class="hl">vetting its own suppliers, specifying its own products</span>, and
+        tracking every consignment from factory floor to the UK warehouse</b> through a system
+        built in-house. That vertical
         reach is unusual for an independent firm of this size.</p>
         <div class="pill" style="border-color:var(--rule)">
           <div><h4>Equipment</h4><p>Extinguishers and emergency lighting — supply, installation,
@@ -845,6 +912,14 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="slab dark" id="slab">
+  <div class="in-w">
+    <div class="k">Five years</div>
+    <h2>From one unit<br>to a group.</h2>
+    <div class="f">Bury · 2021 — present</div>
   </div>
 </section>
 

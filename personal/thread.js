@@ -58,12 +58,12 @@
     });
   }
   if (!reduce) {
-    $$(".ch h2, .rec-head h2").forEach(function (el) { split(el, "words", 0.055); });
+    $$(".ch h2, .rec-head h2, .slab h2").forEach(function (el) { split(el, "words", 0.055); });
   }
 
   /* ── drifting orbital patterns behind every panel ─────────── */
   if (!reduce) {
-    $$("#explore .hero, #explore .ch, #explore .scene").forEach(function (sec) {
+    $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab").forEach(function (sec) {
       var fx = document.createElement("div");
       fx.className = "bgfx"; fx.setAttribute("aria-hidden", "true");
       fx.innerHTML = "<i></i><i></i><i></i>";
@@ -143,6 +143,7 @@
     { id: "c03",  side: "L", y: 0.42 },
     { id: "c04",  side: "C", y: 0.40 },
     { id: "c05",  side: "R", y: 0.42 },
+    { id: "slab", side: "C", y: 0.50, noKnot: true },
     { id: "c06",  side: "L", y: 0.42 },
     { id: "c07",  side: "C", y: 0.52 }
   ];
@@ -175,14 +176,14 @@
     var heroPrefix = "", heroExit = null;
     if (heroEl) {
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
-      var yMain  = hT + hH * 0.717;          // the long horizontal
-      var yTop   = hT + hH * 0.526;          // the lifted horizontal
+      var yMain  = hT + hH * 0.775;          // the long horizontal
+      var yTop   = hT + hH * 0.545;          // the lifted horizontal
       var xLift  = W * 0.665;                // where it starts to rise
       var xTrunk = W * 0.822;                // the descending trunk
       var xTerm  = W * 0.886;                // spur terminals
       var yExit  = hT + hH * 0.985;          // where it leaves the hero
       var r = Math.min(34, W * 0.022);
-      var bys = [0.691, 0.750, 0.809, 0.868].map(function (f) { return hT + hH * f; });
+      var bys = [0.712, 0.769, 0.826, 0.883].map(function (f) { return hT + hH * f; });
 
       heroPrefix =
         "M " + LX.toFixed(1) + " " + yMain.toFixed(1) +
@@ -375,8 +376,14 @@
   var hero = $(".hero");
 
   /* ══ MASTER LOOP ══════════════════════════════════════════ */
-  var chapters = $$("#explore .ch, #explore .hero, #explore .scene");
+  var chapters = $$("#explore .ch, #explore .hero, #explore .scene, #explore .slab");
   var chrome = $("#chrome"), spine = $$(".spine a");
+  var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
+  var TITLES = { top:["00","Tom Letcher"], ones:["00","One Unit"], c01:["01","One Unit"],
+    c02:["02","The Build"], c03:["03","Momentum"], c04:["04","Freedom Group"],
+    c05:["05","How I Build"], slab:["—","Five Years"], c06:["06","The Record"],
+    c07:["07","Still Building"] };
+  var lastCard = "";
   var lastY = -1, velY = 0;
 
   function frame() {
@@ -423,6 +430,21 @@
       var exploring = document.body.dataset.view === "explore";
       document.body.classList.toggle("dark-chrome", dark && exploring);
       spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+
+      /* progress hairline */
+      if (prog) {
+        var mx2 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+        prog.style.transform = "scaleX(" + clamp(y / mx2, 0, 1).toFixed(4) + ")";
+      }
+
+      /* the corner card names where you are */
+      if (card && exploring) {
+        var meta = TITLES[cur2];
+        if (meta && cur2 !== lastCard) {
+          lastCard = cur2; cardN.textContent = meta[0]; cardT.textContent = meta[1];
+        }
+        card.classList.toggle("away", y < window.innerHeight * 0.45);
+      }
 
       if (exploring) { drawThread(y); runScene(y); }
     }
