@@ -1,0 +1,308 @@
+/* ══════════════════════════════════════════════════════════════════
+   THE PEOPLE OF FREEDOM FIRE — engine
+   Night-and-ember sister of the founder page's engine: heat contours,
+   poster words sliding against the scroll, velocity marquees, an ember
+   cursor, magnetic controls, two-way reveals and counters. Native
+   scrolling; prefers-reduced-motion collapses it all.
+   ══════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  var reduce = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia &&
+    window.matchMedia("(pointer: fine)").matches;
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
+  var lerp  = function (a, b, t) { return a + (b - a) * t; };
+
+  /* ── entrance ─────────────────────────────────────────────── */
+  function ready() { document.body.classList.add("ready"); }
+  if (reduce) { ready(); }
+  else if (document.readyState === "complete") { setTimeout(ready, 850); }
+  else { window.addEventListener("load", function () { setTimeout(ready, 850); }); }
+
+  /* ── heat contours behind every panel ─────────────────────── */
+  function rnd(seed) {
+    return function () {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+      return seed / 0x7fffffff;
+    };
+  }
+  function blobPath(cx, cy, r, rand) {
+    var a1 = .16 + rand() * .1, a2 = .08 + rand() * .08, a3 = .05 + rand() * .05;
+    var p1 = rand() * 6.28, p2 = rand() * 6.28, p3 = rand() * 6.28;
+    var d = "";
+    for (var i = 0; i <= 56; i++) {
+      var th = i / 56 * Math.PI * 2;
+      var rr = r * (1 + a1 * Math.sin(2 * th + p1) + a2 * Math.sin(3 * th + p2) +
+                        a3 * Math.sin(5 * th + p3));
+      var x = cx + Math.cos(th) * rr * 1.35, y = cy + Math.sin(th) * rr;
+      d += (i ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
+    }
+    return d + " Z";
+  }
+  function contourGroup(cx, cy, r, rings, rand, cls) {
+    var g = '<g class="' + cls + '">';
+    for (var k = 0; k < rings; k++) {
+      var s = 1 - k * .17;
+      g += '<path d="' + blobPath(cx + k * 6 * (rand() - .5) * 4,
+                                  cy + k * 5 * (rand() - .5) * 4,
+                                  r * s, rand) + '"/>';
+    }
+    return g + "</g>";
+  }
+  $$("#main .hero, #main .ch").forEach(function (sec, si) {
+    var rand = rnd(211 + si * 149);
+    var fx = document.createElement("div");
+    fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
+    var anim = reduce ? ["", ""] : ["a", "b"];
+    fx.innerHTML =
+      '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
+      contourGroup(180 + rand() * 160, 130 + rand() * 120, 150 + rand() * 70, 5, rand, anim[0]) +
+      contourGroup(720 + rand() * 180, 400 + rand() * 140, 180 + rand() * 80, 6, rand,
+                   anim[1] + (si % 3 === 1 ? " hot" : "")) +
+      "</svg>";
+    sec.insertBefore(fx, sec.firstChild);
+  });
+
+  /* ── one poster word per chapter ──────────────────────────── */
+  var pws = [];
+  $$("#main .ch[data-word]").forEach(function (sec) {
+    var w = document.createElement("span");
+    w.className = "pw"; w.textContent = sec.getAttribute("data-word");
+    w.setAttribute("aria-hidden", "true");
+    sec.insertBefore(w, sec.firstChild);
+    pws.push({ el: w, sec: sec });
+  });
+
+  /* ── headlines assemble word by word ──────────────────────── */
+  function split(el, step) {
+    var nodes = Array.prototype.slice.call(el.childNodes), out = [];
+    nodes.forEach(function (nd) {
+      if (nd.nodeType === 3) {
+        nd.textContent.split(/(\s+)/).forEach(function (tk) {
+          if (!tk) return;
+          if (/^\s+$/.test(tk)) { out.push(document.createTextNode(" ")); return; }
+          var box = document.createElement("span"); box.className = "wa";
+          var ink = document.createElement("i"); ink.textContent = tk;
+          box.appendChild(ink); out.push(box);
+        });
+      } else { out.push(nd); }   /* keep .flame spans whole */
+    });
+    el.textContent = "";
+    var wi = 0;
+    out.forEach(function (nd) {
+      el.appendChild(nd);
+      if (nd.classList && (nd.classList.contains("wa") || nd.classList.contains("flame"))) {
+        var tgt = nd.classList.contains("wa") ? nd.firstChild : nd;
+        tgt.style.setProperty("--d", (wi * step) + "s"); wi++;
+      }
+    });
+  }
+  if (!reduce) {
+    $$("#main .ch h2, .hero h1").forEach(function (el) { split(el, 0.055); });
+  }
+
+  /* ── stagger the grids ────────────────────────────────────── */
+  function stagger(sel, child, step) {
+    $$(sel).forEach(function (g) {
+      $$(child, g).forEach(function (c, i) { c.style.setProperty("--d", (i * step) + "s"); });
+    });
+  }
+  stagger(".team", ".person", 0.06);
+  stagger(".cards", ".cardx", 0.08);
+  stagger(".vals", ".val", 0.08);
+  stagger(".stops", ".stop", 0.09);
+
+  /* ── two-way reveals ──────────────────────────────────────── */
+  var watched = $$(".rv, .plate, .team, .cards, .vals, .stops, .route .routeline");
+  if (!("IntersectionObserver" in window) || reduce) {
+    watched.forEach(function (e) { e.classList.add("in"); });
+  } else {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
+    }, { rootMargin: "-4% 0px -10% 0px", threshold: 0.06 });
+    watched.forEach(function (e) { io.observe(e); });
+  }
+  var heroH = $("#heroH");
+  if (heroH) {
+    reduce ? heroH.classList.add("in")
+           : setTimeout(function () { heroH.classList.add("in"); }, 1150);
+  }
+
+  /* ── counters in the stat bar ─────────────────────────────── */
+  var counters = $$("[data-count]");
+  function countUp(v) {
+    var to = +v.getAttribute("data-count"), t0 = null, dur = 1200;
+    if (reduce) { v.textContent = to; return; }
+    (function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      v.textContent = Math.round(to * e);
+      if (k < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+  if ("IntersectionObserver" in window && !reduce) {
+    var ioc = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (en.isIntersecting) countUp(en.target);
+        else en.target.textContent = "0";
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (v) { v.textContent = "0"; ioc.observe(v); });
+  }
+
+  /* ── cursor ───────────────────────────────────────────────── */
+  var cur = $("#cur"), curDot = $("#curDot"), curRing = $("#curRing");
+  var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, curSeen = false;
+  if (fine && !reduce && cur) {
+    document.documentElement.classList.add("cur-on");
+    window.addEventListener("mousemove", function (e) {
+      mx = e.clientX; my = e.clientY; curSeen = true;
+      var hot = e.target.closest && e.target.closest("a,button,summary,[data-mag],.person,.cardx");
+      cur.classList.toggle("big", !!hot);
+    }, { passive: true });
+    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
+    document.addEventListener("mouseenter", function () { cur.style.opacity = "1"; });
+  }
+
+  /* ── magnetic controls ────────────────────────────────────── */
+  if (fine && !reduce) {
+    $$("[data-mag]").forEach(function (el) {
+      var tx = 0, ty = 0, cx = 0, cy = 0, on = false, raf = null;
+      function tick() {
+        cx = lerp(cx, tx, 0.18); cy = lerp(cy, ty, 0.18);
+        el.style.transform = "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px)";
+        if (on || Math.abs(cx) > 0.1 || Math.abs(cy) > 0.1) raf = requestAnimationFrame(tick);
+        else { el.style.transform = ""; raf = null; }
+      }
+      el.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        tx = (e.clientX - r.left - r.width / 2) * 0.32;
+        ty = (e.clientY - r.top - r.height / 2) * 0.32;
+        on = true; if (!raf) raf = requestAnimationFrame(tick);
+      });
+      el.addEventListener("mouseleave", function () { tx = 0; ty = 0; on = false; });
+    });
+  }
+
+  /* ── marquees ─────────────────────────────────────────────── */
+  var marquees = [];
+  $$(".mq-t").forEach(function (t) {
+    var base = t.getAttribute("data-base") || "";
+    var html = "";
+    for (var i = 0; i < 6; i++) html += "<span>" + base + "</span>";
+    t.innerHTML = html;
+    marquees.push({ el: t, x: 0, dir: +(t.getAttribute("data-mq") || 1), w: 0 });
+  });
+  function measureMarquees() {
+    marquees.forEach(function (m) {
+      var first = m.el.firstElementChild;
+      m.w = first ? first.offsetWidth : 0;
+    });
+  }
+
+  /* ── master loop ──────────────────────────────────────────── */
+  var chapters = $$("#main .ch, #main .hero");
+  var chrome = $("#chrome"), spine = $$(".spine a"), prog = $("#prog");
+  var lastY = -1, velY = 0;
+
+  function frame() {
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    var moved = y !== lastY;
+    velY = lerp(velY, moved ? y - lastY : 0, 0.12);
+    lastY = y;
+
+    if (fine && !reduce && curSeen) {
+      curDot.style.transform = "translate(" + mx + "px," + my + "px)";
+      rx = lerp(rx, mx, 0.16); ry = lerp(ry, my, 0.16);
+      curRing.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
+    }
+
+    if (!reduce) {
+      marquees.forEach(function (m) {
+        if (!m.w) return;
+        m.x -= m.dir * (0.55 + Math.min(6, Math.abs(velY) * 0.12));
+        if (m.x <= -m.w) m.x += m.w;
+        if (m.x > 0) m.x -= m.w;
+        m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
+      });
+    }
+
+    if (moved || velY !== 0) {
+      if (chrome) chrome.classList.toggle("stuck", y > 40);
+      if (prog) {
+        var mx2 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+        prog.style.transform = "scaleX(" + clamp(y / mx2, 0, 1).toFixed(4) + ")";
+      }
+
+      /* poster words slide against the scroll */
+      if (!reduce) {
+        for (var pi = 0; pi < pws.length; pi++) {
+          var ps = pws[pi].sec;
+          var pp = (y + window.innerHeight - ps.offsetTop) /
+                   (window.innerHeight + ps.offsetHeight);
+          if (pp > -0.1 && pp < 1.1) {
+            pws[pi].el.style.transform = "translate3d(" +
+              ((pp - 0.5) * -window.innerWidth * 0.22).toFixed(1) + "px,-50%,0)";
+          }
+        }
+        /* photographs drift inside their crops */
+        $$("[data-drift]").forEach(function (img) {
+          var fr = img.getBoundingClientRect();
+          var fp = clamp((window.innerHeight - fr.top) / (window.innerHeight + fr.height), 0, 1);
+          img.style.transform = "translate3d(0," + ((fp - 0.5) * 44).toFixed(1) + "px,0) scale(1.08)";
+        });
+      }
+
+      /* spine */
+      var cur2 = null;
+      chapters.forEach(function (s) {
+        var top = s.offsetTop, bot = top + s.offsetHeight;
+        if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
+      });
+      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+    }
+    requestAnimationFrame(frame);
+  }
+
+  if (reduce) {
+    function still() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      if (chrome) chrome.classList.toggle("stuck", y > 40);
+      var cur2 = null;
+      chapters.forEach(function (s) {
+        var top = s.offsetTop, bot = top + s.offsetHeight;
+        if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
+      });
+      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+    }
+    window.addEventListener("scroll", still, { passive: true });
+    still();
+  } else {
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener("load", measureMarquees);
+  window.addEventListener("resize", measureMarquees);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureMarquees);
+  measureMarquees();
+
+  /* ── menu sheet ───────────────────────────────────────────── */
+  var burger = $("#burger"), sheet = $("#sheet");
+  function sheetOn(o) {
+    sheet.classList.toggle("on", o);
+    burger.setAttribute("aria-expanded", o);
+    document.documentElement.style.overflow = o ? "hidden" : "";
+  }
+  if (burger && sheet) {
+    burger.addEventListener("click", function () { sheetOn(!sheet.classList.contains("on")); });
+    $("#sheetClose").addEventListener("click", function () { sheetOn(false); });
+    sheet.addEventListener("click", function (e) {
+      if (e.target.tagName === "A" || e.target === sheet) sheetOn(false);
+    });
+    window.addEventListener("keydown", function (e) { if (e.key === "Escape") sheetOn(false); });
+  }
+})();
