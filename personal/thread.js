@@ -89,48 +89,16 @@
     $$(".ch h2, .slab h2").forEach(function (el) { split(el, "words", 0.055); });
   }
 
-  /* ── topographic contours behind every panel ──────────────── */
+  /* ── the moving background: a drifting grid and travelling dots ── */
   function rnd(seed) {           /* deterministic, so layouts are stable */
     return function () {
       seed = (seed * 1103515245 + 12345) & 0x7fffffff;
       return seed / 0x7fffffff;
     };
   }
-  function blobPath(cx, cy, r, rand) {
-    var a1 = .16 + rand() * .1, a2 = .08 + rand() * .08, a3 = .05 + rand() * .05;
-    var p1 = rand() * 6.28, p2 = rand() * 6.28, p3 = rand() * 6.28;
-    var d = "";
-    for (var i = 0; i <= 56; i++) {
-      var th = i / 56 * Math.PI * 2;
-      var rr = r * (1 + a1 * Math.sin(2 * th + p1) + a2 * Math.sin(3 * th + p2) +
-                        a3 * Math.sin(5 * th + p3));
-      var x = cx + Math.cos(th) * rr * 1.35, y = cy + Math.sin(th) * rr;
-      d += (i ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
-    }
-    return d + " Z";
-  }
-  function contourGroup(cx, cy, r, rings, rand, cls) {
-    var g = '<g class="' + cls + '">';
-    for (var k = 0; k < rings; k++) {
-      var s = 1 - k * .17;
-      g += '<path d="' + blobPath(cx + k * 6 * (rand() - .5) * 4,
-                                  cy + k * 5 * (rand() - .5) * 4,
-                                  r * s, rand) + '"/>';
-    }
-    return g + "</g>";
-  }
   $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab").forEach(function (sec, si) {
     var rand = rnd(97 + si * 131);
-    var fx = document.createElement("div");
-    fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
-    var anim = reduce ? ["", ""] : ["a", "b"];
-    fx.innerHTML =
-      '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
-      contourGroup(180 + rand() * 160, 120 + rand() * 130, 150 + rand() * 70, 5, rand, anim[0]) +
-      contourGroup(720 + rand() * 180, 400 + rand() * 140, 180 + rand() * 80, 6, rand,
-                   anim[1] + (si % 3 === 1 ? " pk" : "")) +
-      "</svg>";
-    sec.insertBefore(fx, sec.firstChild);
+
 
     /* a drifting dot grid, and two faint orbits with dots travelling them */
     var dr = document.createElement("div");

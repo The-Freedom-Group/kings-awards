@@ -253,8 +253,7 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 /* ── moving background: orbits with travelling dots, a drifting grid ── */
 .orbits{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .orbits svg{width:100%;height:100%;display:block}
-.orbits path{fill:none;stroke:currentColor;stroke-width:1;vector-effect:non-scaling-stroke;opacity:.13}
-.orbits path.pk{stroke:var(--pink);opacity:.22}
+.orbits path{fill:none;stroke:none}
 .orbits circle{fill:var(--pink);opacity:.6}
 .orbits circle.dim{fill:currentColor;opacity:.35}
 .drift{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.24;color:var(--ink);
@@ -306,20 +305,6 @@ body.ready .hl-node{opacity:1}
 .hl-node span{font-size:12.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
   white-space:nowrap}
 @media(max-width:820px){.hl-start,.hl-node{display:none}}
-
-/* ── topographic contours ───────────────────────────────────── */
-.topo{position:absolute;inset:-6% -4%;pointer-events:none;z-index:0;overflow:hidden}
-.topo svg{width:100%;height:100%;display:block}
-.topo path{fill:none;stroke:currentColor;stroke-width:1;vector-effect:non-scaling-stroke;
-  stroke-linejoin:round}
-.topo g{opacity:.075;transform-origin:50% 50%;will-change:transform}
-.topo g.pk{opacity:.10;color:var(--pink)}
-.topo g.a{animation:topoA 44s ease-in-out infinite alternate}
-.topo g.b{animation:topoB 58s ease-in-out infinite alternate}
-@keyframes topoA{from{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
-  to{transform:translate3d(5%,-6%,0) rotate(6deg) scale(1.1)}}
-@keyframes topoB{from{transform:translate3d(0,0,0) rotate(0deg) scale(1.04)}
-  to{transform:translate3d(-6%,5%,0) rotate(-5deg) scale(.95)}}
 
 /* ── poster words ───────────────────────────────────────────── */
 .pw{position:absolute;top:50%;left:0;z-index:0;pointer-events:none;user-select:none;
