@@ -1,23 +1,25 @@
 /* ══════════════════════════════════════════════════════════════════
    THE PEOPLE — engine (the register)
-   Print motion only: headlines rise line by line from their
-   baselines, part-rules draw themselves, the path's numerals turn
-   red as the reader passes, the assessment marks in red pen, the
-   folio names the part you are reading, and the signature line
-   takes real ink. Nothing glows, nothing floats.
+   Print motion, and a few doors: headlines rise from their baselines,
+   part-rules draw themselves, the cover door swings open as you
+   scroll (or when you knock), the four activity doors open on click,
+   timecards clock in and tilt under the pointer, the red path draws
+   itself with a walker on it, the two-year test measures a date, the
+   evidence slots are stamped, the assessment marks in red pen, and
+   the signature line takes real ink. Nothing glows.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
 
-  var reduce = window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   var pad2  = function (x) { return x < 10 ? "0" + x : "" + x; };
 
   /* ── headlines rise from their baselines ──────────────────── */
-  function splitWords(el, step, base) {
+  function splitWords(el) {
     var nodes = Array.prototype.slice.call(el.childNodes), out = [];
     nodes.forEach(function (nd) {
       if (nd.nodeType === 3) {
@@ -28,86 +30,170 @@
           var ink = document.createElement("i"); ink.textContent = tk;
           box.appendChild(ink); out.push(box);
         });
-      } else if (nd.nodeType === 1) {
-        splitWords(nd, step, base);          /* recurse into <em> etc. */
-        out.push(nd);
-      } else { out.push(nd); }
+      } else if (nd.nodeType === 1) { splitWords(nd); out.push(nd); }
+      else { out.push(nd); }
     });
     el.textContent = "";
     out.forEach(function (nd) { el.appendChild(nd); });
   }
   function delayWords(root, step, base) {
-    $$(".lm i", root).forEach(function (i, k) {
-      i.style.setProperty("--d", (base + k * step).toFixed(2) + "s");
-    });
+    $$(".lm i", root).forEach(function (i, k) { i.style.setProperty("--d", (base + k * step).toFixed(2) + "s"); });
   }
   if (!reduce) {
     $$(".h-b, .bigq, #coverH").forEach(function (el) {
-      splitWords(el, 0.05, 0);
+      splitWords(el);
       delayWords(el, 0.05, el.id === "coverH" ? 0.15 : 0.05);
       if (el.id !== "coverH") el.classList.add("rvh");
     });
     var ch = $("#coverH");
-    if (ch) requestAnimationFrame(function () {
-      requestAnimationFrame(function () { ch.classList.add("in"); });
-    });
+    if (ch) requestAnimationFrame(function () { requestAnimationFrame(function () { ch.classList.add("in"); }); });
   }
 
-  /* ── observation: parts, sheets, headlines ────────────────── */
-  var watched = $$(".rv, .part, .rvh");
+  /* ── observation: parts, sheets, headlines, stamps ────────── */
+  var watched = $$(".rv, .part, .rvh, .tk");
   if (!("IntersectionObserver" in window) || reduce) {
     watched.forEach(function (e) { e.classList.add("in"); });
   } else {
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
-      });
+      es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
     watched.forEach(function (e) { io.observe(e); });
+  }
+
+  /* ── the red ring that follows the pointer ────────────────── */
+  var cur = $("#cur"), mx = 0, my = 0, rx = 0, ry = 0, curRaf = null;
+  if (cur && fine && !reduce) {
+    document.documentElement.classList.add("cur-on");
+    function curTick() {
+      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+      cur.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
+      if (Math.abs(mx - rx) > 0.2 || Math.abs(my - ry) > 0.2) curRaf = requestAnimationFrame(curTick); else curRaf = null;
+    }
+    window.addEventListener("mousemove", function (e) {
+      mx = e.clientX; my = e.clientY;
+      var t = e.target, hot = t.closest && t.closest("a,button,input,canvas,.card,.ext");
+      cur.classList.toggle("big", !!hot);
+      if (!curRaf) curRaf = requestAnimationFrame(curTick);
+    }, { passive: true });
+    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
+    document.addEventListener("mouseenter", function () { cur.style.opacity = ""; });
+  }
+
+  /* ── the cover door ───────────────────────────────────────── */
+  var doorway = $("#doorway"), leaf = $("#leaf"), doorBtn = $("#doorBtn"), doorCap = $("#doorCap");
+  var doorKnocked = false, doorAngle = 0;
+  function setDoor(deg) {
+    doorAngle = deg;
+    if (leaf) leaf.style.setProperty("--o", (-deg).toFixed(1) + "deg");
+    if (doorway) doorway.classList.toggle("open", deg > 18);
+  }
+  function doorFromScroll(y) {
+    if (!doorway || reduce) return;
+    var target = doorKnocked ? 96 : clamp(6 + (y / (window.innerHeight * 0.7)) * 90, 6, 96);
+    setDoor(target);
+  }
+  if (doorBtn) {
+    doorBtn.addEventListener("click", function () {
+      doorKnocked = !doorKnocked;
+      doorBtn.setAttribute("aria-pressed", doorKnocked);
+      doorBtn.setAttribute("aria-label", doorKnocked ? "Close the door" : "Open the door");
+      if (doorCap) doorCap.textContent = doorKnocked ? "Come in" : "Scroll, or knock";
+      if (reduce) setDoor(doorKnocked ? 96 : 70); else doorFromScroll(window.pageYOffset || 0);
+    });
+  }
+  if (reduce) setDoor(70); else setTimeout(function () { setDoor(6); }, 400);
+
+  /* ── the four doors ───────────────────────────────────────── */
+  $$("#doors .dr").forEach(function (dr) {
+    var b = $(".leaf", dr), lbl = $(".open", dr);
+    if (!b) return;
+    b.addEventListener("click", function () {
+      var on = !dr.classList.contains("on");
+      dr.classList.toggle("on", on);
+      b.setAttribute("aria-expanded", on);
+      if (lbl) lbl.textContent = on ? "Close" : "Open";
+    });
+  });
+
+  /* ── the clocking-in board: cards tilt under the pointer ──── */
+  if (fine && !reduce) {
+    $$("#rack .card").forEach(function (c) {
+      c.addEventListener("mousemove", function (e) {
+        var r = c.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+        c.style.transform = "rotateY(" + (px * 10).toFixed(2) + "deg) rotateX(" + (-py * 10).toFixed(2) + "deg) translateY(-4px)";
+      });
+      c.addEventListener("mouseleave", function () { c.style.transform = ""; });
+    });
+  }
+
+  /* ── the two-year test ────────────────────────────────────── */
+  var progStart = $("#progStart"), verdict = $("#verdict");
+  var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8);
+  function monthsBetween(a, b) { return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) - (b.getDate() < a.getDate() ? 1 : 0); }
+  function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
+  if (progStart && verdict) {
+    progStart.addEventListener("input", function () {
+      if (!progStart.value) { verdict.innerHTML = "Enter the date of the earliest record."; return; }
+      var d = new Date(progStart.value + "T00:00:00");
+      if (isNaN(d)) return;
+      var m = monthsBetween(d, DEADLINE);
+      if (d <= CUTOFF) {
+        verdict.innerHTML = "<b>Passes.</b> By the closing date the programme will have run for " +
+          Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") +
+          " — dated from " + fmt(d) + ". Keep that record.";
+      } else {
+        var short = monthsBetween(d, CUTOFF);
+        verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + Math.abs(monthsBetween(CUTOFF, d)) +
+          " month" + (Math.abs(monthsBetween(CUTOFF, d)) === 1 ? "" : "s") + " too young for this cycle. Unless an earlier record exists, this category waits a year.";
+        void short;
+      }
+    });
   }
 
   /* ── the reading position: folio, index, progress, path ───── */
   var progFill = $("#progFill"), folio = $("#folio"), index = $$(".index a");
   var sections = $$("main section");
-  var PARTS = { top: "Cover", who: "Who we are", work: "The work", crew: "The crew",
-    door: "The Open Door", training: "Training", build: "What we're building",
-    code: "The code", join: "Join us" };
-  var prows = $$("#proc .prow"), procEl = $("#proc");
+  var PARTS = { top: "Cover", who: "Who we are", work: "The work", crew: "The crew", door: "The Open Door",
+    training: "Training", build: "What we're building", code: "The code", join: "Join us" };
+  var steps = $$("#rail .step"), rail = $("#rail"), railInk = $("#railInk"), walker = $("#walker");
+  if (railInk) { var L = 1000; try { L = railInk.getTotalLength(); } catch (e) {} railInk.style.setProperty("--l", L); }
   var ticking = false;
 
   function onScroll() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
     if (progFill) {
-      var mx = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-      progFill.style.width = (clamp(y / mx, 0, 1) * 100).toFixed(2) + "%";
+      var mx2 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+      progFill.style.width = (clamp(y / mx2, 0, 1) * 100).toFixed(2) + "%";
     }
-    var vm = y + window.innerHeight * 0.42, cur = null, idx = 0;
+    doorFromScroll(y);
+    var vm = y + window.innerHeight * 0.42, cur2 = null, idx = 0;
     for (var i = 0; i < sections.length; i++) {
       var s = sections[i];
-      if (vm >= s.offsetTop && vm < s.offsetTop + s.offsetHeight) { cur = s.id; idx = i; }
+      if (vm >= s.offsetTop && vm < s.offsetTop + s.offsetHeight) { cur2 = s.id; idx = i; }
     }
-    index.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur); });
-    if (folio && cur) {
-      var line = "The People · " + (PARTS[cur] || "") + " · Part " + (idx + 1) + " of " +
-        sections.length;
+    index.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+    if (folio && cur2) {
+      var line = "The People · " + (PARTS[cur2] || "") + " · Part " + (idx + 1) + " of " + sections.length;
       if (folio.textContent !== line) folio.textContent = line;
     }
-    if (prows.length && procEl) {
-      var r = procEl.getBoundingClientRect();
-      var lp = clamp((window.innerHeight * 0.86 - r.top) /
-                     (r.height + window.innerHeight * 0.2), 0, 1);
-      for (var k = 0; k < prows.length; k++) {
-        prows[k].classList.toggle("lit", lp >= (k + 0.65) / prows.length);
+    if (steps.length && rail) {
+      var r = rail.getBoundingClientRect();
+      var lp = clamp((window.innerHeight * 0.86 - r.top) / (r.height + window.innerHeight * 0.2), 0, 1);
+      for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("lit", lp >= (k + 0.65) / steps.length);
+      if (railInk && !reduce) {
+        var Lr = parseFloat(railInk.style.getPropertyValue("--l")) || 1000;
+        railInk.style.strokeDashoffset = (Lr * (1 - lp)).toFixed(1);
+        if (walker) walker.setAttribute("cx", (6 + lp * 988).toFixed(1));
+        rail.style.setProperty("--lp", (lp * 100).toFixed(1) + "%");   /* the vertical rail on phones */
       }
     }
     ticking = false;
   }
-  window.addEventListener("scroll", function () {
-    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
-  }, { passive: true });
+  window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
   window.addEventListener("resize", onScroll);
   onScroll();
-  if (reduce) prows.forEach(function (r) { r.classList.add("lit"); });
+  if (reduce) steps.forEach(function (r) { r.classList.add("lit"); });
 
   /* ── the assessment ───────────────────────────────────────── */
   var FIRE = {
@@ -119,19 +205,14 @@
   };
   var fnote = $("#fnote"), fcs = $$(".fc"), exts = $$(".ext");
   function pickFire(cls) {
-    fcs.forEach(function (b) {
-      var on = b.getAttribute("data-cls") === cls;
-      b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
-    });
+    fcs.forEach(function (b) { var on = b.getAttribute("data-cls") === cls; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
     exts.forEach(function (x) {
       var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
       x.classList.toggle("hit", ok); x.classList.toggle("miss", !ok);
     });
     if (fnote) fnote.textContent = FIRE[cls] || "";
   }
-  fcs.forEach(function (b) {
-    b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); });
-  });
+  fcs.forEach(function (b) { b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); }); });
   if (fcs.length) pickFire("a");
 
   var QUIZ = [
@@ -150,15 +231,13 @@
     fmL.setAttribute("aria-pressed", !test); fmT.setAttribute("aria-pressed", test);
     fq.hidden = !test; fsc.hidden = !test;
     exts.forEach(function (x) { x.classList.remove("hit", "miss", "right", "wrong"); });
-    if (test) { qi = 0; qScore = 0; qLock = false; askQ(); }
-    else { pickFire("a"); }
+    if (test) { qi = 0; qScore = 0; qLock = false; askQ(); } else { pickFire("a"); }
   }
   function askQ() {
     fsc.textContent = qScore + " / " + QUIZ.length;
     if (qi >= QUIZ.length) {
       fq.innerHTML = "<b>" + qScore + " of " + QUIZ.length + ".</b> " +
-        (qScore === QUIZ.length ? "Full marks — you'd pass our induction."
-          : "Return to Learn, then sit it again.");
+        (qScore === QUIZ.length ? "Full marks — you'd pass our induction." : "Return to Learn, then sit it again.");
       if (fnote) fnote.textContent = "Sit the paper again whenever you like.";
       return;
     }
@@ -176,15 +255,10 @@
       if (ok) qScore++;
       if (fnote) fnote.textContent = (ok ? "Correct. " : "Marked wrong. ") + FIRE[cls];
       fsc.textContent = qScore + " / " + QUIZ.length;
-      setTimeout(function () {
-        x.classList.remove("right", "wrong");
-        qi++; qLock = false; askQ();
-      }, 1400);
+      setTimeout(function () { x.classList.remove("right", "wrong"); qi++; qLock = false; askQ(); }, 1400);
     }
     x.addEventListener("click", answer);
-    x.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); answer(); }
-    });
+    x.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); answer(); } });
   });
   if (fmL && fmT) {
     fmL.addEventListener("click", function () { setFMode(false); });
@@ -201,38 +275,25 @@
       var keep = null;
       if (signed) { try { keep = sctx.getImageData(0, 0, sig.width, sig.height); } catch (e) {} }
       sig.width = w; sig.height = 88;
-      sctx.lineWidth = 2; sctx.lineCap = "round"; sctx.lineJoin = "round";
-      sctx.strokeStyle = "#C40000";
+      sctx.lineWidth = 2; sctx.lineCap = "round"; sctx.lineJoin = "round"; sctx.strokeStyle = "#C40000";
       if (keep) sctx.putImageData(keep, 0, 0);
     }
-    function pos(e) {
-      var r = sig.getBoundingClientRect();
-      var p = e.touches ? e.touches[0] : e;
-      return [p.clientX - r.left, p.clientY - r.top];
-    }
-    sig.addEventListener("mousedown", function (e) {
-      drawing = true; var p = pos(e); lx = p[0]; ly = p[1]; e.preventDefault();
-    });
+    function pos(e) { var r = sig.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e; return [p.clientX - r.left, p.clientY - r.top]; }
+    sig.addEventListener("mousedown", function (e) { drawing = true; var p = pos(e); lx = p[0]; ly = p[1]; e.preventDefault(); });
     sig.addEventListener("mousemove", function (e) {
-      if (!drawing) return;
-      var p = pos(e);
+      if (!drawing) return; var p = pos(e);
       sctx.beginPath(); sctx.moveTo(lx, ly); sctx.lineTo(p[0], p[1]); sctx.stroke();
       lx = p[0]; ly = p[1]; signed = true; e.preventDefault();
     });
     window.addEventListener("mouseup", function () { drawing = false; });
-    sig.addEventListener("touchstart", function (e) {
-      drawing = true; var p = pos(e); lx = p[0]; ly = p[1]; e.preventDefault();
-    }, { passive: false });
+    sig.addEventListener("touchstart", function (e) { drawing = true; var p = pos(e); lx = p[0]; ly = p[1]; e.preventDefault(); }, { passive: false });
     sig.addEventListener("touchmove", function (e) {
-      if (!drawing) return;
-      var p = pos(e);
+      if (!drawing) return; var p = pos(e);
       sctx.beginPath(); sctx.moveTo(lx, ly); sctx.lineTo(p[0], p[1]); sctx.stroke();
       lx = p[0]; ly = p[1]; signed = true; e.preventDefault();
     }, { passive: false });
     sig.addEventListener("touchend", function () { drawing = false; });
-    if (sigClear) sigClear.addEventListener("click", function () {
-      sctx.clearRect(0, 0, sig.width, sig.height); signed = false;
-    });
+    if (sigClear) sigClear.addEventListener("click", function () { sctx.clearRect(0, 0, sig.width, sig.height); signed = false; });
     window.addEventListener("resize", sigSize);
     window.addEventListener("load", sigSize);
     sigSize();
