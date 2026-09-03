@@ -30,9 +30,16 @@
       if (k < 1) requestAnimationFrame(step);
     });
   }
-  if (reduce) { ready(); }
-  else if (document.readyState === "complete") { setTimeout(ready, 900); }
-  else { window.addEventListener("load", function () { setTimeout(ready, 900); }); }
+  /* the entrance waits for load, but never for long: a slow font server
+     must not hold the page behind a monogram. Whichever comes first wins. */
+  var readied = false;
+  function readyOnce() { if (!readied) { readied = true; ready(); } }
+  if (reduce) { readyOnce(); }
+  else {
+    if (document.readyState === "complete") { setTimeout(readyOnce, 900); }
+    else { window.addEventListener("load", function () { setTimeout(readyOnce, 900); }); }
+    setTimeout(readyOnce, 3200);
+  }
 
   /* ── portrait load ────────────────────────────────────────── */
   var shot = $("#shot"), shotWrap = $("#shotWrap");
@@ -494,6 +501,7 @@
   function W() { return explore ? explore.offsetWidth : window.innerWidth; }
   var chrome = $("#chrome"), spine = $$(".spine a");
   var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
+  var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
   var TITLES = { top:["00","Tom Letcher"], ones:["00","One Unit"], c01:["01","One Unit"],
     c02:["02","The Build"], c03:["03","Momentum"], c04:["04","Freedom Group"],
     c05:["05","How I Build"], slab:["—","Five Years"], c06:["06","The Record"],
@@ -552,13 +560,17 @@
         prog.style.transform = "scaleX(" + clamp(y / mx2, 0, 1).toFixed(4) + ")";
       }
 
-      /* the corner card names where you are */
-      if (card && exploring) {
+      /* the corner card, and the chrome label where the card can't fit, name where you are */
+      if (exploring) {
         var meta = TITLES[cur2];
         if (meta && cur2 !== lastCard) {
-          lastCard = cur2; cardN.textContent = meta[0]; cardT.textContent = meta[1];
+          lastCard = cur2;
+          if (card) { cardN.textContent = meta[0]; cardT.textContent = meta[1]; }
+          if (now)  { nowN.textContent = meta[0]; nowT.textContent = meta[1]; }
         }
-        card.classList.toggle("away", y < window.innerHeight * 0.45);
+        var early = y < window.innerHeight * 0.45;
+        if (card) card.classList.toggle("away", early);
+        if (now)  now.classList.toggle("on", !early);
       }
 
       /* poster words slide against the scroll */
