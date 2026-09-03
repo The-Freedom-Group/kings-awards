@@ -60,23 +60,24 @@
     watched.forEach(function (e) { io.observe(e); });
   }
 
-  /* ── the red ring that follows the pointer ────────────────── */
-  var cur = $("#cur"), mx = 0, my = 0, rx = 0, ry = 0, curRaf = null;
-  if (cur && fine && !reduce) {
+  /* ── the pointer: a red dot, and a ring that follows it ───── */
+  var cur = $("#cur"), curDot = $("#curdot"), mx = 0, my = 0, rx = 0, ry = 0, curRaf = null;
+  if (cur && curDot && fine && !reduce) {
     document.documentElement.classList.add("cur-on");
     function curTick() {
-      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+      rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
       cur.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
       if (Math.abs(mx - rx) > 0.2 || Math.abs(my - ry) > 0.2) curRaf = requestAnimationFrame(curTick); else curRaf = null;
     }
     window.addEventListener("mousemove", function (e) {
       mx = e.clientX; my = e.clientY;
+      curDot.style.transform = "translate(" + mx + "px," + my + "px)";
       var t = e.target, hot = t.closest && t.closest("a,button,input,canvas,.card,.ext");
       cur.classList.toggle("big", !!hot);
       if (!curRaf) curRaf = requestAnimationFrame(curTick);
     }, { passive: true });
-    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
-    document.addEventListener("mouseenter", function () { cur.style.opacity = ""; });
+    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; curDot.style.opacity = "0"; });
+    document.addEventListener("mouseenter", function () { cur.style.opacity = ""; curDot.style.opacity = ""; });
   }
 
   /* ── the cover door ───────────────────────────────────────── */
@@ -87,18 +88,28 @@
     if (leaf) leaf.style.setProperty("--o", (-deg).toFixed(1) + "deg");
     if (doorway) doorway.classList.toggle("open", deg > 18);
   }
+  /* on a desk the cover is pinned for one viewport of scrolling while the
+     door opens; the door is fully open before the page moves on. On a phone
+     it opens as the doorway comes into view. A knock opens it at once. */
   function doorFromScroll(y) {
     if (!doorway || reduce) return;
-    var target = doorKnocked ? 96 : clamp(6 + (y / (window.innerHeight * 0.7)) * 90, 6, 96);
+    var target;
+    if (doorKnocked) target = 100;
+    else if (window.innerWidth > 920) target = clamp(6 + (y / window.innerHeight) * 94, 6, 100);
+    else {
+      var r = doorway.getBoundingClientRect();
+      target = clamp(6 + ((window.innerHeight - r.top) / (window.innerHeight * 0.75)) * 94, 6, 100);
+    }
     setDoor(target);
+    if (doorCap && !doorKnocked) doorCap.textContent = target >= 99 ? "Come in" : "Scroll to open, or knock";
   }
   if (doorBtn) {
     doorBtn.addEventListener("click", function () {
       doorKnocked = !doorKnocked;
       doorBtn.setAttribute("aria-pressed", doorKnocked);
       doorBtn.setAttribute("aria-label", doorKnocked ? "Close the door" : "Open the door");
-      if (doorCap) doorCap.textContent = doorKnocked ? "Come in" : "Scroll, or knock";
-      if (reduce) setDoor(doorKnocked ? 96 : 70); else doorFromScroll(window.pageYOffset || 0);
+      if (doorCap) doorCap.textContent = doorKnocked ? "Come in" : "Scroll to open, or knock";
+      if (reduce) setDoor(doorKnocked ? 100 : 70); else doorFromScroll(window.pageYOffset || 0);
     });
   }
   if (reduce) setDoor(70); else setTimeout(function () { setDoor(6); }, 400);
@@ -115,39 +126,17 @@
     });
   });
 
-  /* ── the clocking-in board: cards tilt under the pointer, and punch in ── */
-  $$("#rack .card").forEach(function (c) {
-    if (fine && !reduce) {
+  /* ── the clocking-in board: cards tilt under the pointer ──── */
+  if (fine && !reduce) {
+    $$("#rack .card").forEach(function (c) {
       c.addEventListener("mousemove", function (e) {
         var r = c.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
         c.style.transform = "rotateY(" + (px * 10).toFixed(2) + "deg) rotateX(" + (-py * 10).toFixed(2) + "deg) translateY(-4px)";
       });
       c.addEventListener("mouseleave", function () { c.style.transform = ""; });
-    }
-    var hit = document.createElement("button"); hit.type = "button"; hit.className = "hitc";
-    var who = ($(".nm", c) || {}).textContent || "this card";
-    hit.setAttribute("aria-label", "Clock in " + who.trim());
-    var st = document.createElement("span"); st.className = "stampin"; st.textContent = "Clocked in";
-    c.appendChild(st); c.appendChild(hit);
-    hit.addEventListener("click", function () {
-      var on = !c.classList.contains("punched");
-      c.classList.toggle("punched", on);
-      var b = $("[data-punch]", c);
-      if (b) {
-        if (on) { b.setAttribute("data-was", b.textContent); var d = new Date(); b.textContent = pad2(d.getHours()) + ":" + pad2(d.getMinutes()); }
-        else b.textContent = b.getAttribute("data-was") || "TK";
-      }
-      hit.setAttribute("aria-label", (on ? "Clock out " : "Clock in ") + who.trim());
     });
-  });
-  var boardClock = $("#boardClock");
-  function clockTick() {
-    if (!boardClock) return;
-    var d = new Date();
-    boardClock.innerHTML = pad2(d.getHours()) + "<i>:</i>" + pad2(d.getMinutes()) + "<i>:</i>" + pad2(d.getSeconds());
   }
-  clockTick(); setInterval(clockTick, 1000);
 
   /* ── the loupe: photographs magnify under the pointer ─────── */
   var loupe = $("#loupe");

@@ -55,12 +55,15 @@ body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opa
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .93 0 0 0 0 .9 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
 main,header,footer{position:relative;z-index:2}
 
-/* a red ink ring trails the pointer; the pointer itself stays */
-.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;width:28px;height:28px;
-  margin:-14px 0 0 -14px;border-radius:50%;border:1.5px solid rgba(196,0,0,.55);
+/* the pointer is a red dot with a ring that follows it; the system cursor is hidden */
+html.cur-on,html.cur-on *{cursor:none!important}
+.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;width:30px;height:30px;
+  margin:-15px 0 0 -15px;border-radius:50%;border:1.5px solid rgba(196,0,0,.7);
   opacity:0;transition:width .25s,height .25s,margin .25s,opacity .3s,background .25s}
-html.cur-on .cur{opacity:1}
-.cur.big{width:52px;height:52px;margin:-26px 0 0 -26px;background:rgba(196,0,0,.06)}
+.curdot{position:fixed;left:0;top:0;z-index:301;pointer-events:none;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;background:var(--red);opacity:0;transition:opacity .3s}
+html.cur-on .cur,html.cur-on .curdot{opacity:1}
+.cur.big{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(196,0,0,.07)}
 
 /* ── masthead ───────────────────────────────────────────────── */
 .mast{position:fixed;inset:0 0 auto 0;z-index:90;background:var(--bone);border-bottom:1px solid var(--hair)}
@@ -111,8 +114,9 @@ section+section{border-top:1px solid var(--hair)}
 .aside p{margin:0 0 14px}
 
 /* line-mask reveal: print motion */
-.lm{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}
-.lm i{display:inline-block;font-style:inherit;transform:translateY(112%);
+/* each word is revealed through a box; the box is padded so italic swashes and descenders are never trimmed */
+.lm{display:inline-block;overflow:hidden;vertical-align:bottom;padding:.12em .18em .2em .14em;margin:-.12em -.18em -.2em -.14em}
+.lm i{display:inline-block;font-style:inherit;transform:translateY(118%);
   transition:transform .85s cubic-bezier(.22,.72,.22,1);transition-delay:var(--d,0s)}
 .in .lm i{transform:none}
 .rv{opacity:0;transform:translateY(16px);
@@ -149,9 +153,14 @@ section+section{border-top:1px solid var(--hair)}
 .btn.ghost:hover{background:var(--ink);color:var(--bone)}
 
 /* ── cover: the door ────────────────────────────────────────── */
-.cover{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:60px}
+.cover{min-height:100svh;padding-top:60px}
+.cover .stick{min-height:calc(100svh - 60px);display:flex;flex-direction:column;justify-content:center}
 .cover .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,80px);align-items:center;width:100%}
 @media(max-width:920px){.cover .wrap{grid-template-columns:1fr}}
+/* on a desk the cover is pinned while the door opens; the page moves on once it is fully open */
+@media(min-width:921px) and (prefers-reduced-motion:no-preference){
+  .cover{height:200vh;padding-top:0}
+  .cover .stick{position:sticky;top:0;height:100vh;min-height:0;padding-top:60px}}
 .cover .kick{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);
   margin-bottom:clamp(22px,3.6vh,38px)}
 .cover .kick b{color:var(--red);font-weight:500}
@@ -256,16 +265,6 @@ section+section{border-top:1px solid var(--hair)}
   color:var(--red);border:1px solid var(--red);padding:3px 6px;transform:rotate(6deg);opacity:.85}
 .card.rv{transform:translateY(40px) rotateX(12deg);opacity:0}
 .card.rv.in{transform:none;opacity:1}
-.card .stampin{position:absolute;left:14px;top:46%;font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--red);border:1.5px solid var(--red);padding:4px 7px;transform:rotate(-8deg) scale(1.8);opacity:0;pointer-events:none;mix-blend-mode:multiply}
-.card.punched .stampin{animation:stamp .4s cubic-bezier(.2,.9,.3,1.2) forwards}
-.card.punched .punch b{color:var(--red)}
-.card button.hitc{position:absolute;inset:0;background:none;border:0;cursor:pointer;color:transparent;font:inherit}
-.card button.hitc:focus-visible{outline:2px solid var(--red);outline-offset:4px}
-.clock{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-top:clamp(24px,3.4vw,40px);
-  border-top:1px solid var(--ink);padding-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
-.clock b{font-family:var(--serif);font-size:clamp(26px,3vw,40px);letter-spacing:0;text-transform:none;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:300}
-.clock b i{color:var(--red);font-style:normal}
 
 /* ── THE OPEN DOOR ──────────────────────────────────────────── */
 .door-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(30px,5vw,80px);align-items:start;margin-bottom:clamp(34px,5vw,60px)}
@@ -478,7 +477,7 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
 </head>
 <body>
 
-<i class="cur" id="cur" aria-hidden="true"></i>
+<i class="cur" id="cur" aria-hidden="true"></i><i class="curdot" id="curdot" aria-hidden="true"></i>
 <i class="loupe" id="loupe" aria-hidden="true"></i>
 
 <header class="mast" id="mast">
@@ -505,6 +504,7 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
 
 <!-- COVER -->
 <section class="cover" id="top">
+  <div class="stick">
   <div class="wrap">
     <div>
       <div class="kick rv">Freedom Fire &amp; Safety · Bury · Nationwide · <b>Est. 2021</b></div>
@@ -530,8 +530,9 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
       </div>
       <button class="hit" id="doorBtn" type="button" aria-pressed="false" aria-label="Open the door">Open the door</button>
       <span class="sill"></span>
-      <div class="cap"><span><b>Plate I.</b> The door, Bury</span><span id="doorCap">Scroll, or knock</span></div>
+      <div class="cap"><span><b>Plate I.</b> The door, Bury</span><span id="doorCap">Scroll to open, or knock</span></div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -619,8 +620,6 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
     <h2 class="h-b rv">Faces, not <em>job titles</em></h2>
     <p class="lede rv" style="--d:.1s">The people who turn up, fit it properly and sign their name to it — one
     timecard each, in the rack by the door. Most of them clocked in for the first time through Part 04.</p>
-    <div class="clock rv" style="--d:.05s" aria-live="off"><span>The board's clock · Bury</span>
-      <b id="boardClock">00<i>:</i>00<i>:</i>00</b><span id="clockNote">Tap a card to clock it in — nothing is recorded</span></div>
     <div class="rack" id="rack">
       <div class="card rv"><span class="cn">No. 001</span>
         <span class="nm">Tom Letcher</span><span class="rl">Founder &amp; Director</span>
