@@ -1,7 +1,13 @@
 # King's Awards — Freedom Fire & Safety
 
 Two static websites prepared as supporting material for a King's Awards for Enterprise
-application. No build step, no dependencies — open the HTML files directly.
+application. No build step, no dependencies.
+
+**The founder page (`personal/`) was rebuilt on 3 September 2026 as an evidence-led profile**
+with a verified record. It carries no placeholders; every gap is logged in
+`_private/CONTENT_REQUIRED.md`. What changed is in `CHANGELOG.md`; test results and
+screenshots are in `_qa/`. The team site (`staff/`) has not had that pass yet — the
+placeholder list below still applies to it.
 
 ```
 kings-awards/
@@ -15,8 +21,24 @@ kings-awards/
 └── README.md
 ```
 
-Open `index.html` in a browser. The only external requests are Google Fonts; everything else
-is inline or local.
+## Run, build, deploy
+
+- **Run locally:** any static server from the repository root, e.g.
+  `python -m http.server 8080` or `npx serve .`, then open `http://localhost:8080/personal/`.
+  Opening the HTML files directly also works.
+- **Build:** there is no build. Edit `personal/index.html` (all CSS is inline) and
+  `personal/thread.js`.
+- **Deploy:** GitHub Pages serves `main`; a push is a deploy (the `CNAME` file maps
+  `awards.freedomgroup.uk`). Folders beginning with an underscore (`_private/`, `_qa/`) are
+  not published. `README.md` **is** published.
+- **Fonts and images:** the founder page makes no third-party requests — fonts are self-hosted
+  Latin subsets in `assets/fonts/`, images are WebP with JPEG/PNG fallbacks. The team site still
+  loads Google Fonts.
+- **Re-check the record:** the verified record states "last checked 3 September 2026" and flags
+  itself as stale after 90 days. Re-check the Companies House links in `personal/index.html`,
+  update every `<time datetime>` and the dates in the copy, and republish.
+- **Going public:** the page is `noindex,nofollow` until Tom approves it. To index it, change the
+  robots meta tag in `personal/index.html`, add a `sitemap.xml`, and re-run Lighthouse SEO.
 
 ---
 
@@ -83,16 +105,10 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 
 ### `personal/index.html` — Tom Letcher
 
-| Section | What's needed |
-|---|---|
-| Hero | Professional portrait, 4:5 portrait orientation, min 1200×1500px |
-| 01 Profile | Two or three paragraphs on your route into fire safety — what you did before 2021, why you started rather than stayed employed |
-| 02 The business | Confirm the three service pillars match reality; add fire doors / passive / sprinklers / dry risers if applicable |
-| 03 Trajectory | 2022 headline; 2023–24 headcount, coverage, accreditations (BAFE SP101/SP203, FIA, SafeContractor, CHAS, ISO 9001, NSI, SSAIB), apprenticeships |
-| 04 Leadership | **The whole section** — four short pieces: fresh thinking, growth and influence, long-term vision, resilience |
-| Pull quote | One sentence in your own voice on why the work matters |
-| 05 Governance | HMRC and filing status, accreditation reference numbers, insurance, engineer training and re-certification, environmental measures, community work |
-| 07 Contact | Direct email, and mobile if you want it public |
+No placeholders remain on the page. Everything Tom still needs to supply or decide — 23 items,
+each with the evidence required, an owner and a status — is in `_private/CONTENT_REQUIRED.md`.
+The two that block the most: the Young Founder age test (the register says April 1996) and the
+"Freedom Global Ltd" entity, which the company's own site names but the register does not show.
 
 ### `staff/index.html` — The People of Freedom Fire
 

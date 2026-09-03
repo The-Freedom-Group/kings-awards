@@ -1,111 +1,29 @@
 /* ══════════════════════════════════════════════════════════════════
    THE FREEDOM LINE — engine
-   One rAF loop drives everything: the thread drawn through every
-   chapter, the pinned 2021 scene, the hero choreography, the cursor,
-   the magnetic elements and the velocity marquees. Native scrolling
-   throughout; prefers-reduced-motion collapses it all to a still,
-   fully readable page.
+   Native scrolling throughout. Work happens only on scroll (one
+   requestAnimationFrame per scroll event, none while idle). The line
+   is an SVG path drawn by stroke-dashoffset — no layout, no reflow.
+   prefers-reduced-motion: the line is drawn in full, nothing moves.
+   Without JavaScript the page reads top to bottom unchanged.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
 
-  var reduce = window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var fine = window.matchMedia &&
-    window.matchMedia("(pointer: fine)").matches;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
-  var lerp  = function (a, b, t) { return a + (b - a) * t; };
+  var narrow = function () { return window.innerWidth <= 820; };
 
-  /* ── entrance ─────────────────────────────────────────────── */
-  function ready() {
-    document.body.classList.add("ready");
-    if (reduce) { heroIn = 1; return; }
-    var t0 = null;
-    requestAnimationFrame(function step(ts) {
-      if (!t0) t0 = ts;
-      var k = Math.min(1, (ts - t0) / 1500);
-      heroIn = 1 - Math.pow(1 - k, 3);
-      if (k < 1) requestAnimationFrame(step);
-    });
-  }
-  /* the entrance waits for load, but never for long: a slow font server
-     must not hold the page behind a monogram. Whichever comes first wins. */
-  var readied = false;
-  function readyOnce() { if (!readied) { readied = true; ready(); } }
-  if (reduce) { readyOnce(); }
-  else {
-    if (document.readyState === "complete") { setTimeout(readyOnce, 900); }
-    else { window.addEventListener("load", function () { setTimeout(readyOnce, 900); }); }
-    setTimeout(readyOnce, 3200);
-  }
-
-  /* ── portrait load ────────────────────────────────────────── */
-  var shot = $("#shot"), shotWrap = $("#shotWrap");
-  function lit() { if (shot) shot.classList.add("on"); }
-  if (shot) {
-    shot.complete ? lit()
-      : (shot.addEventListener("load", lit), shot.addEventListener("error", lit));
-  }
-
-  /* ── split headlines: words for h2, letters for the name ──── */
-  function split(el, mode, step) {
-    if (mode === "letters") {
-      var chars = el.textContent.split("");
-      el.textContent = "";
-      chars.forEach(function (t, i) {
-        if (t === " ") { el.appendChild(document.createTextNode(" ")); return; }
-        var box = document.createElement("span"); box.className = "wa";
-        var ink = document.createElement("i"); ink.textContent = t;
-        ink.style.setProperty("--d", (i * step) + "s");
-        box.appendChild(ink); el.appendChild(box);
-      });
-      return;
-    }
-    /* words: walk the child nodes so <br> and inline elements survive */
-    var nodes = Array.prototype.slice.call(el.childNodes), out = [];
-    nodes.forEach(function (nd) {
-      if (nd.nodeType === 3) {
-        nd.textContent.split(/(\s+)/).forEach(function (tk) {
-          if (!tk) return;
-          if (/^\s+$/.test(tk)) { out.push(document.createTextNode(" ")); return; }
-          var box = document.createElement("span"); box.className = "wa";
-          var ink = document.createElement("i"); ink.textContent = tk;
-          box.appendChild(ink); out.push(box);
-        });
-      } else { out.push(nd); }
-    });
-    el.textContent = "";
-    var wi = 0;
-    out.forEach(function (nd) {
-      el.appendChild(nd);
-      if (nd.classList && nd.classList.contains("wa")) {
-        nd.firstChild.style.setProperty("--d", (wi * step) + "s"); wi++;
-      }
-    });
-  }
-  if (!reduce) {
-    $$(".ch h2, .slab h2").forEach(function (el) { split(el, "words", 0.055); });
-  }
-
-  /* ── topographic contours behind every panel ──────────────── */
-  function rnd(seed) {           /* deterministic, so layouts are stable */
-    return function () {
-      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-      return seed / 0x7fffffff;
-    };
-  }
+  /* ── contours: a static texture behind each panel ─────────── */
+  function rnd(seed) { return function () { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }; }
   function blobPath(cx, cy, r, rand) {
     var a1 = .16 + rand() * .1, a2 = .08 + rand() * .08, a3 = .05 + rand() * .05;
-    var p1 = rand() * 6.28, p2 = rand() * 6.28, p3 = rand() * 6.28;
-    var d = "";
+    var p1 = rand() * 6.28, p2 = rand() * 6.28, p3 = rand() * 6.28, d = "";
     for (var i = 0; i <= 56; i++) {
       var th = i / 56 * Math.PI * 2;
-      var rr = r * (1 + a1 * Math.sin(2 * th + p1) + a2 * Math.sin(3 * th + p2) +
-                        a3 * Math.sin(5 * th + p3));
-      var x = cx + Math.cos(th) * rr * 1.35, y = cy + Math.sin(th) * rr;
-      d += (i ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
+      var rr = r * (1 + a1 * Math.sin(2 * th + p1) + a2 * Math.sin(3 * th + p2) + a3 * Math.sin(5 * th + p3));
+      d += (i ? " L " : "M ") + (cx + Math.cos(th) * rr * 1.35).toFixed(1) + " " + (cy + Math.sin(th) * rr).toFixed(1);
     }
     return d + " Z";
   }
@@ -113,640 +31,335 @@
     var g = '<g class="' + cls + '">';
     for (var k = 0; k < rings; k++) {
       var s = 1 - k * .17;
-      g += '<path d="' + blobPath(cx + k * 6 * (rand() - .5) * 4,
-                                  cy + k * 5 * (rand() - .5) * 4,
-                                  r * s, rand) + '"/>';
+      g += '<path d="' + blobPath(cx + k * 6 * (rand() - .5) * 4, cy + k * 5 * (rand() - .5) * 4, r * s, rand) + '"/>';
     }
     return g + "</g>";
   }
-  $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab").forEach(function (sec, si) {
-    var rand = rnd(97 + si * 131);
-    var fx = document.createElement("div");
-    fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
-    var anim = reduce ? ["", ""] : ["a", "b"];
-    fx.innerHTML =
-      '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
-      contourGroup(180 + rand() * 160, 120 + rand() * 130, 150 + rand() * 70, 5, rand, anim[0]) +
-      contourGroup(720 + rand() * 180, 400 + rand() * 140, 180 + rand() * 80, 6, rand,
-                   anim[1] + (si % 3 === 1 ? " pk" : "")) +
-      "</svg>";
-    sec.insertBefore(fx, sec.firstChild);
-  });
+  function drawContours() {
+    $$("#story .hero, #story .ch, #story .scene").forEach(function (sec, si) {
+      var rand = rnd(97 + si * 131);
+      var fx = document.createElement("div");
+      fx.className = "topo"; fx.setAttribute("aria-hidden", "true");
+      fx.innerHTML = '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
+        contourGroup(180 + rand() * 160, 120 + rand() * 130, 150 + rand() * 70, 5, rand, "") +
+        contourGroup(720 + rand() * 180, 400 + rand() * 140, 180 + rand() * 80, 6, rand, si % 3 === 1 ? "pk" : "") + "</svg>";
+      sec.insertBefore(fx, sec.firstChild);
+    });
+  }
+  /* decoration waits for an idle moment; the content never waits for decoration */
+  if ("requestIdleCallback" in window) requestIdleCallback(drawContours, { timeout: 1500 });
+  else setTimeout(drawContours, 60);
 
   /* ── poster words, one per chapter ────────────────────────── */
-  var PW = { c01: "UNIT", c02: "BUILD", c03: "MOMENTUM", c04: "GROUP",
-             c05: "METHOD", c06: "RECORD", c07: "NEXT" };
-  var pws = [];
+  var PW = { origin: "ORIGIN", build: "BUILD", progress: "PROGRESS", group: "GROUP", method: "METHOD", next: "NEXT" };
   Object.keys(PW).forEach(function (id) {
     var sec = document.getElementById(id);
     if (!sec) return;
     var w = document.createElement("span");
     w.className = "pw"; w.textContent = PW[id]; w.setAttribute("aria-hidden", "true");
     sec.insertBefore(w, sec.firstChild);
-    pws.push({ el: w, sec: sec });
   });
 
-  /* ── stagger groups ───────────────────────────────────────── */
-  function stagger(sel, child, step) {
-    $$(sel).forEach(function (g) {
-      $$(child, g).forEach(function (c, i) { c.style.setProperty("--d", (i * step) + "s"); });
-    });
-  }
-  stagger(".metrics", ".metric", 0.09);
-  stagger(".grp-list", "li", 0.05);
-  stagger(".map", ".node", 0.07);
-
-  /* planets sit ON the drawn rings: same ellipses, same rotation */
-  function placeOrbits() {
-    var RINGS = { A: [33, 13], B: [43, 20.5], C: [51, 28] };
-    var PHI = -16 * Math.PI / 180, CX = 50, CY = 38;
-    $$(".map .node").forEach(function (nd) {
-      var ring = nd.getAttribute("data-ring");
-      var x = CX, y = CY;
-      if (ring !== "0" && RINGS[ring]) {
-        var th = (+nd.getAttribute("data-ang") || 0) * Math.PI / 180;
-        var ex = RINGS[ring][0] * Math.cos(th), ey = RINGS[ring][1] * Math.sin(th);
-        x = CX + ex * Math.cos(PHI) - ey * Math.sin(PHI);
-        y = CY + ex * Math.sin(PHI) + ey * Math.cos(PHI);
-      }
-      nd.style.left = x + "%";
-      nd.style.top = (y / 76 * 100) + "%";
-    });
-  }
-  placeOrbits();
-
-  /* ── hero branch lines ────────────────────────────────────── */
-  $$(".draw").forEach(function (p) {
-    var L = 2000; try { L = p.getTotalLength(); } catch (e) {}
-    p.style.setProperty("--len", L);
-  });
-
-  /* ── construct on entry, deconstruct on exit ──────────────── */
-  var watched = $$(".rv, .draw, .map, .plate");
+  /* ── reveal headings and figures as they arrive (never body copy) */
+  var watched = $$(".rv, .map, .plate");
+  $$(".map").forEach(function (m) { $$(".node", m).forEach(function (n, i) { n.style.setProperty("--d", (i * 0.03) + "s"); }); });
   if (!("IntersectionObserver" in window) || reduce) {
     watched.forEach(function (e) { e.classList.add("in"); });
   } else {
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
-    }, { rootMargin: "-4% 0px -10% 0px", threshold: 0.06 });
+      es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
     watched.forEach(function (e) { io.observe(e); });
   }
 
-  var heroType = $(".hero-type");
-  if (heroType) {
-    reduce ? heroType.classList.add("in")
-           : setTimeout(function () { heroType.classList.add("in"); }, 1250);
-  }
+  /* ══ THE LINE ═════════════════════════════════════════════ */
+  var story = $("#story"), thread = $("#thread"), svg = $("#threadSvg"),
+      track = $("#tTrack"), live = $("#tLive"), head = $("#tHead");
 
-  /* ── metric counters ──────────────────────────────────────── */
-  var counters = $$(".metric .v").filter(function (v) {
-    var t = v.textContent.trim();
-    return /^[0-9]+$/.test(t) && +t < 1000;   /* years are labels, not quantities */
-  });
-  counters.forEach(function (v) { v.dataset.to = v.textContent.trim(); });
-  function countUp(v) {
-    var to = +v.dataset.to, t0 = null, dur = 1100;
-    if (reduce) { v.textContent = to; return; }
-    (function step(ts) {
-      if (!t0) t0 = ts;
-      var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-      v.textContent = Math.round(to * e);
-      if (k < 1) requestAnimationFrame(step);
-    })(performance.now());
-  }
-  if ("IntersectionObserver" in window && !reduce) {
-    var ioc = new IntersectionObserver(function (es) {
-      es.forEach(function (en) {
-        if (en.isIntersecting) countUp(en.target); else en.target.textContent = "0";
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(function (v) { v.textContent = "0"; ioc.observe(v); });
-  }
-
-  /* ══ THE THREAD ═══════════════════════════════════════════ */
-  var explore = $("#explore"),
-      thread  = $("#thread"),
-      svg     = $("#threadSvg"),
-      track   = $("#tTrack"),
-      live    = $("#tLive"),
-      head    = $("#tHead");
-
-  /* L and R ride the empty margin outside the text column, so the
-     line never crosses a word. C is the centre. */
+  /* L and R ride the empty margin outside the text column, so the line
+     never crosses a word. The record has no line: evidence stands alone. */
   var PLAN = [
-    { id: "ones", side: "C", y: 0.50, noKnot: true },
-    { id: "c01",  side: "L", y: 0.42 },
-    { id: "c02",  side: "R", y: 0.42 },
-    { id: "c03",  side: "L", y: 0.42 },
-    { id: "c04",  side: "C", y: 0.40 },
-    { id: "c05",  side: "R", y: 0.42 },
-    { id: "slab", side: "C", y: 0.50, noKnot: true },
-    { id: "c06",  side: "L", y: 0.42 },
-    { id: "c07",  side: "C", y: 0.52 }
+    { id: "in-brief", side: "R", y: 0.30 },
+    { id: "one",      side: "R", y: 0.50, noKnot: true },
+    { id: "origin",   side: "L", y: 0.42 },
+    { id: "build",    side: "R", y: 0.42 },
+    { id: "progress", side: "L", y: 0.42 },
+    { id: "group",    side: "R", y: 0.38 },
+    { id: "method",   side: "L", y: 0.42 },
+    { id: "next",     side: "L", y: 0.40 }
   ];
-
-  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0;
-  var endPt = null, endFrac = 1, endNote = null;
+  var pts = [], knots = [], totalLen = 0, knotAt = [], endPt = null, endFrac = 1, endNote = null, heroFrac = 0;
+  function placeHead(x, y) { head.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)"; }
 
   function buildPath() {
-    if (!explore || !thread || !svg) return false;
-    if (window.innerWidth <= 820) { thread.style.display = "none"; return false; }
-    thread.style.display = "";
-
-    var W = explore.offsetWidth, H = explore.offsetHeight;
+    if (!story || !thread || !svg) return false;
+    var W = story.offsetWidth, H = story.offsetHeight;
     if (!W || !H) return false;
-
-    /* find the text column so the line can run outside it */
-    var col = explore.querySelector(".ch .wrap") || explore.querySelector(".wrap");
+    var col = story.querySelector(".ch .wrap") || story.querySelector(".wrap");
     var cr = col ? col.getBoundingClientRect() : { left: 0, right: W };
-    var LX = Math.max(18, cr.left - 34);
-    var RX = Math.min(W - 18, cr.right + 34);
-    var CX = W * 0.5;
-    var SIDE = { L: LX, R: RX, C: CX };
-
+    var mobile = narrow();
+    var LX = mobile ? 10 : Math.max(18, cr.left - 34);
+    var RX = mobile ? 10 : Math.min(W - 18, cr.right + 34);
+    var SIDE = { L: LX, R: RX };
     pts = [];
 
-    /* ── the hero bend, to the reference proportions ──────────
-       Runs in from the left, lifts over the portrait, turns down the
-       right and continues as the page thread. Four spurs peel off the
-       descending trunk. One stroke; the spurs hang from it. */
-    var heroEl = document.getElementById("top");
-    var heroPrefix = "", heroExit = null;
-    if (heroEl) {
+    var heroPrefix = "";
+    var heroEl = document.getElementById("top"), stage = document.getElementById("heroStage");
+    if (heroEl && stage && !mobile) {
+      /* the bend: in from the left under the copy, up over the portrait,
+         down the right as the trunk that carries the four chapter spurs */
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
-      var yMain  = hT + hH * 0.81;           // the long horizontal
-      var yTop   = hT + hH * 0.545;          // the lifted horizontal
-      var xLift  = W * 0.665;                // where it starts to rise
-      var xTrunk = W * 0.822;                // the descending trunk
-      var xTerm  = W * 0.886;                // spur terminals
-      var yExit  = hT + hH * 0.985;          // where it leaves the hero
+      var sr = stage.getBoundingClientRect(), hr = heroEl.getBoundingClientRect();
+      var yMain  = hT + (sr.bottom - hr.top) + 8;
+      var yTop   = hT + hH * 0.50;
+      var xLift  = W * 0.66, xTrunk = W * 0.82, xTerm = W * 0.885;
+      var yExit  = hT + hH;
       var r = Math.min(34, W * 0.022);
-      var bys = [0.748, 0.803, 0.858, 0.913].map(function (f) { return hT + hH * f; });
-
-      heroPrefix =
-        "M " + LX.toFixed(1) + " " + yMain.toFixed(1) +
+      heroPrefix = "M " + LX.toFixed(1) + " " + yMain.toFixed(1) +
         " H " + (xLift - r).toFixed(1) +
-        " Q " + xLift.toFixed(1) + " " + yMain.toFixed(1) +
-        " "   + xLift.toFixed(1) + " " + (yMain - r).toFixed(1) +
+        " Q " + xLift.toFixed(1) + " " + yMain.toFixed(1) + " " + xLift.toFixed(1) + " " + (yMain - r).toFixed(1) +
         " V " + (yTop + r).toFixed(1) +
-        " Q " + xLift.toFixed(1) + " " + yTop.toFixed(1) +
-        " "   + (xLift + r).toFixed(1) + " " + yTop.toFixed(1) +
+        " Q " + xLift.toFixed(1) + " " + yTop.toFixed(1) + " " + (xLift + r).toFixed(1) + " " + yTop.toFixed(1) +
         " H " + (xTrunk - r).toFixed(1) +
-        " Q " + xTrunk.toFixed(1) + " " + yTop.toFixed(1) +
-        " "   + xTrunk.toFixed(1) + " " + (yTop + r).toFixed(1) +
+        " Q " + xTrunk.toFixed(1) + " " + yTop.toFixed(1) + " " + xTrunk.toFixed(1) + " " + (yTop + r).toFixed(1) +
         " V " + yExit.toFixed(1);
-
-      heroExit = { x: xTrunk, y: yExit, id: "top", el: heroEl, noKnot: true };
-
-      /* spurs + their terminals */
+      var top0 = yTop + 60, gap = Math.max(48, (yExit - 30 - top0) / 4);
       for (var bi = 0; bi < 4; bi++) {
-        var by = bys[bi], sp = document.getElementById("sp" + bi);
-        if (sp) {
-          var d2 = "M " + xTrunk.toFixed(1) + " " + (by - 30).toFixed(1) +
-                   " C " + xTrunk.toFixed(1) + " " + (by - 6).toFixed(1) +
-                   ", "  + (xTrunk + 14).toFixed(1) + " " + by.toFixed(1) +
-                   ", "  + (xTrunk + 42).toFixed(1) + " " + by.toFixed(1) +
-                   " H " + xTerm.toFixed(1);
-          sp.setAttribute("d", d2);
-          var L2 = 300; try { L2 = sp.getTotalLength(); } catch (e) {}
-          sp.style.setProperty("--l", L2);
-        }
+        var by = top0 + gap * bi + gap * 0.5, sp = document.getElementById("sp" + bi);
+        if (sp) sp.setAttribute("d", "M " + xTrunk.toFixed(1) + " " + (by - 30).toFixed(1) +
+          " C " + xTrunk.toFixed(1) + " " + (by - 6).toFixed(1) + ", " + (xTrunk + 14).toFixed(1) + " " + by.toFixed(1) +
+          ", " + (xTrunk + 42).toFixed(1) + " " + by.toFixed(1) + " H " + xTerm.toFixed(1));
         var nd = document.getElementById("hn" + bi);
-        if (nd) {
-          nd.style.left = (xTerm - 6.5) + "px";
-          nd.style.top  = (by - hT) + "px";
-        }
+        if (nd) { nd.style.left = (xTerm - 6.5) + "px"; nd.style.top = (by - hT) + "px"; }
       }
-
       var lbl = document.getElementById("hlStart");
-      if (lbl) {
-        lbl.style.left = LX + "px";
-        lbl.style.top = (yMain - hT) + "px";
-      }
-      pts.push(heroExit);
+      if (lbl) { lbl.style.left = LX + "px"; lbl.style.top = (yMain - hT) + "px"; }
+      pts.push({ x: xTrunk, y: yExit, id: "top", el: heroEl, noKnot: true });
+    } else {
+      $$(".spur").forEach(function (p) { p.setAttribute("d", ""); });
     }
 
+    /* a change of side happens in the padding at the top of the next section,
+       where there is nothing to read — never across a heading */
+    var prevSide = mobile ? "L" : "R";
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
-      pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y,
-                 id: p.id, el: el, noKnot: !!p.noKnot });
+      var side = mobile ? "L" : p.side;
+      if (side !== prevSide) {
+        var band = el.classList.contains("scene") ? el.offsetHeight * 0.12
+                 : (parseFloat(getComputedStyle(el).paddingTop) || 72);
+        pts.push({ x: SIDE[prevSide], y: el.offsetTop + 14, id: p.id + "-x1", el: null, noKnot: true });
+        pts.push({ x: SIDE[side], y: el.offsetTop + band - 18, id: p.id + "-x2", el: null, noKnot: true });
+      }
+      pts.push({ x: SIDE[side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: !!p.noKnot });
+      prevSide = side;
     });
     if (pts.length < 2) return false;
-    pts.push({ x: CX, y: H + 40, id: "beyond", el: null, noKnot: true });
+    var last = pts[pts.length - 1];
+    pts.push({ x: last.x, y: H - 40, id: "end", el: null, noKnot: true });
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
     for (var i = 0; i < pts.length - 1; i++) {
       var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5;
-      d += " C " + a.x.toFixed(1) + " " + (a.y + dy).toFixed(1) +
-           ", " + b.x.toFixed(1) + " " + (b.y - dy).toFixed(1) +
-           ", " + b.x.toFixed(1) + " " + b.y.toFixed(1);
+      d += mobile ? (" L " + b.x.toFixed(1) + " " + b.y.toFixed(1))
+                  : (" C " + a.x.toFixed(1) + " " + (a.y + dy).toFixed(1) + ", " + b.x.toFixed(1) + " " + (b.y - dy).toFixed(1) +
+                     ", " + b.x.toFixed(1) + " " + b.y.toFixed(1));
     }
-
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     track.setAttribute("d", d);
     live.setAttribute("d", d);
-
     try { totalLen = live.getTotalLength(); } catch (e) { totalLen = 0; }
     if (!totalLen) return false;
-
-    /* how much of the stroke is the hero bend? it should never be
-       half-drawn while the reader is still looking at it */
+    live.style.strokeDasharray = totalLen;
+    live.style.strokeDashoffset = reduce ? 0 : totalLen;
+    /* the hero bend is drawn in full on arrival; it must never be half a line */
     heroFrac = 0;
     if (heroPrefix) {
       var probe = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      probe.setAttribute("d", heroPrefix);
-      svg.appendChild(probe);
+      probe.setAttribute("d", heroPrefix); svg.appendChild(probe);
       try { heroFrac = probe.getTotalLength() / totalLen; } catch (e) { heroFrac = 0; }
       svg.removeChild(probe);
     }
-    live.style.strokeDasharray = totalLen;
-    live.style.strokeDashoffset = totalLen;
 
     knots.forEach(function (k) { k.remove(); });
     knots = []; knotAt = [];
-    var SAMPLES = 280, samples = [];
+    var SAMPLES = 240, samples = [];
     for (var s = 0; s <= SAMPLES; s++) {
       var pt = live.getPointAtLength(totalLen * s / SAMPLES);
       samples.push({ x: pt.x, y: pt.y, l: totalLen * s / SAMPLES });
     }
     pts.forEach(function (p) {
-      if (p.noKnot || p.id === "beyond") return;
+      if (p.noKnot) return;
       var best = samples[0], bd = Infinity;
-      samples.forEach(function (sp) {
-        var dd = (sp.x - p.x) * (sp.x - p.x) + (sp.y - p.y) * (sp.y - p.y);
-        if (dd < bd) { bd = dd; best = sp; }
-      });
+      samples.forEach(function (sp) { var dd = (sp.x - p.x) * (sp.x - p.x) + (sp.y - p.y) * (sp.y - p.y); if (dd < bd) { bd = dd; best = sp; } });
       var k = document.createElement("i");
       k.className = "knot" + (p.el && p.el.classList.contains("dark") ? " dk" : "");
       k.style.left = p.x + "px"; k.style.top = p.y + "px";
-      thread.appendChild(k);
-      knots.push(k); knotAt.push(best.l / totalLen);
+      thread.appendChild(k); knots.push(k); knotAt.push(best.l / totalLen);
     });
-
-    /* where the head lands: the last point of the line still on the page */
-    endPt = null; endFrac = 1;
-    for (var e2 = 0; e2 < samples.length; e2++) {
-      if (samples[e2].y >= H - 90) {
-        endPt = samples[e2];
-        endFrac = samples[e2].l / totalLen;
-        break;
-      }
-    }
-    if (!endPt) { endPt = samples[samples.length - 1]; endFrac = 0.99; }
+    endPt = samples[samples.length - 1]; endFrac = 0.995;
     if (endNote) endNote.remove();
     endNote = document.createElement("span");
-    endNote.className = "endnote";
-    endNote.textContent = "— still drawing";
-    endNote.style.left = (endPt.x + 20) + "px";
-    endNote.style.top = endPt.y + "px";
+    endNote.className = "endnote"; endNote.textContent = "still drawing";
+    endNote.style.left = (endPt.x + 18) + "px"; endNote.style.top = endPt.y + "px";
     thread.appendChild(endNote);
+    if (reduce) { thread.classList.add("on", "landed"); placeHead(endPt.x, endPt.y); knots.forEach(function (k) { k.classList.add("hit"); }); }
     return true;
   }
 
   function drawThread(y) {
-    if (!totalLen || thread.style.display === "none") return;
-    var h = explore.offsetHeight || 1;
+    if (!totalLen || reduce) return;
+    var h = story.offsetHeight || 1;
     var p = clamp((y + window.innerHeight * 0.62) / h, 0, 1);
-    p = Math.max(p, heroFrac * heroIn);
+    p = Math.max(p, heroFrac);
     live.style.strokeDashoffset = totalLen * (1 - p);
     thread.classList.toggle("on", p > 0.004);
-
-    /* the head rides the line, then settles at the page's edge and beacons */
     var landed = p >= endFrac - 0.002;
     thread.classList.toggle("landed", landed);
     if (p > 0.004) {
       var pt = landed && endPt ? endPt : live.getPointAtLength(totalLen * p);
-      head.style.left = pt.x + "px";
-      head.style.top  = pt.y + "px";
+      placeHead(pt.x, pt.y);
     }
-    for (var i = 0; i < knots.length; i++) {
-      knots[i].classList.toggle("hit", p >= knotAt[i]);
-    }
+    for (var i = 0; i < knots.length; i++) knots[i].classList.toggle("hit", p >= knotAt[i]);
   }
 
-  /* ══ CURSOR ═══════════════════════════════════════════════ */
-  var cur = $("#cur"), curDot = $("#curDot"), curRing = $("#curRing");
-  var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, curSeen = false;
-  if (fine && !reduce && cur) {
-    document.documentElement.classList.add("cur-on");
-    window.addEventListener("mousemove", function (e) {
-      mx = e.clientX; my = e.clientY; curSeen = true;
-      var t = e.target;
-      var hot = t.closest && t.closest("a,button,summary,[data-mag],.node");
-      cur.classList.toggle("big", !!hot);
-    }, { passive: true });
-    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
-    document.addEventListener("mouseenter", function () { cur.style.opacity = "1"; });
-  }
-
-  /* ── magnetic elements ────────────────────────────────────── */
-  if (fine && !reduce) {
-    $$("[data-mag]").forEach(function (el) {
-      var tx = 0, ty = 0, cx = 0, cy = 0, on = false, raf = null;
-      function tick() {
-        cx = lerp(cx, tx, 0.18); cy = lerp(cy, ty, 0.18);
-        el.style.transform = "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px)";
-        if (on || Math.abs(cx) > 0.1 || Math.abs(cy) > 0.1) raf = requestAnimationFrame(tick);
-        else { el.style.transform = ""; raf = null; }
-      }
-      el.addEventListener("mousemove", function (e) {
-        var r = el.getBoundingClientRect();
-        tx = (e.clientX - r.left - r.width / 2) * 0.32;
-        ty = (e.clientY - r.top - r.height / 2) * 0.32;
-        on = true; if (!raf) raf = requestAnimationFrame(tick);
-      });
-      el.addEventListener("mouseleave", function () { tx = 0; ty = 0; on = false; });
-    });
-  }
-
-  /* ══ MARQUEES ═════════════════════════════════════════════ */
-  var marquees = [];
-  $$(".mq-t").forEach(function (t) {
-    var base = t.getAttribute("data-base") || "";
-    var html = "";
-    for (var i = 0; i < 6; i++) html += "<span>" + base + "</span>";
-    t.innerHTML = html;
-    marquees.push({ el: t, x: 0, dir: +(t.getAttribute("data-mq") || 1), w: 0 });
-  });
-  function measureMarquees() {
-    marquees.forEach(function (m) {
-      var first = m.el.firstElementChild;
-      m.w = first ? first.offsetWidth : 0;
-    });
-  }
-
-  /* ══ PINNED SCENE — 2021 ══════════════════════════════════ */
-  var scene = $("#ones"), phrases = $$("#phs .ph");
-  var sceneTop = 0, sceneRange = 1;
+  /* ══ THE PINNED SEQUENCE — 2021 ═══════════════════════════ */
+  var scene = $("#one"), phrases = $$("#phs .ph"), sceneTop = 0, sceneRange = 1;
   function measureScene() {
     if (!scene) return;
-    var r = scene.getBoundingClientRect();
-    sceneTop = r.top + (window.pageYOffset || document.documentElement.scrollTop);
-    sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight);
+    sceneTop = scene.offsetTop; sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight);
   }
   function runScene(y) {
-    if (!scene || reduce || window.innerWidth <= 820) return;
+    if (!scene || reduce || narrow()) return;
     var p = clamp((y - sceneTop) / sceneRange, 0, 1);
     var idx = Math.min(phrases.length - 1, Math.floor(p * phrases.length));
     phrases.forEach(function (ph, i) { ph.classList.toggle("on", i === idx); });
   }
 
-  /* ══ HERO CHOREOGRAPHY ════════════════════════════════════ */
-  var hero = $(".hero");
+  /* ══ ON SCROLL: chrome, spine, progress, indicator ════════ */
+  var chapters = $$("#story .ch, #story .hero, #story .scene, #record");
+  var chrome = $("#chrome"), spine = $$(".spine a"), navLinks = $$(".chrome nav a");
+  var prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
+  var TITLES = { top: ["00", "Tom Letcher"], "in-brief": ["30s", "Thirty-second record"], one: ["01", "Origin"],
+    origin: ["01", "Origin"], build: ["02", "The build"], progress: ["03", "Measured progress"],
+    group: ["04", "The Freedom Group"], method: ["05", "Operating philosophy"], next: ["06", "What comes next"],
+    record: ["07", "Verified record"] };
+  var NAV = { origin: "#origin", one: "#origin", build: "#origin", progress: "#progress", group: "#group",
+    method: "#group", next: "#group", record: "#record" };
+  var lastCard = "", ticking = false;
 
-  /* ══ MASTER LOOP ══════════════════════════════════════════ */
-  var chapters = $$("#explore .ch, #explore .hero, #explore .scene, #explore .slab");
-  var yrail = $("#yrail"), c03El = document.getElementById("c03");
-  function W() { return explore ? explore.offsetWidth : window.innerWidth; }
-  var chrome = $("#chrome"), spine = $$(".spine a");
-  var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
-  var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
-  var TITLES = { top:["00","Tom Letcher"], ones:["00","One Unit"], c01:["01","One Unit"],
-    c02:["02","The Build"], c03:["03","Momentum"], c04:["04","Freedom Group"],
-    c05:["05","How I Build"], slab:["—","Five Years"], c06:["06","The Record"],
-    c07:["07","Still Building"] };
-  var lastCard = "";
-  var lastY = -1, velY = 0;
-
-  function frame() {
+  function onScroll() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
-    var moved = y !== lastY;
-    velY = lerp(velY, moved ? y - lastY : 0, 0.12);
-    lastY = y;
+    if (chrome) chrome.classList.toggle("stuck", y > 40);
 
-    /* cursor */
-    if (fine && !reduce && curSeen) {
-      curDot.style.transform = "translate(" + mx + "px," + my + "px)";
-      rx = lerp(rx, mx, 0.16); ry = lerp(ry, my, 0.16);
-      curRing.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
+    var mid = y + 90, dark = false, cur = null;
+    chapters.forEach(function (s) {
+      var top = s.offsetTop, bot = top + s.offsetHeight;
+      if (mid >= top && mid < bot) dark = s.classList.contains("dark") || s.classList.contains("scene");
+      if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur = s.id;
+    });
+    document.body.classList.toggle("dark-chrome", dark);
+    var spineKey = cur === "one" ? "origin" : cur;
+    spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === spineKey); });
+    navLinks.forEach(function (a) {
+      if (NAV[cur] === a.getAttribute("href")) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    });
+    if (prog) {
+      var mx = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+      prog.style.transform = "scaleX(" + clamp(y / mx, 0, 1).toFixed(4) + ")";
     }
+    var meta = TITLES[cur];
+    if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }
+    if (now) now.classList.toggle("on", y > window.innerHeight * 0.45);
 
-    /* marquees — velocity-reactive */
-    if (!reduce) {
-      marquees.forEach(function (m) {
-        if (!m.w) return;
-        m.x -= m.dir * (0.55 + Math.min(6, Math.abs(velY) * 0.12));
-        if (m.x <= -m.w) m.x += m.w;
-        if (m.x > 0) m.x -= m.w;
-        m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
-      });
-    }
-
-    if (moved || velY !== 0) {
-      if (chrome) chrome.classList.toggle("stuck", y > 40);
-
-      /* hero: portrait drifts against the scroll */
-      if (hero && !reduce && shotWrap) {
-        var hp = clamp(y / (hero.offsetHeight || 1), 0, 1);
-        shotWrap.style.transform = "translate3d(0," + (hp * -46).toFixed(1) + "px,0)";
-      }
-
-      /* chrome tone + spine */
-      var mid = y + 90, dark = false, cur2 = null;
-      chapters.forEach(function (s) {
-        var top = s.offsetTop, bot = top + s.offsetHeight;
-        if (mid >= top && mid < bot)
-          dark = s.classList.contains("dark") || s.classList.contains("scene");
-        if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
-      });
-      var exploring = document.body.dataset.view === "explore";
-      document.body.classList.toggle("dark-chrome", dark && exploring);
-      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
-
-      /* progress hairline */
-      if (prog) {
-        var mx2 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-        prog.style.transform = "scaleX(" + clamp(y / mx2, 0, 1).toFixed(4) + ")";
-      }
-
-      /* the corner card, and the chrome label where the card can't fit, name where you are */
-      if (exploring) {
-        var meta = TITLES[cur2];
-        if (meta && cur2 !== lastCard) {
-          lastCard = cur2;
-          if (card) { cardN.textContent = meta[0]; cardT.textContent = meta[1]; }
-          if (now)  { nowN.textContent = meta[0]; nowT.textContent = meta[1]; }
-        }
-        var early = y < window.innerHeight * 0.45;
-        if (card) card.classList.toggle("away", early);
-        if (now)  now.classList.toggle("on", !early);
-      }
-
-      /* poster words slide against the scroll */
-      if (!reduce) {
-        for (var pi = 0; pi < pws.length; pi++) {
-          var ps = pws[pi].sec;
-          var pp = (y + window.innerHeight - ps.offsetTop) /
-                   (window.innerHeight + ps.offsetHeight);
-          if (pp > -0.1 && pp < 1.1) {
-            pws[pi].el.style.transform = "translate3d(" +
-              ((pp - 0.5) * -W() * 0.22).toFixed(1) + "px,-50%,0)";
-          }
-        }
-        /* the years rail drags with the scroll */
-        if (yrail && c03El && window.innerWidth > 820) {
-          var rp = clamp((y + window.innerHeight * 0.8 - c03El.offsetTop) /
-                         (c03El.offsetHeight * 0.9), 0, 1);
-          var over = Math.max(0, yrail.scrollWidth - yrail.parentElement.clientWidth);
-          yrail.style.transform = "translate3d(" + (-rp * over).toFixed(1) + "px,0,0)";
-        }
-      }
-
-      if (exploring) { drawThread(y); runScene(y); }
-    }
-    requestAnimationFrame(frame);
+    drawThread(y); runScene(y);
+    ticking = false;
   }
-
-  /* fall back to plain scroll handling when reduced motion is on */
-  if (reduce) {
-    function still() {
-      var y = window.pageYOffset || document.documentElement.scrollTop;
-      if (chrome) chrome.classList.toggle("stuck", y > 40);
-      var mid = y + 90, dark = false, cur2 = null;
-      chapters.forEach(function (s) {
-        var top = s.offsetTop, bot = top + s.offsetHeight;
-        if (mid >= top && mid < bot)
-          dark = s.classList.contains("dark") || s.classList.contains("scene");
-        if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
-      });
-      var exploring = document.body.dataset.view === "explore";
-      document.body.classList.toggle("dark-chrome", dark && exploring);
-      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
-      if (exploring) drawThread(y);
-    }
-    window.addEventListener("scroll", still, { passive: true });
-    still();
-  } else {
-    requestAnimationFrame(frame);
-  }
+  function requestTick() { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }
+  window.addEventListener("scroll", requestTick, { passive: true });
 
   /* ── rebuild on layout shifts ─────────────────────────────── */
   var rebuildTimer = null;
   function rebuild() {
     clearTimeout(rebuildTimer);
-    rebuildTimer = setTimeout(function () {
-      buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
-    }, 140);
+    rebuildTimer = setTimeout(function () { buildPath(); measureScene(); onScroll(); }, 120);
   }
   window.addEventListener("resize", rebuild);
   window.addEventListener("load", rebuild);
-  if ("ResizeObserver" in window && explore) new ResizeObserver(rebuild).observe(explore);
+  if ("ResizeObserver" in window && story) new ResizeObserver(rebuild).observe(story);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
-  buildPath(); measureScene(); measureMarquees();
+  buildPath(); measureScene(); onScroll();
 
-  /* ══ EXPLORE ⇄ VERIFIED RECORD (pink wipe) ════════════════ */
-  var mE = $("#mExplore"), mR = $("#mRecord"), wipe = $("#wipe");
-  function applyView(v) {
-    document.body.dataset.view = v;
-    if (v === "record") {
-      $$("#record .rv").forEach(function (e) { e.classList.add("in"); });
-    }
-    mE.setAttribute("aria-pressed", v === "explore");
-    mR.setAttribute("aria-pressed", v === "record");
-    if (v === "record") document.body.classList.remove("dark-chrome");
-    window.scrollTo(0, 0);
-    if (v === "explore") rebuild();
-  }
-  function setView(v) {
-    if (document.body.dataset.view === v) return;
-    if (reduce || !wipe || !wipe.animate) { applyView(v); return; }
-    wipe.style.transformOrigin = "bottom";
-    wipe.animate([{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }],
-      { duration: 300, easing: "cubic-bezier(.6,0,.4,1)", fill: "forwards" })
-      .onfinish = function () {
-        applyView(v);
-        wipe.style.transformOrigin = "top";
-        wipe.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(0)" }],
-          { duration: 340, easing: "cubic-bezier(.6,0,.4,1)", fill: "forwards" });
-      };
-  }
-  if (mE && mR) {
-    mE.addEventListener("click", function () { setView("explore"); });
-    mR.addEventListener("click", function () { setView("record"); });
-  }
-
-  /* ── map ⇄ list ───────────────────────────────────────────── */
-  var vM = $("#vMap"), vL = $("#vList");
-  function setGrp(g) {
-    document.body.dataset.grp = g;
-    vM.setAttribute("aria-pressed", g === "map");
-    vL.setAttribute("aria-pressed", g === "list");
-    rebuild();
-  }
-  if (vM && vL) {
-    vM.addEventListener("click", function () { setGrp("map"); });
-    vL.addEventListener("click", function () { setGrp("list"); });
-  }
-
-  /* ── the group map ────────────────────────────────────────── */
-  var DATA = {
-    group:     { n: "Freedom Group", t: "The holding structure.",
-                 b: "One group, built so each venture is a separate operating company rather than another department." },
-    fire:      { n: "Freedom Fire &amp; Safety", t: "The business that started it.",
-                 b: "Fire safety products, installation and compliance — serving homes and businesses across the UK.",
-                 u: "https://www.freedom-fire.co.uk" },
-    global:    { n: "Freedom Global", t: "Operating.",
-                 b: "TK — one line on what Freedom Global does today, and the date it began trading." },
-    dist:      { n: "Freedom Distribution", t: "Operating.",
-                 b: "TK — one line on the distribution arm, and the date it began trading." },
-    fac:       { n: "Freedom Facilities", t: "Launching.",
-                 b: "TK — what it will do, and when it launches. Not yet trading." },
-    hepa:      { n: "Hepa Fellas", t: "Launching.",
-                 b: "TK — what it will do, and when it launches. Not yet trading." },
-    firestorm: { n: "Firestorm", t: "Planned.", b: "TK — planned brand. Not yet trading." },
-    voltz:     { n: "Voltz", t: "Planned.", b: "TK — planned brand. Not yet trading." },
-    kunergy:   { n: "Kunergy", t: "Planned.", b: "TK — planned brand. Not yet trading." },
-    t3:        { n: "T3", t: "Planned.", b: "TK — planned brand. Not yet trading." }
+  /* ══ THE GROUP MAP ════════════════════════════════════════ */
+  var CH = "https://find-and-update.company-information.service.gov.uk/";
+  var checked = "3 September 2026";
+  var ST = {
+    v: '<span class="st v"><i>✓</i>Verified</span>',
+    p: '<span class="st p"><i>◐</i>Pending evidence</span>',
+    n: '<span class="st n"><i>✕</i>Not verified</span>'
   };
-  var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
+  var DATA = {
+    ffs: { n: "Freedom Fire &amp; Safety Ltd", says: "The operating business: fire-safety equipment, installation and compliance work for homes and businesses.",
+      st: "v", why: " — company 13589467, active, incorporated 27 August 2021.", u: CH + "company/13589467", ul: "Companies House record" },
+    global: { n: "Freedom Global", says: "Described as “Freedom Global Ltd”, the multi-brand ecommerce company, trading as Freedom Fire &amp; Safety Ltd.",
+      st: "n", why: " — no company of this name at the registered office, and the founder's only registered directorship is Freedom Fire &amp; Safety Ltd.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    distribution: { n: "Freedom Distribution", says: "Planned trade distribution and wholesale company.",
+      st: "n", why: " — not on the register as a company connected to the founder.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    facilities: { n: "Freedom Facilities", says: "Planned compliance, servicing and facilities company.",
+      st: "n", why: " — not on the register as a company connected to the founder.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    firestorm: { n: "Firestorm", says: "A fire-safety brand the company states it owns, with a trademark claimed.", st: "p", why: " — trademark number not yet supplied.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    voltz: { n: "Voltz", says: "A brand the company states it owns, with a trademark claimed.", st: "p", why: " — trademark number not yet supplied.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    kunergy: { n: "Kunergy", says: "A brand the company states it owns, with a trademark claimed.", st: "p", why: " — trademark number not yet supplied.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    t3: { n: "T3", says: "A brand the company states it owns, with a trademark claimed.", st: "p", why: " — trademark number not yet supplied.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    crystal: { n: "Crystal Cleaning Solutions", says: "A cleaning brand the company states it owns, with a trademark claimed.", st: "p", why: " — trademark number not yet supplied.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    form: { n: "Freedom Form", says: "A commercial property venture the company describes for 2029 onwards.", st: "n", why: " — stated intent only; no company exists.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    freight: { n: "Freedom Freight", says: "A logistics and freight venture the company describes for 2029 onwards.", st: "n", why: " — stated intent only; no company exists.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    fly: { n: "Freedom Fly", says: "A drone-services venture the company describes for 2029 onwards.", st: "n", why: " — stated intent only; no company exists.", u: "https://freedomgroup.uk/", ul: "The company's description" },
+    fuel: { n: "Freedom Fuel", says: "A forecourt and convenience-retail venture the company describes for 2029 onwards.", st: "n", why: " — stated intent only; no company exists.", u: "https://freedomgroup.uk/", ul: "The company's description" }
+  };
+  var pN = $("#pName"), pS = $("#pSays"), pSt = $("#pStatus"), pC = $("#pChecked"), pG = $("#pGo");
   $$(".node").forEach(function (nd) {
     nd.addEventListener("click", function () {
-      $$(".node").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
-      nd.classList.add("sel"); nd.setAttribute("aria-pressed", "true");
+      $$(".node").forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+      nd.setAttribute("aria-pressed", "true");
       var d = DATA[nd.dataset.k];
       if (!d || !pN) return;
-      pN.innerHTML = d.n; pT.textContent = d.t; pB.textContent = d.b;
-      if (d.u) { pG.href = d.u; pG.style.display = ""; } else { pG.style.display = "none"; }
-      if (!reduce && panel && panel.animate) {
-        panel.animate(
-          [{ opacity: 0.15, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }],
-          { duration: 420, easing: "cubic-bezier(.2,.8,.25,1)" });
-      }
+      pN.innerHTML = d.n; pS.innerHTML = d.says; pSt.innerHTML = ST[d.st] + d.why; pC.textContent = checked;
+      pG.href = d.u; pG.textContent = d.ul + " ↗";
     });
   });
 
-  /* ── chapter sheet ────────────────────────────────────────── */
-  var burger = $("#burger"), sheet = $("#sheet");
+  /* ══ SECTION SHEET (small screens) ════════════════════════ */
+  var burger = $("#burger"), sheet = $("#sheet"), sheetClose = $("#sheetClose");
   function sheetOn(o) {
     var was = sheet.classList.contains("on");
-    sheet.classList.toggle("on", o);
+    sheet.classList.toggle("on", o); sheet.hidden = !o;
     burger.setAttribute("aria-expanded", o);
     document.documentElement.style.overflow = o ? "hidden" : "";
-    if (o) { $("#sheetClose").focus(); }
-    else if (was) { burger.focus(); }
-  }
-  function sheetTrap(e) {
-    if (e.key !== "Tab" || !sheet.classList.contains("on")) return;
-    var f = $$("button, a[href]", sheet), first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    if (o) sheetClose.focus(); else if (was) burger.focus();
   }
   if (burger && sheet) {
     burger.addEventListener("click", function () { sheetOn(!sheet.classList.contains("on")); });
-    $("#sheetClose").addEventListener("click", function () { sheetOn(false); });
-    sheet.addEventListener("click", function (e) {
-      if (e.target.tagName === "A" || e.target === sheet) sheetOn(false);
+    sheetClose.addEventListener("click", function () { sheetOn(false); });
+    sheet.addEventListener("click", function (e) { if (e.target.closest("a")) sheetOn(false); });
+    window.addEventListener("keydown", function (e) {
+      if (!sheet.classList.contains("on")) return;
+      if (e.key === "Escape") { sheetOn(false); return; }
+      if (e.key !== "Tab") return;
+      var f = $$("button, a[href]", sheet), first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
-    window.addEventListener("keydown", function (e) { if (e.key === "Escape") sheetOn(false); });
-    window.addEventListener("keydown", sheetTrap);
   }
 
-  /* ── a chapter link taken from the Verified Record returns to Explore first;
-        otherwise the anchor sits inside a hidden block and the click does nothing ── */
-  $$(".chrome nav a, .sheet a, .mono-mark, .skip").forEach(function (a) {
-    a.addEventListener("click", function () {
-      if (document.body.dataset.view === "record") applyView("explore");
-    });
-  });
+  /* ══ THE RECORD: print, and staleness ═════════════════════ */
+  var printBtn = $("#printBtn");
+  if (printBtn && window.print) { printBtn.hidden = false; printBtn.addEventListener("click", function () { window.print(); }); }
+  var checkedOn = $("#checkedOn"), recMeta = $("#recMeta");
+  if (checkedOn && recMeta) {
+    var then = new Date(checkedOn.getAttribute("datetime") + "T00:00:00");
+    var days = (Date.now() - then.getTime()) / 86400000;
+    if (days > 90) recMeta.classList.add("is-stale");
+  }
 })();
