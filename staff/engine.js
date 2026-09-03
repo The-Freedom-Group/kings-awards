@@ -115,39 +115,117 @@
     });
   });
 
-  /* ── the clocking-in board: cards tilt under the pointer ──── */
-  if (fine && !reduce) {
-    $$("#rack .card").forEach(function (c) {
+  /* ── the clocking-in board: cards tilt under the pointer, and punch in ── */
+  $$("#rack .card").forEach(function (c) {
+    if (fine && !reduce) {
       c.addEventListener("mousemove", function (e) {
         var r = c.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
         c.style.transform = "rotateY(" + (px * 10).toFixed(2) + "deg) rotateX(" + (-py * 10).toFixed(2) + "deg) translateY(-4px)";
       });
       c.addEventListener("mouseleave", function () { c.style.transform = ""; });
+    }
+    var hit = document.createElement("button"); hit.type = "button"; hit.className = "hitc";
+    var who = ($(".nm", c) || {}).textContent || "this card";
+    hit.setAttribute("aria-label", "Clock in " + who.trim());
+    var st = document.createElement("span"); st.className = "stampin"; st.textContent = "Clocked in";
+    c.appendChild(st); c.appendChild(hit);
+    hit.addEventListener("click", function () {
+      var on = !c.classList.contains("punched");
+      c.classList.toggle("punched", on);
+      var b = $("[data-punch]", c);
+      if (b) {
+        if (on) { b.setAttribute("data-was", b.textContent); var d = new Date(); b.textContent = pad2(d.getHours()) + ":" + pad2(d.getMinutes()); }
+        else b.textContent = b.getAttribute("data-was") || "TK";
+      }
+      hit.setAttribute("aria-label", (on ? "Clock out " : "Clock in ") + who.trim());
+    });
+  });
+  var boardClock = $("#boardClock");
+  function clockTick() {
+    if (!boardClock) return;
+    var d = new Date();
+    boardClock.innerHTML = pad2(d.getHours()) + "<i>:</i>" + pad2(d.getMinutes()) + "<i>:</i>" + pad2(d.getSeconds());
+  }
+  clockTick(); setInterval(clockTick, 1000);
+
+  /* ── the loupe: photographs magnify under the pointer ─────── */
+  var loupe = $("#loupe");
+  if (loupe && fine && !reduce) {
+    $$(".plate, .doorway").forEach(function (host) {
+      var im = $("img", host), zoom = 2.2;
+      if (!im) return;
+      host.addEventListener("mousemove", function (e) {
+        var r = im.getBoundingClientRect();
+        if (!im.naturalWidth) return;
+        if (host.classList.contains("doorway") && doorAngle < 40) { loupe.classList.remove("on"); return; }
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { loupe.classList.remove("on"); return; }
+        var fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+        var bw = r.width * zoom, bh = r.height * zoom;
+        loupe.style.backgroundImage = "url(" + JSON.stringify(im.currentSrc || im.src) + ")";
+        loupe.style.backgroundSize = bw.toFixed(0) + "px " + bh.toFixed(0) + "px";
+        loupe.style.backgroundPosition = (-(fx * bw - 85)).toFixed(0) + "px " + (-(fy * bh - 85)).toFixed(0) + "px";
+        loupe.style.transform = "translate(" + (e.clientX - 85) + "px," + (e.clientY - 85) + "px)";
+        loupe.classList.add("on");
+      });
+      host.addEventListener("mouseleave", function () { loupe.classList.remove("on"); });
     });
   }
 
+  /* ── the cover door leans toward the pointer ──────────────── */
+  if (doorway && fine && !reduce) {
+    doorway.addEventListener("mousemove", function (e) {
+      var r = doorway.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+      doorway.style.transform = "rotateY(" + (px * 6).toFixed(2) + "deg) rotateX(" + (-py * 4).toFixed(2) + "deg)";
+    });
+    doorway.addEventListener("mouseleave", function () { doorway.style.transform = ""; });
+  }
+
+  /* ── print the exhibit ────────────────────────────────────── */
+  var printEx = $("#printExhibit");
+  if (printEx && window.print) {
+    printEx.hidden = false;
+    printEx.addEventListener("click", function () {
+      document.body.classList.add("print-exhibit");
+      $$("#doors .dr").forEach(function (d) { d.classList.add("on"); });
+      window.print();
+    });
+    window.addEventListener("afterprint", function () { document.body.classList.remove("print-exhibit"); });
+  }
+
   /* ── the two-year test ────────────────────────────────────── */
-  var progStart = $("#progStart"), verdict = $("#verdict");
-  var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8);
+  var progStart = $("#progStart"), verdict = $("#verdict"), ruler = $("#ruler"), pin = $("#pin"), band = $("#band"), cut = $("#cut");
+  var twoYearState = $("#twoYearState");
+  var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8), EPOCH0 = new Date(2021, 7, 27);
   function monthsBetween(a, b) { return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) - (b.getDate() < a.getDate() ? 1 : 0); }
   function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
+  function pct(d) { return clamp((d - EPOCH0) / (DEADLINE - EPOCH0), 0, 1) * 100; }
+  if (band) band.style.width = pct(CUTOFF).toFixed(2) + "%";
+  if (cut) cut.style.left = pct(CUTOFF).toFixed(2) + "%";
+  $$("#ruler .yr").forEach(function (y) { y.style.left = pct(new Date(+y.textContent, 0, 1)).toFixed(2) + "%"; });
   if (progStart && verdict) {
     progStart.addEventListener("input", function () {
-      if (!progStart.value) { verdict.innerHTML = "Enter the date of the earliest record."; return; }
+      if (!progStart.value) {
+        verdict.innerHTML = "Enter the date of the earliest record.";
+        if (ruler) ruler.classList.remove("set", "fail"); if (twoYearState) twoYearState.textContent = "";
+        return;
+      }
       var d = new Date(progStart.value + "T00:00:00");
       if (isNaN(d)) return;
-      var m = monthsBetween(d, DEADLINE);
-      if (d <= CUTOFF) {
+      var m = monthsBetween(d, DEADLINE), ok = d <= CUTOFF;
+      if (ok) {
         verdict.innerHTML = "<b>Passes.</b> By the closing date the programme will have run for " +
           Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") +
           " — dated from " + fmt(d) + ". Keep that record.";
       } else {
-        var short = monthsBetween(d, CUTOFF);
-        verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + Math.abs(monthsBetween(CUTOFF, d)) +
-          " month" + (Math.abs(monthsBetween(CUTOFF, d)) === 1 ? "" : "s") + " too young for this cycle. Unless an earlier record exists, this category waits a year.";
-        void short;
+        var sh = Math.abs(monthsBetween(CUTOFF, d));
+        verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + sh + " month" + (sh === 1 ? "" : "s") +
+          " too young for this cycle. Unless an earlier record exists, this category waits a year.";
       }
+      if (pin) pin.style.left = pct(d).toFixed(2) + "%";
+      if (ruler) { ruler.classList.add("set"); ruler.classList.toggle("fail", !ok); }
+      if (twoYearState) twoYearState.textContent = ok ? "· Passes on the date given" : "· Not yet, on the date given";
     });
   }
 
@@ -158,7 +236,7 @@
     training: "Training", build: "What we're building", code: "The code", join: "Join us" };
   var steps = $$("#rail .step"), rail = $("#rail"), railInk = $("#railInk"), walker = $("#walker");
   if (railInk) { var L = 1000; try { L = railInk.getTotalLength(); } catch (e) {} railInk.style.setProperty("--l", L); }
-  var ticking = false;
+  var ticking = false, lastLp = -1, moveT = null;
 
   function onScroll() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
@@ -184,7 +262,11 @@
       if (railInk && !reduce) {
         var Lr = parseFloat(railInk.style.getPropertyValue("--l")) || 1000;
         railInk.style.strokeDashoffset = (Lr * (1 - lp)).toFixed(1);
-        if (walker) walker.setAttribute("cx", (6 + lp * 988).toFixed(1));
+        if (walker) {
+          walker.setAttribute("transform", "translate(" + (6 + lp * 988).toFixed(1) + " 0)");
+          if (lp !== lastLp) { rail.classList.add("moving"); clearTimeout(moveT); moveT = setTimeout(function () { rail.classList.remove("moving"); }, 260); }
+          lastLp = lp;
+        }
         rail.style.setProperty("--lp", (lp * 100).toFixed(1) + "%");   /* the vertical rail on phones */
       }
     }
