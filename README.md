@@ -6,9 +6,12 @@ application. No build step, no dependencies — open the HTML files directly.
 ```
 kings-awards/
 ├── index.html            Gateway linking both sites
-├── personal/index.html   Tom Letcher — formal professional profile
+├── personal/index.html   Tom Letcher — The Freedom Line (founder page)
+├── personal/thread.js    the page's engine: the line, the pinned scene, the map
 ├── staff/index.html      The People of Freedom Fire — team site
-├── assets/               ff_logo.png, ff_logo_black.png, FireStorm.png
+├── staff/engine.js       its engine
+├── assets/               logos, the portrait, the team and floor photographs
+├── CNAME                 awards.freedomgroup.uk
 └── README.md
 ```
 
@@ -112,12 +115,21 @@ and leave out anyone who would rather not appear.
 
 Two deliberately different registers, because they are for different readers.
 
-**Personal** — light, editorial, restrained. Serif headings (Source Serif 4), generous
-whitespace, hairline rules, a single muted gold accent, no animation. Structured around the
-five themes the King's Awards assessment looks for: fresh ideas, growth and influence,
-long-term vision, resilience, and customer value. Third person throughout, which reads as more
-credible than first person for an award submission; there is one first-person pull quote for
-contrast.
+**Personal — The Freedom Line.** One pink line is drawn from the first unit to what comes
+next. It enters the hero from the left, lifts over the portrait, drops down the right with
+four spurs (Fire, Global, Distribution, Facilities), threads all seven chapters and settles
+at the foot of the page with a beacon and "still drawing". Porcelain, carbon and pink, with
+pink held to roughly 5% of the surface. Anton for display, Inter for text, Instrument Serif
+italic for the script accents. Around the chapters: an entrance line, a custom cursor,
+velocity marquees, a pinned 2021 scene ("One key. One unit. One director. Aged 25."),
+drifting topographic contours, poster words, a years rail that moves with the scroll, and
+a corner card naming the chapter. Chapter 04 is the group map drawn as the Freedom Group
+logo's orbital system — gradient planets on a tilted pink tape, operating companies lit,
+planned ones small and dark on the outer ring. **Explore ⇄ Verified Record** in the header
+swaps the whole thing for a clean printable page behind a pink wipe. Third person
+throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-trapped
+chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
+page.
 
 **Staff** — dark, brand-led, louder. Barlow Condensed display type, the night-navy and flame
 palette taken from the existing Freedom Freight page (`#0a0e16`, `#e01b0e`, `#ff6a1f`,
@@ -130,7 +142,8 @@ Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and p
 
 ## Hosting
 
-Currently local files. If you want them online, the same pattern as Freedom Freight works —
-a Cloudflare static-asset Worker serving a directory, behind Cloudflare Access if it should
-stay private during drafting. Worth keeping private until the placeholders are gone, since the
-`noindex,nofollow` tags on both pages are a request to search engines, not a lock.
+Live at **https://awards.freedomgroup.uk** — GitHub Pages from this repo (the `CNAME` file),
+so a push to `main` is a deploy. Gateway at `/`, founder page at `/personal/`, team site at
+`/staff/`. There is no access control: the `noindex,nofollow` tags on both pages are a
+request to search engines, not a lock, so treat the address as private by obscurity only,
+and do not circulate it until the placeholders are gone.
