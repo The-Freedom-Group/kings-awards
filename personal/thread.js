@@ -192,7 +192,10 @@
   }
 
   /* ── metric counters ──────────────────────────────────────── */
-  var counters = $$(".metric .v").filter(function (v) { return /^\d+$/.test(v.textContent.trim()); });
+  var counters = $$(".metric .v").filter(function (v) {
+    var t = v.textContent.trim();
+    return /^[0-9]+$/.test(t) && +t < 1000;   /* years are labels, not quantities */
+  });
   counters.forEach(function (v) { v.dataset.to = v.textContent.trim(); });
   function countUp(v) {
     var to = +v.dataset.to, t0 = null, dur = 1100;
@@ -570,7 +573,7 @@
           }
         }
         /* the years rail drags with the scroll */
-        if (yrail && c03El) {
+        if (yrail && c03El && window.innerWidth > 820) {
           var rp = clamp((y + window.innerHeight * 0.8 - c03El.offsetTop) /
                          (c03El.offsetHeight * 0.9), 0, 1);
           var over = Math.max(0, yrail.scrollWidth - yrail.parentElement.clientWidth);
@@ -669,7 +672,8 @@
     group:     { n: "Freedom Group", t: "The holding structure.",
                  b: "One group, built so each venture is a separate operating company rather than another department." },
     fire:      { n: "Freedom Fire &amp; Safety", t: "The business that started it.",
-                 b: "Fire safety products, installation and compliance — serving homes and businesses across the UK." },
+                 b: "Fire safety products, installation and compliance — serving homes and businesses across the UK.",
+                 u: "https://www.freedom-fire.co.uk" },
     global:    { n: "Freedom Global", t: "Operating.",
                  b: "TK — one line on what Freedom Global does today, and the date it began trading." },
     dist:      { n: "Freedom Distribution", t: "Operating.",
@@ -686,12 +690,12 @@
   var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
   $$(".node").forEach(function (nd) {
     nd.addEventListener("click", function () {
-      $$(".node").forEach(function (o) { o.classList.remove("sel"); });
-      nd.classList.add("sel");
+      $$(".node").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
+      nd.classList.add("sel"); nd.setAttribute("aria-pressed", "true");
       var d = DATA[nd.dataset.k];
       if (!d || !pN) return;
       pN.innerHTML = d.n; pT.textContent = d.t; pB.textContent = d.b;
-      pG.style.display = nd.dataset.s === "future" ? "none" : "";
+      if (d.u) { pG.href = d.u; pG.style.display = ""; } else { pG.style.display = "none"; }
       if (!reduce && panel && panel.animate) {
         panel.animate(
           [{ opacity: 0.15, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }],
@@ -703,9 +707,18 @@
   /* ── chapter sheet ────────────────────────────────────────── */
   var burger = $("#burger"), sheet = $("#sheet");
   function sheetOn(o) {
+    var was = sheet.classList.contains("on");
     sheet.classList.toggle("on", o);
     burger.setAttribute("aria-expanded", o);
     document.documentElement.style.overflow = o ? "hidden" : "";
+    if (o) { $("#sheetClose").focus(); }
+    else if (was) { burger.focus(); }
+  }
+  function sheetTrap(e) {
+    if (e.key !== "Tab" || !sheet.classList.contains("on")) return;
+    var f = $$("button, a[href]", sheet), first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
   if (burger && sheet) {
     burger.addEventListener("click", function () { sheetOn(!sheet.classList.contains("on")); });
@@ -714,5 +727,14 @@
       if (e.target.tagName === "A" || e.target === sheet) sheetOn(false);
     });
     window.addEventListener("keydown", function (e) { if (e.key === "Escape") sheetOn(false); });
+    window.addEventListener("keydown", sheetTrap);
   }
+
+  /* ── a chapter link taken from the Verified Record returns to Explore first;
+        otherwise the anchor sits inside a hidden block and the click does nothing ── */
+  $$(".chrome nav a, .sheet a, .mono-mark, .skip").forEach(function (a) {
+    a.addEventListener("click", function () {
+      if (document.body.dataset.view === "record") applyView("explore");
+    });
+  });
 })();
