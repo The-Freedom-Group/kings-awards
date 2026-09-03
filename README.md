@@ -48,6 +48,19 @@ leading 6 May 2026 - 8 Sept 2027 (already evidenced by the register), the 18-30 
 anything else), and the commercial threshold (250k GBP turnover or 500k GBP external
 funding, evidence outstanding).
 
+Beyond the gates, Young Founder needs evidence of impact across **five themes**, which
+chapter 05 and the Verified Record now follow in the award's own order:
+
+| Theme | Evidence needed |
+|---|---|
+| Fresh ideas and creative thinking | Short video, up to 2 minutes, on the founder's journey from idea to impact |
+| Driving growth and industry influence | Business performance over the past 1-2 years showing growth, plus external recognition (speaking testimonials, awards, media) |
+| Leading and big-picture thinking | The organisation's long-term vision and how it is implemented |
+| Strategic resilience | Challenges faced and how the organisation adapted |
+| Customer value | How customer satisfaction is measured and used to improve products or services |
+
+All five are outstanding, and the video does not exist yet.
+
 ⚠️ **The two-year test is a hard gate.** If the programme cannot show a start date ≥2
 years before submission with a dated record behind it, this category must wait a cycle —
 establish that before writing another word of the application.
@@ -89,7 +102,7 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 | 01 Profile | Two or three paragraphs on your route into fire safety — what you did before 2021, why you started rather than stayed employed |
 | 02 The business | Confirm the three service pillars match reality; add fire doors / passive / sprinklers / dry risers if applicable |
 | 03 Trajectory | 2022 headline; 2023–24 headcount, coverage, accreditations (BAFE SP101/SP203, FIA, SafeContractor, CHAS, ISO 9001, NSI, SSAIB), apprenticeships |
-| 04 Leadership | **The whole section** — four short pieces: fresh thinking, growth and influence, long-term vision, resilience |
+| 04 Leadership | **The whole section** — five short pieces in the award's order: fresh ideas, growth and influence, big-picture leadership, resilience, customer value — plus the 2-minute video |
 | Pull quote | One sentence in your own voice on why the work matters |
 | 05 Governance | HMRC and filing status, accreditation reference numbers, insurance, engineer training and re-certification, environmental measures, community work |
 | 07 Contact | Direct email, and mobile if you want it public |
