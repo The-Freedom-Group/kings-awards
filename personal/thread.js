@@ -238,7 +238,7 @@
     { id: "c07",  side: "C", y: 0.52 }
   ];
 
-  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0;
+  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1;
   var endPt = null, endFrac = 1, endNote = null;
 
   function buildPath() {
@@ -387,6 +387,11 @@
       }
     }
     if (!endPt) { endPt = samples[samples.length - 1]; endFrac = 0.99; }
+    /* the furthest the reader can scroll is the foot of the story; the
+       scroll-to-line mapping is scaled so the tip arrives at the end point
+       exactly there - the burst fires only when it does */
+    var pReachRaw = (H - window.innerHeight * 0.38) / H;
+    pScale = pReachRaw > 0 ? (endFrac + 0.001) / pReachRaw : 1;
     if (endNote) endNote.remove();
     endNote = document.createElement("span");
     endNote.className = "endnote";
@@ -411,8 +416,8 @@
       var w = document.createElement("i"); w.className = "wave " + c;
       w.style.left = pt.x + "px"; w.style.top = pt.y + "px"; frag.appendChild(w); bits.push(w);
     });
-    for (var i = 0; i < 18; i++) {
-      var a = (i / 18) * Math.PI * 2 + Math.random() * .3, r = 70 + Math.random() * 150;
+    for (var i = 0; i < 26; i++) {
+      var a = (i / 26) * Math.PI * 2 + Math.random() * .25, r = 90 + Math.random() * 220;
       var s = document.createElement("i"); s.className = "spark";
       s.style.left = pt.x + "px"; s.style.top = pt.y + "px";
       s.style.setProperty("--dx", (Math.cos(a) * r).toFixed(1) + "px");
@@ -428,16 +433,13 @@
   function drawThread(y) {
     if (!totalLen || thread.style.display === "none") return;
     var h = explore.offsetHeight || 1;
-    var p = clamp((y + window.innerHeight * 0.62) / h, 0, 1);
+    var p = clamp((y + window.innerHeight * 0.62) / h * pScale, 0, 1);
     p = Math.max(p, heroFrac * heroIn);
     live.style.strokeDashoffset = totalLen * (1 - p);
     thread.classList.toggle("on", p > 0.004);
 
-    /* the head rides the line, then settles at the page's edge and beacons.
-       Reaching the foot of the page counts as arriving, whatever the maths says. */
-    var exploreEnd = explore.offsetTop + explore.offsetHeight;
-    var landed = p >= endFrac - 0.002 || (y + window.innerHeight) >= exploreEnd - 60;
-    if (landed && p < endFrac) { p = endFrac; live.style.strokeDashoffset = totalLen * (1 - p); }
+    /* the head rides the line, then settles at the page's edge and beacons */
+    var landed = p >= endFrac - 0.002;
     thread.classList.toggle("landed", landed);
     if (landed && !wasLanded) burst(endPt);
     wasLanded = landed;

@@ -230,19 +230,19 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .wave.w2{animation-delay:.2s;border-width:1px}
 .thread .wave.w3{animation-delay:.4s;border-width:1px;border-style:dashed}
 @keyframes wave{0%{opacity:.95;width:24px;height:24px;margin:-12px 0 0 -12px}
-  100%{opacity:0;width:760px;height:760px;margin:-380px 0 0 -380px}}
+  100%{opacity:0;width:960px;height:960px;margin:-480px 0 0 -480px}}
 .thread .spark{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
   background:var(--pink);box-shadow:0 0 8px 2px rgba(255,45,141,.55);pointer-events:none;
-  animation:spark 1.3s cubic-bezier(.15,.8,.3,1) forwards}
-@keyframes spark{0%{transform:translate(0,0) scale(1);opacity:1}
-  100%{transform:translate(var(--dx),calc(var(--dy) + 48px)) scale(.1);opacity:0}}
-.thread.burst .knot{animation:knotFlash .8s ease-out both;animation-delay:calc(var(--i,0) * .08s)}
-@keyframes knotFlash{0%{box-shadow:0 0 0 0 rgba(255,45,141,.75);transform:scale(1.3)}
-  45%{transform:scale(2.4)}100%{box-shadow:0 0 0 16px rgba(255,45,141,0);transform:scale(1.3)}}
+  animation:spark 1.5s cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes spark{0%{transform:translate(0,0) scale(1.2);opacity:1}
+  100%{transform:translate(var(--dx),calc(var(--dy) + 60px)) scale(.1);opacity:0}}
+.thread.burst .knot{animation:knotFlash .9s ease-out both;animation-delay:calc(var(--i,0) * .08s)}
+@keyframes knotFlash{0%{box-shadow:0 0 0 0 rgba(255,45,141,.8);transform:scale(1.3)}
+  45%{transform:scale(3)}100%{box-shadow:0 0 0 22px rgba(255,45,141,0);transform:scale(1.3)}}
 .thread.landed .head{animation:headGlow 2.4s ease-in-out infinite}
 @keyframes headGlow{0%,100%{box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6)}
   50%{box-shadow:0 0 0 9px rgba(255,45,141,.22),0 0 40px 12px rgba(255,45,141,.85)}}
-.thread .halo{position:absolute;left:50%;top:50%;width:36px;height:36px;margin:-18px 0 0 -18px;
+.thread .halo{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;
   border-radius:50%;border:1.5px dashed var(--pink);opacity:0;transition:opacity .6s ease .5s}
 .thread .halo::after{content:"";position:absolute;left:50%;top:-3px;width:5px;height:5px;margin-left:-2.5px;
   border-radius:50%;background:var(--pink)}
@@ -499,6 +499,14 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
 .node .st{font-family:var(--sans);font-size:8.5px;letter-spacing:.16em;font-weight:500;
   color:var(--pink);text-transform:uppercase}
 .node.core{--os:clamp(74px,9vw,104px);--p1:#ff9dcb;--p2:#ff3d9a;--p3:#8f0b55}
+/* the Freedom Group planet carries the world's coastlines in white, turning slowly */
+.node.core .orb{overflow:hidden}
+.node.core .orb::before{content:"";position:absolute;inset:0;border-radius:50%;
+  background:url("../assets/world-white.webp") repeat-x 0 50%/200% 100%;opacity:.95;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 52%,rgba(0,0,0,.35) 66%,transparent 74%);
+  mask-image:radial-gradient(circle at 50% 50%,#000 52%,rgba(0,0,0,.35) 66%,transparent 74%);
+  animation:globe 80s linear infinite}
+@keyframes globe{to{background-position-x:200%}}
 .node.core .lbl{font-size:clamp(12px,1.35vw,17px)}
 .node[data-s="operating"]{--os:clamp(50px,6.4vw,68px)}
 .node[data-k="fire"]{--p1:#ffc37a;--p2:#fb4d12;--p3:#8f1802}
@@ -637,7 +645,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .sheet li{opacity:1;transform:none;transition:none}
   .prog,.card{transition:none}
   .topo g{animation:none}
-  .drift,.thread.landed .head,.thread.landed .halo,.thread.burst .knot{animation:none}
+  .drift,.thread.landed .head,.thread.landed .halo,.thread.burst .knot,.node.core .orb::before{animation:none}
   .thread .wave,.thread .spark{display:none}
   .pw{opacity:.05}
   .scr{transform:rotate(-7deg)}
