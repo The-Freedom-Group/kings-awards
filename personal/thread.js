@@ -131,6 +131,31 @@
                    anim[1] + (si % 3 === 1 ? " pk" : "")) +
       "</svg>";
     sec.insertBefore(fx, sec.firstChild);
+
+    /* a drifting dot grid, and two faint orbits with dots travelling them */
+    var dr = document.createElement("div");
+    dr.className = "drift"; dr.setAttribute("aria-hidden", "true");
+    sec.insertBefore(dr, sec.firstChild);
+    if (!reduce) {
+      var ob = document.createElement("div");
+      ob.className = "orbits"; ob.setAttribute("aria-hidden", "true");
+      var o = "";
+      for (var oi = 0; oi < 2; oi++) {
+        var cx = 150 + rand() * 700, cy = 100 + rand() * 400, rx = 160 + rand() * 260, ry = rx * (.32 + rand() * .2);
+        var tilt = -30 + rand() * 40, pid = "orb" + si + oi;
+        var d = "M " + (cx - rx).toFixed(1) + " " + cy.toFixed(1) +
+                " A " + rx.toFixed(1) + " " + ry.toFixed(1) + " 0 1 0 " + (cx + rx).toFixed(1) + " " + cy.toFixed(1) +
+                " A " + rx.toFixed(1) + " " + ry.toFixed(1) + " 0 1 0 " + (cx - rx).toFixed(1) + " " + cy.toFixed(1);
+        var dur = (26 + rand() * 30).toFixed(1), dur2 = (34 + rand() * 30).toFixed(1);
+        o += '<g transform="rotate(' + tilt.toFixed(1) + ' ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ')">' +
+             '<path id="' + pid + '" class="' + (oi ? "pk" : "") + '" d="' + d + '"/>' +
+             '<circle r="3.2"><animateMotion dur="' + dur + 's" repeatCount="indefinite"><mpath href="#' + pid + '"/></animateMotion></circle>' +
+             '<circle r="2" class="dim"><animateMotion dur="' + dur2 + 's" begin="-' + (dur2 / 2).toFixed(1) + 's" repeatCount="indefinite"><mpath href="#' + pid + '"/></animateMotion></circle>' +
+             '</g>';
+      }
+      ob.innerHTML = '<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' + o + "</svg>";
+      sec.insertBefore(ob, sec.firstChild);
+    }
   });
 
   /* ── poster words, one per chapter ────────────────────────── */
@@ -401,7 +426,35 @@
     endNote.style.left = (endPt.x + 20) + "px";
     endNote.style.top = endPt.y + "px";
     thread.appendChild(endNote);
+    /* knots count back up the line, so the landing flash runs bottom to top */
+    knots.forEach(function (k, i) { k.style.setProperty("--i", knots.length - 1 - i); });
+    if (head && !head.querySelector(".halo")) {
+      var halo = document.createElement("i"); halo.className = "halo"; head.appendChild(halo);
+    }
     return true;
+  }
+
+  /* the landing: a shockwave, a burst of sparks, and the knots lit in turn */
+  var wasLanded = false;
+  function burst(pt) {
+    if (reduce || !pt) return;
+    var frag = document.createDocumentFragment(), bits = [];
+    ["", "w2", "w3"].forEach(function (c) {
+      var w = document.createElement("i"); w.className = "wave " + c;
+      w.style.left = pt.x + "px"; w.style.top = pt.y + "px"; frag.appendChild(w); bits.push(w);
+    });
+    for (var i = 0; i < 18; i++) {
+      var a = (i / 18) * Math.PI * 2 + Math.random() * .3, r = 70 + Math.random() * 150;
+      var s = document.createElement("i"); s.className = "spark";
+      s.style.left = pt.x + "px"; s.style.top = pt.y + "px";
+      s.style.setProperty("--dx", (Math.cos(a) * r).toFixed(1) + "px");
+      s.style.setProperty("--dy", (Math.sin(a) * r).toFixed(1) + "px");
+      s.style.animationDelay = (Math.random() * .12) + "s";
+      frag.appendChild(s); bits.push(s);
+    }
+    thread.appendChild(frag);
+    thread.classList.add("burst");
+    setTimeout(function () { bits.forEach(function (b) { b.remove(); }); thread.classList.remove("burst"); }, 2200);
   }
 
   function drawThread(y) {
@@ -412,9 +465,14 @@
     live.style.strokeDashoffset = totalLen * (1 - p);
     thread.classList.toggle("on", p > 0.004);
 
-    /* the head rides the line, then settles at the page's edge and beacons */
-    var landed = p >= endFrac - 0.002;
+    /* the head rides the line, then settles at the page's edge and beacons.
+       Reaching the foot of the page counts as arriving, whatever the maths says. */
+    var exploreEnd = explore.offsetTop + explore.offsetHeight;
+    var landed = p >= endFrac - 0.002 || (y + window.innerHeight) >= exploreEnd - 60;
+    if (landed && p < endFrac) { p = endFrac; live.style.strokeDashoffset = totalLen * (1 - p); }
     thread.classList.toggle("landed", landed);
+    if (landed && !wasLanded) burst(endPt);
+    wasLanded = landed;
     if (p > 0.004) {
       var pt = landed && endPt ? endPt : live.getPointAtLength(totalLen * p);
       head.style.left = pt.x + "px";
