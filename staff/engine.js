@@ -174,7 +174,7 @@
       var ftSplit = new SplitText(".ft .mail", { type: "chars" });
       var ft = gsap.timeline({ scrollTrigger: { trigger: ".footer", start: "top 85%", end: "bottom 85%", scrub: 2 } });
       ft.fromTo(".footer-header, .footer-menu-item li, .footer-item img, .ft-line", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2)
-        .fromTo("#obj3", { rotation: 0, scale: 1, autoAlpha: 0, x: "-33vw", y: "-60vh" }, { rotation: 141, scale: .8, autoAlpha: 1, x: "0vw", y: "4vh", duration: 5 }, 0)
+        .fromTo("#obj3", { rotation: 0, scale: 1, autoAlpha: 0, x: "-33vw", y: "-60vh" }, { rotation: 141, scale: .8, autoAlpha: 1, x: "-9vw", y: "4vh", duration: 5 }, 0)
         .fromTo(ftSplit.chars, { autoAlpha: 0, x: "0.5em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, 2.2);
       gsap.timeline({ scrollTrigger: { trigger: ".cta", start: "top 85%", end: "bottom 60%", scrub: 2 } })
         .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
