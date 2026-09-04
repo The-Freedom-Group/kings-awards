@@ -144,24 +144,24 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff — The Way In.** Rebuilt on 4 September 2026, clean and premium at Bill's direction:
-white and light grey, a lot of air, Antonio for the headlines with the second half of each in
-grey, Inter for everything else, red used once per screen at most (a dot, a word, a rule). The
-team photo is the hero, in colour, in a rounded frame with a caption, and is left alone. Then the
-life: as you scroll, the framed team photo grows to fill the screen and a second headline
-appears over it; a small cursor grows and names what it is over (Read, Open, Show, Meet); a
-chapter spine on the left; the five tests dim except the one at the reading line; the three
-story cards tilt to the mouse and, clicked, filter the register to their people (with chips
-to switch); the profile sheet has previous and next and the arrow keys; the path carries a
-red dot along it; the two-year test has one-tap dates; both photos drift with the scroll.
-All of it steps aside under prefers-reduced-motion and on phones. Part 01
-is the award's five tests as a ruled list with a status dot each; between it and Part 02, the
-three stories as three cards; Part 02 the four named activities as an accordion, plus the path
-from starter to mentor as a line that fills step by step; Part 03 the nine people as a register
-(name, role, story, their question, an arrow) with a profile sheet each; Part 04 the two
-commitments as two cards; Part 05 the two-year test with its ruler and the four proofs; Part 06
-the fire-class trainer on the real label colours; Part 07 join, with the photo again. Every
-unsupported claim is a grey slot with a red rule.
+**Staff — The Way In.** Rebuilt on 4 September 2026 at Bill's direction to match the language of
+a studio site he admires (rzv.studio), effect for effect, in our own code and with our content.
+Near-black plum and off-white, Inter 800 uppercase for the big lines with one Baskerville italic
+word in each, DM Mono for the small print. On arrival: a preloader that slides the logo up and
+away, then the four hero lines rise out of masks with a slight rotation, a glass cube (CSS 3D,
+iridescent edges, an orb inside) floats up, and the header, the rotating "scroll down" circle
+and the mono footnotes follow. A ring cursor lags behind a dot and, over anything you can open,
+becomes a white disc with an arrow. Scrolling is smoothed (GSAP ScrollSmoother) with parallax on
+the cubes; the hero blurs away as you leave it; separators grow from 25% to full width; headings
+arrive a word at a time. The nine people are full-width tiles, each a dark gradient in its own
+hue, a huge serif initial that drifts as you scroll, the person's question, and a caption; the
+arrow cursor opens the profile sheet (question, film slot, own words, route, since, which award
+activity it proves; previous and next). Then the page wipes from dark to white for the statement
+and a slow carousel of routes and commitments, back to dark for a starfield behind "This is more
+than a hiring policy", the five tests with the two-year calculator in a glass box, and "Fancy a
+proper trade?" whose letters arrive one by one while the cube flies down into the footer, which
+staggers in. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText) from cdnjs. Everything falls
+back to a plain, fully readable page if the library does not load or reduced motion is set.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
