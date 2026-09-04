@@ -44,8 +44,8 @@
 
   /* ── menu ─────────────────────────────────────────────────── */
   var menu = $("#menu"), burger = $("#burger"), menuX = $("#menuX");
-  function closeMenu() { if (menu) { menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); } }
-  if (burger) burger.addEventListener("click", function () { menu.classList.add("open"); menu.setAttribute("aria-hidden", "false"); });
+  function closeMenu() { if (menu) { menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); document.body.classList.remove("menu-open"); } }
+  if (burger) burger.addEventListener("click", function () { menu.classList.add("open"); menu.setAttribute("aria-hidden", "false"); document.body.classList.add("menu-open"); });
   if (menuX) menuX.addEventListener("click", closeMenu);
 
   /* ── the cursor ───────────────────────────────────────────── */
@@ -68,9 +68,59 @@
     })();
   }
 
-  /* ── the cubes size their faces from their box ────────────── */
+  /* ── the cube that rides the page, and the fire inside it ── */
+  var cubeFixed = $("#cubeFixed");
   function sizeCubes() { $$(".cube").forEach(function (c) { c.style.setProperty("--w", c.offsetWidth + "px"); }); }
   sizeCubes(); window.addEventListener("resize", sizeCubes);
+  (function () {
+    var cv = $("#flame"); if (!cv || !cubeFixed) return;
+    var ctx = cv.getContext("2d"), W = 0, H = 0, ps = [], fire = false, t = 0, cool = null, running = false;
+    function size() { var r = cv.getBoundingClientRect(); W = cv.width = Math.max(2, Math.round(r.width * 1.5)); H = cv.height = Math.max(2, Math.round(r.height * 1.5)); }
+    function spawn(n) {
+      var bw = W / 1.8, cx = W / 2, cy = H * (0.9 + 0.5) / 2.05, half = bw * 0.27;
+      for (var i = 0; i < n; i++) {
+        var p = {};
+        if (fire) {
+          /* born on the cube's faces and edges, all over it */
+          var edge = Math.random(); p.x = cx + (Math.random() - .5) * 2 * half; p.y = cy + (edge < .6 ? (Math.random() - .5) * 2 * half : half * (0.6 + Math.random() * .4));
+          p.vx = (Math.random() - .5) * 1.8; p.vy = -(2.2 + Math.random() * 4.2); p.r = bw * (0.07 + Math.random() * 0.11); p.decay = 0.008 + Math.random() * 0.014;
+        } else {
+          /* the pilot light in the middle */
+          p.x = cx + (Math.random() - .5) * bw * 0.08; p.y = cy + bw * 0.08 + Math.random() * bw * 0.05;
+          p.vx = (Math.random() - .5) * .5; p.vy = -(1.2 + Math.random() * 1.8); p.r = bw * (0.045 + Math.random() * 0.06); p.decay = 0.016 + Math.random() * 0.022;
+        }
+        p.life = 1; p.seed = Math.random() * 6.283; ps.push(p);
+      }
+    }
+    function frame() {
+      running = true; t += 0.016; ctx.clearRect(0, 0, W, H); ctx.globalCompositeOperation = "lighter";
+      if (!reduce || ps.length === 0) spawn(fire ? 22 : 5);
+      for (var i = ps.length - 1; i >= 0; i--) {
+        var p = ps[i];
+        p.x += p.vx + Math.sin(t * 9 + p.seed) * (fire ? .9 : .35); p.y += p.vy; p.vy *= .984; p.vx *= .98; p.life -= p.decay;
+        if (p.life <= 0) { ps.splice(i, 1); continue; }
+        var l = p.life, rad = p.r * (0.35 + 0.65 * l), a = Math.min(1, l * 1.3) * (fire ? .95 : .85);
+        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+        if (l > .72) { g.addColorStop(0, "rgba(255,255,225," + a + ")"); g.addColorStop(.35, "rgba(255,200,70," + (a * .85) + ")"); g.addColorStop(.7, "rgba(255,110,10," + (a * .4) + ")"); }
+        else if (l > .4) { g.addColorStop(0, "rgba(255,170,50," + a + ")"); g.addColorStop(.4, "rgba(255,80,0," + (a * .7) + ")"); g.addColorStop(.8, "rgba(200,20,0," + (a * .25) + ")"); }
+        else { g.addColorStop(0, "rgba(225,6,0," + a + ")"); g.addColorStop(.5, "rgba(120,0,0," + (a * .45) + ")"); }
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, 6.283); ctx.fill();
+      }
+      if (ps.length > 900) ps.splice(0, ps.length - 900);
+      if (reduce && ps.length && !fire) { running = false; return; } /* one still frame is enough */
+      requestAnimationFrame(frame);
+    }
+    function ignite(on) {
+      clearTimeout(cool);
+      if (on) { fire = true; cubeFixed.classList.add("fire"); if (!running) frame(); }
+      else cool = setTimeout(function () { fire = false; cubeFixed.classList.remove("fire"); }, 600);
+    }
+    cubeFixed.addEventListener("mouseenter", function () { ignite(true); });
+    cubeFixed.addEventListener("mouseleave", function () { ignite(false); });
+    cubeFixed.addEventListener("click", function () { ignite(!fire); });
+    size(); window.addEventListener("resize", size); frame();
+  })();
 
   /* ── reveal (IO, works with or without the library) ──────── */
   var watched = $$(".rv, .flip");
@@ -114,7 +164,6 @@
       .fromTo("#heroFoot", { autoAlpha: 1 }, { filter: "blur(3px)", autoAlpha: 0 }, 0)
       .fromTo("#heroHead", { autoAlpha: 1 }, { autoAlpha: 0, y: -60, filter: "blur(2px)" }, 0.2);
     smoother.effects("#heroPh", { speed: .85 });
-    smoother.effects("#obj2", { speed: 1.18 });
 
     /* separators with text: 25% → 100% */
     $$(".sep.with-text").forEach(function (el) {
@@ -167,13 +216,12 @@
       .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
       .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, 1.2);
     gsap.timeline({ scrollTrigger: { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
-      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2)
-      .fromTo("#obj3", { rotation: 0, scale: 1, autoAlpha: 0, x: "24vw", y: "-70vh" }, { rotation: 141, scale: .8, autoAlpha: 1, x: "0vw", y: "2vh", duration: 5 }, 0);
+      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2);
 
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
   } else if (hasGsap) {
-    gsap.set(["#chrome", "#fm", "#obj3", "#fr a", "#fl"], { autoAlpha: 1 });
+    gsap.set(["#chrome", "#fm", "#fr a", "#fl"], { autoAlpha: 1 });
     gsap.set(".hero .line span", { y: 0 });
   }
 
@@ -188,7 +236,7 @@
     lit.style.top = top + "px"; lit.style.height = Math.max(0, reach - top) + "px";
     route.classList.toggle("landed", reach >= H - 32);
   }
-  var prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
+  var peopleSec = $("#people"), prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
   var floor = $("#floor"), stations = $$("#floor .st");
   function frame() {
     var y = scrollY();
@@ -197,7 +245,12 @@
       var probe = y + window.innerHeight * 0.42, cur = null;
       chapters.forEach(function (s) { if (probe >= s.offsetTop && probe < s.offsetTop + s.offsetHeight) cur = s.id; });
       if (!cur && chapters.length && probe >= chapters[chapters.length - 1].offsetTop) cur = chapters[chapters.length - 1].id;
-      if (prog) { var mx = (html.scrollHeight - window.innerHeight) || 1; prog.style.transform = "scaleX(" + clamp(y / mx, 0, 1).toFixed(4) + ")"; }
+      var mx = (html.scrollHeight - window.innerHeight) || 1, pr = clamp(y / mx, 0, 1);
+      if (prog) prog.style.transform = "scaleX(" + pr.toFixed(4) + ")";
+      if (cubeFixed) { var vh = window.innerHeight, bh = cubeFixed.offsetHeight, ct = vh * 0.11 + (reduce ? 0 : pr * (vh * 0.97 - bh - vh * 0.11));
+        cubeFixed.style.top = ct.toFixed(1) + "px"; if (!reduce) cubeFixed.style.setProperty("--spin", (pr * 540).toFixed(1) + "deg");
+        /* hidden while the people are on screen, so it never sits over a name */
+        if (peopleSec) { var pb = peopleSec.getBoundingClientRect(); cubeFixed.classList.toggle("hide", pb.top < vh * 0.85 && pb.bottom > vh * 0.15); } }
       var meta = TITLES[cur]; if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }
       if (now) now.classList.toggle("on", y > window.innerHeight * 0.5);
       if (floor && stations.length) { var r = floor.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.85 - r.top) / (r.height + window.innerHeight * 0.25), 0, 1); floor.style.setProperty("--lp", lp.toFixed(3)); stations.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.5) / stations.length); }); }

@@ -165,8 +165,9 @@ slides the logo up and away behind a red bar, four hero lines rising out of mask
 behind a red dot and becomes a red disc with an arrow over anything you can open, smooth scrolling (GSAP
 ScrollSmoother) with parallax, the hero blurring away as you leave it, a black-to-paper wipe into the
 intro statement, separators that grow, headings arriving a word at a time, the tiles' huge drifting
-initials, the inspection tag turning in, the closing line arriving letter by letter, and a red 3D cube
-that flies down into the footer as it staggers in. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText)
+initials, the inspection tag turning in, the closing line arriving letter by letter, and a red 3D cube that rides down the right-hand side of the page with the scroll, tumbling as it goes,
+with a live particle flame inside it that engulfs the whole cube when you hover or tap it; it hides itself
+while the people are on screen so it never sits over a name. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText)
 from cdnjs. Everything falls back to a plain, fully readable page if the library does not load or reduced
 motion is set.
 

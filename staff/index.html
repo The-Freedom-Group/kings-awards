@@ -187,19 +187,26 @@ html.js.has-gsap .hero .fm{opacity:0}
 .intro h2 .ava img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(1)}
 .intro p{max-width:66ch;color:var(--pale-2);font-size:16px;line-height:1.7;margin:clamp(24px,3vw,40px) 0 clamp(28px,3.4vw,44px);transition:color .5s}
 .intro.on-white p{color:var(--ink-2)}
-.intro .obj2{position:absolute;right:-4vw;top:-4vh;width:min(44vw,640px);aspect-ratio:1;opacity:.9;pointer-events:none;z-index:1}
-@media(max-width:900px){.intro .obj2{width:90vw;right:-40vw;top:50%}}
 
-/* the call-point cube */
+/* the cube that rides the page */
+.cube-fixed{position:fixed;right:2vw;top:11vh;width:min(15vw,190px);aspect-ratio:1;z-index:60;transition:opacity .5s,transform .5s;will-change:top;transform:rotate(var(--spin,0deg))}
+.cube-fixed.hide,body.prof-open .cube-fixed,body.menu-open .cube-fixed{opacity:0;pointer-events:none}
+.cube-fixed:hover{transform:rotate(var(--spin,0deg)) scale(1.06)}
+@media(max-width:760px),(max-height:520px){.cube-fixed{display:none}}
 .cube-box{position:relative;width:100%;height:100%;perspective:1400px;transform-style:preserve-3d}
-.cube{--d:calc(var(--w,200px) / 2);position:absolute;left:50%;top:50%;width:40%;height:40%;transform-style:preserve-3d;margin:-20% 0 0 -20%;animation:spin 28s linear infinite}
+.cube{--d:calc(var(--w,200px) / 2);position:absolute;left:50%;top:50%;width:52%;height:52%;transform-style:preserve-3d;margin:-26% 0 0 -26%;animation:spin 28s linear infinite}
+.fire .cube{animation-duration:7s}
 @keyframes spin{from{transform:rotateX(-18deg) rotateY(0deg) rotateZ(10deg)}to{transform:rotateX(-18deg) rotateY(360deg) rotateZ(10deg)}}
-.cube .f{position:absolute;inset:0;border:2px solid rgba(255,255,255,.7);border-radius:4%;background:linear-gradient(135deg,rgba(225,6,0,.96),rgba(184,5,0,.92));box-shadow:inset 0 0 40px rgba(0,0,0,.25);display:grid;place-content:center}
+.cube .f{position:absolute;inset:0;border:2px solid rgba(255,255,255,.7);border-radius:4%;background:linear-gradient(135deg,rgba(225,6,0,.96),rgba(184,5,0,.92));box-shadow:inset 0 0 40px rgba(0,0,0,.25);display:grid;place-content:center;transition:background .4s,border-color .4s,box-shadow .4s}
+.fire .cube .f{background:linear-gradient(160deg,#FFB347,#FF5A00 35%,#E10600 65%,#5A0200);border-color:#FFE29A;box-shadow:0 0 34px rgba(255,120,0,.85),inset 0 0 30px rgba(255,200,80,.45);animation:faceFlicker .14s steps(2) infinite}
+@keyframes faceFlicker{0%{filter:brightness(1)}100%{filter:brightness(1.25)}}
+.fire .cube .f::before{background:#1a0500;box-shadow:inset 0 0 0 2px rgba(255,200,80,.35),inset 0 0 24px rgba(255,90,0,.9)}
 .cube .f::before{content:"";position:absolute;inset:22%;background:var(--black);border-radius:3%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14)}
 .cube .f::after{content:"THIS WAY IN";position:absolute;inset:0;display:grid;place-content:center;font-family:var(--disp);font-variation-settings:"wdth" 122,"wght" 900;font-size:calc(var(--w,200px) * .09);letter-spacing:.02em;color:#fff;text-align:center;line-height:1}
 .cube .f1{transform:translateZ(var(--d))}.cube .f2{transform:rotateY(180deg) translateZ(var(--d))}.cube .f3{transform:rotateY(90deg) translateZ(var(--d))}.cube .f4{transform:rotateY(-90deg) translateZ(var(--d))}.cube .f5{transform:rotateX(90deg) translateZ(var(--d))}.cube .f6{transform:rotateX(-90deg) translateZ(var(--d))}
-.cube .lamp{position:absolute;left:50%;top:50%;width:22%;height:22%;margin:-11% 0 0 -11%;border-radius:50%;background:#fff;box-shadow:0 0 30px 10px rgba(255,255,255,.6),0 0 80px 30px rgba(225,6,0,.7);animation:lampPulse 1.6s ease-in-out infinite}
-.cube-box .halo{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle,rgba(225,6,0,.35),rgba(225,6,0,.1) 45%,transparent 70%);filter:blur(40px)}
+.cube-box .flame{position:absolute;left:-40%;right:-40%;top:-90%;bottom:-15%;width:auto;height:auto;pointer-events:none;mix-blend-mode:screen}
+.cube-box .halo{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle,rgba(225,6,0,.35),rgba(225,6,0,.1) 45%,transparent 70%);filter:blur(40px);transition:background .5s,inset .5s}
+.fire .cube-box .halo{inset:0;background:radial-gradient(circle,rgba(255,150,0,.7),rgba(225,6,0,.4) 45%,transparent 72%)}
 
 /* ══ CHAPTERS ══════════════════════════════════════════════════ */
 .ch{padding:clamp(72px,10vw,150px) 0;position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
@@ -288,27 +295,29 @@ html.js.has-gsap .hero .fm{opacity:0}
 /* ── 03 the roll call, as nine tiles ─────────────────────────── */
 .legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:clamp(22px,3vw,36px);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);align-items:center}
 .legend i{display:inline-block;width:22px;height:12px;border:1.5px solid var(--black);border-radius:2px;vertical-align:-1px;margin-right:8px;background:var(--b)}
-.tiles{display:grid;gap:12px}
-.tile{position:relative;width:100%;aspect-ratio:16/7.5;border-radius:8px;overflow:hidden;background:var(--black);border:0;padding:0;text-align:left;color:#fff;font:inherit;cursor:pointer;display:block;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(3,1fr)}
+@media(max-width:1000px){.tiles{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.tiles{grid-template-columns:1fr}}
+.tile{position:relative;width:100%;aspect-ratio:4/3.4;border-radius:8px;overflow:hidden;background:var(--black);border:0;padding:0;text-align:left;color:#fff;font:inherit;cursor:pointer;display:block;box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .tile .bg{position:absolute;inset:0;background:radial-gradient(110% 90% at 18% 12%,var(--a),transparent 55%),radial-gradient(90% 80% at 88% 92%,rgba(225,6,0,.22),transparent 60%),linear-gradient(180deg,#1C1C1C,#0E0E0E)}
 .tile .grain{position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.tile .band-l{position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--b);border-right:2px solid rgba(255,255,255,.18)}
-.tile .big{position:absolute;left:50%;top:50%;font-family:var(--disp);font-variation-settings:"wdth" 125,"wght" 900;text-transform:uppercase;font-size:clamp(180px,34vw,560px);line-height:1;color:rgba(255,255,255,.07);letter-spacing:-.04em;transform:translate(-50%,-50%);will-change:transform;pointer-events:none}
-.tile .q{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(30ch,78%);text-align:center;font-family:var(--disp);font-variation-settings:"wdth" 100,"wght" 700;font-size:clamp(18px,2.2vw,34px);line-height:1.15;letter-spacing:-.02em;color:#fff}
-.tile .cap{position:absolute;left:36px;bottom:26px;display:grid;gap:4px}
-.tile .cap b{font-family:var(--disp);font-variation-settings:"wdth" 120,"wght" 900;text-transform:uppercase;font-size:clamp(24px,3vw,44px);line-height:.9;letter-spacing:-.015em}
-.tile .cap span{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-2)}
-.tile .no{position:absolute;left:36px;top:24px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pale-2);display:flex;gap:14px}
+.tile .band-l{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--b);border-right:2px solid rgba(255,255,255,.18)}
+.tile .big{position:absolute;left:50%;top:50%;font-family:var(--disp);font-variation-settings:"wdth" 125,"wght" 900;text-transform:uppercase;font-size:clamp(150px,17vw,290px);line-height:1;color:rgba(255,255,255,.07);letter-spacing:-.04em;transform:translate(-50%,-50%);will-change:transform;pointer-events:none}
+.tile .q{position:absolute;left:50%;top:50%;transform:translate(-50%,-56%);max-width:88%;text-align:center;font-family:var(--disp);font-variation-settings:"wdth" 100,"wght" 700;font-size:clamp(15px,1.3vw,20px);line-height:1.2;letter-spacing:-.015em;color:#fff}
+.tile .cap{position:absolute;left:26px;bottom:20px;right:20px;display:grid;gap:3px}
+.tile .cap b{font-family:var(--disp);font-variation-settings:"wdth" 120,"wght" 900;text-transform:uppercase;font-size:clamp(20px,1.9vw,28px);line-height:.9;letter-spacing:-.015em}
+.tile .cap span{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale-2)}
+.tile .no{position:absolute;left:26px;top:18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--pale-2);display:flex;gap:14px}
 .tile .no i{font-style:normal;color:#fff}
-.tile .pres{position:absolute;right:26px;top:22px;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-3);transition:color .3s}
-.tile .pres i{width:24px;height:24px;border:2px solid #fff;border-radius:3px;display:grid;place-content:center;position:relative;background:transparent;transition:background .3s}
-.tile .pres i::after{content:"";position:absolute;left:6px;top:1px;width:7px;height:13px;border-right:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(45deg) scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.tile .pres{position:absolute;right:18px;top:16px;display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-3);transition:color .3s}
+.tile .pres i{width:20px;height:20px;border:2px solid #fff;border-radius:3px;display:grid;place-content:center;position:relative;background:transparent;transition:background .3s}
+.tile .pres i::after{content:"";position:absolute;left:5px;top:0;width:6px;height:11px;border-right:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(45deg) scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
 .tile.here .pres{color:#fff}
 .tile.here .pres i{background:var(--red);border-color:var(--red)}
 .tile.here .pres i::after{transform:rotate(45deg) scale(1)}
-.tile .film{position:absolute;right:26px;bottom:26px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pale-2);border:1.5px solid rgba(255,255,255,.35);border-radius:3px;padding:8px 12px}
+.tile .film{display:none;position:absolute;right:26px;bottom:26px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pale-2);border:1.5px solid rgba(255,255,255,.35);border-radius:3px;padding:8px 12px}
 .tile template{display:none}
-@media(max-width:900px){.tile{aspect-ratio:4/3.2}.tile .big{font-size:clamp(150px,50vw,260px)}.tile .q{font-size:clamp(16px,4.5vw,22px);max-width:84%}.tile .film{display:none}.tile .cap{left:28px;bottom:20px}.tile .no{left:28px}}
+@media(max-width:600px){.tile{aspect-ratio:4/3}.tile .big{font-size:clamp(150px,50vw,260px)}.tile .q{font-size:clamp(15px,4.2vw,19px)}}
 .tiles + .tk{margin-top:clamp(26px,4vw,48px)}
 
 /* profile sheet */
@@ -401,8 +410,6 @@ body.prof-open{overflow:hidden}
 .bigman{position:absolute;right:calc(var(--gut) * .5);bottom:-4%;width:clamp(200px,28vw,420px);opacity:.1;pointer-events:none;z-index:1}
 .bigman svg{width:100%;height:auto}
 footer{background:var(--black);color:var(--pale-2);padding:clamp(80px,12vw,200px) 0 44px;font-size:14px;line-height:1.6;position:relative;z-index:6;border-top:1px solid var(--rule-d);overflow:hidden}
-footer .obj3{position:absolute;right:0;top:-12vh;width:min(40vw,560px);aspect-ratio:1;pointer-events:none;z-index:1}
-html.js.has-gsap footer .obj3{opacity:0}
 footer .wrap{position:relative;z-index:2}
 .ft-top{display:flex;justify-content:center;padding:0 0 clamp(26px,3.6vw,44px);border-bottom:1px solid var(--rule-d)}
 .totop{display:inline-flex;flex-direction:column;align-items:center;gap:12px;color:var(--pale);padding:10px}
@@ -430,9 +437,9 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
 @media(prefers-reduced-motion:reduce){
   .rv,.flip>*{opacity:1;transform:none;transition:none}.ch h2 .wipe{clip-path:none;transition:none}
   .hero .ph img,.route .lit,.sq,.tile .pres i::after,.floor::before{transition:none;animation:none}
-  .route .lit::after{animation:none}.cube,.cube .lamp,.hero .fm svg{animation:none}
-  .preloader{display:none}html.js.has-gsap .chrome,html.js.has-gsap .hero .fm,html.js.has-gsap footer .obj3{opacity:1}.hero h1 .line span{transform:none!important}}
-@media print{.chrome,.prog,.route,.totop,.bigman,.preloader,.cur-dot,.cur-ring,.obj2,.obj3,.hero .foot{display:none}.hero{height:auto;min-height:0;background:#fff;color:#000}.hero .ph{position:relative;height:50vh}.hero .in{position:relative;padding:20px 0}.hero h1{color:#000}
+  .route .lit::after{animation:none}.cube,.hero .fm svg{animation:none}
+  .preloader{display:none}html.js.has-gsap .chrome,html.js.has-gsap .hero .fm{opacity:1}.hero h1 .line span{transform:none!important}}
+@media print{.chrome,.prog,.route,.totop,.bigman,.preloader,.cur-dot,.cur-ring,.cube-fixed,.hero .foot{display:none}.hero{height:auto;min-height:0;background:#fff;color:#000}.hero .ph{position:relative;height:50vh}.hero .in{position:relative;padding:20px 0}.hero h1{color:#000}
   .ch,.ch.dark,.ch.on-red,.entrance,.intro,body,footer{background:#fff;color:#000}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
@@ -496,7 +503,6 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
 <!-- ══ THE WIPE ══ -->
 <div class="colour-divider" aria-hidden="true"></div>
 <section class="intro" id="intro">
-  <div class="obj2" id="obj2" aria-hidden="true"><div class="cube-box"><div class="halo"></div><div class="cube"><div class="f f1"></div><div class="f f2"></div><div class="f f3"></div><div class="f f4"></div><div class="f f5"></div><div class="f f6"></div><div class="lamp"></div></div></div></div>
   <div class="wrap">
     <div class="sep with-text">Unit 19 / Bury / Est. 2021</div>
     <h2 class="fi">We're Freedom Fire<span class="ava"><img src="../assets/team-sm.jpg" alt=""></span>a fire safety business that hires the people the job market walks past, and <em class="s">trains every one of them</em> to a certified trade.</h2>
@@ -570,13 +576,13 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
         <span class="fb"><span class="k">Activity d · what we do</span><p>Job Centre referrals, no degree filter, no experience wall, adjustments offered up front — and what is actually screened for: attitude.</p><span class="tk"><b>Team to supply</b>The advert, the process, and who it reached.</span></span></button>
     </div>
     <div class="plan rv">
-      <div class="ph"><span class="sign green">Floor plan</span>The route from starter to mentor</div>
+      <div class="ph"><span class="sign green">Floor plan</span>The route through the door: from first day to training the next person</div>
       <div class="floor" id="floor">
-        <div class="st"><div class="no">Station 1</div><h3>Day one</h3><p>Paid from the start. <span class="tk-in">TK — starting package</span></p></div>
-        <div class="st"><div class="no">Station 2</div><h3>First tickets</h3><p>Qualifications funded by the company. <span class="tk-in">TK — which</span></p></div>
-        <div class="st"><div class="no">Station 3</div><h3>On the vans</h3><p>Mentored by an experienced engineer on real jobs.</p></div>
-        <div class="st"><div class="no">Station 4</div><h3>Certified</h3><p>Signing their own work. <span class="tk-in">TK — time to qualify</span></p></div>
-        <div class="st"><div class="no">Station 5</div><h3>The mentor</h3><p>Training the next one through the same door.</p></div>
+        <div class="st"><div class="no">Stage 1</div><h3>Day one</h3><p>A paid job from the first day, whichever way you came in. No unpaid trial, no "see how it goes". <span class="tk-in">TK — the starting wage and hours</span></p></div>
+        <div class="st"><div class="no">Stage 2</div><h3>First tickets</h3><p>The first qualifications you need to work safely, booked and paid for by the company in your first weeks. <span class="tk-in">TK — which qualifications, and their cost</span></p></div>
+        <div class="st"><div class="no">Stage 3</div><h3>On the vans</h3><p>Out on real jobs alongside an experienced engineer, who shows you the work and checks yours, until you can do it unsupervised.</p></div>
+        <div class="st"><div class="no">Stage 4</div><h3>Certified</h3><p>Qualified in your own right and signing off your own work. <span class="tk-in">TK — how long that typically takes</span></p></div>
+        <div class="st"><div class="no">Stage 5</div><h3>The mentor</h3><p>Now the experienced engineer in the van, training the next person who came in through the same door.</p></div>
       </div>
     </div>
   </div>
@@ -651,7 +657,7 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
       <div>
         <div class="ch-tag"><span class="num">04</span>The people</div>
         <h2 class="wd">Assembly point. <em class="s">Roll call.</em></h2>
-        <p class="stand">Nine names, ticked present as you reach them. The band down the left of each is the route in. Open a name for the question, the film slot and the story in their own words.</p>
+        <p class="stand">Nine names, ticked present as you reach them. The band down the left of each card is the route in. Open a name for the question they are filmed answering, the film slot and the story in their own words.</p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#E10600"/><g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="square"><path d="M18 18l22 22M102 18L80 40M18 102l22-22M102 102L80 80"/></g><g fill="#fff"><circle cx="52" cy="52" r="6"/><circle cx="68" cy="52" r="6"/><circle cx="52" cy="68" r="6"/><circle cx="68" cy="68" r="6"/></g></svg></div>
     </div>
@@ -790,7 +796,6 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
 </main>
 
 <footer id="footer">
-  <div class="obj3" id="obj3" aria-hidden="true"><div class="cube-box"><div class="halo"></div><div class="cube"><div class="f f1"></div><div class="f f2"></div><div class="f f3"></div><div class="f f4"></div><div class="f f5"></div><div class="f f6"></div><div class="lamp"></div></div></div></div>
   <div class="wrap">
     <div class="ft-top footer-item"><a class="totop" href="#top" aria-label="Back to the top" data-cur><span class="sq2"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="square"><path d="M15 26V6M6 15l9-9 9 9"/></svg></span><span class="lbl">Back to the top</span></a></div>
     <div class="ft-grid">
@@ -805,6 +810,10 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
 
 </div><!-- /smooth-content -->
 </div><!-- /smooth-wrapper -->
+
+<div class="cube-fixed" id="cubeFixed" aria-hidden="true" data-cur>
+  <div class="cube-box" id="cubeBox"><div class="halo"></div><div class="cube"><div class="f f1"></div><div class="f f2"></div><div class="f f3"></div><div class="f f4"></div><div class="f f5"></div><div class="f f6"></div></div><canvas class="flame" id="flame"></canvas></div>
+</div>
 
 <div class="prof" id="prof" role="dialog" aria-modal="true" aria-labelledby="pfName" hidden>
   <div class="prof-in">
