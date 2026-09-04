@@ -144,10 +144,10 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff — The Open Door.** Rebuilt on 4 September 2026 for one reader: the assessor. Night navy,
-flame, ember and amber (the Freedom Freight palette), Barlow Condensed capitals, Plex Mono data,
-hazard-tape section markers. Warehouse, not magazine. The cover is a roller shutter that rolls up
-on scroll to reveal the team; Part 01 is the award's five tests as a checklist with where each is
+**Staff — The Open Door.** Rebuilt on 4 September 2026 for one reader: the assessor. Night navy with
+one muted gold and a single ember accent, Barlow Condensed in sentence case, Plex Mono data,
+hairline rules, thin-bordered panels. Restrained, not poster. The cover is a roller shutter that
+opens and closes on a tap to reveal the team; Part 01 is the award's five tests as a checklist with where each is
 answered; Part 03 is the programme (four shutter panels for the four named activities, the path
 with a walker, the two-year-test calculator with a ruler, the four proofs); Part 04 is nine
 profiles in three stories, each with its own question and a film slot; Part 05 is the two

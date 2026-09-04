@@ -86,28 +86,18 @@
   /* on a desk the cover is pinned for one viewport of scrolling while the
      door opens; the door is fully open before the page moves on. On a phone
      it opens as the doorway comes into view. A knock opens it at once. */
-  function doorFromScroll(y) {
-    if (!doorway || reduce) return;
-    var target;
-    if (doorKnocked) target = 100;
-    else if (window.innerWidth > 920) target = clamp(6 + (y / window.innerHeight) * 94, 6, 100);
-    else {
-      var r = doorway.getBoundingClientRect();
-      target = clamp(6 + ((window.innerHeight - r.top) / (window.innerHeight * 0.75)) * 94, 6, 100);
-    }
-    setDoor(target);
-    if (doorCap && !doorKnocked) doorCap.textContent = target >= 99 ? "Come in" : "Scroll to open, or tap";
-  }
+  /* the gate opens and closes on a click, nothing else */
+  function doorFromScroll() {}
   if (doorBtn) {
     doorBtn.addEventListener("click", function () {
       doorKnocked = !doorKnocked;
       doorBtn.setAttribute("aria-pressed", doorKnocked);
       doorBtn.setAttribute("aria-label", doorKnocked ? "Close the shutter" : "Open the shutter");
-      if (doorCap) doorCap.textContent = doorKnocked ? "Come in" : "Scroll to open, or tap";
-      if (reduce) setDoor(doorKnocked ? 100 : 70); else doorFromScroll(window.pageYOffset || 0);
+      if (doorCap) doorCap.textContent = doorKnocked ? "Tap to close" : "Tap to open";
+      setDoor(doorKnocked ? 100 : 0);
     });
   }
-  if (reduce) setDoor(78); else setTimeout(function () { setDoor(8); }, 400);
+  setDoor(0);
 
   /* ── the four doors ───────────────────────────────────────── */
   $$("#doors .dr").forEach(function (dr) {
