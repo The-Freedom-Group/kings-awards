@@ -144,24 +144,24 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff — The Way In.** Rebuilt on 4 September 2026 at Bill's direction to match the language of
-a studio site he admires (rzv.studio), effect for effect, in our own code and with our content.
-Near-black plum and off-white, Inter 800 uppercase for the big lines with one Baskerville italic
-word in each, DM Mono for the small print. On arrival: a preloader that slides the logo up and
-away, then the four hero lines rise out of masks with a slight rotation, a glass cube (CSS 3D,
-iridescent edges, an orb inside) floats up, and the header, the rotating "scroll down" circle
-and the mono footnotes follow. A ring cursor lags behind a dot and, over anything you can open,
-becomes a white disc with an arrow. Scrolling is smoothed (GSAP ScrollSmoother) with parallax on
-the cubes; the hero blurs away as you leave it; separators grow from 25% to full width; headings
-arrive a word at a time. The nine people are full-width tiles, each a dark gradient in its own
-hue, a huge serif initial that drifts as you scroll, the person's question, and a caption; the
-arrow cursor opens the profile sheet (question, film slot, own words, route, since, which award
-activity it proves; previous and next). Then the page wipes from dark to white for the statement
-and a slow carousel of routes and commitments, back to dark for a starfield behind "This is more
-than a hiring policy", the five tests with the two-year calculator in a glass box, and "Fancy a
-proper trade?" whose letters arrive one by one while the cube flies down into the footer, which
-staggers in. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText) from cdnjs. Everything falls
-back to a plain, fully readable page if the library does not load or reduced motion is set.
+**Staff — The Way In.** The signage site with a studio site's engine underneath it (4 September 2026,
+after Bill asked for a mix of the bold signage version and the rzv.studio rebuild). Skin: UK fire-safety
+signage. Red, white, grey and black; Archivo wide and heavy for the big lines with one Instrument Serif
+italic word in red; IBM Plex Mono for the small print. A break-glass call point over the blurred team
+photo instead of a door (a click breaks the glass, a click resets it), an escape-route strip down the
+left lit as far as you have read, sign tokens, the four activities as signs that turn over, a floor plan
+that lights station by station, two plates on the wall, the inspection tag with the two-year ruler, the
+fire-class paper, and the ticker. Motion: a preloader that slides the logo up and away with a red bar,
+the two hero lines rising out of masks with a slight rotation, the call point floating up, a ring cursor
+that lags behind a red dot and becomes a red disc with an arrow over anything you can open, smooth
+scrolling (GSAP ScrollSmoother) with parallax on the photo and the cube, the hero blurring away as you
+leave it, a black-to-paper wipe into the intro statement, separators that grow from 25% to full width,
+chapter headings arriving a word at a time, the nine people as full-width black tiles with a route band,
+a huge drifting initial and a Present box that ticks as each tile arrives, an ember field behind "This is
+more than a hiring policy", a marquee of the commitments, the inspection tag turning in, "Fancy a proper
+trade?" arriving letter by letter, and a red 3D call-point cube that flies down into the footer as it
+staggers in. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText) from cdnjs. Everything falls back to a
+plain, fully readable page if the library does not load or reduced motion is set.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
