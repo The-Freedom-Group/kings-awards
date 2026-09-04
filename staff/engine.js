@@ -148,6 +148,8 @@
     $("#pfRole").innerHTML = card.dataset.role;
     $("#pfRoute").textContent = card.dataset.route; $("#pfRoute2").textContent = card.dataset.route;
     $("#pfFocus").innerHTML = card.dataset.focus;
+    var q = card.dataset.q || "";
+    $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + card.dataset.name : "“" + q + "”";
     $("#pfSince").textContent = card.dataset.since === "TK" ? "TK — start date" : card.dataset.since;
     $("#pfAct").innerHTML = card.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
     var tpl = $("template.story", card);

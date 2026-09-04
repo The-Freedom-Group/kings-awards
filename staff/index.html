@@ -274,12 +274,22 @@ button.card:focus-visible{outline:2px solid var(--red);outline-offset:4px}
 .card .nt b{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
 .card template{display:none}
 
-/* the one question */
-.question{border:1px solid var(--ink);padding:clamp(18px,2.8vw,30px);margin-top:clamp(24px,3.4vw,40px);display:grid;gap:10px}
-.question .qk{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
-.question .qq{margin:0;font-family:var(--serif);font-size:clamp(24px,3.2vw,44px);line-height:1.05;font-weight:300}
-.question .qq::first-letter{color:var(--red)}
-.question .qn{font-size:13.5px;color:var(--ink-2)}
+/* the three stories */
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);margin-top:clamp(24px,3.4vw,40px)}
+@media(max-width:900px){.cats{grid-template-columns:1fr}}
+.cat{padding:clamp(18px,2.6vw,28px);display:grid;gap:10px;align-content:start;border-left:1px solid var(--hair)}
+.cat:first-child{border-left:0}
+@media(max-width:900px){.cat{border-left:0;border-top:1px solid var(--hair)}.cat:first-child{border-top:0}}
+.cat .ck{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.cat h3{font-size:clamp(22px,2.4vw,30px);line-height:1.05}
+.cat p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.cat .cq{font-family:var(--serif);font-style:italic;font-size:15px;line-height:1.35;color:var(--ink);border-top:1px solid var(--hair);padding-top:10px}
+.cat .cw{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.cat .cw i{font-style:normal;color:var(--ink-3)}
+.catnote{margin:14px 0 0;font-size:13.5px;color:var(--ink-3)}
+.card .nt em{font-style:normal;font-weight:600;color:var(--ink)}
+.card .nt em.tbd{color:var(--ink-3);font-weight:400}
+.card .nt em.access,.card .nt em.hard{color:var(--red)}
 
 /* routes in, as a ledger row */
 .routes{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--ink);margin-top:clamp(18px,2.6vw,28px)}
@@ -670,17 +680,31 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
 <!-- 03 CREW -->
 <section id="crew">
   <div class="wrap">
-    <div class="part rv"><span class="no">03</span><span class="ti">The crew — nine profiles, one question</span><span class="rule"></span></div>
+    <div class="part rv"><span class="no">03</span><span class="ti">The crew — nine profiles, three stories</span><span class="rule"></span></div>
     <h2 class="h-b rv">Faces, not <em>job titles</em></h2>
-    <p class="lede rv" style="--d:.1s">Nine people, one card each: how they came in, what they're here for, and a
-    short film answering the same single question. Every route in is one of the four things the award names —
+    <p class="lede rv" style="--d:.1s">Nine people, one card each: how they came in, which of three stories is theirs, and a short film answering
+    a question written for them. Every route in is one of the four things the award names —
     the crew is the exhibit's evidence, and each profile says which line of it they prove.</p>
 
-    <div class="question rv" style="--d:.12s">
-      <span class="qk">The one question, asked of everyone</span>
-      <p class="qq">“Where were you before the door — and where are you now?”</p>
-      <span class="qn">One take, under a minute, phone camera is fine. Same question, nine answers.</span>
+    <div class="cats rv" style="--d:.12s" aria-label="The three kinds of story">
+      <div class="cat feet"><span class="ck">Story i</span><h3>Finding their feet</h3>
+        <p>Came in green, on a placement or straight from study, and grew into the trade. The story of adapting
+        to real work — and of a company that made room for it.</p>
+        <span class="cq">Question shape · “What did you expect it to be, and what did it turn out to be?”</span>
+        <span class="cw">Bill <i>· others to be assigned</i></span></div>
+      <div class="cat access"><span class="ck">Story ii</span><h3>Access &amp; adjustments</h3>
+        <p>The job made to fit the person, not the other way round. What had to change, who changed it, and what
+        the person then did with it. Told only in their own words, with written consent.</p>
+        <span class="cq">Question shape · “What had to change for this to work — and who changed it?”</span>
+        <span class="cw">Jojo</span></div>
+      <div class="cat hard"><span class="ck">Story iii</span><h3>A harder start</h3>
+        <p>No route in and nothing behind them — the street, the Job Centre, a life that had not offered a trade.
+        What an open door means when there is no safety net.</p>
+        <span class="cq">Question shape · “Where were you the year before this — and where are you now?”</span>
+        <span class="cw">Dylan <i>· others to be assigned</i></span></div>
     </div>
+    <p class="catnote rv" style="--d:.13s">Every profile carries its own question, written for that person. The shapes above are
+    starting points; the question on each card is the one that gets filmed.</p>
 
     <div class="routes rv" style="--d:.14s" aria-label="Routes in, and which award activity each proves">
       <div class="rt"><b>4</b><span>T-Level placements</span><i>a · work experience</i></div>
@@ -691,73 +715,73 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
     </div>
 
     <div class="rack" id="rack">
-      <button class="card rv" type="button" style="--d:0.00s" data-k="tom" data-name="Tom Letcher" data-role="Founder &amp; Managing Director" data-route="Founder" data-focus="Built the door" data-act="a b c d" data-since="27·08·2021" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.00s" data-k="tom" data-name="Tom Letcher" data-role="Founder &amp; Managing Director" data-route="Founder" data-cat="door" data-focus="The door itself" data-q="Why keep the door open, when it would be easier to hire the finished article?" data-act="a b c d" data-since="27·08·2021" aria-haspopup="dialog">
         <span class="cn">No. 001</span><span class="route founder">Founder</span>
         <span class="nm">Tom Letcher</span><span class="rl">Founder &amp; Managing Director</span>
-        <span class="nt"><b>Focus ·</b> Built the door</span>
+        <span class="nt"><b>Story ·</b> <em class="catl door">The door itself</em></span>
         <span class="punch"><span>Watch · Read</span><b>27·08·2021</b></span>
         <template class="story">Started the company at 25 and still picks up the phone. The open door is his hiring policy, not a scheme.</template>
       </button>
-      <button class="card rv" type="button" style="--d:0.06s" data-k="bill" data-name="Bill" data-role="Web Developer" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.06s" data-k="bill" data-name="Bill" data-role="Web Developer" data-route="T-Level placement" data-cat="feet" data-focus="Finding their feet" data-q="What did you expect it to be, and what did it turn out to be?" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 002</span><span class="route tlevel">T-Level placement</span>
         <span class="nm">Bill</span><span class="rl">Web Developer</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl feet">Finding their feet</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
-        <template class="story">Came in on a T-Level industry placement and stayed. <span class="tk-in">TK — where before, what changed, what next.</span></template>
+        <template class="story">Came in on a T-Level industry placement and stayed. <span class="tk-in">TK — the first weeks, what was hard, what clicked, what he runs now.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.12s" data-k="harrison" data-name="Harrison" data-role="Warehouse Operative" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.12s" data-k="harrison" data-name="Harrison" data-role="Warehouse Operative" data-route="T-Level placement" data-cat="tbd" data-focus="To be assigned" data-q="TK — question to be written for Harrison" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 003</span><span class="route tlevel">T-Level placement</span>
         <span class="nm">Harrison</span><span class="rl">Warehouse Operative</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl tbd">To be assigned</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
         <template class="story"><span class="tk-in">TK — where before, how the placement went, what he runs now.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.18s" data-k="gabriel" data-name="Gabriel" data-role="Web Developer" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.18s" data-k="gabriel" data-name="Gabriel" data-role="Web Developer" data-route="T-Level placement" data-cat="tbd" data-focus="To be assigned" data-q="TK — question to be written for Gabriel" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 004</span><span class="route tlevel">T-Level placement</span>
         <span class="nm">Gabriel</span><span class="rl">Web Developer</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl tbd">To be assigned</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
         <template class="story"><span class="tk-in">TK — where before, what changed, what next.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.24s" data-k="jojo" data-name="Jojo" data-role="Warehouse Operative" data-route="College placement" data-focus="Access &amp; adjustments" data-act="a b d" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.24s" data-k="jojo" data-name="Jojo" data-role="Warehouse Operative" data-route="College placement" data-cat="access" data-focus="Access &amp; adjustments" data-q="What had to change for this to work — and who changed it?" data-act="a b d" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 005</span><span class="route college">College placement</span>
         <span class="nm">Jojo</span><span class="rl">Warehouse Operative</span>
-        <span class="nt"><b>Focus ·</b> Access &amp; adjustments</span>
+        <span class="nt"><b>Story ·</b> <em class="catl access">Access &amp; adjustments</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
-        <template class="story"><span class="tk-in">TK — Jojo's account, in Jojo's own words: the placement, the adjustments that made the job work, and what it changed. Health information is Jojo's to share; nothing appears here without written consent.</span></template>
+        <template class="story"><span class="tk-in">TK — Jojo’s account, in Jojo’s own words: the placement, the adjustments that made the job work, and what it changed. Health information is Jojo’s to share; nothing appears here without written consent.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.30s" data-k="elliot" data-name="Elliot" data-role="Ecommerce Assistant" data-route="Student" data-focus="Story" data-act="a b" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.30s" data-k="elliot" data-name="Elliot" data-role="Ecommerce Assistant" data-route="Student" data-cat="tbd" data-focus="To be assigned" data-q="TK — question to be written for Elliot" data-act="a b" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 006</span><span class="route student">Student</span>
         <span class="nm">Elliot</span><span class="rl">Ecommerce Assistant</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl tbd">To be assigned</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
         <template class="story"><span class="tk-in">TK — studying what, how the job fits around it, what changed.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.36s" data-k="dylan" data-name="Dylan" data-role="Warehouse Operative" data-route="Job Centre" data-focus="Story" data-act="d" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.36s" data-k="dylan" data-name="Dylan" data-role="Warehouse Operative" data-route="Job Centre" data-cat="hard" data-focus="A harder start" data-q="Where were you the year before this — and where are you now?" data-act="d" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 007</span><span class="route jobcentre">Job Centre</span>
         <span class="nm">Dylan</span><span class="rl">Warehouse Operative</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl hard">A harder start</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
-        <template class="story"><span class="tk-in">TK — the referral, the interview, the first week, what changed.</span></template>
+        <template class="story"><span class="tk-in">TK — the year before, the referral, the interview, the first week, what changed. In Dylan’s words.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.42s" data-k="billy" data-name="Billy" data-role="IT Technician" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.42s" data-k="billy" data-name="Billy" data-role="IT Technician" data-route="T-Level placement" data-cat="tbd" data-focus="To be assigned" data-q="TK — question to be written for Billy" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 008</span><span class="route tlevel">T-Level placement</span>
         <span class="nm">Billy</span><span class="rl">IT Technician</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl tbd">To be assigned</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
         <template class="story"><span class="tk-in">TK — where before, what changed, what next.</span></template>
       </button>
-      <button class="card rv" type="button" style="--d:0.48s" data-k="josh" data-name="Josh" data-role="Ecommerce Assistant" data-route="Job Centre" data-focus="Story" data-act="d" data-since="TK" aria-haspopup="dialog">
+      <button class="card rv" type="button" style="--d:0.48s" data-k="josh" data-name="Josh" data-role="Ecommerce Assistant" data-route="Job Centre" data-cat="tbd" data-focus="To be assigned" data-q="TK — question to be written for Josh" data-act="d" data-since="TK" aria-haspopup="dialog">
         <span class="cn">No. 009</span><span class="route jobcentre">Job Centre</span>
         <span class="nm">Josh</span><span class="rl">Ecommerce Assistant</span>
-        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="nt"><b>Story ·</b> <em class="catl tbd">To be assigned</em></span>
         <span class="punch"><span>Watch · Read</span><b>TK</b></span>
         <template class="story"><span class="tk-in">TK — the referral, the interview, the first week, what changed.</span></template>
       </button>
     </div>
     <span class="tk rv" style="--d:.1s"><b>Tom &amp; team to supply, with written consent</b>
-    For each person: the film (one question, under a minute), the start date, and two or three sentences in
-    their own words — where they were, how they came in, what changed. Surnames and portraits go on only once
+    For each person: which of the three stories is theirs, their own question, the film (under a minute),
+    the start date, and two or three sentences in their own words — where they were, how they came in, what changed. Surnames and portraits go on only once
     each person has signed the consent form; first names only until then. Anything about health or
     disability is that person's to tell, in their words, or not at all.</span>
   </div>
@@ -1022,10 +1046,10 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
     <span class="proute" id="pfRoute"></span>
     <h3 id="pfName"></h3>
     <div class="prole" id="pfRole"></div>
-    <div class="pfocus"><span>Focus</span><b id="pfFocus"></b></div>
+    <div class="pfocus"><span>Story</span><b id="pfFocus"></b></div>
     <div class="vid" id="pfVid">
       <span class="play" aria-hidden="true"></span>
-      <span class="vq">“Where were you before the door — and where are you now?”</span>
+      <span class="vq" id="pfQ"></span>
       <span class="vt">Film to be recorded · under a minute · one take</span>
     </div>
     <div class="pwords"><span class="pk">In their own words</span><p id="pfStory"></p></div>
