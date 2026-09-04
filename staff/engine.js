@@ -68,59 +68,10 @@
     })();
   }
 
-  /* ── the cube that rides the page, and the fire inside it ── */
+  /* ── the cube that rides the page ─────────────────────── */
   var cubeFixed = $("#cubeFixed");
   function sizeCubes() { $$(".cube").forEach(function (c) { c.style.setProperty("--w", c.offsetWidth + "px"); }); }
   sizeCubes(); window.addEventListener("resize", sizeCubes);
-  (function () {
-    var cv = $("#flame"); if (!cv || !cubeFixed) return;
-    var ctx = cv.getContext("2d"), W = 0, H = 0, ps = [], fire = false, t = 0, cool = null, running = false;
-    function size() { var r = cv.getBoundingClientRect(); W = cv.width = Math.max(2, Math.round(r.width * 1.5)); H = cv.height = Math.max(2, Math.round(r.height * 1.5)); }
-    function spawn(n) {
-      var bw = W / 1.8, cx = W / 2, cy = H * (0.9 + 0.5) / 2.05, half = bw * 0.27;
-      for (var i = 0; i < n; i++) {
-        var p = {};
-        if (fire) {
-          /* born on the cube's faces and edges, all over it */
-          var edge = Math.random(); p.x = cx + (Math.random() - .5) * 2 * half; p.y = cy + (edge < .6 ? (Math.random() - .5) * 2 * half : half * (0.6 + Math.random() * .4));
-          p.vx = (Math.random() - .5) * 1.8; p.vy = -(2.2 + Math.random() * 4.2); p.r = bw * (0.07 + Math.random() * 0.11); p.decay = 0.008 + Math.random() * 0.014;
-        } else {
-          /* the pilot light in the middle */
-          p.x = cx + (Math.random() - .5) * bw * 0.08; p.y = cy + bw * 0.08 + Math.random() * bw * 0.05;
-          p.vx = (Math.random() - .5) * .5; p.vy = -(1.2 + Math.random() * 1.8); p.r = bw * (0.045 + Math.random() * 0.06); p.decay = 0.016 + Math.random() * 0.022;
-        }
-        p.life = 1; p.seed = Math.random() * 6.283; ps.push(p);
-      }
-    }
-    function frame() {
-      running = true; t += 0.016; ctx.clearRect(0, 0, W, H); ctx.globalCompositeOperation = "lighter";
-      if (!reduce || ps.length === 0) spawn(fire ? 22 : 5);
-      for (var i = ps.length - 1; i >= 0; i--) {
-        var p = ps[i];
-        p.x += p.vx + Math.sin(t * 9 + p.seed) * (fire ? .9 : .35); p.y += p.vy; p.vy *= .984; p.vx *= .98; p.life -= p.decay;
-        if (p.life <= 0) { ps.splice(i, 1); continue; }
-        var l = p.life, rad = p.r * (0.35 + 0.65 * l), a = Math.min(1, l * 1.3) * (fire ? .95 : .85);
-        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
-        if (l > .72) { g.addColorStop(0, "rgba(255,255,225," + a + ")"); g.addColorStop(.35, "rgba(255,200,70," + (a * .85) + ")"); g.addColorStop(.7, "rgba(255,110,10," + (a * .4) + ")"); }
-        else if (l > .4) { g.addColorStop(0, "rgba(255,170,50," + a + ")"); g.addColorStop(.4, "rgba(255,80,0," + (a * .7) + ")"); g.addColorStop(.8, "rgba(200,20,0," + (a * .25) + ")"); }
-        else { g.addColorStop(0, "rgba(225,6,0," + a + ")"); g.addColorStop(.5, "rgba(120,0,0," + (a * .45) + ")"); }
-        g.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, 6.283); ctx.fill();
-      }
-      if (ps.length > 900) ps.splice(0, ps.length - 900);
-      if (reduce && ps.length && !fire) { running = false; return; } /* one still frame is enough */
-      requestAnimationFrame(frame);
-    }
-    function ignite(on) {
-      clearTimeout(cool);
-      if (on) { fire = true; cubeFixed.classList.add("fire"); if (!running) frame(); }
-      else cool = setTimeout(function () { fire = false; cubeFixed.classList.remove("fire"); }, 600);
-    }
-    cubeFixed.addEventListener("mouseenter", function () { ignite(true); });
-    cubeFixed.addEventListener("mouseleave", function () { ignite(false); });
-    cubeFixed.addEventListener("click", function () { ignite(!fire); });
-    size(); window.addEventListener("resize", size); frame();
-  })();
 
   /* ── reveal (IO, works with or without the library) ──────── */
   var watched = $$(".rv, .flip");
