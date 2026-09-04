@@ -265,6 +265,60 @@ section+section{border-top:1px solid var(--hair)}
   color:var(--red);border:1px solid var(--red);padding:3px 6px;transform:rotate(6deg);opacity:.85}
 .card.rv{transform:translateY(40px) rotateX(12deg);opacity:0}
 .card.rv.in{transform:none;opacity:1}
+button.card{font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+button.card:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+.card .route{position:absolute;right:10px;top:34px;font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:3px 6px;border:1px solid var(--ink);color:var(--ink);transform:rotate(4deg);background:var(--bone)}
+.card .route.jobcentre,.card .route.college{border-color:var(--red);color:var(--red)}
+.card .route.founder{background:var(--ink);color:var(--bone)}
+.card .nt b{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.card template{display:none}
+
+/* the one question */
+.question{border:1px solid var(--ink);padding:clamp(18px,2.8vw,30px);margin-top:clamp(24px,3.4vw,40px);display:grid;gap:10px}
+.question .qk{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.question .qq{margin:0;font-family:var(--serif);font-size:clamp(24px,3.2vw,44px);line-height:1.05;font-weight:300}
+.question .qq::first-letter{color:var(--red)}
+.question .qn{font-size:13.5px;color:var(--ink-2)}
+
+/* routes in, as a ledger row */
+.routes{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--ink);margin-top:clamp(18px,2.6vw,28px)}
+@media(max-width:900px){.routes{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.routes{grid-template-columns:1fr 1fr}}
+.routes .rt{padding:14px 12px 14px 0;border-bottom:1px solid var(--hair);display:grid;gap:3px}
+.routes .rt b{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3.2vw,42px);line-height:1;color:var(--red)}
+.routes .rt span{font-size:14px;font-weight:500}
+.routes .rt i{font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+/* the profile sheet */
+.prof{position:fixed;inset:0;z-index:250;background:rgba(20,20,20,.28);display:flex;justify-content:flex-end}
+.prof[hidden]{display:none}
+.prof-in{width:min(560px,100%);height:100%;overflow:auto;background:var(--bone);border-left:1px solid var(--ink);padding:clamp(22px,3vw,40px);
+  position:relative;transform:translateX(24px);opacity:0;animation:sheetIn .45s cubic-bezier(.2,.8,.25,1) forwards}
+@keyframes sheetIn{to{transform:none;opacity:1}}
+.pclose{position:absolute;top:18px;right:18px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  background:none;border:1px solid var(--ink);color:var(--ink);padding:10px 14px;cursor:pointer}
+.pclose:hover{background:var(--ink);color:var(--bone)}
+.proute{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);
+  border:1px solid var(--red);padding:4px 8px;margin:28px 0 16px}
+.prof h3{font-size:clamp(34px,4.4vw,56px);line-height:1;margin-bottom:6px}
+.prole{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px}
+.pfocus{display:flex;gap:12px;align-items:baseline;border-top:1px solid var(--ink);padding-top:12px;margin-bottom:18px}
+.pfocus span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.pfocus b{font-family:var(--serif);font-weight:400;font-size:20px}
+.vid{position:relative;aspect-ratio:16/9;border:1px dashed var(--red);background:var(--bone-2);display:grid;place-content:center;gap:10px;
+  text-align:center;padding:20px}
+.vid .play{width:54px;height:54px;border-radius:50%;border:1.5px solid var(--ink);margin:0 auto;position:relative}
+.vid .play::after{content:"";position:absolute;left:21px;top:16px;border-left:16px solid var(--red);border-top:11px solid transparent;border-bottom:11px solid transparent}
+.vid .vq{font-family:var(--serif);font-size:clamp(17px,2vw,22px);line-height:1.2;max-width:26ch}
+.vid .vt{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+.pwords{margin-top:22px}
+.pk{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.pwords p{margin:0;font-size:15.5px;line-height:1.6;color:var(--ink-2)}
+.pmeta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:22px;border-top:1px solid var(--hair);padding-top:16px}
+@media(max-width:480px){.pmeta{grid-template-columns:1fr}}
+.pmeta b{font-size:14px;font-weight:600;line-height:1.35}
+body.prof-open{overflow:hidden}
 
 /* ── THE OPEN DOOR ──────────────────────────────────────────── */
 .door-lead{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(30px,5vw,80px);align-items:start;margin-bottom:clamp(34px,5vw,60px)}
@@ -616,48 +670,96 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
 <!-- 03 CREW -->
 <section id="crew">
   <div class="wrap">
-    <div class="part rv"><span class="no">03</span><span class="ti">The crew — the clocking-in board</span><span class="rule"></span></div>
+    <div class="part rv"><span class="no">03</span><span class="ti">The crew — nine profiles, one question</span><span class="rule"></span></div>
     <h2 class="h-b rv">Faces, not <em>job titles</em></h2>
-    <p class="lede rv" style="--d:.1s">The people who turn up, fit it properly and sign their name to it — one
-    timecard each, in the rack by the door. Most of them clocked in for the first time through Part 04.</p>
-    <div class="rack" id="rack">
-      <div class="card rv"><span class="cn">No. 001</span>
-        <span class="nm">Tom Letcher</span><span class="rl">Founder &amp; Director</span>
-        <span class="nt">Founded the company in 2021 and still picks up the phone. <span class="tk-in">TK — one line</span></span>
-        <span class="punch"><span>In</span><b data-punch>27·08·2021</b></span></div>
-      <div class="card rv" style="--d:.06s"><span class="cn">No. 002</span><span class="via">Via the door</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Operations</span>
-        <span class="nt"><span class="tk-in">TK — one line about what they run</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
-      <div class="card rv" style="--d:.12s"><span class="cn">No. 003</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Lead engineer</span>
-        <span class="nt"><span class="tk-in">TK — years in the trade, tickets held</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
-      <div class="card rv" style="--d:.18s"><span class="cn">No. 004</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Fire risk assessor</span>
-        <span class="nt"><span class="tk-in">TK — qualifications and patch covered</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
-      <div class="card rv" style="--d:.24s"><span class="cn">No. 005</span><span class="via">Via the door</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Service engineer</span>
-        <span class="nt"><span class="tk-in">TK — one line</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
-      <div class="card rv" style="--d:.30s"><span class="cn">No. 006</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Scheduling &amp; office</span>
-        <span class="nt">Knows where everyone is. <span class="tk-in">TK</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
-      <div class="card rv" style="--d:.36s"><span class="cn">No. 007</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Accounts</span>
-        <span class="nt"><span class="tk-in">TK — one line</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
-      <div class="card rv" style="--d:.42s"><span class="cn">No. 008</span><span class="via">Via the door</span>
-        <span class="nm"><span class="tk-in">TK — name</span></span><span class="rl">Apprentice</span>
-        <span class="nt"><span class="tk-in">TK — what they're training towards</span></span>
-        <span class="punch"><span>In</span><b data-punch>TK</b></span></div>
+    <p class="lede rv" style="--d:.1s">Nine people, one card each: how they came in, what they're here for, and a
+    short film answering the same single question. Every route in is one of the four things the award names —
+    the crew is the exhibit's evidence, and each profile says which line of it they prove.</p>
+
+    <div class="question rv" style="--d:.12s">
+      <span class="qk">The one question, asked of everyone</span>
+      <p class="qq">“Where were you before the door — and where are you now?”</p>
+      <span class="qn">One take, under a minute, phone camera is fine. Same question, nine answers.</span>
     </div>
-    <span class="tk rv" style="--d:.1s"><b>Tom &amp; team to supply</b>
-    Names, start dates and one line each, with written consent before anyone is published. Mark
-    which people came through the open door — the "via the door" stamps here are placeholders, not
-    a record. Duplicate or delete cards to match the real headcount; portraits can join later.</span>
+
+    <div class="routes rv" style="--d:.14s" aria-label="Routes in, and which award activity each proves">
+      <div class="rt"><b>4</b><span>T-Level placements</span><i>a · work experience</i></div>
+      <div class="rt"><b>2</b><span>Job Centre referrals</span><i>d · recruitment open to everyone</i></div>
+      <div class="rt"><b>1</b><span>College placement</span><i>a · work experience</i></div>
+      <div class="rt"><b>1</b><span>Student, alongside study</span><i>a &amp; b · careers advice, mentoring</i></div>
+      <div class="rt"><b>1</b><span>Founder</span><i>the one who opened it</i></div>
+    </div>
+
+    <div class="rack" id="rack">
+      <button class="card rv" type="button" style="--d:0.00s" data-k="tom" data-name="Tom Letcher" data-role="Founder &amp; Managing Director" data-route="Founder" data-focus="Built the door" data-act="a b c d" data-since="27·08·2021" aria-haspopup="dialog">
+        <span class="cn">No. 001</span><span class="route founder">Founder</span>
+        <span class="nm">Tom Letcher</span><span class="rl">Founder &amp; Managing Director</span>
+        <span class="nt"><b>Focus ·</b> Built the door</span>
+        <span class="punch"><span>Watch · Read</span><b>27·08·2021</b></span>
+        <template class="story">Started the company at 25 and still picks up the phone. The open door is his hiring policy, not a scheme.</template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.06s" data-k="bill" data-name="Bill" data-role="Web Developer" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 002</span><span class="route tlevel">T-Level placement</span>
+        <span class="nm">Bill</span><span class="rl">Web Developer</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story">Came in on a T-Level industry placement and stayed. <span class="tk-in">TK — where before, what changed, what next.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.12s" data-k="harrison" data-name="Harrison" data-role="Warehouse Operative" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 003</span><span class="route tlevel">T-Level placement</span>
+        <span class="nm">Harrison</span><span class="rl">Warehouse Operative</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — where before, how the placement went, what he runs now.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.18s" data-k="gabriel" data-name="Gabriel" data-role="Web Developer" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 004</span><span class="route tlevel">T-Level placement</span>
+        <span class="nm">Gabriel</span><span class="rl">Web Developer</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — where before, what changed, what next.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.24s" data-k="jojo" data-name="Jojo" data-role="Warehouse Operative" data-route="College placement" data-focus="Access &amp; adjustments" data-act="a b d" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 005</span><span class="route college">College placement</span>
+        <span class="nm">Jojo</span><span class="rl">Warehouse Operative</span>
+        <span class="nt"><b>Focus ·</b> Access &amp; adjustments</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — Jojo's account, in Jojo's own words: the placement, the adjustments that made the job work, and what it changed. Health information is Jojo's to share; nothing appears here without written consent.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.30s" data-k="elliot" data-name="Elliot" data-role="Ecommerce Assistant" data-route="Student" data-focus="Story" data-act="a b" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 006</span><span class="route student">Student</span>
+        <span class="nm">Elliot</span><span class="rl">Ecommerce Assistant</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — studying what, how the job fits around it, what changed.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.36s" data-k="dylan" data-name="Dylan" data-role="Warehouse Operative" data-route="Job Centre" data-focus="Story" data-act="d" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 007</span><span class="route jobcentre">Job Centre</span>
+        <span class="nm">Dylan</span><span class="rl">Warehouse Operative</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — the referral, the interview, the first week, what changed.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.42s" data-k="billy" data-name="Billy" data-role="IT Technician" data-route="T-Level placement" data-focus="Story" data-act="a" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 008</span><span class="route tlevel">T-Level placement</span>
+        <span class="nm">Billy</span><span class="rl">IT Technician</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — where before, what changed, what next.</span></template>
+      </button>
+      <button class="card rv" type="button" style="--d:0.48s" data-k="josh" data-name="Josh" data-role="Ecommerce Assistant" data-route="Job Centre" data-focus="Story" data-act="d" data-since="TK" aria-haspopup="dialog">
+        <span class="cn">No. 009</span><span class="route jobcentre">Job Centre</span>
+        <span class="nm">Josh</span><span class="rl">Ecommerce Assistant</span>
+        <span class="nt"><b>Focus ·</b> Story</span>
+        <span class="punch"><span>Watch · Read</span><b>TK</b></span>
+        <template class="story"><span class="tk-in">TK — the referral, the interview, the first week, what changed.</span></template>
+      </button>
+    </div>
+    <span class="tk rv" style="--d:.1s"><b>Tom &amp; team to supply, with written consent</b>
+    For each person: the film (one question, under a minute), the start date, and two or three sentences in
+    their own words — where they were, how they came in, what changed. Surnames and portraits go on only once
+    each person has signed the consent form; first names only until then. Anything about health or
+    disability is that person's to tell, in their words, or not at all.</span>
   </div>
 </section>
 
@@ -912,6 +1014,29 @@ footer img{height:18px;width:auto;filter:grayscale(1)}
 </section>
 
 </main>
+
+<!-- the profile: a sheet that slides in from the right -->
+<div class="prof" id="prof" role="dialog" aria-modal="true" aria-labelledby="pfName" hidden>
+  <div class="prof-in">
+    <button class="pclose" id="pclose" type="button">Close</button>
+    <span class="proute" id="pfRoute"></span>
+    <h3 id="pfName"></h3>
+    <div class="prole" id="pfRole"></div>
+    <div class="pfocus"><span>Focus</span><b id="pfFocus"></b></div>
+    <div class="vid" id="pfVid">
+      <span class="play" aria-hidden="true"></span>
+      <span class="vq">“Where were you before the door — and where are you now?”</span>
+      <span class="vt">Film to be recorded · under a minute · one take</span>
+    </div>
+    <div class="pwords"><span class="pk">In their own words</span><p id="pfStory"></p></div>
+    <div class="pmeta">
+      <div><span class="pk">Route in</span><b id="pfRoute2"></b></div>
+      <div><span class="pk">Since</span><b id="pfSince"></b></div>
+      <div><span class="pk">Proves, for the award</span><b id="pfAct"></b></div>
+    </div>
+  </div>
+</div>
+
 
 <footer>
   <div class="wrap">

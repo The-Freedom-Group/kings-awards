@@ -138,6 +138,43 @@
     });
   }
 
+  /* ── the profiles: a card opens a sheet ───────────────────── */
+  var prof = $("#prof"), pclose = $("#pclose"), lastCard = null;
+  var ACTS = { a: "a · work experience or careers advice", b: "b · mentoring", c: "c · interview and job-related training", d: "d · recruitment open to everyone" };
+  function openProf(card) {
+    if (!prof) return;
+    lastCard = card;
+    $("#pfName").textContent = card.dataset.name;
+    $("#pfRole").innerHTML = card.dataset.role;
+    $("#pfRoute").textContent = card.dataset.route; $("#pfRoute2").textContent = card.dataset.route;
+    $("#pfFocus").innerHTML = card.dataset.focus;
+    $("#pfSince").textContent = card.dataset.since === "TK" ? "TK — start date" : card.dataset.since;
+    $("#pfAct").innerHTML = card.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
+    var tpl = $("template.story", card);
+    $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
+    prof.hidden = false; document.body.classList.add("prof-open");
+    pclose.focus();
+  }
+  function closeProf() {
+    if (!prof || prof.hidden) return;
+    prof.hidden = true; document.body.classList.remove("prof-open");
+    if (lastCard) lastCard.focus();
+  }
+  $$("#rack .card").forEach(function (c) { c.addEventListener("click", function () { openProf(c); }); });
+  if (pclose) pclose.addEventListener("click", closeProf);
+  if (prof) {
+    prof.addEventListener("click", function (e) { if (e.target === prof) closeProf(); });
+    window.addEventListener("keydown", function (e) {
+      if (prof.hidden) return;
+      if (e.key === "Escape") { closeProf(); return; }
+      if (e.key === "Tab") {
+        var f = $$("button, a[href]", prof), first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  }
+
   /* ── the loupe: photographs magnify under the pointer ─────── */
   var loupe = $("#loupe");
   if (loupe && fine && !reduce) {
