@@ -1,10 +1,9 @@
 /* ══════════════════════════════════════════════════════════════════
    THE WAY IN — engine
-   The call point (a click breaks the glass, a click resets it), the
-   escape-route strip lit as far as you have read, four signs that
-   turn over, a floor plan that lights station by station, the roll
-   call ticked present as each name arrives, the profile sheet, the
-   two-year inspection tag, the fire-class paper, the ticker.
+   Quiet: things arrive as you reach them, headlines a word at a
+   time. The four activities open on a click, the path lights step by
+   step, the register opens a profile sheet, the two-year test does
+   its sums, the fire-class paper marks itself, the ticker counts.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -14,99 +13,71 @@
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   var pad2 = function (x) { return x < 10 ? "0" + x : "" + x; };
 
-  /* ── the call point ───────────────────────────────────────── */
-  var hero = $("#top"), cp = $("#cp"), cpTop = $("#cpTop");
-  function setGlass(broken) {
-    if (!hero) return;
-    hero.classList.toggle("broken", broken);
-    if (cp) { cp.setAttribute("aria-pressed", broken); cp.setAttribute("aria-label", broken ? "Reset the call point" : "Break glass — reveal the team"); }
-    if (cpTop) { cpTop.textContent = broken ? "Reset call point" : "Break glass"; cpTop.classList.toggle("reset", broken); }
-  }
-  if (cp) cp.addEventListener("click", function () { setGlass(!hero.classList.contains("broken")); });
-  if (cpTop) cpTop.addEventListener("click", function () {
-    var broken = !hero.classList.contains("broken"); setGlass(broken);
-    if (broken) window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-  });
-
-  /* ── headline wipes ───────────────────────────────────────── */
+  /* ── headlines, a word at a time ──────────────────────────── */
   if (!reduce) $$(".ch h2").forEach(function (h) {
-    var parts = Array.prototype.slice.call(h.childNodes), i = 0;
-    parts.forEach(function (nd) {
-      if (nd.nodeType === 3 && nd.textContent.trim()) { var s = document.createElement("span"); s.className = "wipe"; s.style.setProperty("--d", (i++ * 0.18) + "s"); s.textContent = nd.textContent; h.replaceChild(s, nd); }
-      else if (nd.nodeType === 1 && nd.tagName === "EM") { nd.classList.add("wipe"); nd.style.setProperty("--d", (i++ * 0.18) + "s"); }
-    });
+    var i = 0;
+    function wrap(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (nd) {
+        if (nd.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          nd.textContent.split(/(\s+)/).forEach(function (tk) {
+            if (!tk) return;
+            if (/^\s+$/.test(tk)) { frag.appendChild(document.createTextNode(" ")); return; }
+            var s = document.createElement("span"); s.className = "w"; s.textContent = tk; s.style.setProperty("--d", (i++ * 0.07) + "s"); frag.appendChild(s);
+          });
+          node.replaceChild(frag, nd);
+        } else if (nd.nodeType === 1 && nd.tagName !== "BR") wrap(nd);
+      });
+    }
+    wrap(h);
   });
 
   /* ── reveal ───────────────────────────────────────────────── */
-  var watched = $$(".rv, .flip");
+  var watched = $$(".rv");
   if (!("IntersectionObserver" in window) || reduce) watched.forEach(function (e) { e.classList.add("in"); });
   else {
     var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
     watched.forEach(function (e) { io.observe(e); });
   }
 
-  /* ── the route strip ──────────────────────────────────────── */
-  var story = $("#story"), route = $("#route"), lit = $("#routeLit"), marks = [];
-  var chapters = $$("#story .ch, #story .hero");
-  var TITLES = { top: ["00", "The call point"], award: ["01", "The award"], stories: ["i–iii", "Three stories"], programme: ["02", "The programme"], people: ["03", "The people"],
-    creds: ["04", "What we are"], test: ["05", "The two-year test"], training: ["06", "Training"], join: ["07", "Join"] };
-  function buildMarks() {}
-  function drawRoute(y) {
-    if (!route || !lit || !story) return;
-    var H = story.offsetHeight, top = hero ? hero.offsetHeight : 0, reach = clamp(y + window.innerHeight * 0.58, top, H - 30);
-    lit.style.top = top + "px"; lit.style.height = Math.max(0, reach - top) + "px";
-    route.classList.toggle("landed", reach >= H - 32);
-  }
-
   /* ── on scroll ────────────────────────────────────────────── */
-  var prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
-  var floor = $("#floor"), stations = $$("#floor .st");
+  var chapters = $$("#story .ch, #story .hero");
+  var TITLES = { top: ["00", "The way in"], award: ["01", "The award"], stories: ["", "Three stories"], programme: ["02", "The programme"], people: ["03", "The people"],
+    creds: ["04", "What we are"], test: ["05", "The two-year test"], training: ["06", "Training"], join: ["07", "Join"] };
+  var chrome = $("#chrome"), prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
+  var rail = $("#rail"), steps = $$("#rail .step");
   function frame() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
     if (y !== lastY) {
       lastY = y;
+      if (chrome) chrome.classList.toggle("stuck", y > 20);
       var probe = y + window.innerHeight * 0.42, cur = null;
       chapters.forEach(function (s) { if (probe >= s.offsetTop && probe < s.offsetTop + s.offsetHeight) cur = s.id; });
       if (!cur && chapters.length && probe >= chapters[chapters.length - 1].offsetTop) cur = chapters[chapters.length - 1].id;
       if (prog) { var mx = (document.documentElement.scrollHeight - window.innerHeight) || 1; prog.style.transform = "scaleX(" + clamp(y / mx, 0, 1).toFixed(4) + ")"; }
       var meta = TITLES[cur]; if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }
-      if (now) now.classList.toggle("on", y > window.innerHeight * 0.5);
-      if (floor && stations.length) { var r = floor.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.85 - r.top) / (r.height + window.innerHeight * 0.25), 0, 1); floor.style.setProperty("--lp", lp.toFixed(3)); stations.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.5) / stations.length); }); }
-      drawRoute(y);
+      if (now) now.classList.toggle("on", y > window.innerHeight * 0.6);
+      if (rail && steps.length) { var r = rail.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.85 - r.top) / (r.height + window.innerHeight * 0.3), 0, 1); rail.style.setProperty("--lp", lp.toFixed(3)); steps.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.5) / steps.length); }); }
     }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-  var rebuildTimer = null;
-  function rebuild() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(function () { buildMarks(); lastY = -1; }, 140); }
-  window.addEventListener("resize", rebuild); window.addEventListener("load", rebuild);
-  if ("ResizeObserver" in window && story) new ResizeObserver(rebuild).observe(story);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
-  buildMarks();
 
-  /* ── four signs ───────────────────────────────────────────── */
-  $$("#signs .sq").forEach(function (b) {
-    b.addEventListener("click", function () { var on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-expanded", on); });
+  /* ── the four activities ──────────────────────────────────── */
+  $$("#acts .act").forEach(function (a) {
+    var b = $("button", a);
+    b.addEventListener("click", function () { var on = !a.classList.contains("on"); a.classList.toggle("on", on); b.setAttribute("aria-expanded", on); });
   });
 
-  /* ── the roll call ────────────────────────────────────────── */
-  var rows = $$("#register .row");
-  if (!("IntersectionObserver" in window) || reduce) rows.forEach(function (r) { r.classList.add("here"); });
-  else {
-    var pending = 0;
-    var rio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (!en.isIntersecting) return; rio.unobserve(en.target); var t = en.target; setTimeout(function () { t.classList.add("here"); }, 160 + (pending++ % 9) * 140); }); }, { threshold: 0.4 });
-    rows.forEach(function (r) { rio.observe(r); });
-  }
-
   /* ── profiles ─────────────────────────────────────────────── */
-  var prof = $("#prof"), pclose = $("#pclose"), lastEl = null;
+  var rows = $$("#register .row"), prof = $("#prof"), pclose = $("#pclose"), lastEl = null;
   var ACTS = { a: "a · work experience or careers advice", b: "b · mentoring", c: "c · interview and job-related training", d: "d · recruitment open to everyone" };
   function openProf(row) {
     if (!prof) return; lastEl = document.activeElement;
     $("#pfName").textContent = row.dataset.name; $("#pfRole").innerHTML = row.dataset.role;
     $("#pfRoute").textContent = row.dataset.route; $("#pfRoute2").textContent = row.dataset.route; $("#pfBand").style.setProperty("--b", row.dataset.b || "#111");
     $("#pfFocus").innerHTML = row.dataset.focus;
-    var q = row.dataset.q || ""; $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + row.dataset.name : "“" + q + "”";
+    var q = row.dataset.q || ""; $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + row.dataset.name : "“" + q.replace(/ — /g, ", ") + "”";
     $("#pfSince").textContent = row.dataset.since === "TK" ? "TK — start date" : row.dataset.since;
     $("#pfAct").innerHTML = row.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
     var tpl = $("template.story", row); $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
@@ -125,7 +96,7 @@
     });
   }
 
-  /* ── the inspection tag ───────────────────────────────────── */
+  /* ── the two-year test ────────────────────────────────────── */
   var progStart = $("#progStart"), verdict = $("#verdict"), ruler = $("#ruler"), pin = $("#pin"), band = $("#band"), cut = $("#cut"), twoYearState = $("#twoYearState");
   var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8), EPOCH0 = new Date(2021, 7, 27);
   function monthsBetween(a, b) { return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) - (b.getDate() < a.getDate() ? 1 : 0); }
@@ -137,15 +108,15 @@
     if (!progStart.value) { verdict.innerHTML = "Enter the date of the earliest record."; if (ruler) ruler.classList.remove("set", "fail"); if (twoYearState) twoYearState.innerHTML = ""; return; }
     var d = new Date(progStart.value + "T00:00:00"); if (isNaN(d)) return;
     var m = monthsBetween(d, DEADLINE), ok = d <= CUTOFF;
-    if (ok) verdict.innerHTML = "<b class='ok'>Passes.</b> By the closing date the programme will have run for " + Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") + " — dated from " + fmt(d) + ". Keep that record.";
+    if (ok) verdict.innerHTML = "<b class='ok'>Passes.</b> By the closing date the programme will have run for " + Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") + ", dated from " + fmt(d) + ". Keep that record.";
     else { var sh = Math.abs(monthsBetween(CUTOFF, d)); verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + sh + " month" + (sh === 1 ? "" : "s") + " too young for this cycle. Unless an earlier record exists, this category waits a year."; }
     if (pin) pin.style.left = pct(d).toFixed(2) + "%"; if (ruler) { ruler.classList.add("set"); ruler.classList.toggle("fail", !ok); }
-    if (twoYearState) twoYearState.innerHTML = ok ? "<span class='sign black'>✓ Passes on the date given</span>" : "<span class='sign red'>✕ Not yet, on the date given</span>";
+    if (twoYearState) twoYearState.innerHTML = ok ? "<span class='st ok'>Passes on the date given</span>" : "<span class='st no'>Not yet, on the date given</span>";
   });
 
   /* ── the paper ────────────────────────────────────────────── */
-  var FIRE = { a: "Class A — wood, paper, textiles. Water, foam, powder or wet chemical will do it.", b: "Class B — petrol, paint, solvents. Foam, CO₂ or powder. Never water.",
-    c: "Class C — flammable gases. Dry powder only, once the supply is isolated.", e: "Live electrical — CO₂ or dry powder. Water and foam conduct.", f: "Class F — cooking oils and fats. Wet chemical, purpose-built for the job." };
+  var FIRE = { a: "Class A: wood, paper, textiles. Water, foam, powder or wet chemical will do it.", b: "Class B: petrol, paint, solvents. Foam, CO₂ or powder. Never water.",
+    c: "Class C: flammable gases. Dry powder only, once the supply is isolated.", e: "Live electrical: CO₂ or dry powder. Water and foam conduct.", f: "Class F: cooking oils and fats. Wet chemical, purpose-built for the job." };
   var fnote = $("#fnote"), fcs = $$(".fc"), exts = $$(".ext");
   function pickFire(cls) {
     fcs.forEach(function (b) { var on = b.getAttribute("data-cls") === cls; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
@@ -154,7 +125,7 @@
   }
   fcs.forEach(function (b) { b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); }); });
   if (fcs.length) pickFire("a");
-  var QUIZ = [{ q: "Waste-paper bin alight in an office.", cls: "a" }, { q: "Overheated fuse board — still live.", cls: "e" }, { q: "Chip-pan fire in the staff kitchen.", cls: "f" },
+  var QUIZ = [{ q: "Waste-paper bin alight in an office.", cls: "a" }, { q: "Overheated fuse board, still live.", cls: "e" }, { q: "Chip-pan fire in the staff kitchen.", cls: "f" },
     { q: "Petrol spill ignited in the yard.", cls: "b" }, { q: "Gas cylinder burning at the valve.", cls: "c" }, { q: "Laptop charger smoking on a desk.", cls: "e" }];
   var fmL = $("#fmLearn"), fmT = $("#fmTest"), fq = $("#fq"), fsc = $("#fscore"), qi = 0, qScore = 0, qLock = false;
   function setFMode(test) {
@@ -165,8 +136,8 @@
   }
   function askQ() {
     fsc.textContent = qScore + " / " + QUIZ.length;
-    if (qi >= QUIZ.length) { fq.innerHTML = "<b>" + qScore + " of " + QUIZ.length + ".</b> " + (qScore === QUIZ.length ? "Full marks — you'd pass our induction." : "Return to Learn, then sit it again."); if (fnote) fnote.textContent = "Sit the paper again whenever you like."; return; }
-    fq.innerHTML = "Q" + (qi + 1) + " — <b>" + QUIZ[qi].q + "</b> Which extinguisher?"; if (fnote) fnote.textContent = "Mark your answer.";
+    if (qi >= QUIZ.length) { fq.innerHTML = "<b>" + qScore + " of " + QUIZ.length + ".</b> " + (qScore === QUIZ.length ? "Full marks. You'd pass our induction." : "Return to Learn, then sit it again."); if (fnote) fnote.textContent = "Sit the paper again whenever you like."; return; }
+    fq.innerHTML = "Q" + (qi + 1) + " · <b>" + QUIZ[qi].q + "</b> Which extinguisher?"; if (fnote) fnote.textContent = "Mark your answer.";
   }
   exts.forEach(function (x) {
     x.setAttribute("tabindex", "0");
