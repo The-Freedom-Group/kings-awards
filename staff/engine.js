@@ -40,13 +40,8 @@
     $$(".lm i", root).forEach(function (i, k) { i.style.setProperty("--d", (base + k * step).toFixed(2) + "s"); });
   }
   if (!reduce) {
-    $$(".h-b, .bigq, #coverH").forEach(function (el) {
-      splitWords(el);
-      delayWords(el, 0.05, el.id === "coverH" ? 0.15 : 0.05);
-      if (el.id !== "coverH") el.classList.add("rvh");
-    });
-    var ch = $("#coverH");
-    if (ch) requestAnimationFrame(function () { requestAnimationFrame(function () { ch.classList.add("in"); }); });
+    $$(".h-b, .bigq, #coverH").forEach(function (el) { el.classList.add("rv"); });
+    var ch = $("#coverH"); if (ch) requestAnimationFrame(function () { requestAnimationFrame(function () { ch.classList.add("in"); }); });
   }
 
   /* ── observation: parts, sheets, headlines, stamps ────────── */
@@ -85,7 +80,7 @@
   var doorKnocked = false, doorAngle = 0;
   function setDoor(deg) {
     doorAngle = deg;
-    if (leaf) leaf.style.setProperty("--o", (-deg).toFixed(1) + "deg");
+    if (leaf) leaf.style.setProperty("--o", clamp(deg, 0, 100).toFixed(1));   /* percent rolled up */
     if (doorway) doorway.classList.toggle("open", deg > 18);
   }
   /* on a desk the cover is pinned for one viewport of scrolling while the
@@ -101,18 +96,18 @@
       target = clamp(6 + ((window.innerHeight - r.top) / (window.innerHeight * 0.75)) * 94, 6, 100);
     }
     setDoor(target);
-    if (doorCap && !doorKnocked) doorCap.textContent = target >= 99 ? "Come in" : "Scroll to open, or knock";
+    if (doorCap && !doorKnocked) doorCap.textContent = target >= 99 ? "Come in" : "Scroll to open, or tap";
   }
   if (doorBtn) {
     doorBtn.addEventListener("click", function () {
       doorKnocked = !doorKnocked;
       doorBtn.setAttribute("aria-pressed", doorKnocked);
-      doorBtn.setAttribute("aria-label", doorKnocked ? "Close the door" : "Open the door");
-      if (doorCap) doorCap.textContent = doorKnocked ? "Come in" : "Scroll to open, or knock";
+      doorBtn.setAttribute("aria-label", doorKnocked ? "Close the shutter" : "Open the shutter");
+      if (doorCap) doorCap.textContent = doorKnocked ? "Come in" : "Scroll to open, or tap";
       if (reduce) setDoor(doorKnocked ? 100 : 70); else doorFromScroll(window.pageYOffset || 0);
     });
   }
-  if (reduce) setDoor(70); else setTimeout(function () { setDoor(6); }, 400);
+  if (reduce) setDoor(78); else setTimeout(function () { setDoor(8); }, 400);
 
   /* ── the four doors ───────────────────────────────────────── */
   $$("#doors .dr").forEach(function (dr) {
@@ -260,8 +255,8 @@
   /* ── the reading position: folio, index, progress, path ───── */
   var progFill = $("#progFill"), folio = $("#folio"), index = $$(".index a");
   var sections = $$("main section");
-  var PARTS = { top: "Cover", who: "Who we are", work: "The work", crew: "The crew", door: "The Open Door",
-    training: "Training", build: "What we're building", code: "The code", join: "Join us" };
+  var PARTS = { top: "Cover", award: "The award", who: "Who we are", door: "The programme", crew: "The people",
+    creds: "What we are", training: "Training", code: "The code", join: "Join us" };
   var steps = $$("#rail .step"), rail = $("#rail"), railInk = $("#railInk"), walker = $("#walker");
   if (railInk) { var L = 1000; try { L = railInk.getTotalLength(); } catch (e) {} railInk.style.setProperty("--l", L); }
   var ticking = false, lastLp = -1, moveT = null;
@@ -280,7 +275,7 @@
     }
     index.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
     if (folio && cur2) {
-      var line = "The People · " + (PARTS[cur2] || "") + " · Part " + (idx + 1) + " of " + sections.length;
+      var line = "The Open Door · " + (PARTS[cur2] || "") + " · Part " + (idx + 1) + " of " + sections.length;
       if (folio.textContent !== line) folio.textContent = line;
     }
     if (steps.length && rail) {

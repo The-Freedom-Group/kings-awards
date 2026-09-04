@@ -144,10 +144,15 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff** — dark, brand-led, louder. Barlow Condensed display type, the night-navy and flame
-palette taken from the existing Freedom Freight page (`#0a0e16`, `#e01b0e`, `#ff6a1f`,
-`#ffb454`), ember drift in the hero, scroll reveals, hover lift on cards. Uses the white
-Freedom logo throughout; the personal site uses the black version in its footer.
+**Staff — The Open Door.** Rebuilt on 4 September 2026 for one reader: the assessor. Night navy,
+flame, ember and amber (the Freedom Freight palette), Barlow Condensed capitals, Plex Mono data,
+hazard-tape section markers. Warehouse, not magazine. The cover is a roller shutter that rolls up
+on scroll to reveal the team; Part 01 is the award's five tests as a checklist with where each is
+answered; Part 03 is the programme (four shutter panels for the four named activities, the path
+with a walker, the two-year-test calculator with a ruler, the four proofs); Part 04 is nine
+profiles in three stories, each with its own question and a film slot; Part 05 is the two
+standing commitments — T Level Ambassadors and Disability Confident Employer — with evidence
+slots. Every unsupported claim is an amber "Evidence required" slot.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
