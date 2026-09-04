@@ -285,16 +285,23 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
    copy sits behind it and bleeds out into the page - the fade happens outside the image */
 .hero-shot img{width:100%;opacity:0;transition:opacity 1s ease}
 .hero-shot img.on{opacity:1}
-.hero-shot img#shot{position:relative;z-index:2;
-  -webkit-mask-image:linear-gradient(to bottom,#000 54%,transparent 97%),
-    linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 54%,transparent 97%),
-    linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%);
+/* three layers, each dissolving into the next: the sharp photograph, a lightly blurred
+   copy a little larger, and a heavily blurred copy larger still. Every mask is a long,
+   even ramp, so there is no seam where one layer ends and the next begins. */
+.hero-shot img#shot{position:relative;z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+    linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+    linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
   -webkit-mask-composite:source-in;mask-composite:intersect}
-.hero-shot img.halo{position:absolute;left:-34%;top:-26%;width:168%;z-index:1;opacity:.68;
-  filter:blur(52px) saturate(.9);transform:translateZ(0);pointer-events:none;
-  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 26%,rgba(0,0,0,.55) 58%,transparent 92%);
-  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 26%,rgba(0,0,0,.55) 58%,transparent 92%)}
+.hero-shot img.halo{position:absolute;left:-12%;top:-8%;width:124%;z-index:2;opacity:.55;
+  filter:blur(14px) saturate(.9);transform:translateZ(0);pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 34%,rgba(0,0,0,.5) 64%,transparent 96%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 34%,rgba(0,0,0,.5) 64%,transparent 96%)}
+.hero-shot img.halo2{position:absolute;left:-40%;top:-30%;width:180%;z-index:1;opacity:.42;
+  filter:blur(60px) saturate(.85);transform:translateZ(0);pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%)}
 @media(max-width:820px){
   .hero-shot{position:relative;right:auto;bottom:auto;width:88%;margin:10px -6% -8% auto}
   .hero-type h1{font-size:clamp(54px,17vw,120px)}}
@@ -789,6 +796,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   <div class="wrap">
     <div class="hero-stage">
       <div class="hero-shot" id="shotWrap">
+        <img class="halo2 on" src="../assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
         <img class="halo on" src="../assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
         <img id="shot" src="../assets/tom-mono.jpg"
              srcset="../assets/tom-mono-sm.jpg 440w, ../assets/tom-mono.jpg 682w"
