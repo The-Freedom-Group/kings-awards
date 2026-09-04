@@ -1,417 +1,282 @@
 /* ══════════════════════════════════════════════════════════════════
-   THE PEOPLE — engine (the register)
-   Print motion, and a few doors: headlines rise from their baselines,
-   part-rules draw themselves, the cover door swings open as you
-   scroll (or when you knock), the four activity doors open on click,
-   timecards clock in and tilt under the pointer, the red path draws
-   itself with a walker on it, the two-year test measures a date, the
-   evidence slots are stamped, the assessment marks in red pen, and
-   the signature line takes real ink. Nothing glows.
+   THE OPEN DOOR — engine
+   The founder page's engine, mirrored: a flame line drawn through
+   the chapters as you read, a pinned scene, headlines that rise word
+   by word, poster words behind chapters, a velocity marquee. Plus the
+   door (a click opens and closes it), the four activities, the roll
+   call, the profiles, the two-year test and the assessment.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
-
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var fine = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
-  var pad2  = function (x) { return x < 10 ? "0" + x : "" + x; };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var pad2 = function (x) { return x < 10 ? "0" + x : "" + x; };
 
-  /* ── headlines rise from their baselines ──────────────────── */
-  function splitWords(el) {
+  /* ── the door ─────────────────────────────────────────────── */
+  var door = $("#top"), doorBtn = $("#doorBtn"), hint = $("#hint");
+  function setDoor(open) {
+    if (!door) return;
+    door.classList.toggle("open", open);
+    if (doorBtn) doorBtn.setAttribute("aria-pressed", open);
+    if (hint) hint.style.opacity = open ? "0" : "";
+    var ot = $("#openTop"); if (ot) ot.textContent = open ? "Close the door" : "Open the door";
+  }
+  ["#doorBtn", "#doorOpen"].forEach(function (s) { var b = $(s); if (b) b.addEventListener("click", function () { setDoor(true); }); });
+  var dc = $("#doorClose"); if (dc) dc.addEventListener("click", function () { setDoor(false); });
+  var ot = $("#openTop");
+  if (ot) ot.addEventListener("click", function () {
+    var open = !door.classList.contains("open");
+    setDoor(open);
+    if (open) window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  /* ── split headlines: words rise ──────────────────────────── */
+  function split(el, step) {
     var nodes = Array.prototype.slice.call(el.childNodes), out = [];
     nodes.forEach(function (nd) {
       if (nd.nodeType === 3) {
         nd.textContent.split(/(\s+)/).forEach(function (tk) {
           if (!tk) return;
           if (/^\s+$/.test(tk)) { out.push(document.createTextNode(" ")); return; }
-          var box = document.createElement("span"); box.className = "lm";
-          var ink = document.createElement("i"); ink.textContent = tk;
-          box.appendChild(ink); out.push(box);
+          var box = document.createElement("span"); box.className = "wa";
+          var ink = document.createElement("i"); ink.textContent = tk; box.appendChild(ink); out.push(box);
         });
-      } else if (nd.nodeType === 1) { splitWords(nd); out.push(nd); }
-      else { out.push(nd); }
+      } else { out.push(nd); }
     });
-    el.textContent = "";
-    out.forEach(function (nd) { el.appendChild(nd); });
+    el.textContent = ""; var wi = 0;
+    out.forEach(function (nd) { el.appendChild(nd); if (nd.classList && nd.classList.contains("wa")) { nd.firstChild.style.setProperty("--d", (wi * step) + "s"); wi++; } });
   }
-  function delayWords(root, step, base) {
-    $$(".lm i", root).forEach(function (i, k) { i.style.setProperty("--d", (base + k * step).toFixed(2) + "s"); });
-  }
-  if (!reduce) {
-    $$(".h-b, .bigq, #coverH").forEach(function (el) { el.classList.add("rv"); });
-    var ch = $("#coverH"); if (ch) requestAnimationFrame(function () { requestAnimationFrame(function () { ch.classList.add("in"); }); });
-  }
+  if (!reduce) $$(".ch h2").forEach(function (el) { split(el, 0.055); });
 
-  /* ── observation: parts, sheets, headlines, stamps ────────── */
-  var watched = $$(".rv, .part, .rvh, .tk");
-  if (!("IntersectionObserver" in window) || reduce) {
-    watched.forEach(function (e) { e.classList.add("in"); });
-  } else {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+  /* ── poster words ─────────────────────────────────────────── */
+  var PW = { award: "TESTED", programme: "FOUR", people: "NINE", creds: "STANDING", test: "TWO YEARS", training: "FIRE", join: "IN" };
+  var pws = [];
+  Object.keys(PW).forEach(function (id) {
+    var sec = document.getElementById(id); if (!sec) return;
+    var w = document.createElement("span"); w.className = "pw"; w.textContent = PW[id]; w.setAttribute("aria-hidden", "true");
+    sec.insertBefore(w, sec.firstChild); pws.push({ el: w, sec: sec });
+  });
+
+  /* ── reveal ───────────────────────────────────────────────── */
+  var watched = $$(".rv");
+  if (!("IntersectionObserver" in window) || reduce) watched.forEach(function (e) { e.classList.add("in"); });
+  else {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
     watched.forEach(function (e) { io.observe(e); });
   }
 
-  /* ── the pointer: a red dot, and a ring that follows it ───── */
-  var cur = $("#cur"), curDot = $("#curdot"), mx = 0, my = 0, rx = 0, ry = 0, curRaf = null;
-  if (cur && curDot && fine && !reduce) {
-    document.documentElement.classList.add("cur-on");
-    function curTick() {
-      rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
-      cur.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
-      if (Math.abs(mx - rx) > 0.2 || Math.abs(my - ry) > 0.2) curRaf = requestAnimationFrame(curTick); else curRaf = null;
+  /* ── the line ─────────────────────────────────────────────── */
+  var story = $("#story"), thread = $("#thread"), svg = $("#threadSvg"), track = $("#tTrack"), live = $("#tLive"), head = $("#tHead");
+  var PLAN = [
+    { id: "award", side: "L", y: 0.40 }, { id: "one", side: "R", y: 0.5, noKnot: true }, { id: "programme", side: "L", y: 0.42 },
+    { id: "people", side: "R", y: 0.36 }, { id: "creds", side: "L", y: 0.44 }, { id: "test", side: "R", y: 0.4 },
+    { id: "training", side: "L", y: 0.42 }, { id: "join", side: "R", y: 0.45 }
+  ];
+  var pts = [], knots = [], totalLen = 0, knotAt = [], endPt = null, endFrac = 1, endNote = null, pScale = 1;
+  function placeHead(x, y) { head.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)"; }
+  function buildPath() {
+    if (!story || !thread || !svg || window.innerWidth <= 820) return false;
+    var W = story.offsetWidth, H = story.offsetHeight; if (!W || !H) return false;
+    var col = story.querySelector(".ch .wrap"); var cr = col ? col.getBoundingClientRect() : { left: 0, right: W };
+    var LX = Math.max(18, cr.left - 34), RX = Math.min(W - 32, cr.right + 34), SIDE = { L: LX, R: RX };
+    pts = [];
+    var d0 = document.getElementById("top");
+    if (d0) pts.push({ x: W / 2, y: d0.offsetTop + d0.offsetHeight - 2, id: "top", el: d0, noKnot: true });
+    var prev = "C";
+    PLAN.forEach(function (p) {
+      var el = document.getElementById(p.id); if (!el) return;
+      if (prev !== "C" && p.side !== prev) {
+        var band = el.classList.contains("scene") ? el.offsetHeight * 0.12 : (parseFloat(getComputedStyle(el).paddingTop) || 76);
+        pts.push({ x: SIDE[prev], y: el.offsetTop + 14, noKnot: true }); pts.push({ x: SIDE[p.side], y: el.offsetTop + band - 18, noKnot: true });
+      }
+      pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: !!p.noKnot }); prev = p.side;
+    });
+    if (pts.length < 2) return false;
+    var last = pts[pts.length - 1]; pts.push({ x: last.x, y: H - 40, noKnot: true });
+    var d = "M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1);
+    for (var i = 0; i < pts.length - 1; i++) { var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5;
+      d += " C " + a.x.toFixed(1) + " " + (a.y + dy).toFixed(1) + ", " + b.x.toFixed(1) + " " + (b.y - dy).toFixed(1) + ", " + b.x.toFixed(1) + " " + b.y.toFixed(1); }
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H); track.setAttribute("d", d); live.setAttribute("d", d);
+    try { totalLen = live.getTotalLength(); } catch (e) { totalLen = 0; } if (!totalLen) return false;
+    live.style.strokeDasharray = totalLen; live.style.strokeDashoffset = reduce ? 0 : totalLen;
+    knots.forEach(function (k) { k.remove(); }); knots = []; knotAt = [];
+    var S = 240, samples = [];
+    for (var s = 0; s <= S; s++) { var pt = live.getPointAtLength(totalLen * s / S); samples.push({ x: pt.x, y: pt.y, l: totalLen * s / S }); }
+    pts.forEach(function (p) {
+      if (p.noKnot) return; var best = samples[0], bd = Infinity;
+      samples.forEach(function (sp) { var dd = (sp.x - p.x) * (sp.x - p.x) + (sp.y - p.y) * (sp.y - p.y); if (dd < bd) { bd = dd; best = sp; } });
+      var k = document.createElement("i"); k.className = "knot" + (p.el && p.el.classList.contains("light") ? " lt" : "");
+      k.style.left = p.x + "px"; k.style.top = p.y + "px"; thread.appendChild(k); knots.push(k); knotAt.push(best.l / totalLen);
+    });
+    endPt = null; endFrac = 1;
+    for (var e2 = 0; e2 < samples.length; e2++) if (samples[e2].y >= H - 90) { endPt = samples[e2]; endFrac = samples[e2].l / totalLen; break; }
+    if (!endPt) { endPt = samples[samples.length - 1]; endFrac = 0.99; }
+    if (endNote) endNote.remove();
+    endNote = document.createElement("span"); endNote.className = "endnote"; endNote.textContent = "— the door is still open";
+    var onRight = endPt.x > W / 2; endNote.style.left = (endPt.x + (onRight ? -18 : 18)) + "px"; endNote.style.top = endPt.y + "px"; endNote.style.transform = onRight ? "translate(-100%,-50%)" : "translate(0,-50%)"; thread.appendChild(endNote);
+    var pReachRaw = (H - window.innerHeight * 0.38) / H; pScale = pReachRaw > 0 ? (endFrac + 0.001) / pReachRaw : 1;
+    if (reduce) { thread.classList.add("on", "landed"); placeHead(endPt.x, endPt.y); knots.forEach(function (k) { k.classList.add("hit"); }); }
+    return true;
+  }
+  function drawThread(y) {
+    if (!totalLen || reduce || window.innerWidth <= 820) return;
+    var h = story.offsetHeight || 1, p = clamp((y + window.innerHeight * 0.62) / h * pScale, 0, 1);
+    live.style.strokeDashoffset = totalLen * (1 - p); thread.classList.toggle("on", p > 0.004);
+    var landed = p >= endFrac - 0.002; thread.classList.toggle("landed", landed);
+    if (p > 0.004) { var pt = landed && endPt ? endPt : live.getPointAtLength(totalLen * p); placeHead(pt.x, pt.y); }
+    for (var i = 0; i < knots.length; i++) knots[i].classList.toggle("hit", p >= knotAt[i]);
+  }
+
+  /* ── the pinned scene ─────────────────────────────────────── */
+  var scene = $("#one"), phrases = $$("#phs .ph"), sceneTop = 0, sceneRange = 1;
+  function measureScene() { if (!scene) return; sceneTop = scene.offsetTop; sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight); }
+  function runScene(y) {
+    if (!scene || reduce || window.innerWidth <= 820) return;
+    var p = clamp((y - sceneTop) / sceneRange, 0, 1), idx = Math.min(phrases.length - 1, Math.floor(p * phrases.length));
+    phrases.forEach(function (ph, i) { ph.classList.toggle("on", i === idx); });
+  }
+
+  /* ── marquee + roll call ──────────────────────────────────── */
+  var marquees = [];
+  $$(".mq-t").forEach(function (t) { var base = t.getAttribute("data-base") || "", html = ""; for (var i = 0; i < 6; i++) html += "<span>" + base + "</span>"; t.innerHTML = html; marquees.push({ el: t, x: 0, dir: 1, w: 0, speed: 0.6 }); });
+  var rollT = $("#rollT"), cards = $$("#rack .card");
+  if (rollT) {
+    var one = "";
+    cards.forEach(function (c) { one += '<button type="button" class="' + (c.dataset.cat === "tbd" ? "tbd" : "") + '" data-k="' + c.dataset.k + '">' + c.dataset.name + '<i>·</i></button>'; });
+    rollT.innerHTML = one + one + one;
+    rollT.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; var c = $('#rack .card[data-k="' + b.dataset.k + '"]'); if (c) openProf(c); });
+    marquees.push({ el: rollT, x: 0, dir: 1, w: 0, speed: 0.35, roll: true });
+  }
+  function measureMarquees() { marquees.forEach(function (m) { if (m.roll) { m.w = m.el.scrollWidth / 3; } else { var f = m.el.firstElementChild; m.w = f ? f.offsetWidth : 0; } }); }
+
+  /* ── on scroll ────────────────────────────────────────────── */
+  var chapters = $$("#story .ch, #story .door, #story .scene");
+  var chrome = $("#chrome"), spine = $$(".spine a"), prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
+  var TITLES = { top: ["00", "The door"], award: ["01", "The award"], one: ["01", "The award"], programme: ["02", "The programme"], people: ["03", "The people"],
+    creds: ["04", "What we are"], test: ["05", "The two-year test"], training: ["06", "Training"], join: ["07", "Join"] };
+  var lastCard = "", lastY = -1, velY = 0, steps = $$("#rail .step"), rail = $("#rail");
+  function frame() {
+    var y = window.pageYOffset || document.documentElement.scrollTop, moved = y !== lastY;
+    velY = lerp(velY, moved ? y - lastY : 0, 0.12); lastY = y;
+    if (!reduce) marquees.forEach(function (m) { if (!m.w) return; m.x -= m.dir * (m.speed + Math.min(6, Math.abs(velY) * 0.12)); if (m.x <= -m.w) m.x += m.w; if (m.x > 0) m.x -= m.w; m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)"; });
+    if (moved || Math.abs(velY) > 0.01) {
+      if (chrome) chrome.classList.toggle("stuck", y > 40);
+      var mid = y + 90, light = false, cur = null;
+      chapters.forEach(function (s) { var top = s.offsetTop, bot = top + s.offsetHeight; if (mid >= top && mid < bot) light = s.classList.contains("light"); if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur = s.id; });
+      document.body.classList.toggle("light-chrome", light);
+      if (!cur && chapters.length && y + window.innerHeight * 0.42 >= chapters[chapters.length - 1].offsetTop) cur = chapters[chapters.length - 1].id;
+      var sk = cur === "one" ? "award" : cur; spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === sk); });
+      if (prog) { var mx = (document.documentElement.scrollHeight - window.innerHeight) || 1; prog.style.transform = "scaleX(" + clamp(y / mx, 0, 1).toFixed(4) + ")"; }
+      var meta = TITLES[cur]; if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }
+      if (now) now.classList.toggle("on", y > window.innerHeight * 0.45);
+      if (!reduce) for (var pi = 0; pi < pws.length; pi++) { var ps = pws[pi].sec, pp = (y + window.innerHeight - ps.offsetTop) / (window.innerHeight + ps.offsetHeight); if (pp > -0.1 && pp < 1.1) pws[pi].el.style.transform = "translate3d(" + ((pp - 0.5) * -(story.offsetWidth) * 0.22).toFixed(1) + "px,-50%,0)"; }
+      if (rail && steps.length) { var r = rail.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.86 - r.top) / (r.height + window.innerHeight * 0.2), 0, 1); steps.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.65) / steps.length); }); }
+      drawThread(y); runScene(y);
     }
-    window.addEventListener("mousemove", function (e) {
-      mx = e.clientX; my = e.clientY;
-      curDot.style.transform = "translate(" + mx + "px," + my + "px)";
-      var t = e.target, hot = t.closest && t.closest("a,button,input,canvas,.card,.ext");
-      cur.classList.toggle("big", !!hot);
-      if (!curRaf) curRaf = requestAnimationFrame(curTick);
-    }, { passive: true });
-    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; curDot.style.opacity = "0"; });
-    document.addEventListener("mouseenter", function () { cur.style.opacity = ""; curDot.style.opacity = ""; });
+    requestAnimationFrame(frame);
   }
+  requestAnimationFrame(frame);
+  var rebuildTimer = null;
+  function rebuild() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(function () { buildPath(); measureScene(); measureMarquees(); lastY = -1; }, 140); }
+  window.addEventListener("resize", rebuild); window.addEventListener("load", rebuild);
+  if ("ResizeObserver" in window && story) new ResizeObserver(rebuild).observe(story);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
+  buildPath(); measureScene(); measureMarquees();
 
-  /* ── the cover door ───────────────────────────────────────── */
-  var doorway = $("#doorway"), leaf = $("#leaf"), doorBtn = $("#doorBtn"), doorCap = $("#doorCap");
-  var doorKnocked = false, doorAngle = 0;
-  function setDoor(deg) {
-    doorAngle = deg;
-    if (leaf) leaf.style.setProperty("--o", clamp(deg, 0, 100).toFixed(1));   /* percent rolled up */
-    if (doorway) doorway.classList.toggle("open", deg > 18);
-  }
-  /* on a desk the cover is pinned for one viewport of scrolling while the
-     door opens; the door is fully open before the page moves on. On a phone
-     it opens as the doorway comes into view. A knock opens it at once. */
-  /* the gate opens and closes on a click, nothing else */
-  function doorFromScroll() {}
-  if (doorBtn) {
-    doorBtn.addEventListener("click", function () {
-      doorKnocked = !doorKnocked;
-      doorBtn.setAttribute("aria-pressed", doorKnocked);
-      doorBtn.setAttribute("aria-label", doorKnocked ? "Close the shutter" : "Open the shutter");
-      if (doorCap) doorCap.textContent = doorKnocked ? "Tap to close" : "Tap to open";
-      setDoor(doorKnocked ? 100 : 0);
-    });
-  }
-  setDoor(0);
-
-  /* ── the four doors ───────────────────────────────────────── */
-  $$("#doors .dr").forEach(function (dr) {
-    var b = $(".leaf", dr), lbl = $(".open", dr);
-    if (!b) return;
-    b.addEventListener("click", function () {
-      var on = !dr.classList.contains("on");
-      dr.classList.toggle("on", on);
-      b.setAttribute("aria-expanded", on);
-      if (lbl) lbl.textContent = on ? "Close" : "Open";
-    });
+  /* ── the four activities ──────────────────────────────────── */
+  $$("#acts .act").forEach(function (a) {
+    var b = $("button", a);
+    b.addEventListener("click", function () { var on = !a.classList.contains("on"); a.classList.toggle("on", on); b.setAttribute("aria-expanded", on); });
   });
 
-  /* ── the clocking-in board: cards tilt under the pointer ──── */
-  if (fine && !reduce) {
-    $$("#rack .card").forEach(function (c) {
-      c.addEventListener("mousemove", function (e) {
-        var r = c.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
-        c.style.transform = "rotateY(" + (px * 10).toFixed(2) + "deg) rotateX(" + (-py * 10).toFixed(2) + "deg) translateY(-4px)";
-      });
-      c.addEventListener("mouseleave", function () { c.style.transform = ""; });
-    });
-  }
-
-  /* ── the profiles: a card opens a sheet ───────────────────── */
-  var prof = $("#prof"), pclose = $("#pclose"), lastCard = null;
+  /* ── profiles ─────────────────────────────────────────────── */
+  var prof = $("#prof"), pclose = $("#pclose"), lastEl = null;
   var ACTS = { a: "a · work experience or careers advice", b: "b · mentoring", c: "c · interview and job-related training", d: "d · recruitment open to everyone" };
   function openProf(card) {
-    if (!prof) return;
-    lastCard = card;
-    $("#pfName").textContent = card.dataset.name;
-    $("#pfRole").innerHTML = card.dataset.role;
+    if (!prof) return; lastEl = document.activeElement;
+    $("#pfName").textContent = card.dataset.name; $("#pfRole").innerHTML = card.dataset.role;
     $("#pfRoute").textContent = card.dataset.route; $("#pfRoute2").textContent = card.dataset.route;
     $("#pfFocus").innerHTML = card.dataset.focus;
-    var q = card.dataset.q || "";
-    $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + card.dataset.name : "“" + q + "”";
+    var q = card.dataset.q || ""; $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + card.dataset.name : "“" + q + "”";
     $("#pfSince").textContent = card.dataset.since === "TK" ? "TK — start date" : card.dataset.since;
     $("#pfAct").innerHTML = card.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
-    var tpl = $("template.story", card);
-    $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
-    prof.hidden = false; document.body.classList.add("prof-open");
-    pclose.focus();
+    var tpl = $("template.story", card); $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
+    prof.hidden = false; document.body.classList.add("prof-open"); pclose.focus();
   }
-  function closeProf() {
-    if (!prof || prof.hidden) return;
-    prof.hidden = true; document.body.classList.remove("prof-open");
-    if (lastCard) lastCard.focus();
-  }
-  $$("#rack .card").forEach(function (c) { c.addEventListener("click", function () { openProf(c); }); });
+  function closeProf() { if (!prof || prof.hidden) return; prof.hidden = true; document.body.classList.remove("prof-open"); if (lastEl && lastEl.focus) lastEl.focus(); }
+  cards.forEach(function (c) { c.addEventListener("click", function () { openProf(c); }); });
   if (pclose) pclose.addEventListener("click", closeProf);
   if (prof) {
     prof.addEventListener("click", function (e) { if (e.target === prof) closeProf(); });
     window.addEventListener("keydown", function (e) {
       if (prof.hidden) return;
       if (e.key === "Escape") { closeProf(); return; }
-      if (e.key === "Tab") {
-        var f = $$("button, a[href]", prof), first = f[0], last = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-      }
+      if (e.key === "Tab") { var f = $$("button, a[href]", prof), first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } }
     });
-  }
-
-  /* ── the loupe: photographs magnify under the pointer ─────── */
-  var loupe = $("#loupe");
-  if (loupe && fine && !reduce) {
-    $$(".plate, .doorway").forEach(function (host) {
-      var im = $("img", host), zoom = 2.2;
-      if (!im) return;
-      host.addEventListener("mousemove", function (e) {
-        var r = im.getBoundingClientRect();
-        if (!im.naturalWidth) return;
-        if (host.classList.contains("doorway") && doorAngle < 40) { loupe.classList.remove("on"); return; }
-        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { loupe.classList.remove("on"); return; }
-        var fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
-        var bw = r.width * zoom, bh = r.height * zoom;
-        loupe.style.backgroundImage = "url(" + JSON.stringify(im.currentSrc || im.src) + ")";
-        loupe.style.backgroundSize = bw.toFixed(0) + "px " + bh.toFixed(0) + "px";
-        loupe.style.backgroundPosition = (-(fx * bw - 85)).toFixed(0) + "px " + (-(fy * bh - 85)).toFixed(0) + "px";
-        loupe.style.transform = "translate(" + (e.clientX - 85) + "px," + (e.clientY - 85) + "px)";
-        loupe.classList.add("on");
-      });
-      host.addEventListener("mouseleave", function () { loupe.classList.remove("on"); });
-    });
-  }
-
-  /* ── the cover door leans toward the pointer ──────────────── */
-  if (doorway && fine && !reduce) {
-    doorway.addEventListener("mousemove", function (e) {
-      var r = doorway.getBoundingClientRect();
-      var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
-      doorway.style.transform = "rotateY(" + (px * 6).toFixed(2) + "deg) rotateX(" + (-py * 4).toFixed(2) + "deg)";
-    });
-    doorway.addEventListener("mouseleave", function () { doorway.style.transform = ""; });
-  }
-
-  /* ── print the exhibit ────────────────────────────────────── */
-  var printEx = $("#printExhibit");
-  if (printEx && window.print) {
-    printEx.hidden = false;
-    printEx.addEventListener("click", function () {
-      document.body.classList.add("print-exhibit");
-      $$("#doors .dr").forEach(function (d) { d.classList.add("on"); });
-      window.print();
-    });
-    window.addEventListener("afterprint", function () { document.body.classList.remove("print-exhibit"); });
   }
 
   /* ── the two-year test ────────────────────────────────────── */
-  var progStart = $("#progStart"), verdict = $("#verdict"), ruler = $("#ruler"), pin = $("#pin"), band = $("#band"), cut = $("#cut");
-  var twoYearState = $("#twoYearState");
+  var progStart = $("#progStart"), verdict = $("#verdict"), ruler = $("#ruler"), pin = $("#pin"), band = $("#band"), cut = $("#cut"), twoYearState = $("#twoYearState");
   var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8), EPOCH0 = new Date(2021, 7, 27);
   function monthsBetween(a, b) { return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) - (b.getDate() < a.getDate() ? 1 : 0); }
   function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
   function pct(d) { return clamp((d - EPOCH0) / (DEADLINE - EPOCH0), 0, 1) * 100; }
-  if (band) band.style.width = pct(CUTOFF).toFixed(2) + "%";
-  if (cut) cut.style.left = pct(CUTOFF).toFixed(2) + "%";
+  if (band) band.style.width = pct(CUTOFF).toFixed(2) + "%"; if (cut) cut.style.left = pct(CUTOFF).toFixed(2) + "%";
   $$("#ruler .yr").forEach(function (y) { y.style.left = pct(new Date(+y.textContent, 0, 1)).toFixed(2) + "%"; });
-  if (progStart && verdict) {
-    progStart.addEventListener("input", function () {
-      if (!progStart.value) {
-        verdict.innerHTML = "Enter the date of the earliest record.";
-        if (ruler) ruler.classList.remove("set", "fail"); if (twoYearState) twoYearState.textContent = "";
-        return;
-      }
-      var d = new Date(progStart.value + "T00:00:00");
-      if (isNaN(d)) return;
-      var m = monthsBetween(d, DEADLINE), ok = d <= CUTOFF;
-      if (ok) {
-        verdict.innerHTML = "<b>Passes.</b> By the closing date the programme will have run for " +
-          Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") +
-          " — dated from " + fmt(d) + ". Keep that record.";
-      } else {
-        var sh = Math.abs(monthsBetween(CUTOFF, d));
-        verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + sh + " month" + (sh === 1 ? "" : "s") +
-          " too young for this cycle. Unless an earlier record exists, this category waits a year.";
-      }
-      if (pin) pin.style.left = pct(d).toFixed(2) + "%";
-      if (ruler) { ruler.classList.add("set"); ruler.classList.toggle("fail", !ok); }
-      if (twoYearState) twoYearState.textContent = ok ? "· Passes on the date given" : "· Not yet, on the date given";
-    });
-  }
-
-  /* ── the reading position: folio, index, progress, path ───── */
-  var progFill = $("#progFill"), folio = $("#folio"), index = $$(".index a");
-  var sections = $$("main section");
-  var PARTS = { top: "Cover", award: "The award", who: "Who we are", door: "The programme", crew: "The people",
-    creds: "What we are", training: "Training", code: "The code", join: "Join us" };
-  var steps = $$("#rail .step"), rail = $("#rail"), railInk = $("#railInk"), walker = $("#walker");
-  if (railInk) { var L = 1000; try { L = railInk.getTotalLength(); } catch (e) {} railInk.style.setProperty("--l", L); }
-  var ticking = false, lastLp = -1, moveT = null;
-
-  function onScroll() {
-    var y = window.pageYOffset || document.documentElement.scrollTop;
-    if (progFill) {
-      var mx2 = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-      progFill.style.width = (clamp(y / mx2, 0, 1) * 100).toFixed(2) + "%";
-    }
-    doorFromScroll(y);
-    var vm = y + window.innerHeight * 0.42, cur2 = null, idx = 0;
-    for (var i = 0; i < sections.length; i++) {
-      var s = sections[i];
-      if (vm >= s.offsetTop && vm < s.offsetTop + s.offsetHeight) { cur2 = s.id; idx = i; }
-    }
-    index.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
-    if (folio && cur2) {
-      var line = "The Open Door · " + (PARTS[cur2] || "") + " · Part " + (idx + 1) + " of " + sections.length;
-      if (folio.textContent !== line) folio.textContent = line;
-    }
-    if (steps.length && rail) {
-      var r = rail.getBoundingClientRect();
-      var lp = clamp((window.innerHeight * 0.86 - r.top) / (r.height + window.innerHeight * 0.2), 0, 1);
-      for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("lit", lp >= (k + 0.65) / steps.length);
-      if (railInk && !reduce) {
-        var Lr = parseFloat(railInk.style.getPropertyValue("--l")) || 1000;
-        railInk.style.strokeDashoffset = (Lr * (1 - lp)).toFixed(1);
-        if (walker) {
-          walker.setAttribute("transform", "translate(" + (6 + lp * 988).toFixed(1) + " 0)");
-          if (lp !== lastLp) { rail.classList.add("moving"); clearTimeout(moveT); moveT = setTimeout(function () { rail.classList.remove("moving"); }, 260); }
-          lastLp = lp;
-        }
-        rail.style.setProperty("--lp", (lp * 100).toFixed(1) + "%");   /* the vertical rail on phones */
-      }
-    }
-    ticking = false;
-  }
-  window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  window.addEventListener("resize", onScroll);
-  onScroll();
-  if (reduce) steps.forEach(function (r) { r.classList.add("lit"); });
+  if (progStart && verdict) progStart.addEventListener("input", function () {
+    if (!progStart.value) { verdict.innerHTML = "Enter the date of the earliest record."; if (ruler) ruler.classList.remove("set", "fail"); if (twoYearState) twoYearState.textContent = ""; return; }
+    var d = new Date(progStart.value + "T00:00:00"); if (isNaN(d)) return;
+    var m = monthsBetween(d, DEADLINE), ok = d <= CUTOFF;
+    if (ok) verdict.innerHTML = "<b>Passes.</b> By the closing date the programme will have run for " + Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") + " — dated from " + fmt(d) + ". Keep that record.";
+    else { var sh = Math.abs(monthsBetween(CUTOFF, d)); verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + sh + " month" + (sh === 1 ? "" : "s") + " too young for this cycle. Unless an earlier record exists, this category waits a year."; }
+    if (pin) pin.style.left = pct(d).toFixed(2) + "%"; if (ruler) { ruler.classList.add("set"); ruler.classList.toggle("fail", !ok); }
+    if (twoYearState) twoYearState.innerHTML = ok ? "<i>✓</i>Passes on the date given" : "<i>✕</i>Not yet, on the date given";
+  });
 
   /* ── the assessment ───────────────────────────────────────── */
-  var FIRE = {
-    a: "Class A — wood, paper, textiles. Water, foam, powder or wet chemical will do it.",
-    b: "Class B — petrol, paint, solvents. Foam, CO₂ or powder. Never water.",
-    c: "Class C — flammable gases. Dry powder only, once the supply is isolated.",
-    e: "Live electrical — CO₂ or dry powder. Water and foam conduct.",
-    f: "Class F — cooking oils and fats. Wet chemical, purpose-built for the job."
-  };
+  var FIRE = { a: "Class A — wood, paper, textiles. Water, foam, powder or wet chemical will do it.", b: "Class B — petrol, paint, solvents. Foam, CO₂ or powder. Never water.",
+    c: "Class C — flammable gases. Dry powder only, once the supply is isolated.", e: "Live electrical — CO₂ or dry powder. Water and foam conduct.", f: "Class F — cooking oils and fats. Wet chemical, purpose-built for the job." };
   var fnote = $("#fnote"), fcs = $$(".fc"), exts = $$(".ext");
   function pickFire(cls) {
     fcs.forEach(function (b) { var on = b.getAttribute("data-cls") === cls; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
-    exts.forEach(function (x) {
-      var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
-      x.classList.toggle("hit", ok); x.classList.toggle("miss", !ok);
-    });
+    exts.forEach(function (x) { var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0; x.classList.toggle("hit", ok); x.classList.toggle("miss", !ok); });
     if (fnote) fnote.textContent = FIRE[cls] || "";
   }
   fcs.forEach(function (b) { b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); }); });
   if (fcs.length) pickFire("a");
-
-  var QUIZ = [
-    { q: "Waste-paper bin alight in an office.", cls: "a" },
-    { q: "Overheated fuse board — still live.", cls: "e" },
-    { q: "Chip-pan fire in the staff kitchen.", cls: "f" },
-    { q: "Petrol spill ignited in the yard.", cls: "b" },
-    { q: "Gas cylinder burning at the valve.", cls: "c" },
-    { q: "Laptop charger smoking on a desk.", cls: "e" }
-  ];
-  var fmL = $("#fmLearn"), fmT = $("#fmTest"), fq = $("#fq"), fsc = $("#fscore");
-  var qi = 0, qScore = 0, qLock = false;
+  var QUIZ = [{ q: "Waste-paper bin alight in an office.", cls: "a" }, { q: "Overheated fuse board — still live.", cls: "e" }, { q: "Chip-pan fire in the staff kitchen.", cls: "f" },
+    { q: "Petrol spill ignited in the yard.", cls: "b" }, { q: "Gas cylinder burning at the valve.", cls: "c" }, { q: "Laptop charger smoking on a desk.", cls: "e" }];
+  var fmL = $("#fmLearn"), fmT = $("#fmTest"), fq = $("#fq"), fsc = $("#fscore"), qi = 0, qScore = 0, qLock = false;
   function setFMode(test) {
-    document.body.classList.toggle("ftest", test);
-    fmL.classList.toggle("on", !test); fmT.classList.toggle("on", test);
-    fmL.setAttribute("aria-pressed", !test); fmT.setAttribute("aria-pressed", test);
-    fq.hidden = !test; fsc.hidden = !test;
+    document.body.classList.toggle("ftest", test); fmL.classList.toggle("on", !test); fmT.classList.toggle("on", test);
+    fmL.setAttribute("aria-pressed", !test); fmT.setAttribute("aria-pressed", test); fq.hidden = !test; fsc.hidden = !test;
     exts.forEach(function (x) { x.classList.remove("hit", "miss", "right", "wrong"); });
-    if (test) { qi = 0; qScore = 0; qLock = false; askQ(); } else { pickFire("a"); }
+    if (test) { qi = 0; qScore = 0; qLock = false; askQ(); } else pickFire("a");
   }
   function askQ() {
     fsc.textContent = qScore + " / " + QUIZ.length;
-    if (qi >= QUIZ.length) {
-      fq.innerHTML = "<b>" + qScore + " of " + QUIZ.length + ".</b> " +
-        (qScore === QUIZ.length ? "Full marks — you'd pass our induction." : "Return to Learn, then sit it again.");
-      if (fnote) fnote.textContent = "Sit the paper again whenever you like.";
-      return;
-    }
-    fq.innerHTML = "Q" + (qi + 1) + " — <b>" + QUIZ[qi].q + "</b> Which extinguisher?";
-    if (fnote) fnote.textContent = "Mark your answer.";
+    if (qi >= QUIZ.length) { fq.innerHTML = "<b>" + qScore + " of " + QUIZ.length + ".</b> " + (qScore === QUIZ.length ? "Full marks — you'd pass our induction." : "Return to Learn, then sit it again."); if (fnote) fnote.textContent = "Sit the paper again whenever you like."; return; }
+    fq.innerHTML = "Q" + (qi + 1) + " — <b>" + QUIZ[qi].q + "</b> Which extinguisher?"; if (fnote) fnote.textContent = "Mark your answer.";
   }
   exts.forEach(function (x) {
     x.setAttribute("tabindex", "0");
     function answer() {
-      if (!document.body.classList.contains("ftest") || qLock || qi >= QUIZ.length) return;
-      qLock = true;
-      var cls = QUIZ[qi].cls;
-      var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
-      x.classList.add(ok ? "right" : "wrong");
-      if (ok) qScore++;
-      if (fnote) fnote.textContent = (ok ? "Correct. " : "Marked wrong. ") + FIRE[cls];
-      fsc.textContent = qScore + " / " + QUIZ.length;
+      if (!document.body.classList.contains("ftest") || qLock || qi >= QUIZ.length) return; qLock = true;
+      var cls = QUIZ[qi].cls, ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
+      x.classList.add(ok ? "right" : "wrong"); if (ok) qScore++; if (fnote) fnote.textContent = (ok ? "Correct. " : "Marked wrong. ") + FIRE[cls]; fsc.textContent = qScore + " / " + QUIZ.length;
       setTimeout(function () { x.classList.remove("right", "wrong"); qi++; qLock = false; askQ(); }, 1400);
     }
-    x.addEventListener("click", answer);
-    x.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); answer(); } });
+    x.addEventListener("click", answer); x.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); answer(); } });
   });
-  if (fmL && fmT) {
-    fmL.addEventListener("click", function () { setFMode(false); });
-    fmT.addEventListener("click", function () { setFMode(true); });
-  }
-
-  /* ── the signature line ───────────────────────────────────── */
-  var sig = $("#sigPad"), sigClear = $("#sigClear");
-  if (sig && sig.getContext) {
-    var sctx = sig.getContext("2d"), drawing = false, signed = false, lx = 0, ly = 0;
-    function sigSize() {
-      var w = sig.clientWidth || (sig.parentElement && sig.parentElement.clientWidth);
-      if (!w) return;
-      var keep = null;
-      if (signed) { try { keep = sctx.getImageData(0, 0, sig.width, sig.height); } catch (e) {} }
-      sig.width = w; sig.height = 88;
-      sctx.lineWidth = 2; sctx.lineCap = "round"; sctx.lineJoin = "round"; sctx.strokeStyle = "#C40000";
-      if (keep) sctx.putImageData(keep, 0, 0);
-    }
-    function pos(e) { var r = sig.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e; return [p.clientX - r.left, p.clientY - r.top]; }
-    sig.addEventListener("mousedown", function (e) { drawing = true; var p = pos(e); lx = p[0]; ly = p[1]; e.preventDefault(); });
-    sig.addEventListener("mousemove", function (e) {
-      if (!drawing) return; var p = pos(e);
-      sctx.beginPath(); sctx.moveTo(lx, ly); sctx.lineTo(p[0], p[1]); sctx.stroke();
-      lx = p[0]; ly = p[1]; signed = true; e.preventDefault();
-    });
-    window.addEventListener("mouseup", function () { drawing = false; });
-    sig.addEventListener("touchstart", function (e) { drawing = true; var p = pos(e); lx = p[0]; ly = p[1]; e.preventDefault(); }, { passive: false });
-    sig.addEventListener("touchmove", function (e) {
-      if (!drawing) return; var p = pos(e);
-      sctx.beginPath(); sctx.moveTo(lx, ly); sctx.lineTo(p[0], p[1]); sctx.stroke();
-      lx = p[0]; ly = p[1]; signed = true; e.preventDefault();
-    }, { passive: false });
-    sig.addEventListener("touchend", function () { drawing = false; });
-    if (sigClear) sigClear.addEventListener("click", function () { sctx.clearRect(0, 0, sig.width, sig.height); signed = false; });
-    window.addEventListener("resize", sigSize);
-    window.addEventListener("load", sigSize);
-    sigSize();
-  }
+  if (fmL && fmT) { fmL.addEventListener("click", function () { setFMode(false); }); fmT.addEventListener("click", function () { setFMode(true); }); }
 
   /* ── protecting-since ─────────────────────────────────────── */
-  var EPOCH = new Date(2021, 7, 27).getTime();
-  var groups = [["tD", "tH", "tM", "tS"], ["tD2", "tH2", "tM2", "tS2"]].map(function (g) {
-    return g.map(function (id) { return document.getElementById(id); });
-  });
-  var lastSec = -1;
-  function ticker() {
-    var s = Math.floor((Date.now() - EPOCH) / 1000);
-    if (s === lastSec) return;
-    lastSec = s;
-    groups.forEach(function (g) {
-      if (!g[0]) return;
-      g[0].textContent = Math.floor(s / 86400);
-      g[1].textContent = pad2(Math.floor(s / 3600) % 24);
-      g[2].textContent = pad2(Math.floor(s / 60) % 60);
-      g[3].textContent = pad2(s % 60);
-    });
-  }
-  ticker();
-  setInterval(ticker, 1000);
+  var EPOCH = new Date(2021, 7, 27).getTime(), g = ["tD2", "tH2", "tM2", "tS2"].map(function (id) { return document.getElementById(id); }), lastSec = -1;
+  function ticker() { var s = Math.floor((Date.now() - EPOCH) / 1000); if (s === lastSec || !g[0]) return; lastSec = s;
+    g[0].textContent = Math.floor(s / 86400); g[1].textContent = pad2(Math.floor(s / 3600) % 24); g[2].textContent = pad2(Math.floor(s / 60) % 60); g[3].textContent = pad2(s % 60); }
+  ticker(); setInterval(ticker, 1000);
 })();

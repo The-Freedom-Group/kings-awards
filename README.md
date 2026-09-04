@@ -8,7 +8,7 @@ kings-awards/
 ├── index.html            Gateway linking both sites
 ├── personal/index.html   Tom Letcher — The Freedom Line (founder page)
 ├── personal/thread.js    the page's engine: the line, the pinned scene, the map
-├── staff/index.html      The People of Freedom Fire — team site
+├── staff/index.html      The Open Door — team site
 ├── staff/engine.js       its engine
 ├── assets/               logos, the portrait, the team and floor photographs
 ├── CNAME                 awards.freedomgroup.uk
@@ -107,7 +107,7 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 | 05 Governance | HMRC and filing status, accreditation reference numbers, insurance, engineer training and re-certification, environmental measures, community work |
 | 07 Contact | Direct email, and mobile if you want it public |
 
-### `staff/index.html` — The People of Freedom Fire
+### `staff/index.html` — The Open Door
 
 | Section | What's needed |
 |---|---|
@@ -144,15 +144,22 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff — The Open Door.** Rebuilt on 4 September 2026 for one reader: the assessor. Night navy with
-one muted gold and a single ember accent, Barlow Condensed in sentence case, Plex Mono data,
-hairline rules, thin-bordered panels. Restrained, not poster. The cover is a roller shutter that
-opens and closes on a tap to reveal the team; Part 01 is the award's five tests as a checklist with where each is
-answered; Part 03 is the programme (four shutter panels for the four named activities, the path
-with a walker, the two-year-test calculator with a ruler, the four proofs); Part 04 is nine
-profiles in three stories, each with its own question and a film slot; Part 05 is the two
-standing commitments — T Level Ambassadors and Disability Confident Employer — with evidence
-slots. Every unsupported claim is an amber "Evidence required" slot.
+**Staff — The Open Door.** Rebuilt again on 4 September 2026 as the founder page's mirror
+image: carbon where that is porcelain, a flame line where that has a pink one, the same Anton,
+Inter and Instrument Serif. One idea — a door. The first screen is a steel door split down a
+glowing seam; a click (anywhere on it, or the button) slides both leaves away onto the team,
+and a click closes it again. The scroll never opens it. From the foot of the door a flame line
+is drawn through every chapter as you read, knotting at each one and landing at the foot of the
+page with "the door is still open". Around it: chapter headlines that rise word by word, a
+velocity marquee (paid work / funded tickets / a certified trade), a pinned scene ("No degree.
+No connections. No safety net. One door."), outlined poster words behind chapters, script
+accents, a chapter spine and a numbered header. Part 01 is the award's five tests as a ledger
+with giant numerals; Part 02 the four named activities as four doors that open, plus the path
+from starter to mentor; Part 03 the roll call — the nine names as a slow marquee, each a button
+— then the three stories, the routes in, and the nine cards with a profile sheet and film slot;
+Part 04 the two standing commitments (T Level Ambassadors, Disability Confident Employer);
+Part 05 the two-year test with its ruler and the four proofs; Part 06 the fire-class trainer;
+Part 07 join. Every unsupported claim is a dashed flame "evidence" slot.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
