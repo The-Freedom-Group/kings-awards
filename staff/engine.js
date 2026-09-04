@@ -1,236 +1,188 @@
 /* ══════════════════════════════════════════════════════════════════
-   THE WAY IN — engine (GSAP: ScrollTrigger, ScrollSmoother, SplitText)
-   The preloader, the hero that rises out of its masks, the ring
-   cursor, smooth scrolling with parallax, the reveals, the wipe to
-   white, the carousel, the starfield, the glass object that flies
-   into the footer, the staggered footer, the profile sheet, and the
-   two-year test.
+   THE WAY IN — engine
+   The call point (a click breaks the glass, a click resets it), the
+   escape-route strip lit as far as you have read, four signs that
+   turn over, a floor plan that lights station by station, the roll
+   call ticked present as each name arrives, the profile sheet, the
+   two-year inspection tag, the fire-class paper, the ticker.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var fine = window.matchMedia && window.matchMedia("(hover:hover) and (pointer:fine)").matches;
-  var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+  var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
+  var pad2 = function (x) { return x < 10 ? "0" + x : "" + x; };
 
-  /* ── if the library never arrives, show the page plainly ── */
-  function plain() {
-    document.documentElement.classList.add("no-gsap");
-    var pl = $("#preloader"); if (pl) pl.style.display = "none";
-    $$(".hero .line span").forEach(function (s) { s.style.transform = "none"; });
-    ["#top", "#bm", "#obj1", "#obj3"].forEach(function (s) { var e = $(s); if (e) e.style.opacity = "1"; });
-    $$(".fi,.sl,.fu-1,.tile,.footer-item,.cta-h").forEach(function (e) { e.style.opacity = "1"; e.style.visibility = "visible"; });
+  /* ── the call point ───────────────────────────────────────── */
+  var hero = $("#top"), cp = $("#cp"), cpTop = $("#cpTop");
+  function setGlass(broken) {
+    if (!hero) return;
+    hero.classList.toggle("broken", broken);
+    if (cp) { cp.setAttribute("aria-pressed", broken); cp.setAttribute("aria-label", broken ? "Reset the call point" : "Break glass — reveal the team"); }
+    if (cpTop) { cpTop.textContent = broken ? "Reset call point" : "Break glass"; cpTop.classList.toggle("reset", broken); }
   }
-  if (!hasGsap) { plain(); }
-  else {
-    gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
-    gsap.config({ nullTargetWarn: false });
-    gsap.defaults({ duration: 1 });
-  }
+  if (cp) cp.addEventListener("click", function () { setGlass(!hero.classList.contains("broken")); });
+  if (cpTop) cpTop.addEventListener("click", function () {
+    var broken = !hero.classList.contains("broken"); setGlass(broken);
+    if (broken) window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
 
-  /* ── smooth scrolling ─────────────────────────────────────── */
-  var smoother = null;
-  if (hasGsap && !reduce) {
-    smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0.5, normalizeScroll: true, ignoreMobileResize: true, effects: true });
-  }
-  function scrollTo(target) {
-    var el = typeof target === "string" ? $(target) : target; if (!el) return;
-    if (smoother) smoother.scrollTo(el, true, "top top"); else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-  }
-  $$('a[href^="#"]').forEach(function (a) { a.addEventListener("click", function (e) { var h = a.getAttribute("href"); if (h.length > 1 && $(h)) { e.preventDefault(); scrollTo(h); closeMenu(); } }); });
-
-  /* ── menu ─────────────────────────────────────────────────── */
-  var menu = $("#menu");
-  function closeMenu() { if (menu) { menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); } }
-  var burger = $("#burger"); if (burger) burger.addEventListener("click", function () { menu.classList.add("open"); menu.setAttribute("aria-hidden", "false"); });
-  var mx = $("#menuX"); if (mx) mx.addEventListener("click", closeMenu);
-
-  /* ── the cursor ───────────────────────────────────────────── */
-  var dot = $("#curDot"), ring = $("#curRing");
-  if (dot && ring && fine) {
-    var px = -100, py = -100, rx = -100, ry = -100, shown = false;
-    window.addEventListener("mousemove", function (e) { px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; } }, { passive: true });
-    document.addEventListener("mouseover", function (e) {
-      var t = e.target.closest && e.target.closest("[data-cur], .tile, .card");
-      document.body.classList.toggle("cur-big", !!t);
-      document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, .prof")));
+  /* ── headline wipes ───────────────────────────────────────── */
+  if (!reduce) $$(".ch h2").forEach(function (h) {
+    var parts = Array.prototype.slice.call(h.childNodes), i = 0;
+    parts.forEach(function (nd) {
+      if (nd.nodeType === 3 && nd.textContent.trim()) { var s = document.createElement("span"); s.className = "wipe"; s.style.setProperty("--d", (i++ * 0.18) + "s"); s.textContent = nd.textContent; h.replaceChild(s, nd); }
+      else if (nd.nodeType === 1 && nd.tagName === "EM") { nd.classList.add("wipe"); nd.style.setProperty("--d", (i++ * 0.18) + "s"); }
     });
-    document.addEventListener("mouseleave", function () { document.body.classList.add("cur-off"); });
-    document.addEventListener("mouseenter", function () { document.body.classList.remove("cur-off"); });
-    (function loop() {
-      dot.style.transform = "translate(" + px + "px," + py + "px)";
-      rx += (px - rx) * 0.16; ry += (py - ry) * 0.16;
-      ring.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
-      requestAnimationFrame(loop);
-    })();
+  });
+
+  /* ── reveal ───────────────────────────────────────────────── */
+  var watched = $$(".rv, .flip");
+  if (!("IntersectionObserver" in window) || reduce) watched.forEach(function (e) { e.classList.add("in"); });
+  else {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    watched.forEach(function (e) { io.observe(e); });
   }
 
-  /* ── the glass objects size their faces from their box ────── */
-  function sizeGlass() { $$(".glass .cube").forEach(function (c) { c.style.setProperty("--w", c.offsetWidth + "px"); }); }
-  sizeGlass(); window.addEventListener("resize", sizeGlass);
+  /* ── the route strip ──────────────────────────────────────── */
+  var story = $("#story"), route = $("#route"), lit = $("#routeLit"), marks = [];
+  var chapters = $$("#story .ch, #story .hero");
+  var TITLES = { top: ["00", "The call point"], award: ["01", "The award"], stories: ["i–iii", "Three stories"], programme: ["02", "The programme"], people: ["03", "The people"],
+    creds: ["04", "What we are"], test: ["05", "The two-year test"], training: ["06", "Training"], join: ["07", "Join"] };
+  function buildMarks() {}
+  function drawRoute(y) {
+    if (!route || !lit || !story) return;
+    var H = story.offsetHeight, top = hero ? hero.offsetHeight : 0, reach = clamp(y + window.innerHeight * 0.58, top, H - 30);
+    lit.style.top = top + "px"; lit.style.height = Math.max(0, reach - top) + "px";
+    route.classList.toggle("landed", reach >= H - 32);
+  }
 
-  /* ── the starfield ────────────────────────────────────────── */
-  (function () {
-    var cv = $("#stars"); if (!cv) return; var ctx = cv.getContext("2d"), W, H, stars = [], N = 240, run = false;
-    function size() { W = cv.width = cv.offsetWidth * (window.devicePixelRatio > 1 ? 1.5 : 1); H = cv.height = cv.offsetHeight * (window.devicePixelRatio > 1 ? 1.5 : 1); }
-    function seed() { stars = []; for (var i = 0; i < N; i++) stars.push({ x: (Math.random() - .5) * W, y: (Math.random() - .5) * H, z: Math.random() * W, o: Math.random() }); }
-    function frame() {
-      if (!run) return;
-      ctx.fillStyle = "rgba(5,3,10,.5)"; ctx.fillRect(0, 0, W, H);
-      var cx = W / 2, cy = H / 2;
-      for (var i = 0; i < N; i++) { var s = stars[i]; s.z -= 1.6 + s.o * 2.2; if (s.z <= 1) { s.x = (Math.random() - .5) * W; s.y = (Math.random() - .5) * H; s.z = W; }
-        var k = 260 / s.z, x = cx + s.x * k, y = cy + s.y * k, k2 = 260 / (s.z + 26), x2 = cx + s.x * k2, y2 = cy + s.y * k2;
-        if (x < 0 || x > W || y < 0 || y > H) continue;
-        ctx.strokeStyle = "rgba(240,233,238," + (0.08 + 0.5 * (1 - s.z / W)) + ")"; ctx.lineWidth = Math.max(.5, 1.6 * (1 - s.z / W)); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke(); }
-      requestAnimationFrame(frame);
+  /* ── on scroll ────────────────────────────────────────────── */
+  var prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
+  var floor = $("#floor"), stations = $$("#floor .st");
+  function frame() {
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    if (y !== lastY) {
+      lastY = y;
+      var probe = y + window.innerHeight * 0.42, cur = null;
+      chapters.forEach(function (s) { if (probe >= s.offsetTop && probe < s.offsetTop + s.offsetHeight) cur = s.id; });
+      if (!cur && chapters.length && probe >= chapters[chapters.length - 1].offsetTop) cur = chapters[chapters.length - 1].id;
+      if (prog) { var mx = (document.documentElement.scrollHeight - window.innerHeight) || 1; prog.style.transform = "scaleX(" + clamp(y / mx, 0, 1).toFixed(4) + ")"; }
+      var meta = TITLES[cur]; if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }
+      if (now) now.classList.toggle("on", y > window.innerHeight * 0.5);
+      if (floor && stations.length) { var r = floor.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.85 - r.top) / (r.height + window.innerHeight * 0.25), 0, 1); floor.style.setProperty("--lp", lp.toFixed(3)); stations.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.5) / stations.length); }); }
+      drawRoute(y);
     }
-    size(); seed(); window.addEventListener("resize", function () { size(); seed(); });
-    if (reduce) { run = true; frame(); run = false; return; }
-    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { es.forEach(function (en) { var was = run; run = en.isIntersecting; if (run && !was) frame(); }); }).observe(cv); else { run = true; frame(); }
-  })();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  var rebuildTimer = null;
+  function rebuild() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(function () { buildMarks(); lastY = -1; }, 140); }
+  window.addEventListener("resize", rebuild); window.addEventListener("load", rebuild);
+  if ("ResizeObserver" in window && story) new ResizeObserver(rebuild).observe(story);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
+  buildMarks();
 
-  /* ── the carousel ─────────────────────────────────────────── */
-  (function () {
-    var t = $("#carT"); if (!t) return; var one = t.innerHTML; t.innerHTML = one + one + one; var w = 0, x = 0;
-    function measure() { w = t.scrollWidth / 3; } measure(); window.addEventListener("resize", measure);
-    if (reduce) return;
-    (function loop() { x -= 0.45; if (x <= -w) x += w; t.style.transform = "translate3d(" + x.toFixed(1) + "px,0,0)"; requestAnimationFrame(loop); })();
-  })();
+  /* ── four signs ───────────────────────────────────────────── */
+  $$("#signs .sq").forEach(function (b) {
+    b.addEventListener("click", function () { var on = !b.classList.contains("on"); b.classList.toggle("on", on); b.setAttribute("aria-expanded", on); });
+  });
 
-  /* ── everything animated ──────────────────────────────────── */
-  if (hasGsap) {
-    var top = $("#top");
-    if (reduce) {
-      gsap.set(["#top", "#bm", "#obj1", "#obj3"], { autoAlpha: 1 });
-      gsap.set(".hero .line span", { y: 0 });
-    } else {
-      /* the entrance */
-      var intro = gsap.timeline();
-      intro.fromTo("#plLogo", { y: "120%" }, { y: "0%", duration: 1.1, ease: "power4.out" }, 0.3)
-        .fromTo("#plTag", { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .6 }, 1.1)
-        .to("#plLogo", { y: "-130%", duration: .7, ease: "power4.in" }, 2.1)
-        .to("#plTag", { autoAlpha: 0, duration: .3 }, 2.1)
-        .fromTo("#preloader", { autoAlpha: 1, y: "0vh" }, { autoAlpha: 0, y: "-100vh", duration: .6, ease: "expo.inOut" }, 2.4)
-        .fromTo(".hero .line span", { rotation: 3, autoAlpha: 0, y: "5em" }, { rotation: 0, autoAlpha: 1, y: "0em", duration: 2, ease: "power4.out", stagger: .1 }, 2.55)
-        .fromTo("#obj1", { autoAlpha: 0, y: "25vh" }, { autoAlpha: 1, y: "0vh", duration: 2.9, ease: "sine.out" }, 3.2)
-        .fromTo("#top", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, 3.4)
-        .fromTo("#bm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, 3.7)
-        .fromTo("#br a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, 3.5);
-      var blSplit = new SplitText("#bl", { type: "chars" });
-      intro.fromTo(blSplit.chars, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", duration: .7, stagger: .06 }, 3.5);
-
-      /* the hero blurs away as you leave it */
-      gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom 20%", scrub: 1.5 } })
-        .fromTo(".bottom-row", { autoAlpha: 1 }, { filter: "blur(3px)", autoAlpha: 0 }, 0)
-        .fromTo(".hero-intro", { autoAlpha: 1 }, { autoAlpha: 0, y: -60 }, 0.2);
-      if (smoother) smoother.effects("#obj1", { speed: 0.8 });
-      if (smoother) smoother.effects("#obj2", { speed: 1.15 });
-
-      /* separators with text: 25% → 100% */
-      $$(".sep.with-text").forEach(function (el) {
-        gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 30%", scrub: 1 } })
-          .fromTo(el, { width: "25%" }, { width: "100%", duration: 2 }, 1).fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 }, 1);
-      });
-      /* headings, a word at a time */
-      $$("h2.fi, p.fi").forEach(function (el) {
-        var st = new SplitText(el, { type: "words" });
-        gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 70%", scrub: 1 } })
-          .fromTo(st.words, { autoAlpha: 0, y: "0.5em" }, { autoAlpha: 1, y: "0em", stagger: .1 }, 1);
-      });
-      $$(".fu-1").forEach(function (el) {
-        var st = new SplitText(el, { type: "words" });
-        gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 70%", scrub: 1 } })
-          .fromTo(st.words, { rotation: 3, autoAlpha: 0, y: "2rem" }, { rotation: 0, autoAlpha: 1, y: "0rem", stagger: .15, duration: 1.5 }, 1);
-      });
-      $$("h2.sl").forEach(function (el) {
-        var st = new SplitText(el, { type: "words" });
-        gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 70%", scrub: 1 } })
-          .fromTo(st.words, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, 1);
-      });
-      $$(".test.sl").forEach(function (el) {
-        gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 75%", scrub: 1 } })
-          .fromTo(el, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em" }, 1);
-      });
-      /* the tiles */
-      $$(".tile").forEach(function (t) {
-        gsap.timeline({ scrollTrigger: { trigger: t, start: "top 100%", end: "top 45%", scrub: 1 } }).fromTo(t, { y: "5vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0);
-        var big = $(".big", t); if (big) { gsap.set(big, { xPercent: -50 }); gsap.fromTo(big, { yPercent: -62 }, { yPercent: -40, ease: "none", scrollTrigger: { trigger: t, start: "top bottom", end: "bottom top", scrub: true } }); }
-      });
-      /* the blur box */
-      $$(".blur-box").forEach(function (b) {
-        gsap.timeline({ scrollTrigger: { trigger: b, start: "top 100%", end: "bottom 80%", scrub: 1 } }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, .5);
-      });
-      /* the wipe to white, and the header follows */
-      var wipe = gsap.timeline({ scrollTrigger: { trigger: ".colour-divider", start: "center 50%", end: "center 30%", scrub: true,
-        onUpdate: function (st) { var on = st.progress > .5; $("#white").classList.toggle("on-white", on); if (top) top.classList.toggle("dark-on-white", on); } } });
-      wipe.to(".change-to-white", { background: "#fbf8f9" }, 0);
-      ScrollTrigger.create({ trigger: ".purpose", start: "top 60px", onEnter: function () { if (top) top.classList.remove("dark-on-white"); }, onLeaveBack: function () { if (top) top.classList.add("dark-on-white"); } });
-      gsap.timeline({ scrollTrigger: { trigger: ".client-logos", start: "top 90%", end: "bottom 60%", scrub: 1 } }).fromTo(".client-logos", { autoAlpha: 0 }, { autoAlpha: 1 }, 0);
-      $$(".client-logos .card").forEach(function (c, i) { gsap.fromTo(c, { y: "5vh" }, { y: "0vh", scrollTrigger: { trigger: ".client-logos", start: "top 100%", end: "bottom 50%", scrub: 1 } }); });
-
-      /* the call, the object flying in, the footer arriving */
-      var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
-      var ftSplit = new SplitText(".ft .mail", { type: "chars" });
-      var ft = gsap.timeline({ scrollTrigger: { trigger: ".footer", start: "top 85%", end: "bottom 85%", scrub: 2 } });
-      ft.fromTo(".footer-header, .footer-menu-item li, .footer-item img, .ft-line", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2)
-        .fromTo("#obj3", { rotation: 0, scale: 1, autoAlpha: 0, x: "-33vw", y: "-60vh" }, { rotation: 141, scale: .8, autoAlpha: 1, x: "-9vw", y: "4vh", duration: 5 }, 0)
-        .fromTo(ftSplit.chars, { autoAlpha: 0, x: "0.5em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, 2.2);
-      gsap.timeline({ scrollTrigger: { trigger: ".cta", start: "top 85%", end: "bottom 60%", scrub: 2 } })
-        .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
-        .fromTo(".cta .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0 }, 1.2);
-
-      window.addEventListener("load", function () { ScrollTrigger.refresh(); });
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
-    }
+  /* ── the roll call ────────────────────────────────────────── */
+  var rows = $$("#register .row");
+  if (!("IntersectionObserver" in window) || reduce) rows.forEach(function (r) { r.classList.add("here"); });
+  else {
+    var pending = 0;
+    var rio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (!en.isIntersecting) return; rio.unobserve(en.target); var t = en.target; setTimeout(function () { t.classList.add("here"); }, 160 + (pending++ % 9) * 140); }); }, { threshold: 0.4 });
+    rows.forEach(function (r) { rio.observe(r); });
   }
 
   /* ── profiles ─────────────────────────────────────────────── */
-  var tiles = $$(".tile"), prof = $("#prof"), pclose = $("#pclose"), lastEl = null, curIx = -1;
+  var prof = $("#prof"), pclose = $("#pclose"), lastEl = null;
   var ACTS = { a: "a · work experience or careers advice", b: "b · mentoring", c: "c · interview and job-related training", d: "d · recruitment open to everyone" };
-  function openProf(t) {
-    if (!prof) return; lastEl = document.activeElement; curIx = tiles.indexOf(t);
-    $("#pfName").textContent = t.dataset.name; $("#pfRole").innerHTML = t.dataset.role + " · " + t.dataset.route;
-    $("#pfRoute").textContent = t.dataset.route; $("#pfFocus").innerHTML = t.dataset.focus;
-    $("#pfQ").textContent = "“" + t.dataset.q + "”"; $("#pfSince").textContent = t.dataset.since === "TK" ? "TK · start date" : t.dataset.since;
-    $("#pfAct").innerHTML = t.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
-    var tpl = $("template.story-t", t); $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
-    var vid = $("#pfVid"); vid.style.setProperty("--a", getComputedStyle(t).getPropertyValue("--a")); vid.style.setProperty("--b", getComputedStyle(t).getPropertyValue("--b"));
-    var was = !prof.hidden; prof.hidden = false; document.body.classList.add("prof-open"); if (smoother) smoother.paused(true); if (!was) pclose.focus();
-    var inn = $(".prof-in"); if (inn) { inn.scrollTop = 0; inn.style.animation = "none"; void inn.offsetWidth; inn.style.animation = ""; }
+  function openProf(row) {
+    if (!prof) return; lastEl = document.activeElement;
+    $("#pfName").textContent = row.dataset.name; $("#pfRole").innerHTML = row.dataset.role;
+    $("#pfRoute").textContent = row.dataset.route; $("#pfRoute2").textContent = row.dataset.route; $("#pfBand").style.setProperty("--b", row.dataset.b || "#111");
+    $("#pfFocus").innerHTML = row.dataset.focus;
+    var q = row.dataset.q || ""; $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + row.dataset.name : "“" + q + "”";
+    $("#pfSince").textContent = row.dataset.since === "TK" ? "TK — start date" : row.dataset.since;
+    $("#pfAct").innerHTML = row.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
+    var tpl = $("template.story", row); $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
+    prof.hidden = false; document.body.classList.add("prof-open"); pclose.focus();
   }
-  function closeProf() { if (!prof || prof.hidden) return; prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
-  tiles.forEach(function (t) { t.addEventListener("click", function () { openProf(t); }); });
+  function closeProf() { if (!prof || prof.hidden) return; prof.hidden = true; document.body.classList.remove("prof-open"); if (lastEl && lastEl.focus) lastEl.focus(); }
+  rows.forEach(function (r) { r.addEventListener("click", function () { openProf(r); }); });
   if (pclose) pclose.addEventListener("click", closeProf);
-  var pPrev = $("#pPrev"), pNext = $("#pNext");
-  if (pPrev) pPrev.addEventListener("click", function () { openProf(tiles[(curIx - 1 + tiles.length) % tiles.length]); });
-  if (pNext) pNext.addEventListener("click", function () { openProf(tiles[(curIx + 1) % tiles.length]); });
   if (prof) {
     prof.addEventListener("click", function (e) { if (e.target === prof) closeProf(); });
     window.addEventListener("keydown", function (e) {
-      if (menu && menu.classList.contains("open") && e.key === "Escape") { closeMenu(); return; }
       if (prof.hidden) return;
       if (e.key === "Escape") { closeProf(); return; }
-      if (e.key === "ArrowRight") { openProf(tiles[(curIx + 1) % tiles.length]); return; }
-      if (e.key === "ArrowLeft") { openProf(tiles[(curIx - 1 + tiles.length) % tiles.length]); return; }
       if (e.key === "Tab") { var f = $$("button, a[href]", prof), first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } }
     });
   }
 
-  /* ── the two-year test ────────────────────────────────────── */
-  var progStart = $("#progStart"), verdict = $("#verdict"), twoYearState = $("#twoYearState");
-  var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8);
+  /* ── the inspection tag ───────────────────────────────────── */
+  var progStart = $("#progStart"), verdict = $("#verdict"), ruler = $("#ruler"), pin = $("#pin"), band = $("#band"), cut = $("#cut"), twoYearState = $("#twoYearState");
+  var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8), EPOCH0 = new Date(2021, 7, 27);
   function monthsBetween(a, b) { return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) - (b.getDate() < a.getDate() ? 1 : 0); }
   function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); }
-  function judge() {
-    if (!progStart.value) { verdict.innerHTML = "Enter the date of the earliest record."; if (twoYearState) twoYearState.textContent = ""; return; }
+  function pct(d) { return clamp((d - EPOCH0) / (DEADLINE - EPOCH0), 0, 1) * 100; }
+  if (band) band.style.width = pct(CUTOFF).toFixed(2) + "%"; if (cut) cut.style.left = pct(CUTOFF).toFixed(2) + "%";
+  $$("#ruler .yr").forEach(function (y) { y.style.left = pct(new Date(+y.textContent, 0, 1)).toFixed(2) + "%"; });
+  if (progStart && verdict) progStart.addEventListener("input", function () {
+    if (!progStart.value) { verdict.innerHTML = "Enter the date of the earliest record."; if (ruler) ruler.classList.remove("set", "fail"); if (twoYearState) twoYearState.innerHTML = ""; return; }
     var d = new Date(progStart.value + "T00:00:00"); if (isNaN(d)) return;
     var m = monthsBetween(d, DEADLINE), ok = d <= CUTOFF;
-    if (ok) verdict.innerHTML = "<b>Passes.</b> By the closing date the programme will have run for " + Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") + ", dated from " + fmt(d) + ". Keep that record.";
+    if (ok) verdict.innerHTML = "<b class='ok'>Passes.</b> By the closing date the programme will have run for " + Math.floor(m / 12) + " year" + (Math.floor(m / 12) === 1 ? "" : "s") + " and " + (m % 12) + " month" + (m % 12 === 1 ? "" : "s") + " — dated from " + fmt(d) + ". Keep that record.";
     else { var sh = Math.abs(monthsBetween(CUTOFF, d)); verdict.innerHTML = "<b>Not yet.</b> A record from " + fmt(d) + " is " + sh + " month" + (sh === 1 ? "" : "s") + " too young for this cycle. Unless an earlier record exists, this category waits a year."; }
-    if (twoYearState) twoYearState.textContent = ok ? "● Passes on the date given" : "Not yet, on the date given";
+    if (pin) pin.style.left = pct(d).toFixed(2) + "%"; if (ruler) { ruler.classList.add("set"); ruler.classList.toggle("fail", !ok); }
+    if (twoYearState) twoYearState.innerHTML = ok ? "<span class='sign black'>✓ Passes on the date given</span>" : "<span class='sign red'>✕ Not yet, on the date given</span>";
+  });
+
+  /* ── the paper ────────────────────────────────────────────── */
+  var FIRE = { a: "Class A — wood, paper, textiles. Water, foam, powder or wet chemical will do it.", b: "Class B — petrol, paint, solvents. Foam, CO₂ or powder. Never water.",
+    c: "Class C — flammable gases. Dry powder only, once the supply is isolated.", e: "Live electrical — CO₂ or dry powder. Water and foam conduct.", f: "Class F — cooking oils and fats. Wet chemical, purpose-built for the job." };
+  var fnote = $("#fnote"), fcs = $$(".fc"), exts = $$(".ext");
+  function pickFire(cls) {
+    fcs.forEach(function (b) { var on = b.getAttribute("data-cls") === cls; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    exts.forEach(function (x) { var ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0; x.classList.toggle("hit", ok); x.classList.toggle("miss", !ok); });
+    if (fnote) fnote.textContent = FIRE[cls] || "";
   }
-  if (progStart && verdict) progStart.addEventListener("input", judge);
-  $$(".calc .quick button").forEach(function (b) { b.addEventListener("click", function () { progStart.value = b.dataset.d; judge(); $$(".calc .quick button").forEach(function (x) { x.classList.toggle("on", x === b); }); }); });
+  fcs.forEach(function (b) { b.addEventListener("click", function () { pickFire(b.getAttribute("data-cls")); }); });
+  if (fcs.length) pickFire("a");
+  var QUIZ = [{ q: "Waste-paper bin alight in an office.", cls: "a" }, { q: "Overheated fuse board — still live.", cls: "e" }, { q: "Chip-pan fire in the staff kitchen.", cls: "f" },
+    { q: "Petrol spill ignited in the yard.", cls: "b" }, { q: "Gas cylinder burning at the valve.", cls: "c" }, { q: "Laptop charger smoking on a desk.", cls: "e" }];
+  var fmL = $("#fmLearn"), fmT = $("#fmTest"), fq = $("#fq"), fsc = $("#fscore"), qi = 0, qScore = 0, qLock = false;
+  function setFMode(test) {
+    document.body.classList.toggle("ftest", test); fmL.classList.toggle("on", !test); fmT.classList.toggle("on", test);
+    fmL.setAttribute("aria-pressed", !test); fmT.setAttribute("aria-pressed", test); fq.hidden = !test; fsc.hidden = !test;
+    exts.forEach(function (x) { x.classList.remove("hit", "miss", "right", "wrong"); });
+    if (test) { qi = 0; qScore = 0; qLock = false; askQ(); } else pickFire("a");
+  }
+  function askQ() {
+    fsc.textContent = qScore + " / " + QUIZ.length;
+    if (qi >= QUIZ.length) { fq.innerHTML = "<b>" + qScore + " of " + QUIZ.length + ".</b> " + (qScore === QUIZ.length ? "Full marks — you'd pass our induction." : "Return to Learn, then sit it again."); if (fnote) fnote.textContent = "Sit the paper again whenever you like."; return; }
+    fq.innerHTML = "Q" + (qi + 1) + " — <b>" + QUIZ[qi].q + "</b> Which extinguisher?"; if (fnote) fnote.textContent = "Mark your answer.";
+  }
+  exts.forEach(function (x) {
+    x.setAttribute("tabindex", "0");
+    function answer() {
+      if (!document.body.classList.contains("ftest") || qLock || qi >= QUIZ.length) return; qLock = true;
+      var cls = QUIZ[qi].cls, ok = (" " + x.getAttribute("data-ok") + " ").indexOf(" " + cls + " ") >= 0;
+      x.classList.add(ok ? "right" : "wrong"); if (ok) qScore++; if (fnote) fnote.textContent = (ok ? "Correct. " : "Marked wrong. ") + FIRE[cls]; fsc.textContent = qScore + " / " + QUIZ.length;
+      setTimeout(function () { x.classList.remove("right", "wrong"); qi++; qLock = false; askQ(); }, 1400);
+    }
+    x.addEventListener("click", answer); x.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); answer(); } });
+  });
+  if (fmL && fmT) { fmL.addEventListener("click", function () { setFMode(false); }); fmT.addEventListener("click", function () { setFMode(true); }); }
+
+  /* ── protecting-since ─────────────────────────────────────── */
+  var EPOCH = new Date(2021, 7, 27).getTime(), g = ["tD2", "tH2", "tM2", "tS2"].map(function (id) { return document.getElementById(id); }), lastSec = -1;
+  function ticker() { var s = Math.floor((Date.now() - EPOCH) / 1000); if (s === lastSec || !g[0]) return; lastSec = s;
+    g[0].textContent = Math.floor(s / 86400); g[1].textContent = pad2(Math.floor(s / 3600) % 24); g[2].textContent = pad2(Math.floor(s / 60) % 60); g[3].textContent = pad2(s % 60); }
+  ticker(); setInterval(ticker, 1000);
 })();
