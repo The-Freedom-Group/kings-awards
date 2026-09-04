@@ -278,8 +278,8 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .hero-type{position:relative;z-index:3;pointer-events:none}
 .hero-type h1{font-size:clamp(64px,15.4vw,232px);line-height:.8}
 .hero-type h1 span{display:block}
-.hero-shot{position:absolute;right:clamp(60px,9vw,150px);bottom:-8%;
-  width:clamp(300px,41vw,640px);z-index:2;will-change:transform;
+.hero-shot{position:absolute;right:calc(var(--gut) * -.35);bottom:-8%;
+  width:clamp(300px,46vw,700px);z-index:2;will-change:transform;
   overflow:visible}
 /* the photograph itself stays solid, with the original soft edge; a blurred, larger
    copy sits behind it and bleeds out into the page - the fade happens outside the image */
@@ -289,9 +289,9 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
    copy a little larger, and a heavily blurred copy larger still. Every mask is a long,
    even ramp, so there is no seam where one layer ends and the next begins. */
 .hero-shot img#shot{position:relative;z-index:3;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.45) 5%,#000 15%,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+  -webkit-mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
     linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
-  mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.45) 5%,#000 15%,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+  mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
     linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
   -webkit-mask-composite:source-in;mask-composite:intersect}
 .hero-shot img.halo{position:absolute;left:-12%;top:-8%;width:124%;z-index:2;opacity:.55;
