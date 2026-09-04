@@ -8,7 +8,7 @@ kings-awards/
 ├── index.html            Gateway linking both sites
 ├── personal/index.html   Tom Letcher — The Freedom Line (founder page)
 ├── personal/thread.js    the page's engine: the line, the pinned scene, the map
-├── staff/index.html      The Open Door — team site
+├── staff/index.html      The Way In — team site
 ├── staff/engine.js       its engine
 ├── assets/               logos, the portrait, the team and floor photographs
 ├── CNAME                 awards.freedomgroup.uk
@@ -107,7 +107,7 @@ are deliberately obvious. Search either file for `class="tk` to find them all.
 | 05 Governance | HMRC and filing status, accreditation reference numbers, insurance, engineer training and re-certification, environmental measures, community work |
 | 07 Contact | Direct email, and mobile if you want it public |
 
-### `staff/index.html` — The Open Door
+### `staff/index.html` — The Way In
 
 | Section | What's needed |
 |---|---|
@@ -144,22 +144,23 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff — The Open Door.** Rebuilt again on 4 September 2026 as the founder page's mirror
-image: carbon where that is porcelain, a flame line where that has a pink one, the same Anton,
-Inter and Instrument Serif. One idea — a door. The first screen is a steel door split down a
-glowing seam; a click (anywhere on it, or the button) slides both leaves away onto the team,
-and a click closes it again. The scroll never opens it. From the foot of the door a flame line
-is drawn through every chapter as you read, knotting at each one and landing at the foot of the
-page with "the door is still open". Around it: chapter headlines that rise word by word, a
-velocity marquee (paid work / funded tickets / a certified trade), a pinned scene ("No degree.
-No connections. No safety net. One door."), outlined poster words behind chapters, script
-accents, a chapter spine and a numbered header. Part 01 is the award's five tests as a ledger
-with giant numerals; Part 02 the four named activities as four doors that open, plus the path
-from starter to mentor; Part 03 the roll call — the nine names as a slow marquee, each a button
-— then the three stories, the routes in, and the nine cards with a profile sheet and film slot;
-Part 04 the two standing commitments (T Level Ambassadors, Disability Confident Employer);
-Part 05 the two-year test with its ruler and the four proofs; Part 06 the fire-class trainer;
-Part 07 join. Every unsupported claim is a dashed flame "evidence" slot.
+**Staff — The Way In.** Rebuilt on 4 September 2026 in the company's own visual language:
+UK fire-safety signage. Where the founder page is porcelain, pink and a drawn line, this is
+sign red, safety green, hazard yellow and black, set in Archivo at its widest and heaviest with
+Plex Mono for the small print. The first screen is a red manual call point over the team photo
+behind frosted glass; a click breaks the glass (the cracks draw, the strobe fires once, the glass
+clears onto the team), a click resets it, and nothing else opens it. Down the left edge runs a
+photoluminescent escape-route strip whose chevrons light as far as you have read, with a lamp at
+the reading point and "You are here · the way in" at the foot — exit signs point out, this one
+points in. Part 01 is the award's five tests as an eligibility notice with green MET and yellow
+EVIDENCE tokens; between it and Part 02, the three stories on a red notice; Part 02 the four
+named activities as four red signs that turn over, plus a floor plan from starter to mentor that
+lights station by station; Part 03 the roll call at the assembly point — a register of the nine
+names, each ticked present as it arrives, each opening a profile sheet with the question, the
+film slot and their own words, with the route in shown as a colour band read like an extinguisher
+label; Part 04 the two commitments as wall plates; Part 05 the two-year test as a yellow
+inspection tag with its ruler, and the four proofs; Part 06 the fire-class paper on real label
+colours; Part 07 the entrance, in green. Every unsupported claim is a yellow hazard slot.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
