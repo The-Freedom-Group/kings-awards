@@ -144,24 +144,31 @@ throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-tr
 chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
 page.
 
-**Staff — The Way In.** The signage site with a studio site's engine underneath it (4 September 2026,
-after Bill asked for a mix of the bold signage version and the rzv.studio rebuild). Skin: UK fire-safety
-signage. Red, white, grey and black; Archivo wide and heavy for the big lines with one Instrument Serif
-italic word in red; IBM Plex Mono for the small print. A break-glass call point over the blurred team
-photo instead of a door (a click breaks the glass, a click resets it), an escape-route strip down the
-left lit as far as you have read, sign tokens, the four activities as signs that turn over, a floor plan
-that lights station by station, two plates on the wall, the inspection tag with the two-year ruler, the
-fire-class paper, and the ticker. Motion: a preloader that slides the logo up and away with a red bar,
-the two hero lines rising out of masks with a slight rotation, the call point floating up, a ring cursor
-that lags behind a red dot and becomes a red disc with an arrow over anything you can open, smooth
-scrolling (GSAP ScrollSmoother) with parallax on the photo and the cube, the hero blurring away as you
-leave it, a black-to-paper wipe into the intro statement, separators that grow from 25% to full width,
-chapter headings arriving a word at a time, the nine people as full-width black tiles with a route band,
-a huge drifting initial and a Present box that ticks as each tile arrives, an ember field behind "This is
-more than a hiring policy", a marquee of the commitments, the inspection tag turning in, "Fancy a proper
-trade?" arriving letter by letter, and a red 3D call-point cube that flies down into the footer as it
-staggers in. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText) from cdnjs. Everything falls back to a
-plain, fully readable page if the library does not load or reduced motion is set.
+**Staff — The Way In.** Built for one reader, the assessor, and cut back on 4 September 2026 to the
+Promoting Opportunity criteria and nothing else. Every chapter answers a line of the eligibility text, in
+order: 01 the five tests as an index; 02 the programme and its four activities (work experience and careers
+advice, mentoring, interview and job-related training, recruitment open to everyone), with the route from
+starter to mentor; 03 the two-year test with the inspection-tag ruler; the three stories and 04 the nine
+people it supported, as full-width tiles ticked present as you reach them, each opening a profile sheet
+with the question, the film slot and their own words; 05 the proofs for the four groups (the people
+supported, the organisation, the employees, the wider community); 06 the two public commitments (T Level
+Ambassadors, Disability Confident) and the two exclusions (social mobility is not the main focus; not a
+training provider); 07 the door, which is recruitment open to everyone with the contact details. Removed
+at the same time: the break-glass call point, the fire-class quiz, the "more than a hiring policy"
+interlude, the marquee and the "protecting for" ticker.
+
+Skin: UK fire-safety signage in red, white, grey and black. Archivo wide and heavy for the big lines with
+one Instrument Serif italic word in red; IBM Plex Mono for the small print. The team photo is the hero, an
+escape-route strip down the left lights as far as you have read, sign tokens, a red notice for the
+stories, plates on the wall, the inspection tag. Motion, from the studio-site study: a preloader that
+slides the logo up and away behind a red bar, four hero lines rising out of masks, a ring cursor that lags
+behind a red dot and becomes a red disc with an arrow over anything you can open, smooth scrolling (GSAP
+ScrollSmoother) with parallax, the hero blurring away as you leave it, a black-to-paper wipe into the
+intro statement, separators that grow, headings arriving a word at a time, the tiles' huge drifting
+initials, the inspection tag turning in, the closing line arriving letter by letter, and a red 3D cube
+that flies down into the footer as it staggers in. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText)
+from cdnjs. Everything falls back to a plain, fully readable page if the library does not load or reduced
+motion is set.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
