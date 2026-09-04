@@ -194,7 +194,7 @@ body[data-view="record"] .spine{display:none}
 
 /* ══ THE THREAD ═════════════════════════════════════════════ */
 #explore{position:relative}
-.thread{position:absolute;inset:0;z-index:5;pointer-events:none}
+.thread{position:absolute;inset:0;z-index:8;pointer-events:none}   /* above every band, so the line is never cut */
 .thread svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .thread .track{fill:none;stroke:rgba(255,45,141,.13);stroke-width:1.4;vector-effect:non-scaling-stroke}
 .thread .spur{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
@@ -219,7 +219,9 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .head{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
   background:var(--pink);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6);
   opacity:0;transition:opacity .4s;left:-99px;top:-99px}
-.thread.on .head{opacity:1}
+.thread.on .head{opacity:1;animation:headPulse 1.6s ease-in-out infinite}
+@keyframes headPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6)}
+  50%{transform:scale(1.45);box-shadow:0 0 0 9px rgba(255,45,141,.22),0 0 34px 10px rgba(255,45,141,.85)}}
 .thread .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
   border:1.5px solid var(--pink);background:var(--porcelain);opacity:.32;
   transition:opacity .45s,background .45s,transform .45s}
@@ -275,10 +277,10 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .hero-type h1 span{display:block}
 .hero-shot{position:absolute;right:calc(var(--gut) * -.35);bottom:-8%;
   width:clamp(300px,46vw,700px);z-index:2;will-change:transform;
-  -webkit-mask-image:linear-gradient(to bottom,#000 54%,transparent 97%),
-    linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 54%,transparent 97%),
-    linear-gradient(to right,transparent 0,#000 12%,#000 88%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 28%,rgba(0,0,0,.55) 70%,transparent 100%),
+    linear-gradient(to right,transparent 0,#000 26%,#000 74%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 28%,rgba(0,0,0,.55) 70%,transparent 100%),
+    linear-gradient(to right,transparent 0,#000 26%,#000 74%,transparent 100%);
   -webkit-mask-composite:source-in;mask-composite:intersect}
 .hero-shot img{width:100%;opacity:0;transition:opacity 1s ease}
 .hero-shot img.on{opacity:1}
@@ -367,13 +369,13 @@ body.ready .hl-node{opacity:1}
   place-content:center;text-align:center}
 .scene .yr{font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;
   color:var(--pink);margin-bottom:clamp(16px,3vh,30px)}
-.scene .phs{position:relative;min-height:clamp(80px,22vh,220px);
+.scene .phs{position:relative;min-height:clamp(140px,38vh,400px);
   min-width:min(88vw,1000px)}
 .scene .ph{position:absolute;inset:0;display:grid;place-content:center;opacity:0;
   transform:scale(.94);filter:blur(10px);
   transition:opacity .55s ease,transform .55s ease,filter .55s ease}
 .scene .ph.on{opacity:1;transform:none;filter:none}
-.scene .ph h3{font-size:clamp(56px,12.5vw,190px);line-height:.86}
+.scene .ph h3{font-size:clamp(48px,10vw,150px);line-height:.88;max-width:12ch;text-align:center}
 .scene .cnt{margin-top:clamp(18px,4vh,36px);font-size:11px;letter-spacing:.22em;
   text-transform:uppercase;font-weight:500;color:var(--pale-3)}
 .scene .cnt b{color:var(--pink);font-weight:600}
@@ -460,7 +462,8 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
 .fg-wrap{display:flex;justify-content:flex-start;margin:clamp(14px,2.4vw,30px) 0 clamp(22px,3.4vw,40px)}
 .fg-img{width:clamp(150px,17vw,230px);height:auto;
   filter:drop-shadow(0 0 26px rgba(255,45,141,.22))}
-.fg-foot{width:clamp(96px,9vw,128px);height:auto;opacity:.9}
+.fg-foot{width:clamp(150px,15vw,200px);height:auto;margin-bottom:18px;
+  filter:drop-shadow(0 0 22px rgba(255,45,141,.22))}
 .fg-rec{width:clamp(84px,8vw,112px);height:auto;margin-bottom:20px}
 
 /* ── 04 · the group ─────────────────────────────────────────── */
@@ -511,13 +514,26 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
   animation:globe 80s linear infinite}
 @keyframes globe{to{background-position-x:200%}}
 .node.core .lbl{font-size:clamp(12px,1.35vw,17px)}
-.node[data-s="operating"]{--os:clamp(50px,6.4vw,68px)}
-.node[data-k="fire"]{--p1:#ffc37a;--p2:#fb4d12;--p3:#8f1802}
-.node[data-k="global"]{--p1:#8fd0ff;--p2:#0097f6;--p3:#053a75}
-.node[data-k="dist"]{--p1:#86f5c6;--p2:#00c07c;--p3:#04513a}
-.node[data-s="launching"]{--os:clamp(38px,4.8vw,50px);--p1:#ff9dcb;--p2:#ff3d9a;--p3:#8f0b55}
-.node[data-s="future"]{--os:clamp(24px,3.2vw,32px);--p1:#8d96b0;--p2:#3d4459;--p3:#161b28}
-.node[data-s="future"] .lbl{color:var(--pale-3);font-size:clamp(9px,.95vw,12px)}
+/* the planets take the group model's own colours: blue for Global, green for Facilities,
+   orange for Distribution, gold for Form and Freight, violet for Fly and Fuel */
+.node[data-s="operating"]{--os:clamp(52px,6.6vw,70px)}
+.node[data-s="planned"]{--os:clamp(44px,5.6vw,58px)}
+.node[data-s="future"]{--os:clamp(34px,4.4vw,46px)}
+.node[data-k="global"]{--p1:#a6dcff;--p2:#1e8fff;--p3:#0a3a8c}
+.node[data-k="fac"]{--p1:#c2ffe4;--p2:#2ed491;--p3:#0b5a3c}
+.node[data-k="dist"]{--p1:#ffd0ad;--p2:#ff6a3d;--p3:#8a2a10}
+.node[data-k="form"],.node[data-k="freight"]{--p1:#fff2b8;--p2:#f0c24a;--p3:#8a6612}
+.node[data-k="fly"]{--p1:#e0ccff;--p2:#8b5cf6;--p3:#3b1d8a}
+.node[data-k="fuel"]{--p1:#c9b8ff;--p2:#6a48d8;--p3:#2a1466}
+.node[data-k="form"] .orb::before{content:"";position:absolute;left:-34%;top:36%;width:168%;height:26%;
+  border-radius:50%;border:2px solid rgba(240,194,74,.85);transform:rotate(-16deg);pointer-events:none}
+.node[data-s="future"] .lbl{color:var(--pale-2);font-size:clamp(9.5px,1vw,13px)}
+.node[data-s="future"] .st{color:var(--pale-3)}
+.node[data-s="planned"] .st{color:#5fe3a8}
+.node[data-k="global"] .st{color:#7cc1ff}
+.yrlbl{position:absolute;transform:translate(-50%,-50%);font-family:var(--sans);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--pale-3);border:1px solid rgba(255,255,255,.16);padding:3px 8px;border-radius:100px;
+  background:rgba(16,16,16,.85);white-space:nowrap;pointer-events:none}
 .node:hover .orb{transform:scale(1.1)}
 .node.sel .orb{box-shadow:inset -8px -10px 16px rgba(0,0,0,.5),
   inset 3px 4px 8px rgba(255,255,255,.22),
@@ -595,10 +611,34 @@ body[data-grp="list"] .grp{display:none}
 .src{margin-top:18px;font-size:13.5px;color:var(--ink-3)}
 .src a{color:var(--pink);border-bottom:1px solid var(--rule)}
 
-footer{background:var(--carbon);color:var(--pale-3);padding:46px 0 58px;font-size:13px;
-  position:relative;z-index:6}
-footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
-footer .fg{color:var(--pale)}
+footer{background:var(--carbon);color:var(--pale-2);padding:0 0 48px;font-size:14px;line-height:1.6;
+  position:relative;z-index:6;border-top:1px solid var(--rule-d)}
+.ft-top{display:flex;justify-content:center;padding:clamp(40px,6vw,72px) 0 clamp(30px,4vw,52px);
+  border-bottom:1px solid var(--rule-d)}
+.totop{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;
+  color:var(--pale);padding:10px}
+.totop .ring{position:relative;width:72px;height:72px;border-radius:50%;border:1.5px dashed rgba(255,45,141,.7);
+  display:block;transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.totop .ring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--pink);
+  box-shadow:0 0 0 0 rgba(255,45,141,.35);transition:box-shadow .5s,transform .5s}
+.totop .arr{position:absolute;top:10px;left:50%;width:72px;height:72px;margin-left:-36px;display:grid;place-content:center;
+  font-family:var(--disp);font-size:30px;line-height:1;color:var(--carbon);transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.totop .lbl{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pale-3);transition:color .3s}
+.totop:hover .ring{transform:rotate(180deg)}
+.totop:hover .ring::after{box-shadow:0 0 0 14px rgba(255,45,141,0);transform:scale(1.08)}
+.totop:hover .arr{transform:translateY(-6px)}
+.totop:hover .lbl{color:var(--pink)}
+.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:clamp(24px,4vw,56px);padding-top:clamp(30px,4vw,48px)}
+@media(max-width:920px){.ft-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.ft-grid{grid-template-columns:1fr}}
+.ft-brand p{margin:0;color:var(--pale-2)}
+footer h4{margin:0 0 10px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pink)}
+footer p{margin:0}
+footer a{color:var(--pale);text-decoration:none;border-bottom:1px solid var(--rule-d);transition:color .2s,border-color .2s}
+footer a:hover{color:var(--pink);border-bottom-color:var(--pink)}
+.ft-legal{margin-top:clamp(30px,4vw,48px);padding-top:20px;border-top:1px solid var(--rule-d);display:flex;
+  justify-content:space-between;gap:12px 28px;flex-wrap:wrap;font-size:12px;letter-spacing:.06em;color:var(--pale-3)}
+.ft-legal span:last-child{font-family:var(--serif);font-style:italic;letter-spacing:0;font-size:15px;color:var(--pink)}
 
 /* ── motion ─────────────────────────────────────────────────── */
 .rv{opacity:0;transform:translateY(34px) scale(.982);filter:blur(7px);
@@ -730,10 +770,10 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <section class="hero" id="top">
   <div class="hl-start" id="hlStart"><span>2021 — One Unit</span></div>
-  <div class="hl-node" id="hn0" aria-hidden="true"><b></b><span>Fire</span></div>
-  <div class="hl-node" id="hn1" aria-hidden="true"><b></b><span>Global</span></div>
+  <div class="hl-node" id="hn0" aria-hidden="true"><b></b><span>Global</span></div>
+  <div class="hl-node" id="hn1" aria-hidden="true"><b></b><span>Facilities</span></div>
   <div class="hl-node" id="hn2" aria-hidden="true"><b></b><span>Distribution</span></div>
-  <div class="hl-node" id="hn3" aria-hidden="true"><b></b><span>Facilities</span></div>
+  <div class="hl-node" id="hn3" aria-hidden="true"><b></b><span>Future ventures</span></div>
 
   <div class="wrap">
     <div class="hero-stage">
@@ -752,7 +792,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <div class="bar">
   <div class="wrap">
-    <div>Founded 2021</div><div>Age at founding — 25</div>
+    <div>Founded 2021</div><div>Thirty years old · five years in</div>
     <div>UK-wide</div><div>Building what's next</div>
   </div>
 </div>
@@ -761,14 +801,14 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <section class="scene" id="ones" aria-label="2021 — where it started">
   <div class="stick">
-    <div class="yr">Bury · August 2021</div>
+    <div class="yr">Bury · September 2026</div>
     <div class="phs" id="phs">
-      <div class="ph on"><h3>One key.</h3></div>
-      <div class="ph"><h3>One unit.</h3></div>
-      <div class="ph"><h3>One director.</h3></div>
-      <div class="ph"><h3>Aged 25.</h3></div>
+      <div class="ph on"><h3>Thirty years old.</h3></div>
+      <div class="ph"><h3>Five years in.</h3></div>
+      <div class="ph"><h3>One company, still his.</h3></div>
+      <div class="ph"><h3>A group taking shape.</h3></div>
     </div>
-    <div class="cnt">Company <b>13589467</b> · incorporated 27 August 2021</div>
+    <div class="cnt">Born April 1996 · founded company <b>13589467</b> at 25 · sole director and owner since</div>
   </div>
 </section>
 
@@ -885,12 +925,14 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
           appointment are matters of public record.</p></details>
       </div>
       <div class="metric">
-        <div class="v">25</div><div class="k">Age at founding</div>
-        <p class="def">Age of the founder on the date the company was incorporated.</p>
-        <div class="per">Period — 27 August 2021</div>
+        <div class="v">30</div><div class="k">Years old, today</div>
+        <p class="def">The founder's age now — five years after he incorporated the company at 25,
+        with four years of accounts and a group structure behind him.</p>
+        <div class="per">Period — as at September 2026</div>
         <details class="ev"><summary>View evidence</summary>
-          <p>Date of birth as recorded on the Companies House officer appointment (month and year
-          only, as the register redacts the day).</p></details>
+          <p>Date of birth recorded as April 1996 on the Companies House officer appointment (the
+          register shows month and year only), set against today's date and the incorporation
+          date of 27 August 2021.</p></details>
       </div>
       <div class="metric">
         <div class="v"><span class="tk-in">TK</span></div><div class="k">Revenue growth</div>
@@ -970,66 +1012,80 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
             <ellipse class="ringC" cx="50" cy="38" rx="51" ry="28"/>
           </g>
         </svg>
+        <span class="yrlbl" data-ring="A" data-ang="128">2026</span>
+        <span class="yrlbl" data-ring="B" data-ang="95">2027 – 2029</span>
+        <span class="yrlbl" data-ring="C" data-ang="232">2030 +</span>
         <button class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0" aria-pressed="true">
-          <span class="orb"></span><span class="lbl">Freedom<br>Group</span></button>
-        <button class="node" data-k="fire" data-s="operating" data-ring="A" data-ang="205">
-          <span class="orb"></span><span class="lbl">Fire &amp; Safety</span>
-          <span class="st">Operating</span></button>
+          <span class="orb"></span><span class="lbl">Freedom Group<br>Enterprise Ltd</span>
+          <span class="st">Holding</span></button>
         <button class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
-          <span class="orb"></span><span class="lbl">Global</span>
-          <span class="st">Operating</span></button>
-        <button class="node" data-k="dist" data-s="operating" data-ring="A" data-ang="80">
-          <span class="orb"></span><span class="lbl">Distribution</span>
-          <span class="st">Operating</span></button>
-        <button class="node" data-k="fac" data-s="launching" data-ring="B" data-ang="25">
-          <span class="orb"></span><span class="lbl">Facilities</span>
-          <span class="st">Launching</span></button>
-        <button class="node" data-k="hepa" data-s="launching" data-ring="B" data-ang="148">
-          <span class="orb"></span><span class="lbl">Hepa Fellas</span>
-          <span class="st">Launching</span></button>
-        <button class="node" data-k="firestorm" data-s="future" data-ring="C" data-ang="293">
-          <span class="orb"></span><span class="lbl">Firestorm</span></button>
-        <button class="node" data-k="voltz" data-s="future" data-ring="C" data-ang="178">
-          <span class="orb"></span><span class="lbl">Voltz</span></button>
-        <button class="node" data-k="kunergy" data-s="future" data-ring="C" data-ang="8">
-          <span class="orb"></span><span class="lbl">Kunergy</span></button>
-        <button class="node" data-k="t3" data-s="future" data-ring="C" data-ang="68">
-          <span class="orb"></span><span class="lbl">T3</span></button>
+          <span class="orb"></span><span class="lbl">Freedom Global Ltd</span>
+          <span class="st">Active</span></button>
+        <button class="node" data-k="fac" data-s="planned" data-ring="A" data-ang="200">
+          <span class="orb"></span><span class="lbl">Freedom Facilities Ltd</span>
+          <span class="st">Planned</span></button>
+        <button class="node" data-k="dist" data-s="planned" data-ring="A" data-ang="70">
+          <span class="orb"></span><span class="lbl">Freedom Distribution Ltd</span>
+          <span class="st">Planned</span></button>
+        <button class="node" data-k="form" data-s="future" data-ring="B" data-ang="250">
+          <span class="orb"></span><span class="lbl">Freedom Form Ltd</span>
+          <span class="st">Future · 2029</span></button>
+        <button class="node" data-k="freight" data-s="future" data-ring="B" data-ang="35">
+          <span class="orb"></span><span class="lbl">Freedom Freight Ltd</span>
+          <span class="st">Future · 2029</span></button>
+        <button class="node" data-k="fly" data-s="future" data-ring="C" data-ang="300">
+          <span class="orb"></span><span class="lbl">Freedom Fly Ltd</span>
+          <span class="st">Future · 2030 +</span></button>
+        <button class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="150">
+          <span class="orb"></span><span class="lbl">Freedom Fuel Ltd</span>
+          <span class="st">Future · 2036 +</span></button>
       </div>
       <div class="panel" id="panel" aria-live="polite">
-        <h3 id="pName">Freedom Group</h3><hr>
-        <div class="tagline" id="pTag">The holding structure.</div>
-        <p id="pBody">One group, built so each venture is a separate operating company rather
-        than another department. Select a planet.</p>
+        <h3 id="pName">Freedom Group Enterprise Ltd</h3><hr>
+        <div class="tagline" id="pTag">The holding company.</div>
+        <p id="pBody">Owner of the group's brands, trademarks, intellectual property and long-term
+        strategy, licensing them to each specialist operating company. Select a planet.</p>
         <a class="go" id="pGo" href="https://www.freedom-fire.co.uk" target="_blank" rel="noopener" style="display:none">Explore business ↗</a>
       </div>
     </div>
 
     <div class="grp-list rv">
-      <h4>Operating today</h4>
+      <h4>Holding company</h4>
       <ul>
-        <li><span class="nm">Freedom Fire &amp; Safety</span><span class="ds">The business that
-          started it. Fire safety products, installation and compliance — serving homes and
-          businesses across the UK.</span></li>
-        <li><span class="nm">Freedom Global</span><span class="ds"><span class="tk-in">TK — one line
-          on what Freedom Global does today.</span></span></li>
-        <li><span class="nm">Freedom Distribution</span><span class="ds"><span class="tk-in">TK —
-          one line on the distribution arm.</span></span></li>
+        <li><span class="nm">Freedom Group Enterprise Ltd</span><span class="ds">Owns the group's
+          brands, IP and strategy, and licenses them to each operating company.</span></li>
       </ul>
-      <h4>Launching</h4>
+      <h4>Active operating company</h4>
       <ul>
-        <li><span class="nm">Freedom Facilities</span><span class="ds"><span class="tk-in">TK — what
-          it will do, and the launch date.</span></span></li>
-        <li><span class="nm">Hepa Fellas</span><span class="ds"><span class="tk-in">TK — what it will
-          do, and the launch date.</span></span></li>
+        <li><span class="nm">Freedom Global Ltd</span><span class="ds">Currently trading as Freedom
+          Fire &amp; Safety Ltd. Consumer ecommerce and D2C: the group's commercial engine, scaling
+          owned brands across marketplaces, ecommerce channels and specialist storefronts. Core
+          brands: Firestorm™, Voltz™, Kunergy™, T3™, Crystal Cleaning Solutions™.</span></li>
       </ul>
-      <h4>Planned — not yet trading</h4>
+      <h4>Planned companies</h4>
       <ul>
-        <li><span class="nm">Firestorm</span><span class="ds"><span class="tk-in">TK</span></span></li>
-        <li><span class="nm">Voltz</span><span class="ds"><span class="tk-in">TK</span></span></li>
-        <li><span class="nm">Kunergy</span><span class="ds"><span class="tk-in">TK</span></span></li>
-        <li><span class="nm">T3</span><span class="ds"><span class="tk-in">TK</span></span></li>
+        <li><span class="nm">Freedom Facilities Ltd</span><span class="ds">Compliance, servicing and
+          facilities — a recurring-revenue operation delivering fire safety servicing, installation,
+          compliance and facilities support to commercial premises, education, warehousing,
+          construction, hospitality and the public sector.</span></li>
+        <li><span class="nm">Freedom Distribution Ltd</span><span class="ds">Trade distribution and
+          B2B — a wholesale operation supplying the group's owned brands to national retailers,
+          electrical wholesalers, trade partners and commercial distributors.</span></li>
       </ul>
+      <h4>Future ventures</h4>
+      <ul>
+        <li><span class="nm">Freedom Form Ltd · 2029</span><span class="ds">Property, development and
+          design — a commercial property platform for the group's premises, acquisitions and growth.</span></li>
+        <li><span class="nm">Freedom Freight Ltd · 2029</span><span class="ds">Freight, imports and
+          logistics — a logistics arm for imports, freight control and supply-chain efficiency.</span></li>
+        <li><span class="nm">Freedom Fly Ltd · 2030+</span><span class="ds">Drone technology and aerial
+          services — surveying, inspection and aerial visual services.</span></li>
+        <li><span class="nm">Freedom Fuel Ltd · 2036+</span><span class="ds">Forecourts, energy and
+          retail — a long-term ambition to develop or acquire petrol stations, forecourts and
+          convenience-retail locations.</span></li>
+      </ul>
+      <p class="src" style="margin-top:22px;font-size:13px;color:var(--pale-3)">As set out in the group's own model. Only Freedom Fire &amp; Safety Ltd is on the register today;
+        the rest are stated intent — see the Verified Record.</p>
     </div>
   </div>
 </section>
@@ -1211,9 +1267,13 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
     <div class="wrap">
       <h3>Group structure</h3>
       <div class="body">
-        <p><b>Operating today:</b> Freedom Fire &amp; Safety, Freedom Global, Freedom
-        Distribution.<br><b>Launching:</b> Freedom Facilities, Hepa Fellas.<br>
-        <b>Planned, not yet trading:</b> Firestorm, Voltz, Kunergy, T3.</p>
+        <p><b>Holding company (stated):</b> Freedom Group Enterprise Ltd.<br>
+        <b>Active operating company (stated):</b> Freedom Global Ltd, currently trading as Freedom
+        Fire &amp; Safety Ltd — the only company on the register, no. 13589467.<br>
+        <b>Planned:</b> Freedom Facilities Ltd, Freedom Distribution Ltd.<br>
+        <b>Future ventures:</b> Freedom Form Ltd and Freedom Freight Ltd (2029), Freedom Fly Ltd
+        (2030+), Freedom Fuel Ltd (2036+).<br>
+        <b>Brands:</b> Firestorm, Voltz, Kunergy, T3, Crystal Cleaning Solutions.</p>
         <span class="tk"><b>Outstanding — entity detail</b>
         For each company: registered name and number where incorporated, trading status, and the date
         it began or is due to begin trading. Assessors will check planned entities against the
@@ -1302,9 +1362,35 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <footer>
   <div class="wrap">
-    <img class="fg-foot" src="../assets/group-logo-light-sm.png" width="420" height="424"
-         alt="The Freedom Group" loading="lazy" decoding="async">
-    <div>Freedom Fire &amp; Safety Ltd · Company no. 13589467 · Bury, Greater Manchester</div>
+    <div class="ft-top">
+      <a class="totop" href="#top" id="totop" data-mag aria-label="Back to the start of the page">
+        <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
+      </a>
+    </div>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <img class="fg-foot" src="../assets/group-logo-light.png" width="900" height="910"
+             alt="The Freedom Group" loading="lazy" decoding="async">
+        <p>Tom Letcher · founder<br>Freedom Fire &amp; Safety Ltd, company no. 13589467<br>Bury, Greater Manchester</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p><a href="mailto:tom.letcher@freedom-fire.co.uk">tom.letcher@freedom-fire.co.uk</a><br>
+          <a href="tel:+443337722723">0333 772 2723</a><br>
+          <a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p>
+      </div>
+      <div>
+        <h4>Registered office</h4>
+        <p>Unit 19, Pilsworth Industrial Estate<br>Bury, Greater Manchester<br>BL9 8RE</p>
+      </div>
+      <div>
+        <h4>Elsewhere</h4>
+        <p><a href="../staff/index.html">The People of Freedom Fire</a><br>
+          <a href="../">King's Awards materials</a><br>
+          <a href="https://find-and-update.company-information.service.gov.uk/company/13589467">Companies House record</a></p>
+      </div>
+    </div>
+    <div class="ft-legal"><span>© 2026 Freedom Fire &amp; Safety Ltd</span><span>The line is still drawing.</span></div>
   </div>
 </footer>
 

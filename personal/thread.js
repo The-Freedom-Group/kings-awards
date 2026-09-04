@@ -153,7 +153,7 @@
   function placeOrbits() {
     var RINGS = { A: [33, 13], B: [43, 20.5], C: [51, 28] };
     var PHI = -16 * Math.PI / 180, CX = 50, CY = 38;
-    $$(".map .node").forEach(function (nd) {
+    $$(".map .node, .map .yrlbl").forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       var x = CX, y = CY;
       if (ring !== "0" && RINGS[ring]) {
@@ -709,23 +709,23 @@
 
   /* ── the group map ────────────────────────────────────────── */
   var DATA = {
-    group:     { n: "Freedom Group", t: "The holding structure.",
-                 b: "One group, built so each venture is a separate operating company rather than another department." },
-    fire:      { n: "Freedom Fire &amp; Safety", t: "The business that started it.",
-                 b: "Fire safety products, installation and compliance — serving homes and businesses across the UK.",
-                 u: "https://www.freedom-fire.co.uk" },
-    global:    { n: "Freedom Global", t: "Operating.",
-                 b: "TK — one line on what Freedom Global does today, and the date it began trading." },
-    dist:      { n: "Freedom Distribution", t: "Operating.",
-                 b: "TK — one line on the distribution arm, and the date it began trading." },
-    fac:       { n: "Freedom Facilities", t: "Launching.",
-                 b: "TK — what it will do, and when it launches. Not yet trading." },
-    hepa:      { n: "Hepa Fellas", t: "Launching.",
-                 b: "TK — what it will do, and when it launches. Not yet trading." },
-    firestorm: { n: "Firestorm", t: "Planned.", b: "TK — planned brand. Not yet trading." },
-    voltz:     { n: "Voltz", t: "Planned.", b: "TK — planned brand. Not yet trading." },
-    kunergy:   { n: "Kunergy", t: "Planned.", b: "TK — planned brand. Not yet trading." },
-    t3:        { n: "T3", t: "Planned.", b: "TK — planned brand. Not yet trading." }
+    group:   { n: "Freedom Group Enterprise Ltd", t: "The holding company.",
+               b: "Owner of the group's brands, trademarks, intellectual property and long-term strategy, licensing them to each specialist operating company. Brands · IP · Strategy · Capital." },
+    global:  { n: "Freedom Global Ltd", t: "Active — currently trading as Freedom Fire &amp; Safety Ltd.",
+               b: "Consumer ecommerce and D2C: the group's established commercial engine, scaling owned brands across marketplaces, ecommerce channels and specialist online storefronts. Commerce ecosystem: Amazon, eBay, Shopify, Temu, TikTok Shop, OnBuy and specialist storefronts. Core brands: Firestorm™, Voltz™, Kunergy™, T3™, Crystal Cleaning Solutions™.",
+               u: "https://www.freedom-fire.co.uk" },
+    fac:     { n: "Freedom Facilities Ltd", t: "Planned — compliance · servicing · facilities.",
+               b: "A recurring-revenue operation delivering fire safety servicing, installation, compliance and facilities support. Core market: commercial premises, education, warehousing, construction, hospitality and the public sector." },
+    dist:    { n: "Freedom Distribution Ltd", t: "Planned — trade distribution · B2B.",
+               b: "A wholesale operation supplying the group's owned brands to national retailers, electrical wholesalers, trade partners, commercial distributors and export partners. Core categories: fire safety, batteries, PPE, cleaning, automotive." },
+    form:    { n: "Freedom Form Ltd", t: "Future, 2029 — property · development · design.",
+               b: "A future commercial property platform for the group's premises, acquisitions and growth." },
+    freight: { n: "Freedom Freight Ltd", t: "Future, 2029 — freight · imports · logistics.",
+               b: "A future logistics arm for imports, freight control and supply-chain efficiency." },
+    fly:     { n: "Freedom Fly Ltd", t: "Future, 2030+ — drone tech · aerial services.",
+               b: "A future specialist business focused on surveying, inspection and aerial visual services." },
+    fuel:    { n: "Freedom Fuel Ltd", t: "Future, 2036+ — forecourts · energy · retail.",
+               b: "A long-term ambition to develop or acquire petrol stations, forecourts and convenience-retail locations." }
   };
   var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
   $$(".node").forEach(function (nd) {
