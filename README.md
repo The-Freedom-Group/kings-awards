@@ -146,21 +146,21 @@ page.
 
 **Staff — The Way In.** Rebuilt on 4 September 2026 in the company's own visual language:
 UK fire-safety signage. Where the founder page is porcelain, pink and a drawn line, this is
-sign red, safety green, hazard yellow and black, set in Archivo at its widest and heaviest with
+sign red, white, grey and black, set in Archivo at its widest and heaviest with
 Plex Mono for the small print. The first screen is a red manual call point over the team photo
 behind frosted glass; a click breaks the glass (the cracks draw, the strobe fires once, the glass
 clears onto the team), a click resets it, and nothing else opens it. Down the left edge runs a
-photoluminescent escape-route strip whose chevrons light as far as you have read, with a lamp at
+escape-route strip, grey chevrons that turn red as far as you have read, with a lamp at
 the reading point and "You are here · the way in" at the foot — exit signs point out, this one
-points in. Part 01 is the award's five tests as an eligibility notice with green MET and yellow
+points in. Part 01 is the award's five tests as an eligibility notice with black MET and red
 EVIDENCE tokens; between it and Part 02, the three stories on a red notice; Part 02 the four
 named activities as four red signs that turn over, plus a floor plan from starter to mentor that
 lights station by station; Part 03 the roll call at the assembly point — a register of the nine
 names, each ticked present as it arrives, each opening a profile sheet with the question, the
-film slot and their own words, with the route in shown as a colour band read like an extinguisher
-label; Part 04 the two commitments as wall plates; Part 05 the two-year test as a yellow
+film slot and their own words, with the route in shown as a band beside the name; Part 04 the two commitments as wall plates; Part 05 the two-year test as a grey
 inspection tag with its ruler, and the four proofs; Part 06 the fire-class paper on real label
-colours; Part 07 the entrance, in green. Every unsupported claim is a yellow hazard slot.
+colours; Part 07 the entrance. Every unsupported claim is a grey slot with a red warning mark.
+The only colours outside that set are the real extinguisher label colours in Part 06.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
