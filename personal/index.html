@@ -219,9 +219,12 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .head{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
   background:var(--pink);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6);
   opacity:0;transition:opacity .4s;left:-99px;top:-99px}
-.thread.on .head{opacity:1;animation:headPulse 1.6s ease-in-out infinite}
-@keyframes headPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6)}
-  50%{transform:scale(1.45);box-shadow:0 0 0 9px rgba(255,45,141,.22),0 0 34px 10px rgba(255,45,141,.85)}}
+/* the tip keeps its size; what pulses is the light around it and the rings it sends out */
+.thread.on .head{opacity:1;animation:headPulse 1.8s ease-in-out infinite}
+@keyframes headPulse{0%,100%{box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 18px 4px rgba(255,45,141,.5)}
+  50%{box-shadow:0 0 0 7px rgba(255,45,141,.28),0 0 44px 14px rgba(255,45,141,.95)}}
+.thread.on .head::before{animation:beacon 1.8s ease-out infinite}
+.thread.on .head::after{animation:beacon 1.8s ease-out .9s infinite}
 .thread .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
   border:1.5px solid var(--pink);background:var(--porcelain);opacity:.32;
   transition:opacity .45s,background .45s,transform .45s}
@@ -277,10 +280,10 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .hero-type h1 span{display:block}
 .hero-shot{position:absolute;right:calc(var(--gut) * -.35);bottom:-8%;
   width:clamp(300px,46vw,700px);z-index:2;will-change:transform;
-  -webkit-mask-image:linear-gradient(to bottom,#000 28%,rgba(0,0,0,.55) 70%,transparent 100%),
-    linear-gradient(to right,transparent 0,#000 26%,#000 74%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 28%,rgba(0,0,0,.55) 70%,transparent 100%),
-    linear-gradient(to right,transparent 0,#000 26%,#000 74%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 38%,transparent 100%),
+    linear-gradient(to right,transparent 0,#000 24%,#000 76%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 38%,transparent 100%),
+    linear-gradient(to right,transparent 0,#000 24%,#000 76%,transparent 100%);
   -webkit-mask-composite:source-in;mask-composite:intersect}
 .hero-shot img{width:100%;opacity:0;transition:opacity 1s ease}
 .hero-shot img.on{opacity:1}
@@ -987,9 +990,9 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
         </div>
       </div>
       <div class="fg-wrap">
-        <img class="fg-img" src="../assets/group-logo-light.png"
-             srcset="../assets/group-logo-light-sm.png 420w, ../assets/group-logo-light.png 900w"
-             sizes="clamp(150px,17vw,230px)" width="900" height="910"
+        <img class="fg-img" src="../assets/group-orbit-600.png"
+             srcset="../assets/group-orbit-320.png 320w, ../assets/group-orbit-600.png 600w"
+             sizes="clamp(150px,17vw,230px)" width="600" height="607"
              alt="The Freedom Group" loading="lazy" decoding="async">
       </div>
       <p class="stand">A connected group built to move products, services and ideas further.</p>
@@ -1211,7 +1214,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 
 <div id="record">
   <div class="rec-head"><div class="wrap">
-    <img class="fg-rec" src="../assets/group-logo-sm.png" width="420" height="424"
+    <img class="fg-rec" src="../assets/group-orbit-320.png" width="320" height="324"
          alt="The Freedom Group" decoding="async">
     <div class="ch-tag">Verified Record</div>
     <h2>The evidence, without the cinema.</h2>
@@ -1369,7 +1372,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
     </div>
     <div class="ft-grid">
       <div class="ft-brand">
-        <img class="fg-foot" src="../assets/group-logo-light.png" width="900" height="910"
+        <img class="fg-foot" src="../assets/group-orbit-600.png" width="600" height="607"
              alt="The Freedom Group" loading="lazy" decoding="async">
         <p>Tom Letcher · founder<br>Freedom Fire &amp; Safety Ltd, company no. 13589467<br>Bury, Greater Manchester</p>
       </div>
