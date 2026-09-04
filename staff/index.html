@@ -44,6 +44,23 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);flex:0 0 auto}
 .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);vertical-align:middle}
 
+/* ── cursor + spine ──────────────────────────────────────────── */
+@media(hover:hover) and (pointer:fine){
+  .cur{position:fixed;left:0;top:0;z-index:400;pointer-events:none;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--black);mix-blend-mode:difference;transition:width .25s,height .25s,margin .25s,background .25s,opacity .3s;opacity:0}
+  .cur.show{opacity:1}
+  .cur .lb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#fff;white-space:nowrap;opacity:0;transition:opacity .2s}
+  .cur.big{width:64px;height:64px;margin:-32px 0 0 -32px;background:var(--black);mix-blend-mode:normal}
+  .cur.big .lb{opacity:1}
+  .cur.hide{opacity:0}}
+@media(hover:none),(pointer:coarse){.cur{display:none}}
+.spine{position:fixed;left:clamp(14px,2.2vw,36px);top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:12px}
+.spine a{position:relative;font-size:11px;letter-spacing:.1em;font-weight:600;color:var(--grey-3);padding-left:18px;transition:color .25s;font-variant-numeric:tabular-nums}
+.spine a::before{content:"";position:absolute;left:0;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--grey-2);transition:background .25s,transform .25s}
+.spine a:hover{color:var(--black)}
+.spine a.on{color:var(--black)}
+.spine a.on::before{background:var(--red);transform:scale(1.5)}
+@media(max-width:1280px){.spine{display:none}}
+
 /* ── header ──────────────────────────────────────────────────── */
 .prog{position:fixed;left:0;top:0;height:2px;width:100%;z-index:72;transform:scaleX(0);transform-origin:left;background:var(--red)}
 .chrome{position:fixed;inset:0 0 auto 0;z-index:70;background:rgba(255,255,255,.86);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid transparent;transition:border-color .3s}
@@ -66,23 +83,48 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 .chrome .btn{margin-left:auto}
 .chrome nav + .btn{margin-left:0}
 
-/* ── hero ────────────────────────────────────────────────────── */
-.hero{padding:clamp(120px,16vh,168px) 0 0}
-.hero .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5vw,72px);align-items:end}
-@media(max-width:900px){.hero .grid{grid-template-columns:1fr}}
+/* ── hero: the photo grows to fill the screen as you scroll ──── */
+.hero{padding:0;height:210vh;position:relative}
+.hero .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--white)}
+.hero .glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px 600px at var(--gx,70%) var(--gy,30%),rgba(225,6,0,.05),transparent 70%);transition:opacity .6s}
+.hero .stick .wrap{height:100%}
+.hero .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5vw,72px);align-items:center;height:100%;padding-top:76px}
+.hero .copy{transition:none}
+.hero .slot{aspect-ratio:4/4.6;max-height:calc(100vh - 150px);max-height:calc(100svh - 150px);width:100%;justify-self:end}
+.hero .photo{position:absolute;left:0;top:0;width:100%;height:100%;z-index:3;aspect-ratio:auto;will-change:left,top,width,height}
+.hero .photo .over{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:clamp(24px,5vw,72px);color:#fff;opacity:0;background:linear-gradient(180deg,rgba(17,17,17,0) 30%,rgba(17,17,17,.7));pointer-events:none}
+.hero .photo .over .eyebrow{color:rgba(255,255,255,.8)}
+.hero .photo .over h2{font-size:clamp(40px,6vw,96px);line-height:.98;color:#fff;max-width:14ch;margin:18px 0 22px;letter-spacing:-.01em}
+.hero .photo .over h2 em{font-style:normal;color:rgba(255,255,255,.55)}
+.hero .photo .over .btn{border-color:#fff;background:#fff;color:var(--black);pointer-events:auto}
+.hero .photo .over .btn:hover{background:var(--red);border-color:var(--red);color:#fff}
+.hero .hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:4;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey-3);display:flex;align-items:center;gap:10px;transition:opacity .4s}
+.hero .hint i{width:1px;height:26px;background:var(--grey-2);position:relative;overflow:hidden;display:block}
+.hero .hint i::after{content:"";position:absolute;left:0;top:-100%;width:100%;height:100%;background:var(--black);animation:drop 1.8s ease-in-out infinite}
+@keyframes drop{0%{top:-100%}60%,100%{top:100%}}
+.hero.done .hint{opacity:0}
+@media(max-width:900px),(prefers-reduced-motion:reduce){
+  .hero{height:auto;padding:110px 0 0}.hero .stick{position:static;height:auto;overflow:visible}.hero .stick .wrap{height:auto}.hero .grid{grid-template-columns:1fr;height:auto;padding-top:0;gap:28px}
+  .hero .slot{display:none}.hero .photo{position:relative;left:auto;top:auto;width:auto;height:auto;aspect-ratio:4/3;transform:none!important}.hero .photo .over{display:none}.hero .hint{display:none}.hero .glow{display:none}}
 .hero h1{font-size:clamp(60px,7.4vw,118px);line-height:.94;margin:22px 0 0;letter-spacing:-.01em}
 .hero h1 em{font-style:normal;color:var(--grey-3)}
 .hero .lede{margin:clamp(20px,3vw,32px) 0 0;max-width:46ch;font-size:clamp(17px,1.6vw,20px);line-height:1.6;color:var(--grey-4)}
 .hero .lede b{color:var(--black);font-weight:600}
 .hero .cta{margin-top:clamp(22px,3vw,34px);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hero h1 .l{display:inline-block;transform:translateY(.45em);opacity:0;filter:blur(6px);animation:rise 1s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--d,0s)}
+.hero h1 .lw{display:inline-block}
+@keyframes rise{to{transform:none;opacity:1;filter:blur(0)}}
 .hero .creds{margin-top:clamp(18px,2.6vw,28px);display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--grey-4)}
 .hero .creds span{display:inline-flex;align-items:center;gap:8px}
 .photo{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/4.6;background:var(--grey-1);box-shadow:0 30px 80px -30px rgba(17,17,17,.35)}
+.photo .px{position:absolute;inset:-8% 0;will-change:transform}
+.photo .px img{height:100%}
 .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.04);transition:transform 1.6s cubic-bezier(.2,.8,.2,1);filter:saturate(.9)}
 .in .photo img{transform:scale(1)}
-.photo .cap{position:absolute;left:18px;right:18px;bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--grey-4)}
+.photo .cap{z-index:2;position:absolute;left:18px;right:18px;bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--grey-4)}
 .photo .cap b{color:var(--black);font-weight:600}
 @media(max-width:900px){.photo{aspect-ratio:4/3}}
+.join .photo .px{inset:-12% 0}
 .facts{border-top:1px solid var(--grey-1);border-bottom:1px solid var(--grey-1);margin-top:clamp(40px,6vw,72px)}
 .facts .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
 .facts .wrap > div{padding:22px 18px;border-left:1px solid var(--grey-1)}
@@ -112,7 +154,10 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 /* ── 01 five tests ───────────────────────────────────────────── */
 .tests{border-top:1px solid var(--grey-1)}
 .test{display:grid;grid-template-columns:72px 1.1fr 1fr 150px;gap:clamp(16px,3vw,48px);padding:clamp(22px,3vw,34px) 0;border-bottom:1px solid var(--grey-1);align-items:start}
-.test .n{font-family:var(--disp);font-weight:500;font-size:clamp(28px,3vw,40px);line-height:1;color:var(--grey-3)}
+.test .n{font-family:var(--disp);font-weight:500;font-size:clamp(28px,3vw,40px);line-height:1;color:var(--grey-3);transition:color .4s}
+.test.now .n{color:var(--red)}
+.test{transition:opacity .4s}
+.tests.reading .test:not(.now){opacity:.55}
 .test h3{font-family:var(--sans);font-weight:600;font-size:clamp(16px,1.5vw,18px);line-height:1.4;letter-spacing:0}
 .test .q{font-size:14px;color:var(--grey-3);margin:8px 0 0;line-height:1.5}
 .test .a{font-size:15px;color:var(--grey-4);line-height:1.6}
@@ -130,7 +175,11 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 /* three stories */
 .stories{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,32px)}
 @media(max-width:900px){.stories{grid-template-columns:1fr}}
-.story{background:var(--white);border:1px solid var(--grey-1);border-radius:var(--r);padding:clamp(24px,3vw,36px)}
+.story{background:var(--white);border:1px solid var(--grey-1);border-radius:var(--r);padding:clamp(24px,3vw,36px);text-align:left;font:inherit;color:inherit;cursor:pointer;transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s,border-color .3s;transform-style:preserve-3d;display:block;width:100%}
+.story:hover{box-shadow:0 30px 60px -30px rgba(17,17,17,.3);border-color:var(--grey-2)}
+.story .go{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--black)}
+.story .go i{width:28px;height:28px;border-radius:50%;border:1px solid var(--grey-2);display:grid;place-content:center;font-style:normal;transition:background .25s,color .25s,border-color .25s}
+.story:hover .go i{background:var(--black);color:#fff;border-color:var(--black)}
 .story .k{font-family:var(--disp);font-weight:500;font-size:clamp(36px,4vw,56px);line-height:1;color:var(--grey-2)}
 .story h3{font-size:clamp(28px,2.8vw,40px);margin:14px 0 14px;line-height:1.04}
 .story p{margin:0;font-size:15px;color:var(--grey-4);line-height:1.6}
@@ -161,6 +210,8 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 .rail{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(12px,2vw,24px);padding-top:28px}
 .rail::before{content:"";position:absolute;left:0;right:0;top:6px;height:1px;background:var(--grey-1)}
 .rail::after{content:"";position:absolute;left:0;top:6px;height:1px;width:100%;background:var(--black);transform:scaleX(var(--lp,0));transform-origin:left;transition:transform .9s cubic-bezier(.25,.7,.25,1)}
+.rail .mover{position:absolute;left:0;top:6px;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--red);z-index:2;box-shadow:0 0 0 4px rgba(225,6,0,.15);transition:left .9s cubic-bezier(.25,.7,.25,1)}
+@media(max-width:900px){.rail .mover{display:none}}
 .step{position:relative;padding-right:8px}
 .step::before{content:"";position:absolute;left:0;top:-27px;width:11px;height:11px;border-radius:50%;background:var(--white);border:1px solid var(--grey-2);transition:background .4s,border-color .4s;z-index:1}
 .step.lit::before{background:var(--black);border-color:var(--black)}
@@ -173,7 +224,14 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 /* ── 03 the people ───────────────────────────────────────────── */
 .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:22px;font-size:13px;color:var(--grey-4)}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--b);margin-right:8px;border:1px solid rgba(0,0,0,.08)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chip{font:inherit;font-size:13px;font-weight:500;padding:9px 14px;border-radius:100px;border:1px solid var(--grey-2);background:transparent;color:var(--grey-4);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{border-color:var(--black);color:var(--black)}
+.chip.on{background:var(--black);border-color:var(--black);color:#fff}
 .register{border-top:1px solid var(--grey-1)}
+.row{transition:background .2s,opacity .4s,transform .4s}
+.row.dim{opacity:.28}
+.row.dim:hover{opacity:.6}
 .row{width:100%;display:grid;grid-template-columns:54px 1.3fr 1fr 1fr 1.4fr 48px;gap:clamp(14px,2vw,28px);align-items:center;padding:clamp(18px,2.4vw,26px) 0;border:0;border-bottom:1px solid var(--grey-1);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;transition:background .2s;position:relative}
 .row:hover{background:var(--white)}
 .row .cn{font-size:12px;color:var(--grey-3);font-variant-numeric:tabular-nums}
@@ -215,6 +273,10 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1;letter-s
 .pmeta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:24px;border-top:1px solid var(--grey-1);padding-top:16px}
 @media(max-width:480px){.pmeta{grid-template-columns:1fr}}
 .pmeta b{font-size:14px;font-weight:500;line-height:1.4}
+.pnav{display:flex;justify-content:space-between;gap:12px;margin-top:28px;padding-top:18px;border-top:1px solid var(--grey-1)}
+.pnav button{font:inherit;font-size:13px;font-weight:500;background:transparent;border:1px solid var(--grey-2);border-radius:100px;padding:10px 16px;cursor:pointer;color:var(--black);transition:background .2s,color .2s,border-color .2s}
+.pnav button:hover{background:var(--black);color:#fff;border-color:var(--black)}
+.vid .play{transition:transform .3s}.vid:hover .play{transform:scale(1.08)}
 body.prof-open{overflow:hidden}
 
 /* ── 04 what we are ──────────────────────────────────────────── */
@@ -237,6 +299,8 @@ body.prof-open{overflow:hidden}
 .calc label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--grey-3);margin:4px 0 10px}
 .calc input[type=date]{font:inherit;font-size:16px;padding:12px 16px;border:1px solid var(--grey-2);background:#fff;color:var(--black);width:100%;max-width:300px;border-radius:12px}
 .calc input[type=date]:focus{border-color:var(--black);outline:none}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.quick .chip{font-size:12px;padding:7px 12px}
 .verdict{font-family:var(--disp);font-weight:500;font-size:clamp(24px,2.6vw,34px);line-height:1.1;margin-top:18px;min-height:2.3em}
 .verdict b{color:var(--red);font-weight:500}.verdict b.ok{color:var(--black)}
 .fine{font-size:12.5px;color:var(--grey-3);margin-top:8px}
@@ -313,13 +377,15 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
 .rv.in{opacity:1;transform:none}
 .ch h2 .w{display:inline-block;opacity:0;transform:translateY(.35em);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
 .in h2 .w{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.rv,.ch h2 .w{opacity:1;transform:none;transition:none}.photo img{transform:none;transition:none}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){.rv,.ch h2 .w{opacity:1;transform:none;transition:none}.hero h1 .l{animation:none;opacity:1;transform:none;filter:none}.photo img{transform:none;transition:none}html{scroll-behavior:auto}}
 @media print{.chrome,.prog,.totop{display:none}.hero{padding-top:20px}}
 </style>
 </head>
 <body>
 
 <div class="prog" id="prog" aria-hidden="true"></div>
+<div class="cur" id="cur" aria-hidden="true"><span class="lb" id="curLb"></span></div>
+<aside class="spine" id="spine" aria-label="Chapters"><a href="#award" data-t="award">01</a><a href="#programme" data-t="programme">02</a><a href="#people" data-t="people">03</a><a href="#creds" data-t="creds">04</a><a href="#test" data-t="test">05</a><a href="#training" data-t="training">06</a><a href="#join" data-t="join">07</a></aside>
 <header class="chrome" id="chrome">
   <div class="wrap">
     <a class="mark" href="#top" aria-label="Freedom Fire &amp; Safety — top"><img src="../assets/ff_logo_black.png" alt="Freedom Fire &amp; Safety"></a>
@@ -337,18 +403,25 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
 
 <!-- ══ HERO ══ -->
 <section class="hero rv in" id="top">
-  <div class="wrap">
-    <div class="grid">
-      <div>
-        <span class="eyebrow">King's Awards for Enterprise · Promoting Opportunity</span>
-        <h1>The way in.<br><em>Nine people.</em></h1>
-        <p class="lede">A fire safety business in Bury that hires the people the job market walks past, and trains every one of them to a certified trade. <b>This is the crew that came in through the open door</b>, the programme that let them, and the evidence behind both.</p>
-        <div class="cta"><a class="btn" href="#award">The award, as five tests</a><a class="btn ghost" href="#people">Meet the people</a></div>
-        <div class="creds"><span><i class="dot"></i>T Level Ambassadors</span><span><i class="dot"></i>Disability Confident Employer</span><span><i class="dot"></i>Founded 27 August 2021</span></div>
+  <div class="stick" id="stick">
+    <div class="glow" id="glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="grid">
+        <div class="copy" id="heroCopy">
+          <span class="eyebrow">King's Awards for Enterprise · Promoting Opportunity</span>
+          <h1 id="h1"><span class="lw"><span class="l">The</span></span> <span class="lw"><span class="l">way</span></span> <span class="lw"><span class="l">in.</span></span><br><em><span class="lw"><span class="l">Nine</span></span> <span class="lw"><span class="l">people.</span></span></em></h1>
+          <p class="lede">A fire safety business in Bury that hires the people the job market walks past, and trains every one of them to a certified trade. <b>This is the crew that came in through the open door</b>, the programme that let them, and the evidence behind both.</p>
+          <div class="cta"><a class="btn" href="#award" data-cur="Read">The award, as five tests</a><a class="btn ghost" href="#people" data-cur="Meet">Meet the people</a></div>
+          <div class="creds"><span><i class="dot"></i>T Level Ambassadors</span><span><i class="dot"></i>Disability Confident Employer</span><span><i class="dot"></i>Founded 27 August 2021</span></div>
+        </div>
+        <div class="slot" id="slot" aria-hidden="true"></div>
       </div>
-      <figure class="photo" style="margin:0"><img src="../assets/team.jpg" srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w" sizes="(max-width:900px) 100vw, 50vw" width="1200" height="1396" alt="The Freedom Fire and Safety team at the Bury unit" decoding="async" fetchpriority="high">
-        <figcaption class="cap"><span><b>The crew</b> · Unit 19, Bury</span><span>Nine people, three stories</span></figcaption></figure>
     </div>
+    <figure class="photo" id="heroPhoto" style="margin:0"><div class="px" data-px="0.06"><img src="../assets/team.jpg" srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w" sizes="(max-width:900px) 100vw, 60vw" width="1200" height="1396" alt="The Freedom Fire and Safety team at the Bury unit" decoding="async" fetchpriority="high"></div>
+      <figcaption class="cap" id="heroCap"><span><b>The crew</b> · Unit 19, Bury</span><span>Nine people, three stories</span></figcaption>
+      <div class="over" id="heroOver"><span class="eyebrow">Freedom Fire &amp; Safety · Bury</span><h2>Nine people came in <em>through an open door.</em></h2><a class="btn" href="#award" data-cur="Read">Start with the award</a></div>
+    </figure>
+    <div class="hint" id="hint"><i></i>Scroll</div>
   </div>
   <div class="facts" aria-label="Key facts"><div class="wrap">
     <div><b>2021</b><span>Founded 27 August · company no. 13589467</span></div><div><b>11 – 50</b><span>Headcount</span></div><div><b>4 of 4</b><span>Award activities, all running</span></div><div><b>Nine</b><span>People, in three stories</span></div>
@@ -395,15 +468,15 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
       <p class="stand">Nine people, three stories, every person placed. Each is filmed answering one question written for them. Every route in is one of the award's four activities: the people are the programme's evidence.</p>
     </div>
     <div class="stories rv">
-      <div class="story"><span class="k">i</span><h3>Finding their feet</h3>
+      <button class="story" type="button" data-filter="feet" data-cur="Show"><span class="k">i</span><h3>Finding their feet</h3>
         <p>Came in green, on a placement or straight from study, and grew into the trade. The story of adapting to real work, and of a company that made room for it.</p>
-        <div class="qs">“What did you expect it to be, and what did it turn out to be?”</div><div class="who"><b>Bill · Harrison · Gabriel</b></div></div>
-      <div class="story"><span class="k">ii</span><h3>Access &amp; adjustments</h3>
+        <div class="qs">“What did you expect it to be, and what did it turn out to be?”</div><div class="who"><b>Bill · Harrison · Gabriel</b></div><span class="go"><i>→</i>Show these three</span></button>
+      <button class="story" type="button" data-filter="access" data-cur="Show"><span class="k">ii</span><h3>Access &amp; adjustments</h3>
         <p>The job made to fit the person, not the other way round. What had to change, who changed it, and what the person then did with it. Told only in their own words, with written consent.</p>
-        <div class="qs">“What had to change for this to work, and who changed it?”</div><div class="who"><b>Jojo · Elliot</b></div></div>
-      <div class="story"><span class="k">iii</span><h3>A harder start</h3>
+        <div class="qs">“What had to change for this to work, and who changed it?”</div><div class="who"><b>Jojo · Elliot</b></div><span class="go"><i>→</i>Show these two</span></button>
+      <button class="story" type="button" data-filter="hard" data-cur="Show"><span class="k">iii</span><h3>A harder start</h3>
         <p>No route in and nothing behind them: the street, the Job Centre, a life that had not offered a trade. What an open door means when there is no safety net.</p>
-        <div class="qs">“Where were you the year before this, and where are you now?”</div><div class="who"><b>Dylan · Billy · Josh</b></div></div>
+        <div class="qs">“Where were you the year before this, and where are you now?”</div><div class="who"><b>Dylan · Billy · Josh</b></div><span class="go"><i>→</i>Show these three</span></button>
     </div>
   </div>
 </section>
@@ -416,22 +489,22 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
       <p class="stand">The award names four activities. These are the four, as we do them, each with the evidence it needs behind it. It is how we hire, not a side project: the people in Part 03 are this programme's output.</p>
     </div>
     <div class="acts rv" id="acts">
-      <div class="act"><button type="button" aria-expanded="false"><span class="ltr">a</span><h3>Work experience &amp; careers advice</h3><span class="pm" aria-hidden="true"></span></button>
+      <div class="act"><button type="button" aria-expanded="false" data-cur="Open"><span class="ltr">a</span><h3>Work experience &amp; careers advice</h3><span class="pm" aria-hidden="true"></span></button>
         <div class="panel"><span></span><div><p>T Level and college placements, school visits, open days and careers talks, with dates, numbers and who they were with. Four of the nine people came in this way.</p>
           <span class="tk"><b>Team to supply</b><span class="tk-in">What you run, since when, how many people, which colleges.</span></span></div></div></div>
-      <div class="act"><button type="button" aria-expanded="false"><span class="ltr">b</span><h3>Mentoring on the vans</h3><span class="pm" aria-hidden="true"></span></button>
+      <div class="act"><button type="button" aria-expanded="false" data-cur="Open"><span class="ltr">b</span><h3>Mentoring on the vans</h3><span class="pm" aria-hidden="true"></span></button>
         <div class="panel"><span></span><div><p>Every new starter is paired with an experienced engineer on real jobs, and stays paired until they can sign their own work.</p>
           <span class="tk"><b>Team to supply</b><span class="tk-in">The pairing, its length, and one mentor's account.</span></span></div></div></div>
-      <div class="act"><button type="button" aria-expanded="false"><span class="ltr">c</span><h3>Interview &amp; job-ready training</h3><span class="pm" aria-hidden="true"></span></button>
+      <div class="act"><button type="button" aria-expanded="false" data-cur="Open"><span class="ltr">c</span><h3>Interview &amp; job-ready training</h3><span class="pm" aria-hidden="true"></span></button>
         <div class="panel"><span></span><div><p>CV help, interview practice, and the tickets funded before day one: named qualifications, with the invoices.</p>
           <span class="tk"><b>Team to supply</b><span class="tk-in">The qualifications funded, for whom, and when.</span></span></div></div></div>
-      <div class="act"><button type="button" aria-expanded="false"><span class="ltr">d</span><h3>Recruitment open to everyone</h3><span class="pm" aria-hidden="true"></span></button>
+      <div class="act"><button type="button" aria-expanded="false" data-cur="Open"><span class="ltr">d</span><h3>Recruitment open to everyone</h3><span class="pm" aria-hidden="true"></span></button>
         <div class="panel"><span></span><div><p>Job Centre referrals, no degree filter, no experience wall, adjustments offered up front, and what is actually screened for: attitude.</p>
           <span class="tk"><b>Team to supply</b><span class="tk-in">The advert, the process, and who it reached.</span></span></div></div></div>
     </div>
     <div class="path rv">
       <div class="ph"><span class="eyebrow">The path</span><span>From starter to mentor</span></div>
-      <div class="rail" id="rail">
+      <div class="rail" id="rail"><span class="mover" id="mover" aria-hidden="true"></span>
         <div class="step"><div class="no">Step 1</div><h3>Day one</h3><p>Paid from the start. <span class="tk-in">TK — starting package</span></p></div>
         <div class="step"><div class="no">Step 2</div><h3>First tickets</h3><p>Qualifications funded by the company. <span class="tk-in">TK — which</span></p></div>
         <div class="step"><div class="no">Step 3</div><h3>On the vans</h3><p>Mentored by an experienced engineer on real jobs.</p></div>
@@ -452,32 +525,33 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
     <div class="legend rv" aria-label="Routes in">
       <span><i style="--b:#111"></i>T Level placement</span><span><i style="--b:#9A9A96"></i>Job Centre</span><span><i style="--b:#D6D6D2"></i>College placement</span><span><i style="--b:#fff"></i>Student, alongside study</span><span><i style="--b:#E10600"></i>Founder</span>
     </div>
+    <div class="filters rv" id="filters" role="group" aria-label="Filter the people"><button class="chip on" type="button" data-f="all">All nine</button><button class="chip" type="button" data-f="feet">Finding their feet</button><button class="chip" type="button" data-f="access">Access &amp; adjustments</button><button class="chip" type="button" data-f="hard">A harder start</button><button class="chip" type="button" data-f="door">The founder</button></div>
     <div class="register rv" id="register">
-      <button class="row" type="button" data-k="tom" data-name="Tom Letcher" data-role="Founder &amp; Managing Director" data-route="Founder" data-b="#E10600" data-focus="The door itself" data-q="Why keep the door open, when it would be easier to hire the finished article?" data-act="a b c d" data-since="27·08·2021" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="door" data-k="tom" data-name="Tom Letcher" data-role="Founder &amp; Managing Director" data-route="Founder" data-b="#E10600" data-focus="The door itself" data-q="Why keep the door open, when it would be easier to hire the finished article?" data-act="a b c d" data-since="27·08·2021" aria-haspopup="dialog">
         <span class="cn">01</span><span class="nm"><i style="--b:#E10600"></i>Tom Letcher</span><span class="rl">Founder &amp; Managing Director</span><span class="stry"><b>Story</b><em>The door itself</em></span><span class="qq">“Why keep the door open, when it would be easier to hire the finished article?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story">Started the company at 25 and still picks up the phone. The open door is his hiring policy, not a scheme.</template></button>
-      <button class="row" type="button" data-k="bill" data-name="Bill" data-role="Web Developer" data-route="T Level placement" data-b="#111" data-focus="Finding their feet" data-q="What did you expect the placement to be — and what did it turn out to be?" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="feet" data-k="bill" data-name="Bill" data-role="Web Developer" data-route="T Level placement" data-b="#111" data-focus="Finding their feet" data-q="What did you expect the placement to be — and what did it turn out to be?" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">02</span><span class="nm"><i style="--b:#111"></i>Bill</span><span class="rl">Web Developer</span><span class="stry"><b>Story</b><em>Finding their feet</em></span><span class="qq">“What did you expect the placement to be, and what did it turn out to be?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story">Came in on a T Level industry placement and stayed. <span class="tk-in">TK — the first weeks, what was hard, what clicked, what he runs now.</span></template></button>
-      <button class="row" type="button" data-k="harrison" data-name="Harrison" data-role="Warehouse Operative" data-route="T Level placement" data-b="#111" data-focus="Finding their feet" data-q="What was the first job you were trusted to do on your own — and what did that do for you?" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="feet" data-k="harrison" data-name="Harrison" data-role="Warehouse Operative" data-route="T Level placement" data-b="#111" data-focus="Finding their feet" data-q="What was the first job you were trusted to do on your own — and what did that do for you?" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">03</span><span class="nm"><i style="--b:#111"></i>Harrison</span><span class="rl">Warehouse Operative</span><span class="stry"><b>Story</b><em>Finding their feet</em></span><span class="qq">“What was the first job you were trusted to do on your own, and what did that do for you?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — where before, how the placement went, what he runs now.</span></template></button>
-      <button class="row" type="button" data-k="gabriel" data-name="Gabriel" data-role="Web Developer" data-route="T Level placement" data-b="#111" data-focus="Finding their feet" data-q="What can you do now that you couldn’t do on day one — and who taught you?" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="feet" data-k="gabriel" data-name="Gabriel" data-role="Web Developer" data-route="T Level placement" data-b="#111" data-focus="Finding their feet" data-q="What can you do now that you couldn’t do on day one — and who taught you?" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">04</span><span class="nm"><i style="--b:#111"></i>Gabriel</span><span class="rl">Web Developer</span><span class="stry"><b>Story</b><em>Finding their feet</em></span><span class="qq">“What can you do now that you couldn’t do on day one, and who taught you?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — where before, what changed, what next.</span></template></button>
-      <button class="row" type="button" data-k="jojo" data-name="Jojo" data-role="Warehouse Operative" data-route="College placement" data-b="#D6D6D2" data-focus="Access &amp; adjustments" data-q="What had to change for this job to work for you — and who changed it?" data-act="a b d" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="access" data-k="jojo" data-name="Jojo" data-role="Warehouse Operative" data-route="College placement" data-b="#D6D6D2" data-focus="Access &amp; adjustments" data-q="What had to change for this job to work for you — and who changed it?" data-act="a b d" data-since="TK" aria-haspopup="dialog">
         <span class="cn">05</span><span class="nm"><i style="--b:#D6D6D2"></i>Jojo</span><span class="rl">Warehouse Operative</span><span class="stry"><b>Story</b><em>Access &amp; adjustments</em></span><span class="qq">“What had to change for this job to work for you, and who changed it?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — Jojo’s account, in Jojo’s own words: the placement, the adjustments that made the job work, and what it changed. Health information is Jojo’s to share; nothing appears here without written consent.</span></template></button>
-      <button class="row" type="button" data-k="elliot" data-name="Elliot" data-role="Ecommerce Assistant" data-route="Student, alongside study" data-b="#fff" data-focus="Access &amp; adjustments" data-q="You study and work at the same time. What did Freedom Fire adjust so both could fit — and what would have happened without it?" data-act="a b" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="access" data-k="elliot" data-name="Elliot" data-role="Ecommerce Assistant" data-route="Student, alongside study" data-b="#fff" data-focus="Access &amp; adjustments" data-q="You study and work at the same time. What did Freedom Fire adjust so both could fit — and what would have happened without it?" data-act="a b" data-since="TK" aria-haspopup="dialog">
         <span class="cn">06</span><span class="nm"><i style="--b:#fff"></i>Elliot</span><span class="rl">Ecommerce Assistant</span><span class="stry"><b>Story</b><em>Access &amp; adjustments</em></span><span class="qq">“You study and work at the same time. What did Freedom Fire adjust so both could fit?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — studying what, how the job fits around it, what changed.</span></template></button>
-      <button class="row" type="button" data-k="dylan" data-name="Dylan" data-role="Warehouse Operative" data-route="Job Centre" data-b="#9A9A96" data-focus="A harder start" data-q="Where were you the year before this — and where are you now?" data-act="d" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="hard" data-k="dylan" data-name="Dylan" data-role="Warehouse Operative" data-route="Job Centre" data-b="#9A9A96" data-focus="A harder start" data-q="Where were you the year before this — and where are you now?" data-act="d" data-since="TK" aria-haspopup="dialog">
         <span class="cn">07</span><span class="nm"><i style="--b:#9A9A96"></i>Dylan</span><span class="rl">Warehouse Operative</span><span class="stry"><b>Story</b><em>A harder start</em></span><span class="qq">“Where were you the year before this, and where are you now?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — the year before, the referral, the interview, the first week, what changed. In Dylan’s words.</span></template></button>
-      <button class="row" type="button" data-k="billy" data-name="Billy" data-role="IT Technician" data-route="T Level placement" data-b="#111" data-focus="A harder start" data-q="What was standing in your way before this job — and what got you through the door?" data-act="a" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="hard" data-k="billy" data-name="Billy" data-role="IT Technician" data-route="T Level placement" data-b="#111" data-focus="A harder start" data-q="What was standing in your way before this job — and what got you through the door?" data-act="a" data-since="TK" aria-haspopup="dialog">
         <span class="cn">08</span><span class="nm"><i style="--b:#111"></i>Billy</span><span class="rl">IT Technician</span><span class="stry"><b>Story</b><em>A harder start</em></span><span class="qq">“What was standing in your way before this job, and what got you through the door?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — where before, what changed, what next.</span></template></button>
-      <button class="row" type="button" data-k="josh" data-name="Josh" data-role="Ecommerce Assistant" data-route="Job Centre" data-b="#9A9A96" data-focus="A harder start" data-q="What were you walking in with on the day of the interview — and what have you walked away with since?" data-act="d" data-since="TK" aria-haspopup="dialog">
+      <button class="row" type="button" data-cur="Open" data-cat="hard" data-k="josh" data-name="Josh" data-role="Ecommerce Assistant" data-route="Job Centre" data-b="#9A9A96" data-focus="A harder start" data-q="What were you walking in with on the day of the interview — and what have you walked away with since?" data-act="d" data-since="TK" aria-haspopup="dialog">
         <span class="cn">09</span><span class="nm"><i style="--b:#9A9A96"></i>Josh</span><span class="rl">Ecommerce Assistant</span><span class="stry"><b>Story</b><em>A harder start</em></span><span class="qq">“What were you walking in with on the day of the interview, and what have you walked away with since?”</span><span class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         <template class="story"><span class="tk-in">TK — the referral, the interview, the first week, what changed.</span></template></button>
     </div>
@@ -521,6 +595,7 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
       <div>
         <label for="progStart">When does the earliest record date the programme from?</label>
         <input type="date" id="progStart" min="2021-08-27" max="2026-09-08">
+        <div class="quick" aria-label="Try a date"><button class="chip" type="button" data-d="2022-09-01">Sep 2022</button><button class="chip" type="button" data-d="2023-09-01">Sep 2023</button><button class="chip" type="button" data-d="2024-09-01">Sep 2024</button><button class="chip" type="button" data-d="2025-01-15">Jan 2025</button></div>
         <div class="verdict" id="verdict" aria-live="polite">Enter the date of the earliest record.</div>
         <div class="ruler" id="ruler" aria-hidden="true">
           <span class="bandr" id="band"></span>
@@ -579,7 +654,7 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
         <div class="tick">Protecting for <b><span id="tD2">0</span>d <span id="tH2">00</span>:<span id="tM2">00</span>:<span id="tS2">00</span></b> · since 27 August 2021</div>
         <span class="tk"><b>Team to supply</b>A careers email address, any open roles, and what you offer: training funded, van, tickets, progression.</span>
       </div>
-      <figure class="photo" style="margin:0"><img src="../assets/team-sm.jpg" srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w" sizes="(max-width:900px) 100vw, 50vw" width="600" height="698" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="photo" style="margin:0"><div class="px" data-px="0.1"><img src="../assets/team-sm.jpg" srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 1200w" sizes="(max-width:900px) 100vw, 50vw" width="600" height="698" alt="" loading="lazy" decoding="async"></div></figure>
     </div>
   </div>
 </section>
@@ -597,6 +672,7 @@ footer .ff{height:22px;width:auto;margin-bottom:16px}
     <div class="vid" id="pfVid"><span class="play" aria-hidden="true"></span><span class="vq" id="pfQ"></span><span class="vt">Film to be recorded · under a minute · one take</span></div>
     <div class="pwords"><span class="pk">In their own words</span><p id="pfStory"></p></div>
     <div class="pmeta"><div><span class="pk">Route in</span><b id="pfRoute2"></b></div><div><span class="pk">Since</span><b id="pfSince"></b></div><div><span class="pk">Proves, for the award</span><b id="pfAct"></b></div></div>
+    <div class="pnav"><button type="button" id="pPrev">← Previous</button><button type="button" id="pNext">Next →</button></div>
   </div>
 </div>
 

@@ -147,8 +147,14 @@ page.
 **Staff — The Way In.** Rebuilt on 4 September 2026, clean and premium at Bill's direction:
 white and light grey, a lot of air, Antonio for the headlines with the second half of each in
 grey, Inter for everything else, red used once per screen at most (a dot, a word, a rule). The
-team photo is the hero, in colour, in a rounded frame with a caption, and is left alone. Motion
-is quiet: things arrive as you reach them, headlines a word at a time, nothing performs. Part 01
+team photo is the hero, in colour, in a rounded frame with a caption, and is left alone. Then the
+life: as you scroll, the framed team photo grows to fill the screen and a second headline
+appears over it; a small cursor grows and names what it is over (Read, Open, Show, Meet); a
+chapter spine on the left; the five tests dim except the one at the reading line; the three
+story cards tilt to the mouse and, clicked, filter the register to their people (with chips
+to switch); the profile sheet has previous and next and the arrow keys; the path carries a
+red dot along it; the two-year test has one-tap dates; both photos drift with the scroll.
+All of it steps aside under prefers-reduced-motion and on phones. Part 01
 is the award's five tests as a ruled list with a status dot each; between it and Part 02, the
 three stories as three cards; Part 02 the four named activities as an accordion, plus the path
 from starter to mentor as a line that fills step by step; Part 03 the nine people as a register
