@@ -73,22 +73,23 @@
   function sizeCubes() { $$(".cube").forEach(function (c) { c.style.setProperty("--w", c.offsetWidth + "px"); }); }
   sizeCubes(); window.addEventListener("resize", sizeCubes);
 
-  /* ── the call point: a click breaks the glass, a click resets it ── */
-  var cp = $("#cp"), cpTop = $("#cpTop"), heroSec = $("#top");
+  /* ── the shutter: a press rolls it up, a press rolls it down ── */
+  var cp = $("#cp"), cpTop = $("#cpTop"), cpWord = $("#cpWord"), heroSec = $("#top");
   function setGlass(broken) {
     if (!heroSec) return;
-    heroSec.classList.toggle("broken", broken);
-    if (cp) { cp.setAttribute("aria-pressed", broken); cp.setAttribute("aria-label", broken ? "Reset the call point" : "Break glass — reveal the team"); }
-    if (cpTop) { cpTop.textContent = broken ? "Reset call point" : "Break glass"; cpTop.classList.toggle("reset", broken); }
+    heroSec.classList.toggle("open", broken);
+    if (cp) { cp.setAttribute("aria-pressed", broken); cp.setAttribute("aria-label", broken ? "Close the shutter" : "Open the shutter — reveal the team"); }
+    if (cpWord) cpWord.textContent = broken ? "Close" : "Open";
+    if (cpTop) { cpTop.textContent = broken ? "Close the door" : "Open the door"; cpTop.classList.toggle("reset", broken); }
     if (animate) {
       var lines = $$(broken ? ".hero .opened .line span" : ".hero .closed .line span");
-      gsap.fromTo(lines, { y: "110%", rotation: 3 }, { y: "0%", rotation: 0, duration: 1.4, ease: "power4.out", stagger: .12, delay: broken ? .35 : 0 });
+      gsap.fromTo(lines, { y: "110%", rotation: 3 }, { y: "0%", rotation: 0, duration: 1.4, ease: "power4.out", stagger: .12, delay: broken ? 1.1 : 0 });
       var rest = $$(broken ? ".hero .opened .k, .hero .opened .strap, .hero .opened .cta" : ".hero .closed .k, .hero .closed .strap");
-      gsap.fromTo(rest, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .9, stagger: .1, delay: broken ? .7 : .2 });
+      gsap.fromTo(rest, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .9, stagger: .1, delay: broken ? 1.5 : .2 });
     }
   }
-  if (cp) cp.addEventListener("click", function () { setGlass(!heroSec.classList.contains("broken")); });
-  if (cpTop) cpTop.addEventListener("click", function () { var broken = !heroSec.classList.contains("broken"); setGlass(broken); if (broken) scrollTo("#top"); });
+  if (cp) cp.addEventListener("click", function () { setGlass(!heroSec.classList.contains("open")); });
+  if (cpTop) cpTop.addEventListener("click", function () { var broken = !heroSec.classList.contains("open"); setGlass(broken); if (broken) scrollTo("#top"); });
 
   /* ── reveal (IO, works with or without the library) ──────── */
   var watched = $$(".rv, .flip");
