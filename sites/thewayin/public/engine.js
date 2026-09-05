@@ -115,22 +115,23 @@
     var intro = gsap.timeline();
     /* failsafe: nobody waits behind the preloader for more than two seconds; and
        "Skip animation" jumps the whole entrance to its finished state */
-    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 2200);
+    setTimeout(function () { if (intro.progress() < 0.45) intro.progress(1); }, 2600);
     var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
-    intro.fromTo("#plLogo", { y: "120%" }, { y: "0%", duration: 1.1, ease: "power4.out" }, 0.3)
-      .fromTo("#plTag", { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .6 }, 1.1)
-      .fromTo("#plBar", { scaleX: 0 }, { scaleX: 1, duration: 1.7, ease: "power2.inOut" }, 0.4)
-      .to("#plLogo", { y: "-130%", duration: .7, ease: "power4.in" }, 2.1)
-      .to("#plTag", { autoAlpha: 0, duration: .3 }, 2.1)
-      .fromTo("#preloader", { autoAlpha: 1, y: "0vh" }, { autoAlpha: 0, y: "-100vh", duration: .6, ease: "expo.inOut" }, 2.4)
-      .to(".hero .closed .line span", { y: "0%", rotation: 0, duration: 2, ease: "power4.out", stagger: .12 }, 2.55)
-      .to(".hero .closed .k, .hero .closed .strap", { autoAlpha: 1, y: 0, duration: 1, stagger: .12 }, 3)
-      .fromTo("#cpanim", { autoAlpha: 0, y: "18vh" }, { autoAlpha: 1, y: "0vh", duration: 2.4, ease: "sine.out" }, 2.9)
-      .fromTo("#chrome", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, 3.4)
-      .fromTo("#fm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, 3.7)
-      .fromTo("#fr a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, 3.5);
+    /* the preloader is gone inside two seconds; the hero then arrives on top of readable content */
+    intro.fromTo("#plLogo", { y: "120%" }, { y: "0%", duration: .8, ease: "power4.out" }, 0.15)
+      .fromTo("#plTag", { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .5 }, 0.7)
+      .fromTo("#plBar", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "power2.inOut" }, 0.2)
+      .to("#plLogo", { y: "-130%", duration: .5, ease: "power4.in" }, 1.35)
+      .to("#plTag", { autoAlpha: 0, duration: .25 }, 1.35)
+      .fromTo("#preloader", { autoAlpha: 1, y: "0vh" }, { autoAlpha: 0, y: "-100vh", duration: .5, ease: "expo.inOut" }, 1.55)
+      .to(".hero .closed .line span", { y: "0%", rotation: 0, duration: 1.8, ease: "power4.out", stagger: .12 }, 1.65)
+      .to(".hero .closed .k, .hero .closed .strap", { autoAlpha: 1, y: 0, duration: 1, stagger: .12 }, 2.05)
+      .fromTo("#cpanim", { autoAlpha: 0, y: "18vh" }, { autoAlpha: 1, y: "0vh", duration: 2.2, ease: "sine.out" }, 1.95)
+      .fromTo("#chrome", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, 2.3)
+      .fromTo("#fm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, 2.6)
+      .fromTo("#fr a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, 2.45);
     var flSplit = new SplitText("#fl", { type: "chars" });
-    intro.fromTo(flSplit.chars, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", duration: .7, stagger: .05 }, 3.5);
+    intro.fromTo(flSplit.chars, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", duration: .7, stagger: .05 }, 2.45);
 
     /* the hero blurs away as you leave it, the photo drifts */
     gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom 20%", scrub: 1.5 } })
@@ -179,10 +180,10 @@
       gsap.timeline({ scrollTrigger: { trigger: b, start: "top 100%", end: "bottom 80%", scrub: 1 } }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, .5);
     });
     /* the wipe from black to paper */
-    var introSec = $("#intro");
-    gsap.timeline({ scrollTrigger: { trigger: ".colour-divider", start: "center 60%", end: "center 20%", scrub: true,
+    var introSec = $(".intro");
+    if (introSec) gsap.timeline({ scrollTrigger: { trigger: ".colour-divider", start: "center 60%", end: "center 20%", scrub: true,
       onUpdate: function (st) { introSec.classList.toggle("on-white", st.progress > .5); } } })
-      .to("#intro", { backgroundColor: "#F4F4F1" }, 0);
+      .to(introSec, { backgroundColor: "#F4F4F1" }, 0);
 
     /* the call, letter by letter; the cube flying into the footer; the footer arriving */
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
