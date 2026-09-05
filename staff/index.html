@@ -68,8 +68,8 @@ em.s{font-family:var(--serif);font-style:italic;font-weight:400;font-variation-s
 
 /* ── preloader ───────────────────────────────────────────────── */
 .preloader{position:fixed;inset:0;z-index:1000;background:var(--black);display:grid;place-content:center}
-.preloader .lw{height:5.5em;overflow:hidden;position:relative;padding:0 10px}
-.preloader .lw img{height:3.4em;width:auto;transform:translateY(120%)}
+.preloader .lw{height:6.4em;overflow:hidden;position:relative;padding:0 10px}
+.preloader .lw img{height:4.4em;width:auto;transform:translateY(120%)}
 .preloader .lw .tag{position:absolute;left:0;right:0;bottom:-.2em;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--pale-3);opacity:0;white-space:nowrap}
 .preloader .bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--red);transform:scaleX(0);transform-origin:left}
 html.no-js .preloader,html.no-gsap .preloader{display:none}
@@ -93,7 +93,7 @@ html.no-js .preloader,html.no-gsap .preloader{display:none}
 .chrome{position:fixed;inset:0 0 auto 0;z-index:70;background:var(--white);border-bottom:2px solid var(--black)}
 html.js.has-gsap .chrome{opacity:0}
 .chrome .wrap{display:flex;align-items:center;gap:clamp(12px,2.6vw,40px);height:72px;position:relative}
-.mark img{height:22px;width:auto;display:block}
+.mark img{height:36px;width:auto;display:block}
 .now{display:none;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);opacity:0;transition:opacity .3s;white-space:nowrap}
 .now.on{opacity:1}
 @media(min-width:1000px){.now{display:flex}}
@@ -356,6 +356,7 @@ html.js.has-gsap .hero .fm{opacity:0}
 .tile.has-por .bg{background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.08) 40%,rgba(0,0,0,.88))}
 .tile.has-por .q{text-shadow:0 2px 14px rgba(0,0,0,.7)}
 .prof:has(#pfImg:not([hidden])) h3{padding-right:112px}
+.pimg[hidden]{display:none}
 .pimg{position:absolute;top:64px;right:clamp(24px,3vw,44px);width:92px;height:92px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:3px solid var(--black);background:var(--grey-3)}
 .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;z-index:2}
 .vid.has-video .play,.vid.has-video .vq,.vid.has-video .vt{display:none}
@@ -468,7 +469,7 @@ footer h4{margin:0 0 10px;font-family:var(--mono);font-size:10.5px;letter-spacin
 footer p{margin:0}
 footer a{color:var(--pale);border-bottom:1px solid var(--rule-d)}
 footer a:hover{color:var(--red);border-bottom-color:var(--red)}
-footer .ff{height:24px;width:auto;margin-bottom:16px}
+footer .ff{height:40px;width:auto;margin-bottom:18px}
 .plate .badge{display:grid;gap:8px;justify-items:start;margin-bottom:18px}
 .plate .badge img{width:clamp(150px,15vw,190px);height:auto;display:block;margin:-6% 0 -6% -3%}
 .plate .badge small{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
@@ -504,7 +505,9 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
 .fnote{margin:16px 0 0;font-size:13.5px;color:var(--pale-2);max-width:78ch;line-height:1.55}
 .ch:not(.dark) .fnote{color:var(--ink-3)}
 .fnote b{color:inherit;font-weight:700}
-.founder{margin-top:clamp(26px,4vw,48px);border:2px solid var(--black);background:var(--white);padding:22px 24px;display:grid;gap:8px;max-width:640px}
+.founder{margin-top:clamp(26px,4vw,48px);border:2px solid var(--black);background:var(--white);padding:22px 24px;display:grid;gap:8px;max-width:640px;text-align:left;font:inherit;color:inherit;cursor:pointer;transition:box-shadow .25s,transform .25s}
+.founder:hover{box-shadow:8px 8px 0 var(--red);transform:translate(-2px,-2px)}
+.founder .watch{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-top:6px}
 .founder .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
 .founder h3{font-size:28px}
 .founder p{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
@@ -592,7 +595,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
 <a class="skip" href="#record" id="skipRec" style="left:calc(var(--gut) + 340px)">View evidence</a>
 
 <div class="preloader" id="preloader" aria-hidden="true">
-  <div class="lw"><img id="plLogo" src="../assets/ff_logo.png" alt=""><span class="tag" id="plTag">Bury · Unit 19 · Est. 2021</span></div>
+  <div class="lw"><img id="plLogo" src="../assets/ff_logo.png" alt=""><span class="tag" id="plTag">The Way In</span></div>
   <div class="bar" id="plBar"></div>
 </div>
 <div class="cur-dot" id="curDot" aria-hidden="true"></div>
@@ -622,19 +625,19 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
 <!-- ══ THE HERO: the shutter opens as you scroll ══ -->
 <section class="hero" id="top" aria-label="The way in">
   <div class="ph" id="heroPh"><img src="../assets/team.jpg" srcset="../assets/team-sm.jpg 600w, ../assets/team.jpg 900w" sizes="100vw" width="900" height="1200" alt="The Freedom Fire and Safety team standing inside an open shipping container on a lorry" decoding="async"></div>
-  <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="stencil" id="stencil">Freedom Fire &amp; Safety<small>Unit 19 · Pilsworth Industrial Estate · Bury</small></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
+  <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="stencil" id="stencil">Promoting Opportunity<small>King's Awards for Enterprise 2027</small></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
   <div class="daylight" id="daylight" aria-hidden="true"></div>
   <div class="in" id="heroIn">
     <div class="head" id="heroHead">
       <div class="closed" id="hClosed">
-        <div class="k"><span class="sign red">Freedom Fire &amp; Safety</span><span>King's Awards for Enterprise · Promoting Opportunity</span></div>
+        <div class="k"><span class="sign red">King's Awards for Enterprise</span><span>Promoting Opportunity through social mobility</span></div>
         <h1 aria-label="Not everyone arrives by the same route."><div class="line"><span>Not everyone</span></div><div class="line"><span>arrives by</span></div><div class="line"><span>the same <em class="s">route.</em></span></div></h1>
         <p class="strap">Exit signs point out. This one points in.</p>
       </div>
       <div class="opened" id="hOpened">
         <div class="k"><span class="sign green">Promoting Opportunity through social mobility</span><span>The programme, the people, the evidence</span></div>
         <h1 aria-label="Everyone deserves a way in."><div class="line"><span>Everyone</span></div><div class="line"><span>deserves</span></div><div class="line"><span>a way <em class="s">in.</em></span></div></h1>
-        <p class="strap">Real work. Practical support. A route into lasting employment. <b>Eight people came in this way.</b></p>
+        <p class="strap">Real work. Practical support. A route into lasting employment.</p>
         <div class="cta">
           <a class="btn" href="#people" data-cur>Meet the people <i>→</i></a>
           <a class="btn ghost" href="#impact" data-cur>The impact <i>→</i></a>
@@ -643,7 +646,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
     </div>
   </div>
   <div class="foot" id="heroFoot">
-    <div class="fl" id="fl">Bury → UK-wide</div>
+    <div class="fl" id="fl">The Way In</div>
     <div class="fm" id="fm" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">Scroll to open the door ·</textPath></text></svg></div>
     <div class="fr" id="fr"><a href="#partners"><span>Newbridge College</span></a><a href="#partners"><span>The Growth Company</span></a><a href="#record"><span>Evidence record</span></a></div>
   </div>
@@ -765,11 +768,12 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
         <span class="q">Jobcentre Plus referral. Storefronts.</span>
         <span class="cap"><b>Josh</b><span>Ecommerce assistant</span></span></button>
     </div>
-    <div class="founder rv">
+    <button class="founder rv" id="founder" type="button" data-cur data-k="tom" data-name="Tom Letcher" data-role="Founder, programme sponsor and mentor" data-route="Founder" data-since="27 August 2021" data-b="#E10600" data-consent="approved" aria-haspopup="dialog">
       <div class="k">Not counted among the eight</div>
       <h3>Tom Letcher</h3>
       <p>Founder, programme sponsor and mentor. The programme is his decision to hire for potential; he owns it and is not a participant.</p>
-    </div>
+      <span class="watch">Watch Tom's film →</span>
+    </button>
   </div>
 </section>
 
@@ -836,7 +840,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
       <div>
         <div class="ch-tag"><span class="num">06</span>The timeline</div>
         <h2 class="wd">Five years, <em class="s">dated.</em></h2>
-        <p class="stand">At least two years of qualifying activity, with a dated record behind it.</p>
+        <p class="stand">Qualifying activity since 2021, with a dated record behind each entry.</p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M14 20h92l-14 40 14 40H14z" fill="#C9C9C4" stroke="#111" stroke-width="6" stroke-linejoin="round"/><circle cx="34" cy="60" r="7" fill="#111"/><path d="M52 48h36M52 60h36M52 72h24" stroke="#111" stroke-width="6" stroke-linecap="round"/></svg></div>
     </div>
@@ -848,25 +852,6 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
       <li><span class="when">June 2026</span><span class="what">All three offered long-term roles.</span><span class="ent">Management data · PO-TL-04</span></li>
       <li><span class="when">Sept 2026</span><span class="what">Mentor logging and follow-up begin; next cohort in preparation.</span><span class="ent">Target · PO-TL-05</span></li>
     </ol>
-    <div class="tag blur-box" id="calc">
-      <div>
-        <h3>The two-year test</h3>
-        <p>Applications close 8 September 2026, so the earliest dated record must be from 8 September 2024 or before.
-          <details class="more"><summary aria-label="Detail">+</summary><div class="pop"><b>Which record</b>The earliest placement agreement with Newbridge College, and it has to belong to the company rather than to the sole-trader years before August 2021.</div></details></p>
-      </div>
-      <div>
-        <label for="progStart">When does the earliest record date the programme from?</label>
-        <input type="date" id="progStart" min="2021-08-27" max="2026-09-08">
-        <div class="quick"><button type="button" data-d="2021-10-01">Oct 2021</button><button type="button" data-d="2022-09-01">Sep 2022</button><button type="button" data-d="2023-09-01">Sep 2023</button><button type="button" data-d="2025-09-01">Sep 2025</button></div>
-        <div class="verdict" id="verdict" aria-live="polite">Enter the date of the earliest record.</div>
-        <div class="ruler" id="ruler" aria-hidden="true">
-          <span class="bandr" id="band"></span>
-          <span class="yr">2022</span><span class="yr">2023</span><span class="yr">2024</span><span class="yr">2025</span><span class="yr">2026</span>
-          <span class="cut" id="cut">Cut-off · 8 Sep 2024</span><span class="pin" id="pin"></span>
-        </div>
-        <div class="fine">Nothing typed here is stored or sent anywhere.</div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -921,8 +906,8 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
         <div class="s"><span class="sign black">Answered</span></div></div>
       <div class="test"><div class="n">02</div>
         <div><h4>One or more qualifying activities for at least two years</h4></div>
-        <div class="a">Placements since 2021; recruitment open to Jobcentre referrals.<br><a class="to" href="#timeline">The two-year test</a></div>
-        <div class="s"><span class="sign yellow">Earliest record</span><span id="twoYearState"></span></div></div>
+        <div class="a">Placements since 2021; recruitment open to Jobcentre referrals.<br><a class="to" href="#timeline">Part 06</a></div>
+        <div class="s"><span class="sign black">Answered</span></div></div>
       <div class="test"><div class="n">03</div>
         <div><h4>Benefits for the people supported, the organisation, employees and the wider community</h4></div>
         <div class="a">One panel per group, with its count and method.<br><a class="to" href="#impact">Part 04</a></div>

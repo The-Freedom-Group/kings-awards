@@ -54,7 +54,7 @@
     var px = -100, py = -100, rx = -100, ry = -100, shown = false;
     window.addEventListener("mousemove", function (e) { px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; } }, { passive: true });
     document.addEventListener("mouseover", function (e) {
-      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .totop, .pclose, .pnav button, .menu a, .menu .x, .quick button, .more summary");
+      var t = e.target.closest && e.target.closest("[data-cur], .tile, .founder, .sq, .totop, .pclose, .pnav button, .menu a, .menu .x, .more summary");
       document.body.classList.toggle("cur-big", !!t);
       document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, select")));
     });
@@ -274,6 +274,7 @@
   }
   function closeProf() { if (!prof || prof.hidden) return; var v0 = $("#pfVideo"); if (v0) v0.pause(); prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
   tiles.forEach(function (t) { t.addEventListener("click", function () { openProf(t); }); });
+  var founderBtn = $("#founder"); if (founderBtn) founderBtn.addEventListener("click", function () { openProf(founderBtn); });
   if (pclose) pclose.addEventListener("click", closeProf);
   var pPrev = $("#pPrev"), pNext = $("#pNext");
   if (pPrev) pPrev.addEventListener("click", function () { openProf(tiles[(curIx - 1 + tiles.length) % tiles.length]); });
