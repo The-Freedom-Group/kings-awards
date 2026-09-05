@@ -265,10 +265,14 @@
     $("#pfWords").style.display = tpl ? "" : "none";
     $("#pfQ").textContent = "Film with " + d.name + ": to be recorded";
     $("#pfVid").style.setProperty("--a", getComputedStyle(t).getPropertyValue("--a"));
+    var v = $("#pfVideo"), vid = $("#pfVid"), img = $("#pfImg"), note = $("#pfVnote");
+    if (v) { v.pause(); if (d.video) { if (v.getAttribute("src") !== d.video) v.src = d.video; v.poster = d.photo || ""; v.hidden = false; vid.classList.add("has-video"); } else { v.removeAttribute("src"); v.hidden = true; vid.classList.remove("has-video"); } }
+    if (note) note.hidden = !d.video;
+    if (img) { if (d.photo) { img.src = d.photo; img.hidden = false; } else { img.hidden = true; } }
     var was = !prof.hidden; prof.hidden = false; document.body.classList.add("prof-open"); if (smoother) smoother.paused(true); if (!was) pclose.focus();
     var inn = $(".prof-in"); if (inn) { inn.scrollTop = 0; inn.style.animation = "none"; void inn.offsetWidth; inn.style.animation = ""; }
   }
-  function closeProf() { if (!prof || prof.hidden) return; prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
+  function closeProf() { if (!prof || prof.hidden) return; var v0 = $("#pfVideo"); if (v0) v0.pause(); prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
   tiles.forEach(function (t) { t.addEventListener("click", function () { openProf(t); }); });
   if (pclose) pclose.addEventListener("click", closeProf);
   var pPrev = $("#pPrev"), pNext = $("#pNext");

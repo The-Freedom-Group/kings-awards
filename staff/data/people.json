@@ -15,7 +15,10 @@
       "consent": "approved",
       "consent_date": "2026-09-04",
       "voice": true,
-      "film": "to be recorded"
+      "film": "recorded 2026-09-05, 4K HDR master held; hosting pending",
+      "photo": "assets/people/bill.jpg",
+      "film_recorded": "2026-09-05",
+      "captions": "to follow"
     },
     {
       "id": "P02",
@@ -31,7 +34,13 @@
       "role": "Web developer",
       "route": "T Level industry placement",
       "since": "September 2025",
-      "consent": "pending"
+      "consent": "approved",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-05",
+      "photo": "assets/people/gabriel.jpg",
+      "film": "recorded 2026-09-05, 4K HDR master held; hosting pending",
+      "film_recorded": "2026-09-05",
+      "captions": "to follow"
     },
     {
       "id": "P04",
