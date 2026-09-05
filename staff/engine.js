@@ -291,6 +291,37 @@
     });
   }
 
+  /* ── "+" popovers: one floating panel beside the pressed button, kept on screen ── */
+  (function () {
+    var pop = $("#popover"), body = $("#popBody"), x = $("#popX"), cur = null;
+    if (!pop || !body) return;
+    function close() { if (!cur) return; cur.classList.remove("is-open"); cur.querySelector("summary").setAttribute("aria-expanded", "false"); cur = null; pop.classList.remove("on"); }
+    function place(btn) {
+      var r = btn.getBoundingClientRect(), W = window.innerWidth, H = window.innerHeight, pw = pop.offsetWidth, ph = pop.offsetHeight;
+      var left = clamp(r.left - 8, 16, W - pw - 16), above = r.bottom + 12 + ph > H - 16 && r.top - 12 - ph > 16;
+      var top = above ? r.top - 12 - ph : r.bottom + 12;
+      pop.style.left = left + "px"; pop.style.top = top + "px";
+      pop.style.setProperty("--ax", clamp(r.left + r.width / 2 - left - 6, 14, pw - 26) + "px");
+      pop.classList.toggle("above", above);
+    }
+    $$(".more").forEach(function (d) {
+      var btn = d.querySelector("summary"), content = d.querySelector(".pop"); if (!btn || !content) return;
+      btn.setAttribute("role", "button"); btn.setAttribute("aria-expanded", "false");
+      btn.addEventListener("click", function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        if (cur === d) { close(); return; }
+        close(); cur = d; d.classList.add("is-open"); btn.setAttribute("aria-expanded", "true");
+        body.innerHTML = content.innerHTML; pop.classList.add("on"); place(btn);
+      });
+    });
+    if (x) x.addEventListener("click", close);
+    document.addEventListener("click", function (ev) { if (cur && !pop.contains(ev.target)) close(); });
+    window.addEventListener("keydown", function (ev) { if (ev.key === "Escape") close(); });
+    window.addEventListener("resize", close);
+    /* the panel follows its button while the page moves, and lets go if it leaves the screen */
+    (function follow() { if (cur) { var r = cur.querySelector("summary").getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) close(); else place(cur.querySelector("summary")); } requestAnimationFrame(follow); })();
+  })();
+
   /* ── the inspection tag ───────────────────────────────────── */
   var progStart = $("#progStart"), verdict = $("#verdict"), ruler = $("#ruler"), pin = $("#pin"), band = $("#band"), cut = $("#cut"), twoYearState = $("#twoYearState");
   var DEADLINE = new Date(2026, 8, 8), CUTOFF = new Date(2024, 8, 8), EPOCH0 = new Date(2021, 7, 27);

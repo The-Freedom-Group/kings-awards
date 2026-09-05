@@ -551,26 +551,38 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 .ppend{margin:18px 0 0;font-size:13.5px;color:var(--ink-3);border:1px dashed var(--grey-2);padding:12px 14px;line-height:1.55}
 .prof.pending .pfields .opt,.prof.pending .pwords,.prof.pending .vid{display:none}
 .prof:not(.pending) .ppend{display:none}
-@media print{.skip,.travel,.more{display:none}.rec-tbl{font-size:11px}}
+@media print{.skip,.travel,.more,.popover{display:none}.rec-tbl{font-size:11px}}
 
 /* ── the extinguisher that rides the page ───────────────────── */
-.travel{position:fixed;right:1.6vw;top:11vh;width:min(8vw,96px);z-index:60;pointer-events:none;transition:opacity .5s;will-change:top,transform;
-  transform:rotate(var(--sway,0deg));transform-origin:50% 22%;filter:drop-shadow(0 18px 28px rgba(0,0,0,.45))}
+.travel{position:fixed;right:1.4vw;top:11vh;width:min(7.5vw,92px);z-index:60;pointer-events:none;transition:opacity .5s;will-change:top,transform;
+  transform:rotate(var(--sway,0deg));transform-origin:62% 14%;filter:drop-shadow(0 22px 30px rgba(0,0,0,.5))}
 .travel.hide,body.prof-open .travel,body.menu-open .travel{opacity:0}
 .travel .ext{width:100%;height:auto;display:block}
 @media(max-width:760px),(max-height:520px){.travel{display:none}}
-/* ── "+" popovers: the detail lives behind a small circle ────── */
-.more{display:inline-block;position:relative;vertical-align:middle;margin-left:8px;font-family:var(--sans);font-weight:400;letter-spacing:0;text-transform:none;text-align:left}
-.more summary{list-style:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--red);color:var(--red);display:grid;place-content:center;font-family:var(--mono);font-size:15px;line-height:1;cursor:pointer;background:transparent;transition:background .2s,color .2s,transform .3s}
+/* ── "+" popovers: one floating panel, opened beside whichever button was pressed ── */
+.more{display:inline-block;position:relative;vertical-align:middle;margin-left:8px;line-height:0}
+.more summary{list-style:none;position:relative;width:26px;height:26px;border-radius:50%;border:2px solid var(--red);color:var(--red);cursor:pointer;background:transparent;display:block;font-size:0;
+  transition:background .2s,color .2s,transform .35s cubic-bezier(.2,.8,.2,1)}
 .more summary::-webkit-details-marker{display:none}
-.more summary:hover{transform:scale(1.1)}
-.more[open] summary{background:var(--red);color:#fff;transform:rotate(45deg)}
-.more .pop{position:absolute;left:0;top:34px;z-index:40;width:min(360px,80vw);background:var(--white);color:var(--ink);border:2px solid var(--black);border-radius:4px;padding:14px 16px;font-size:13.5px;line-height:1.55;box-shadow:0 20px 50px rgba(0,0,0,.35);font-weight:400}
-.more .pop b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
-.more.r .pop{left:auto;right:0}
-.proof .more,.partner .more,.plate .more,.actcard .more{margin:14px 0 0}
+.more summary::before,.more summary::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;background:currentColor;transform:translate(-50%,-50%);border-radius:1px}
+.more summary::after{transform:translate(-50%,-50%) rotate(90deg)}
+.more summary:hover{transform:scale(1.12)}
+.more.is-open summary{background:var(--red);color:#fff;transform:rotate(45deg)}
+.more .pop{display:none}
+html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-2)}
 .on-red .more summary{border-color:#fff;color:#fff}
-@media(max-width:600px){.more .pop{width:min(320px,86vw)}}
+.proof .more,.partner .more,.plate .more,.actcard .more{margin:14px 0 0;display:block}
+.popover{position:fixed;z-index:950;width:min(380px,calc(100vw - 32px));background:var(--white);color:var(--ink);border:2px solid var(--black);border-radius:4px;padding:16px 40px 16px 18px;
+  font-family:var(--sans);font-size:14px;line-height:1.55;font-weight:400;letter-spacing:0;text-transform:none;text-align:left;box-shadow:0 24px 60px rgba(0,0,0,.4);
+  opacity:0;transform:translateY(6px);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.popover.on{opacity:1;transform:none;pointer-events:auto}
+.popover b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.popover .x{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:2px solid var(--black);background:var(--black);color:#fff;cursor:pointer;font-size:0}
+.popover .x::before,.popover .x::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;background:#fff;transform:translate(-50%,-50%) rotate(45deg);border-radius:1px}
+.popover .x::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.popover::before{content:"";position:absolute;left:var(--ax,20px);top:-8px;width:12px;height:12px;background:var(--white);border-left:2px solid var(--black);border-top:2px solid var(--black);transform:rotate(45deg)}
+.popover.above::before{top:auto;bottom:-8px;transform:rotate(225deg)}
+@media(prefers-reduced-motion:reduce){.popover,.more summary{transition:none}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -996,22 +1008,10 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 </div><!-- /smooth-wrapper -->
 
 <div class="travel" id="travel" aria-hidden="true">
-  <svg class="ext" viewBox="0 0 70 160">
-    <defs><linearGradient id="extg" x1="0" x2="1"><stop offset="0" stop-color="#ff4b3f"/><stop offset=".45" stop-color="#E10600"/><stop offset="1" stop-color="#8c0400"/></linearGradient></defs>
-    <path d="M48 40 c14 8 12 46 -6 66" fill="none" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
-    <path d="M40 104 l6 6" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
-    <rect x="18" y="40" width="34" height="100" rx="10" fill="url(#extg)"/>
-    <rect x="18" y="68" width="34" height="26" fill="#111"/>
-    <text x="35" y="85" text-anchor="middle" font-family="Archivo, Arial Black, sans-serif" font-weight="900" font-size="7.5" fill="#fff" letter-spacing=".5">FIRESTORM</text>
-    <path d="M24 40 v-8 a11 11 0 0 1 22 0 v8" fill="#b80500"/>
-    <rect x="29" y="14" width="12" height="14" rx="2" fill="#222"/>
-    <path d="M20 12 h30" stroke="#222" stroke-width="6" stroke-linecap="round"/>
-    <circle cx="26" cy="24" r="5" fill="#fff" stroke="#222" stroke-width="2"/>
-    <path d="M26 24 l3 -3" stroke="#E10600" stroke-width="1.5"/>
-    <rect x="22" y="140" width="26" height="8" rx="3" fill="#111"/>
-    <rect x="22" y="46" width="6" height="86" rx="3" fill="rgba(255,255,255,.22)"/>
-  </svg>
+  <picture><source srcset="assets/firestorm-pro.webp" type="image/webp"><img class="ext" src="assets/firestorm-pro.png" width="321" height="560" alt="" decoding="async"></picture>
 </div>
+
+<div class="popover" id="popover" role="dialog" aria-modal="false" aria-live="polite"><button class="x" id="popX" type="button" aria-label="Close">Close</button><div id="popBody"></div></div>
 
 <div class="prof" id="prof" role="dialog" aria-modal="true" aria-labelledby="pfName" hidden>
   <div class="prof-in">
