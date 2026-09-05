@@ -1,0 +1,30 @@
+[
+  {
+    "id": "PO-PR-01",
+    "value": "8",
+    "label": "People supported",
+    "period": "2021 to September 2026",
+    "status": "management"
+  },
+  {
+    "id": "PO-AC-01",
+    "value": "3",
+    "label": "T Level placements",
+    "period": "From September 2025",
+    "status": "management"
+  },
+  {
+    "id": "PO-PR-02",
+    "value": "3 of 3",
+    "label": "Offered long-term roles",
+    "period": "June 2026",
+    "status": "management"
+  },
+  {
+    "id": "PO-PT-01",
+    "value": "3",
+    "label": "Referral partners",
+    "period": "Newbridge College 2021; Growth Company 2025; Jobcentre Plus",
+    "status": "management"
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "_note": "Approved public fields only. consent: approved means the person has approved every word of their full profile; pending means first name, role and route only. No health, background or personal history is held here.",
+  "founder": {
+    "name": "Tom Letcher",
+    "role": "Founder, programme sponsor and mentor",
+    "counted_as_participant": false
+  },
+  "people": [
+    {
+      "id": "P01",
+      "name": "Bill",
+      "role": "Web developer",
+      "route": "T Level industry placement",
+      "since": "September 2025",
+      "consent": "approved",
+      "consent_date": "2026-09-04",
+      "voice": true,
+      "film": "to be recorded"
+    },
+    {
+      "id": "P02",
+      "name": "Harrison",
+      "role": "Warehouse operative",
+      "route": "T Level industry placement",
+      "since": "September 2025",
+      "consent": "pending"
+    },
+    {
+      "id": "P03",
+      "name": "Gabriel",
+      "role": "Web developer",
+      "route": "T Level industry placement",
+      "since": "September 2025",
+      "consent": "pending"
+    },
+    {
+      "id": "P04",
+      "name": "Jojo",
+      "role": "Warehouse operative",
+      "route": "College placement",
+      "since": "one of the earliest placements",
+      "consent": "pending"
+    },
+    {
+      "id": "P05",
+      "name": "Elliot",
+      "role": "Ecommerce assistant",
+      "route": "Student, working alongside study",
+      "consent": "pending"
+    },
+    {
+      "id": "P06",
+      "name": "Dylan",
+      "role": "Warehouse operative",
+      "route": "Jobcentre Plus referral",
+      "consent": "pending"
+    },
+    {
+      "id": "P07",
+      "name": "Billy",
+      "role": "IT technician",
+      "route": "T Level industry placement",
+      "consent": "pending"
+    },
+    {
+      "id": "P08",
+      "name": "Josh",
+      "role": "Ecommerce assistant",
+      "route": "Jobcentre Plus referral",
+      "consent": "pending"
+    }
+  ],
+  "withdrawal_contact": "info@freedom-fire.co.uk"
+}

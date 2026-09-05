@@ -25,7 +25,7 @@ SITES = {
         "redirects": "/personal /  301\n/personal/* /  301\n",
     },
     "thewayin": {
-        "src": "staff", "page": "index.html", "engine": "engine.js", "extra": [],
+        "src": "staff", "page": "index.html", "engine": "engine.js", "extra": ["data", "vendor"],
         "self": WAY, "other": TOM, "other_rel": "../personal/index.html",
         "og_image": "https://awards.freedomgroup.uk/assets/team.jpg",
         "redirects": "/staff /  301\n/staff/* /  301\n",

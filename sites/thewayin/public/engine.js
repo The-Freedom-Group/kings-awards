@@ -113,6 +113,10 @@
     gsap.set(".hero .closed .line span", { y: "110%", rotation: 3 });
     gsap.set(".hero .closed .k, .hero .closed .strap", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline();
+    /* failsafe: nobody waits behind the preloader for more than two seconds; and
+       "Skip animation" jumps the whole entrance to its finished state */
+    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 2200);
+    var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
     intro.fromTo("#plLogo", { y: "120%" }, { y: "0%", duration: 1.1, ease: "power4.out" }, 0.3)
       .fromTo("#plTag", { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .6 }, 1.1)
       .fromTo("#plBar", { scaleX: 0 }, { scaleX: 1, duration: 1.7, ease: "power2.inOut" }, 0.4)
@@ -198,8 +202,9 @@
   /* ── the route strip, the progress line, the chapter card ── */
   var hero = $("#top"), story = $("#story"), route = $("#route"), lit = $("#routeLit");
   var chapters = $$("#story .ch, #story .hero, #story .intro");
-  var TITLES = { top: ["00", "The way in"], intro: ["00", "The way in"], award: ["01", "The award"], programme: ["02", "The programme"], test: ["03", "The two-year test"], stories: ["i–iii", "Three stories"],
-    people: ["04", "The people"], proofs: ["05", "The proofs"], creds: ["06", "What we are"], join: ["07", "The door"] };
+  var TITLES = { top: ["00", "The way in"], why: ["01", "Why it exists"], programme: ["02", "The route in"], people: ["03", "The people"],
+    impact: ["04", "The impact"], partners: ["05", "The partners"], timeline: ["06", "The timeline"], learn: ["07", "How we learn"],
+    record: ["08", "Evidence record"], next: ["09", "What comes next"] };
   function drawRoute(y) {
     if (!route || !lit || !story) return;
     var H = story.offsetHeight, top = hero ? hero.offsetHeight : 0, reach = clamp(y + window.innerHeight * 0.58, top, H - 30);
@@ -253,13 +258,17 @@
   var ACTS = { a: "a · work experience or careers advice", b: "b · mentoring", c: "c · interview and job-related training", d: "d · recruitment open to everyone" };
   function openProf(t) {
     if (!prof || !t) return; if (prof.hidden) lastEl = document.activeElement; curIx = tiles.indexOf(t);
-    $("#pfName").textContent = t.dataset.name; $("#pfRole").innerHTML = t.dataset.role;
-    $("#pfRoute").textContent = t.dataset.route; $("#pfRoute2").textContent = t.dataset.route; $("#pfBand").style.setProperty("--b", t.dataset.b || "#111");
-    $("#pfFocus").innerHTML = t.dataset.focus;
-    var q = t.dataset.q || ""; $("#pfQ").textContent = /^TK/.test(q) ? "Question to be written for " + t.dataset.name : "“" + q + "”";
-    $("#pfSince").textContent = t.dataset.since === "TK" ? "TK — start date" : t.dataset.since;
-    $("#pfAct").innerHTML = t.dataset.act.split(" ").map(function (k) { return ACTS[k] || k; }).join("<br>");
+    var d = t.dataset, approved = d.consent === "approved";
+    prof.classList.toggle("pending", !approved);
+    $("#pfName").textContent = d.name; $("#pfRole").textContent = d.role;
+    $("#pfRoute").textContent = d.route; $("#pfRoute2").textContent = d.route; $("#pfBand").style.setProperty("--b", d.b || "#111");
+    $("#pfSince").textContent = d.since || "";
+    $("#pfSupport").textContent = d.support || ""; $("#pfSkills").textContent = d.skills || "";
+    $("#pfResp").textContent = d.resp || ""; $("#pfNext").textContent = d.next || "";
+    $$("#pfFields .opt").forEach(function (el) { el.style.display = el.querySelector("b").textContent ? "" : "none"; });
     var tpl = $("template.story", t); $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
+    $("#pfWords").style.display = tpl ? "" : "none";
+    $("#pfQ").textContent = "Film with " + d.name + ": to be recorded";
     $("#pfVid").style.setProperty("--a", getComputedStyle(t).getPropertyValue("--a"));
     var was = !prof.hidden; prof.hidden = false; document.body.classList.add("prof-open"); if (smoother) smoother.paused(true); if (!was) pclose.focus();
     var inn = $(".prof-in"); if (inn) { inn.scrollTop = 0; inn.style.animation = "none"; void inn.offsetWidth; inn.style.animation = ""; }

@@ -153,31 +153,23 @@ story, skip animation, view evidence. The entrance loader fails safe at two seco
 `https://tomletcher.co.uk/`; the page stays `noindex` until Tom wants it discoverable, and the 301 from
 the awards URL is set up when the domain is.
 
-**Staff — The Way In.** Built for one reader, the assessor, and cut back on 4 September 2026 to the
-Promoting Opportunity criteria and nothing else. Every chapter answers a line of the eligibility text, in
-order: 01 the five tests as an index; 02 the programme and its four activities (work experience and careers
-advice, mentoring, interview and job-related training, recruitment open to everyone), with the route from
-starter to mentor; 03 the two-year test with the inspection-tag ruler; the three stories and 04 the nine
-people it supported, as full-width tiles ticked present as you reach them, each opening a profile sheet
-with the question, the film slot and their own words; 05 the proofs for the four groups (the people
-supported, the organisation, the employees, the wider community); 06 the two public commitments (T Level
-Ambassadors, Disability Confident) and the two exclusions (social mobility is not the main focus; not a
-training provider); 07 the door, which is recruitment open to everyone with the contact details. Removed
-at the same time: the break-glass call point, the fire-class quiz, the "more than a hiring policy"
-interlude, the marquee and the "protecting for" ticker.
-
-Skin: UK fire-safety signage in red, white, grey and black. Archivo wide and heavy for the big lines with
-one Instrument Serif italic word in red; IBM Plex Mono for the small print. The team photo is the hero, an
-escape-route strip down the left lights as far as you have read, sign tokens, a red notice for the
-stories, plates on the wall, the inspection tag. Motion, from the studio-site study: a preloader that
-slides the logo up and away behind a red bar, four hero lines rising out of masks, a ring cursor that lags
-behind a red dot and becomes a red disc with an arrow over anything you can open, smooth scrolling (GSAP
-ScrollSmoother) with parallax, the hero blurring away as you leave it, a black-to-paper wipe into the
-intro statement, separators that grow, headings arriving a word at a time, the tiles' huge drifting
-initials, the inspection tag turning in, the closing line arriving letter by letter, and a red 3D cube that rides down the right-hand side of the page with the scroll, tumbling as it goes;
-it hides itself while the people are on screen so it never sits over a name. GSAP 3.13 (ScrollTrigger, ScrollSmoother, SplitText)
-from cdnjs. Everything falls back to a plain, fully readable page if the library does not load or reduced
-motion is set.
+**Staff — The Way In.** Rebuilt on 5 September 2026 to the Promoting Opportunity master plan (Tom's
+document of 4 September), with the signage skin and the studio engine unchanged. Nine chapters in the
+plan's order: 01 Why it exists; 02 The route in (the six-stage pathway and the two qualifying activities
+that have evidence: placements since 2021 and recruitment open to Jobcentre referrals; mentoring and
+training are not counted until hours are logged); 03 The people (eight participants, first name, role and
+route only until each has approved a full profile; Tom is the founder and sponsor, not counted); 04 The
+impact (one panel per beneficiary group with a count, a method note and, where there is one, a voice);
+05 The partners (Newbridge College, the Growth Company, Jobcentre Plus, names only until confirmed);
+06 The timeline (dated spine and the two-year inspection tag); 07 How we learn (feedback, adjustment,
+observed result); 08 Evidence record (eligibility statement, the five tests as a navigator, the two
+commitments, and every claim with status, source and evidence ID); 09 What comes next. The call point
+returns with the plan's microcopy, "In case of missed potential. Break glass", and the reveal from "Not
+everyone arrives by the same route" to "Everyone deserves a way in". Deficit labels, the nine-person and
+four-of-four claims, the headcount bracket, "paid from day one" and "certified trade" are gone. The claim
+register lives in `staff/data/` (PO- evidence IDs, consent flags in `people.json`). GSAP is self-hosted in
+`staff/vendor/`. The preloader fails safe at two seconds; skip-animation and view-evidence links sit at the
+top of the page.
 
 Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and print sensibly.
 
