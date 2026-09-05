@@ -54,7 +54,7 @@
     var px = -100, py = -100, rx = -100, ry = -100, shown = false;
     window.addEventListener("mousemove", function (e) { px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; } }, { passive: true });
     document.addEventListener("mouseover", function (e) {
-      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .totop");
+      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .cp, .totop");
       document.body.classList.toggle("cur-big", !!t);
       document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, .prof-in, .menu")));
     });
@@ -72,6 +72,23 @@
   var cubeFixed = $("#cubeFixed");
   function sizeCubes() { $$(".cube").forEach(function (c) { c.style.setProperty("--w", c.offsetWidth + "px"); }); }
   sizeCubes(); window.addEventListener("resize", sizeCubes);
+
+  /* ── the call point: a click breaks the glass, a click resets it ── */
+  var cp = $("#cp"), cpTop = $("#cpTop"), heroSec = $("#top");
+  function setGlass(broken) {
+    if (!heroSec) return;
+    heroSec.classList.toggle("broken", broken);
+    if (cp) { cp.setAttribute("aria-pressed", broken); cp.setAttribute("aria-label", broken ? "Reset the call point" : "Break glass — reveal the team"); }
+    if (cpTop) { cpTop.textContent = broken ? "Reset call point" : "Break glass"; cpTop.classList.toggle("reset", broken); }
+    if (animate) {
+      var lines = $$(broken ? ".hero .opened .line span" : ".hero .closed .line span");
+      gsap.fromTo(lines, { y: "110%", rotation: 3 }, { y: "0%", rotation: 0, duration: 1.4, ease: "power4.out", stagger: .12, delay: broken ? .35 : 0 });
+      var rest = $$(broken ? ".hero .opened .k, .hero .opened .strap, .hero .opened .cta" : ".hero .closed .k, .hero .closed .strap");
+      gsap.fromTo(rest, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .9, stagger: .1, delay: broken ? .7 : .2 });
+    }
+  }
+  if (cp) cp.addEventListener("click", function () { setGlass(!heroSec.classList.contains("broken")); });
+  if (cpTop) cpTop.addEventListener("click", function () { var broken = !heroSec.classList.contains("broken"); setGlass(broken); if (broken) scrollTo("#top"); });
 
   /* ── reveal (IO, works with or without the library) ──────── */
   var watched = $$(".rv, .flip");
@@ -93,8 +110,8 @@
   /* ── everything animated ──────────────────────────────────── */
   if (animate) {
     /* the entrance */
-    gsap.set(".hero .line span", { y: "110%", rotation: 3 });
-    gsap.set(".hero .k, .hero .strap, .hero .cta", { autoAlpha: 0, y: 14 });
+    gsap.set(".hero .closed .line span", { y: "110%", rotation: 3 });
+    gsap.set(".hero .closed .k, .hero .closed .strap", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline();
     intro.fromTo("#plLogo", { y: "120%" }, { y: "0%", duration: 1.1, ease: "power4.out" }, 0.3)
       .fromTo("#plTag", { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .6 }, 1.1)
@@ -102,8 +119,9 @@
       .to("#plLogo", { y: "-130%", duration: .7, ease: "power4.in" }, 2.1)
       .to("#plTag", { autoAlpha: 0, duration: .3 }, 2.1)
       .fromTo("#preloader", { autoAlpha: 1, y: "0vh" }, { autoAlpha: 0, y: "-100vh", duration: .6, ease: "expo.inOut" }, 2.4)
-      .to(".hero .line span", { y: "0%", rotation: 0, duration: 2, ease: "power4.out", stagger: .1 }, 2.55)
-      .to(".hero .k, .hero .strap, .hero .cta", { autoAlpha: 1, y: 0, duration: 1, stagger: .12 }, 3.1)
+      .to(".hero .closed .line span", { y: "0%", rotation: 0, duration: 2, ease: "power4.out", stagger: .12 }, 2.55)
+      .to(".hero .closed .k, .hero .closed .strap", { autoAlpha: 1, y: 0, duration: 1, stagger: .12 }, 3)
+      .fromTo("#cpanim", { autoAlpha: 0, y: "18vh" }, { autoAlpha: 1, y: "0vh", duration: 2.4, ease: "sine.out" }, 2.9)
       .fromTo("#chrome", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, 3.4)
       .fromTo("#fm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, 3.7)
       .fromTo("#fr a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, 3.5);
@@ -113,7 +131,8 @@
     /* the hero blurs away as you leave it, the photo drifts */
     gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom 20%", scrub: 1.5 } })
       .fromTo("#heroFoot", { autoAlpha: 1 }, { filter: "blur(3px)", autoAlpha: 0 }, 0)
-      .fromTo("#heroHead", { autoAlpha: 1 }, { autoAlpha: 0, y: -60, filter: "blur(2px)" }, 0.2);
+      .fromTo("#heroHead", { autoAlpha: 1 }, { autoAlpha: 0, y: -60, filter: "blur(2px)" }, 0.2)
+      .fromTo("#cpanim", { y: 0 }, { y: -40 }, 0);
     smoother.effects("#heroPh", { speed: .85 });
 
     /* separators with text: 25% → 100% */
@@ -172,7 +191,7 @@
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
   } else if (hasGsap) {
-    gsap.set(["#chrome", "#fm", "#fr a", "#fl"], { autoAlpha: 1 });
+    gsap.set(["#chrome", "#cpanim", "#fm", "#fr a", "#fl"], { autoAlpha: 1 });
     gsap.set(".hero .line span", { y: 0 });
   }
 
