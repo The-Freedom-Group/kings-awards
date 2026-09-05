@@ -67,5 +67,13 @@
     "kind": "public",
     "name": "King's Awards for Enterprise, eligibility",
     "url": "https://www.gov.uk/kings-awards-for-enterprise/eligibility"
+  },
+  "PACKAGING-SPEC": {
+    "kind": "private",
+    "name": "Packaging specifications and supplier invoices (cardboard cartons, inserts, void fill)"
+  },
+  "WASTE-NOTES": {
+    "kind": "private",
+    "name": "Waste transfer notes from the regulated waste transfer facility (duty of care)"
   }
 }

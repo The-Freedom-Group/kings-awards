@@ -411,6 +411,62 @@
       "last_checked": "2026-09-05",
       "site_location": "held back",
       "form_location": "Commercial success threshold"
+    },
+    {
+      "entity": "FFSL",
+      "owner": "Tom Letcher",
+      "last_checked": "2026-09-05",
+      "site_location": "02, 07, record",
+      "form_location": "ESG practices",
+      "evidence_id": "YF-EN-01",
+      "claim": "Packaging moved from plastic to cardboard",
+      "value_definition": "Cartons, inserts and void fill in cardboard across ecommerce dispatch",
+      "period": "2024 to date",
+      "source": "PACKAGING-SPEC",
+      "status": "management",
+      "public_private": "on request"
+    },
+    {
+      "entity": "FFSL",
+      "owner": "Tom Letcher",
+      "last_checked": "2026-09-05",
+      "site_location": "02, 07, record",
+      "form_location": "ESG practices",
+      "evidence_id": "YF-EN-02",
+      "claim": "Decommissioned extinguishers and hazardous contents go to a regulated waste transfer facility",
+      "value_definition": "Duty-of-care disposal with waste transfer notes",
+      "period": "Ongoing",
+      "source": "WASTE-NOTES",
+      "status": "management",
+      "public_private": "on request"
+    },
+    {
+      "entity": "FFSL",
+      "owner": "Tom Letcher",
+      "last_checked": "2026-09-05",
+      "site_location": "02, 07, record",
+      "form_location": "ESG practices",
+      "evidence_id": "YF-EN-03",
+      "claim": "Direct manufacturing in China, shipped by sea in full containers, warehoused once in Bury",
+      "value_definition": "Route and mode of the inbound supply chain",
+      "period": "2024 to date",
+      "source": "SUPPLIER-JINDUN",
+      "status": "management",
+      "public_private": "on request"
+    },
+    {
+      "entity": "FFSL",
+      "owner": "Tom Letcher",
+      "last_checked": "2026-09-05",
+      "site_location": "02, 07, record",
+      "form_location": "ESG practices",
+      "evidence_id": "YF-EN-04",
+      "claim": "Carbon baseline for freight, fleet, energy and packaging",
+      "value_definition": "Published only once a full period is measured, with method",
+      "period": "Being set in 2026",
+      "source": "PACKAGING-SPEC",
+      "status": "target",
+      "public_private": "public"
     }
   ]
 }
