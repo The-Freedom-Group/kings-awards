@@ -1,0 +1,1773 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tom Letcher — Founder. Operator. Builder.</title>
+<meta name="description" content="Tom Letcher, founder of Freedom Fire &amp; Safety Ltd. From one second-hand fire extinguisher to a nationwide, multi-channel safety business: the story, the method, and a verified record of the evidence.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F4F1EB">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Tom Letcher — Founder. Operator. Builder.">
+<meta property="og:description" content="From one second-hand fire extinguisher to a nationwide, multi-channel safety business.">
+<meta property="og:image" content="https://tomletcher.co.uk/assets/tom-mono.jpg">
+<meta property="og:url" content="https://tomletcher.co.uk/">
+<link rel="canonical" href="https://tomletcher.co.uk/">
+<link rel="apple-touch-icon" href="assets/icon-180.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-tl-32.png?v=2">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-tl-64.png?v=2">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,Times New Roman,serif' font-style='italic' font-size='34' fill='%23F4F1EB'%3ETL%3C/text%3E%3Cpath d='M14 54h36' stroke='%23FF2D8D' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   TOM LETCHER — THE FREEDOM LINE
+   One pink line is drawn from the first extinguisher to what comes next.
+   It enters the hero, threads every chapter, is scrubbed through a
+   pinned scene, and leaves the final chapter unfinished.
+   Porcelain / carbon / pink, pink held to roughly 5% of the surface.
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --porcelain:#F4F1EB; --porcelain-2:#EAE6DE; --carbon:#101010;
+  --pink:#FF2D8D; --pink-2:#ff74b8; --pink-3:#c60f6e; --pink-dim:rgba(255,45,141,.3);
+  --ink:#101010; --ink-2:#4A4A46; --ink-3:#86847E; --rule:#DAD5CB;
+  --pale:#F4F1EB; --pale-2:#A8A6A1; --pale-3:#6A6864; --rule-d:rgba(255,255,255,.13);
+  --disp:"Anton",Impact,"Arial Narrow Bold",sans-serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --wrap:1380px; --gut:clamp(20px,4.4vw,64px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html.cur-on,html.cur-on body,html.cur-on a,html.cur-on button,html.cur-on summary{cursor:none}
+body{margin:0;background:var(--porcelain);color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{margin:0;font-family:var(--disp);font-weight:400;text-transform:uppercase;
+  line-height:.86;letter-spacing:.004em}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--gut)}
+::selection{background:var(--pink);color:#fff}
+
+/* ── skip link ──────────────────────────────────────────────── */
+.skip{position:fixed;left:var(--gut);top:-70px;z-index:400;background:var(--carbon);color:var(--porcelain);
+  padding:11px 16px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+  transition:top .2s}
+.skip:focus-visible{top:14px;outline-offset:0}
+
+/* ── custom cursor ──────────────────────────────────────────── */
+.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;display:none}
+html.cur-on .cur{display:block}
+.cur .dot{position:fixed;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;
+  background:var(--pink)}
+.cur .ring{position:fixed;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;
+  border:1.5px solid rgba(255,45,141,.65);transition:width .28s,height .28s,margin .28s,
+  border-color .28s,background .28s}
+.cur.big .ring{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:var(--pink);
+  background:rgba(255,45,141,.08)}
+
+/* ── entrance ───────────────────────────────────────────────── */
+.enter{position:fixed;inset:0;z-index:250;background:var(--porcelain);
+  display:grid;place-content:center;gap:26px;justify-items:center;
+  transition:opacity .8s ease .25s,visibility .8s ease .25s}
+body.ready .enter{opacity:0;visibility:hidden}
+.enter .m{font-family:var(--serif);font-size:40px;line-height:1;opacity:0;animation:eIn .7s .1s forwards}
+.enter svg{width:min(320px,54vw);height:2px;overflow:visible}
+.enter path{stroke:var(--pink);stroke-width:1.6;fill:none;vector-effect:non-scaling-stroke;
+  stroke-dasharray:320;stroke-dashoffset:320;animation:eDraw 1.1s .35s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes eIn{to{opacity:1}}
+@keyframes eDraw{to{stroke-dashoffset:0}}
+
+/* ── view wipe ──────────────────────────────────────────────── */
+.wipe{position:fixed;inset:0;z-index:220;background:var(--pink);transform:scaleY(0);
+  transform-origin:bottom;pointer-events:none}
+
+/* ── scroll progress hairline ───────────────────────────────── */
+.prog{position:fixed;left:0;top:0;height:2px;width:100%;z-index:72;
+  transform:scaleX(0);transform-origin:left;background:var(--pink);
+  box-shadow:0 0 12px rgba(255,45,141,.6)}
+
+/* ── persistent corner card ─────────────────────────────────── */
+.card{position:fixed;left:clamp(14px,2vw,30px);bottom:clamp(14px,2vw,30px);z-index:64;
+  width:186px;padding:15px 16px 16px;border:1px solid var(--rule);background:rgba(244,241,235,.72);
+  backdrop-filter:blur(12px) saturate(150%);transition:opacity .4s,transform .4s,
+  background .35s,border-color .35s}
+body.dark-chrome .card{background:rgba(16,16,16,.68);border-color:var(--rule-d)}
+.card .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:500}
+body.dark-chrome .card .k{color:var(--pale-3)}
+.card .n{font-family:var(--disp);font-size:44px;line-height:.9;margin:8px 0 2px;color:var(--pink)}
+.card .t{font-family:var(--disp);text-transform:uppercase;font-size:17px;line-height:1;
+  color:var(--ink)}
+body.dark-chrome .card .t{color:var(--pale)}
+.card .d{margin-top:11px;padding-top:9px;border-top:1px solid var(--rule);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+body.dark-chrome .card .d{border-top-color:var(--rule-d);color:var(--pale-3)}
+.card.away{opacity:0;transform:translateY(14px);pointer-events:none}
+@media(max-width:1699px){.card{display:none}}
+body[data-view="record"] .card{display:none}
+
+/* ── accent sweep ───────────────────────────────────────────── */
+.hl{background:linear-gradient(var(--pink),var(--pink)) no-repeat left center/0% 100%;
+  padding:0 .14em;margin:0 -.06em;transition:background-size .95s cubic-bezier(.25,.7,.25,1) .25s,
+  color .5s ease .5s}
+.in .hl{background-size:100% 100%;color:#fff}
+
+/* ── chrome ─────────────────────────────────────────────────── */
+.chrome{position:fixed;inset:0 0 auto 0;z-index:70;border-bottom:1px solid transparent;
+  transition:background .35s,border-color .35s}
+.chrome.stuck{background:rgba(244,241,235,.9);backdrop-filter:blur(14px) saturate(160%);
+  border-bottom-color:var(--rule)}
+body.dark-chrome .chrome.stuck{background:rgba(16,16,16,.88);border-bottom-color:var(--rule-d)}
+.chrome .wrap{display:flex;align-items:center;gap:clamp(12px,3vw,44px);height:78px}
+.mono-mark{font-family:var(--serif);font-size:27px;line-height:1;flex:0 0 auto}
+.chrome nav{margin-left:auto;display:flex;gap:clamp(18px,2.6vw,40px)}
+.chrome nav a{font-size:11.5px;letter-spacing:.19em;text-transform:uppercase;font-weight:500;
+  color:var(--ink-2);transition:color .2s}
+.chrome nav a:hover,.chrome nav a:focus-visible{color:var(--pink)}
+body.dark-chrome .chrome nav a{color:var(--pale-2)}
+body.dark-chrome .mono-mark{color:var(--pale)}
+.now{display:none;align-items:baseline;gap:10px;font-size:10.5px;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:500;color:var(--ink-3);opacity:0;
+  transition:opacity .35s;white-space:nowrap}
+.now b{font-family:var(--disp);font-weight:400;font-size:19px;line-height:1;letter-spacing:0;
+  color:var(--pink)}
+.now.on{opacity:1}
+body.dark-chrome .now{color:var(--pale-3)}
+body[data-view="record"] .now{display:none}
+@media(min-width:1000px) and (max-width:1699px){.now{display:flex}}
+@media(max-width:1000px){.chrome nav{display:none}}
+.mode{display:flex;align-items:center;border:1px solid var(--rule);border-radius:100px;padding:3px;
+  flex:0 0 auto;background:rgba(255,255,255,.4)}
+body.dark-chrome .mode{border-color:var(--rule-d);background:rgba(255,255,255,.05)}
+.mode button{font:inherit;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+  font-weight:500;border:0;background:transparent;color:var(--ink-3);padding:7px 14px;
+  border-radius:100px;cursor:pointer;transition:background .25s,color .25s;white-space:nowrap}
+body.dark-chrome .mode button{color:var(--pale-3)}
+.mode button[aria-pressed="true"]{background:var(--carbon);color:var(--porcelain)}
+body.dark-chrome .mode button[aria-pressed="true"]{background:var(--porcelain);color:var(--carbon)}
+@media(max-width:560px){.mode button{padding:7px 9px;font-size:9.5px;letter-spacing:.08em}}
+.burger{width:40px;height:40px;border-radius:50%;border:1px solid var(--rule);background:transparent;
+  display:grid;place-content:center;gap:4px;cursor:pointer;flex:0 0 auto;padding:0}
+body.dark-chrome .burger{border-color:var(--rule-d)}
+.burger i{display:block;width:15px;height:1.5px;background:var(--ink)}
+body.dark-chrome .burger i{background:var(--pale)}
+.sheet{position:fixed;inset:0;z-index:230;background:var(--carbon);color:var(--pale);
+  display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;
+  transition:opacity .35s,visibility .35s}
+.sheet.on{opacity:1;visibility:visible}
+.sheet ol{list-style:none;margin:0;padding:0;text-align:center}
+.sheet li{margin:clamp(5px,1.3vh,13px) 0;opacity:0;transform:translateY(26px);
+  transition:opacity .5s cubic-bezier(.2,.8,.25,1),transform .5s cubic-bezier(.2,.8,.25,1)}
+.sheet.on li{opacity:1;transform:none}
+.sheet.on li:nth-child(1){transition-delay:.06s}.sheet.on li:nth-child(2){transition-delay:.11s}
+.sheet.on li:nth-child(3){transition-delay:.16s}.sheet.on li:nth-child(4){transition-delay:.21s}
+.sheet.on li:nth-child(5){transition-delay:.26s}.sheet.on li:nth-child(6){transition-delay:.31s}
+.sheet.on li:nth-child(7){transition-delay:.36s}.sheet.on li:nth-child(8){transition-delay:.41s}
+.sheet a{font-family:var(--disp);text-transform:uppercase;font-size:clamp(26px,5.6vw,54px);
+  line-height:1;color:var(--pale);transition:color .2s,letter-spacing .3s}
+.sheet a:hover{color:var(--pink);letter-spacing:.02em}
+.sheet a span{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--pale-3);
+  display:block;margin-bottom:4px;font-weight:500}
+.sheet .close{position:absolute;top:24px;right:var(--gut);background:none;border:0;color:var(--pale);
+  font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+
+/* ── chapter spine ──────────────────────────────────────────── */
+.spine{position:fixed;left:clamp(13px,2vw,34px);top:50%;transform:translateY(-50%);z-index:60;
+  display:flex;flex-direction:column;gap:13px;align-items:flex-start}
+.spine a{position:relative;font-size:11px;letter-spacing:.14em;font-weight:500;color:var(--ink-3);
+  padding-left:20px;transition:color .25s}
+body.dark-chrome .spine a{color:var(--pale-3)}
+.spine a::before{content:"";position:absolute;left:3px;top:50%;width:5px;height:5px;margin-top:-2.5px;
+  border-radius:50%;background:var(--rule);transition:background .25s,transform .25s}
+body.dark-chrome .spine a::before{background:#333}
+.spine a.on{color:var(--pink)}
+.spine a.on::before{background:var(--pink);transform:scale(1.6);box-shadow:0 0 0 4px rgba(255,45,141,.16)}
+@media(max-width:1180px){.spine{display:none}}
+
+/* ── view switching ─────────────────────────────────────────── */
+#record{display:none}
+body[data-view="record"] #explore{display:none}
+body[data-view="record"] #record{display:block}
+body[data-view="record"] .spine{display:none}
+
+/* ══ THE THREAD ═════════════════════════════════════════════ */
+#explore{position:relative}
+.thread{position:absolute;inset:0;z-index:8;pointer-events:none}   /* above every band, so the line is never cut */
+.thread svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.thread .track{fill:none;stroke:rgba(255,45,141,.13);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.thread .spur{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
+  stroke-linecap:round;stroke-dasharray:var(--l,300);stroke-dashoffset:var(--l,300);
+  transition:stroke-dashoffset 1s cubic-bezier(.25,.6,.25,1)}
+body.ready .thread #sp0{stroke-dashoffset:0;transition-delay:1.0s}
+body.ready .thread #sp1{stroke-dashoffset:0;transition-delay:1.15s}
+body.ready .thread #sp2{stroke-dashoffset:0;transition-delay:1.3s}
+body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
+.thread .live{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
+  stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
+.thread .head::before,.thread .head::after{content:"";position:absolute;inset:0;
+  border-radius:50%;border:1.5px solid var(--pink);opacity:0}
+.thread.landed .head::before{animation:beacon 2.6s ease-out infinite}
+.thread.landed .head::after{animation:beacon 2.6s ease-out 1.3s infinite}
+@keyframes beacon{0%{opacity:.8;transform:scale(1)}70%,100%{opacity:0;transform:scale(4.4)}}
+.thread .endnote{position:absolute;font-family:var(--serif);font-style:italic;
+  font-size:16px;color:var(--pink);white-space:nowrap;pointer-events:none;z-index:6;
+  opacity:0;transform:translate(-8px,-50%);transition:opacity .9s ease .35s,
+  transform .9s ease .35s}
+.thread.landed .endnote{opacity:1;transform:translate(0,-50%)}
+.thread .head{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6);
+  opacity:0;transition:opacity .4s;left:-99px;top:-99px}
+/* the tip keeps its size; what pulses is the light around it and the rings it sends out */
+.thread.on .head{opacity:1;animation:headPulse 1.8s ease-in-out infinite}
+@keyframes headPulse{0%,100%{box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 18px 4px rgba(255,45,141,.5)}
+  50%{box-shadow:0 0 0 7px rgba(255,45,141,.28),0 0 44px 14px rgba(255,45,141,.95)}}
+.thread.on .head::before{animation:beacon 1.8s ease-out infinite}
+.thread.on .head::after{animation:beacon 1.8s ease-out .9s infinite}
+.thread .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  border:1.5px solid var(--pink);background:var(--porcelain);opacity:.32;
+  transition:opacity .45s,background .45s,transform .45s}
+.thread .knot.dk{background:var(--carbon)}
+.thread .knot.hit{opacity:1;transform:scale(1.3);background:var(--pink)}
+
+/* ── the landing: a wave, sparks, every knot lit in turn, a halo ── */
+.thread .wave{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;
+  border:2px solid var(--pink);opacity:0;pointer-events:none;
+  animation:wave 1.6s cubic-bezier(.2,.7,.2,1) forwards}
+.thread .wave.w2{animation-delay:.2s;border-width:1px}
+.thread .wave.w3{animation-delay:.4s;border-width:1px;border-style:dashed}
+@keyframes wave{0%{opacity:.95;width:24px;height:24px;margin:-12px 0 0 -12px}
+  100%{opacity:0;width:960px;height:960px;margin:-480px 0 0 -480px}}
+.thread .spark{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 8px 2px rgba(255,45,141,.55);pointer-events:none;
+  animation:spark 1.5s cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes spark{0%{transform:translate(0,0) scale(1.2);opacity:1}
+  100%{transform:translate(var(--dx),calc(var(--dy) + 60px)) scale(.1);opacity:0}}
+.thread.burst .knot{animation:knotFlash .9s ease-out both;animation-delay:calc(var(--i,0) * .08s)}
+@keyframes knotFlash{0%{box-shadow:0 0 0 0 rgba(255,45,141,.8);transform:scale(1.3)}
+  45%{transform:scale(3)}100%{box-shadow:0 0 0 22px rgba(255,45,141,0);transform:scale(1.3)}}
+.thread.landed .head{animation:headGlow 2.4s ease-in-out infinite}
+@keyframes headGlow{0%,100%{box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6)}
+  50%{box-shadow:0 0 0 9px rgba(255,45,141,.22),0 0 40px 12px rgba(255,45,141,.85)}}
+.thread .halo{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;
+  border-radius:50%;border:1.5px dashed var(--pink);opacity:0;transition:opacity .6s ease .5s}
+.thread .halo::after{content:"";position:absolute;left:50%;top:-3px;width:5px;height:5px;margin-left:-2.5px;
+  border-radius:50%;background:var(--pink)}
+.thread.landed .halo{opacity:.85;animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:820px){.thread{display:none}}
+
+/* ── moving background: orbits with travelling dots, a drifting grid ── */
+.orbits{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orbits svg{width:100%;height:100%;display:block}
+.orbits path{fill:none;stroke:none}
+.orbits circle{fill:var(--pink);opacity:.6}
+.orbits circle.dim{fill:currentColor;opacity:.35}
+.drift{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.24;color:var(--ink);
+  background-image:radial-gradient(circle,currentColor 1px,transparent 1.7px);background-size:38px 38px;
+  animation:drift 26s linear infinite}
+.dark .drift,.scene .drift,.slab .drift{color:var(--pale);opacity:.22}
+@keyframes drift{to{background-position:76px 38px}}
+
+/* ── 00 · arrival ───────────────────────────────────────────── */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding-top:78px;overflow:hidden;background:var(--porcelain)}
+.hero .wrap{position:relative;width:100%;z-index:3}
+.hero-stage{position:relative;display:grid;align-items:center;min-height:min(72vh,700px)}
+.hero-type{position:relative;z-index:3;pointer-events:none}
+.hero-type h1{font-size:clamp(64px,15.4vw,232px);line-height:.8}
+.hero-type h1 span{display:block}
+.hero-shot{position:absolute;right:calc(var(--gut) * -.35);bottom:-8%;
+  width:clamp(300px,46vw,700px);z-index:2;will-change:transform;
+  overflow:visible}
+/* the photograph itself stays solid, with the original soft edge; a blurred, larger
+   copy sits behind it and bleeds out into the page - the fade happens outside the image */
+.hero-shot img{width:100%;opacity:0;transition:opacity 1s ease}
+.hero-shot img.on{opacity:1}
+/* three layers, each dissolving into the next: the sharp photograph, a lightly blurred
+   copy a little larger, and a heavily blurred copy larger still. Every mask is a long,
+   even ramp, so there is no seam where one layer ends and the next begins. */
+.hero-shot img#shot{position:relative;z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+    linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+    linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-composite:intersect}
+.hero-shot img.halo{position:absolute;left:-12%;top:-8%;width:124%;z-index:2;opacity:.55;
+  filter:blur(14px) saturate(.9);transform:translateZ(0);pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 34%,rgba(0,0,0,.5) 64%,transparent 96%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 34%,rgba(0,0,0,.5) 64%,transparent 96%)}
+.hero-shot img.halo2{position:absolute;left:-40%;top:-30%;width:180%;z-index:1;opacity:.42;
+  filter:blur(60px) saturate(.85);transform:translateZ(0);pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%)}
+@media(max-width:820px){
+  .hero-shot{position:relative;right:auto;bottom:auto;width:88%;margin:10px -6% -8% auto}
+  .hero-type h1{font-size:clamp(54px,17vw,120px)}}
+.hero-sub{position:relative;z-index:4;margin-top:clamp(18px,3vw,34px);max-width:64ch}
+.hero-sub p{margin:0;font-size:clamp(13px,1.35vw,15.5px);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:500;line-height:1.75}
+.follow{position:relative;z-index:4;margin-top:clamp(24px,4vw,52px);display:inline-flex;
+  align-items:center;gap:10px;font-size:11.5px;letter-spacing:.19em;text-transform:uppercase;
+  font-weight:500;will-change:transform}
+.follow i{display:inline-block;animation:nudge 2.2s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.hl-start{position:absolute;left:var(--gut);z-index:6;transform:translateY(55%);
+  opacity:0;transition:opacity .7s ease .9s}
+body.ready .hl-start{opacity:1}
+.hl-start span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);white-space:nowrap}
+.hl-node{position:absolute;display:flex;align-items:center;gap:12px;transform:translateY(-50%);
+  z-index:6;opacity:0;transition:opacity .6s ease}
+body.ready .hl-node{opacity:1}
+.hl-node#hn0{transition-delay:1.25s}.hl-node#hn1{transition-delay:1.4s}
+.hl-node#hn2{transition-delay:1.55s}.hl-node#hn3{transition-delay:1.7s}
+.hl-node b{width:13px;height:13px;border-radius:50%;border:1.8px solid var(--pink);flex:0 0 auto;
+  background:var(--porcelain)}
+.hl-node span{font-size:12.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
+  white-space:nowrap}
+@media(max-width:820px){.hl-start,.hl-node{display:none}}
+
+/* ── poster words ───────────────────────────────────────────── */
+.pw{position:absolute;top:50%;left:0;z-index:0;pointer-events:none;user-select:none;
+  font-family:var(--disp);text-transform:uppercase;white-space:nowrap;line-height:1;
+  font-size:clamp(140px,27vw,430px);letter-spacing:.015em;
+  transform:translate3d(0,-50%,0);will-change:transform;
+  color:transparent;-webkit-text-stroke:1.2px currentColor;opacity:.085}
+@supports not (-webkit-text-stroke:1px black){.pw{color:currentColor;opacity:.04}}
+
+/* ── script accents ─────────────────────────────────────────── */
+.scr{position:absolute;z-index:3;pointer-events:none;font-family:var(--serif);
+  font-style:italic;color:var(--pink);line-height:1;text-transform:none;
+  font-size:clamp(44px,7.4vw,120px);transform:rotate(-7deg);
+  text-shadow:0 0 34px rgba(255,45,141,.28)}
+
+/* ── the years rail ─────────────────────────────────────────── */
+.years{margin-top:clamp(34px,5vw,58px);overflow:hidden;position:relative}
+.yhead{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:var(--pale-3);margin-bottom:16px}
+.yrail{display:flex;gap:1px;background:var(--rule-d);border:1px solid var(--rule-d);
+  width:max-content;will-change:transform}
+@media(max-width:820px),(prefers-reduced-motion:reduce){
+  .years{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--pink) transparent}
+  .yrail{transform:none!important;padding-bottom:6px}}
+.ycard{background:var(--carbon);min-width:clamp(210px,24vw,300px);padding:24px 22px 28px;
+  position:relative}
+.ycard .y{font-family:var(--disp);font-size:clamp(46px,6vw,74px);line-height:.9;
+  margin-bottom:12px}
+.ycard.live .y{color:var(--pink)}
+.ycard .l{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  margin-bottom:9px}
+.ycard .s{font-size:13.5px;line-height:1.55;color:var(--pale-3);font-weight:300}
+.ycard .vtag{position:absolute;top:20px;right:18px;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:600;color:var(--pink);
+  border:1px solid rgba(255,45,141,.5);padding:3px 7px;border-radius:2px}
+
+.bar{background:var(--carbon);color:var(--porcelain);position:relative;z-index:6}
+.bar .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.bar div{padding:22px 10px;text-align:center;font-size:11.5px;letter-spacing:.17em;
+  text-transform:uppercase;font-weight:500;border-left:1px solid rgba(255,255,255,.14)}
+.bar div:first-child{border-left:0}
+@media(max-width:760px){.bar .wrap{grid-template-columns:1fr 1fr}
+  .bar div:nth-child(3){border-left:0}
+  .bar div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}}
+
+/* ── marquee ────────────────────────────────────────────────── */
+.mq{background:var(--carbon);color:var(--pale);overflow:hidden;position:relative;z-index:6;
+  padding:clamp(14px,2vw,26px) 0;border-top:1px solid var(--rule-d)}
+.mq-t{display:flex;white-space:nowrap;will-change:transform;width:max-content}
+.mq-t span{font-family:var(--disp);text-transform:uppercase;
+  font-size:clamp(30px,5.4vw,70px);line-height:1;padding-right:.55em}
+.mq-t span i{font-style:normal;color:var(--pink);padding-right:.55em}
+
+/* ── pinned scene · ONE ─────────────────────────────────────── */
+.scene{position:relative;height:340vh;background:var(--carbon);color:var(--pale)}
+.scene .stick{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;
+  place-content:center;text-align:center}
+.scene .yr{font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);margin-bottom:clamp(16px,3vh,30px)}
+.scene .phs{position:relative;min-height:clamp(140px,38vh,400px);
+  min-width:min(88vw,1000px)}
+.scene .ph{position:absolute;inset:0;display:grid;place-content:center;opacity:0;
+  transform:scale(.94);filter:blur(10px);
+  transition:opacity .55s ease,transform .55s ease,filter .55s ease}
+.scene .ph.on{opacity:1;transform:none;filter:none}
+.scene .ph h3{font-size:clamp(48px,10vw,150px);line-height:.88;max-width:12ch;text-align:center}
+.scene .cnt{margin-top:clamp(18px,4vh,36px);font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+.scene .cnt b{color:var(--pink);font-weight:600}
+@media(max-width:820px),(prefers-reduced-motion:reduce){
+  .scene{height:auto;padding:clamp(70px,12vw,130px) 0}
+  .scene .stick{position:static;height:auto;overflow:visible}
+  .scene .phs{min-height:0;min-width:0;display:grid;gap:clamp(18px,4vw,34px)}
+  .scene .ph{position:static;opacity:1;transform:none;filter:none}
+  .scene .ph h3{font-size:clamp(44px,11vw,110px)}
+}
+
+/* ── chapters ───────────────────────────────────────────────── */
+.ch{padding:clamp(76px,11vw,168px) 0;position:relative;overflow:hidden}
+.ch.dark{background:var(--carbon);color:var(--pale)}
+.ch::before{content:none}
+.ch .wrap{position:relative;z-index:2}
+.ch-tag{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);margin-bottom:clamp(18px,2.6vw,30px)}
+.ch h2{font-size:clamp(34px,6.6vw,88px);max-width:15ch;margin-bottom:clamp(20px,3vw,36px)}
+.ch .stand{font-size:clamp(17px,2vw,21px);max-width:52ch;color:var(--ink-2);font-weight:300}
+.ch.dark .stand{color:var(--pale-2)}
+.cols{display:grid;grid-template-columns:1fr 1.32fr;gap:clamp(28px,5.5vw,88px);
+  margin-top:clamp(34px,5vw,64px)}
+@media(max-width:920px){.cols{grid-template-columns:1fr;gap:26px}}
+.side{font-size:14.5px;color:var(--ink-3);line-height:1.7}
+.ch.dark .side{color:var(--pale-3)}
+.side p{margin:0 0 15px}
+.body p{margin:0 0 22px;font-size:clamp(16px,1.75vw,18.5px);color:var(--ink-2);font-weight:300;
+  max-width:62ch}
+.ch.dark .body p{color:var(--pale-2)}
+.body p:last-child{margin-bottom:0}
+.body b{font-weight:600;color:var(--ink)}
+.ch.dark .body b{color:var(--pale)}
+
+/* archive photography */
+.plate{position:relative;margin:clamp(34px,5vw,62px) 0 0;overflow:hidden}
+.plate img{width:100%}
+.plate figcaption{margin-top:13px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-3)}
+.ch.dark .plate figcaption{color:var(--pale-3)}
+.plate.wide{margin-inline:calc(var(--gut) * -1);width:calc(100% + var(--gut) * 2)}
+.plate.wide figcaption{padding-inline:var(--gut)}
+.plate.crop{max-height:min(72vh,640px);display:flex;flex-direction:column}
+.plate.crop img{object-fit:cover;height:min(66vh,580px);will-change:transform}
+
+/* serif quotation */
+.quo{margin:clamp(38px,6vw,72px) 0;padding-left:clamp(18px,2.6vw,32px);border-left:2px solid var(--pink)}
+.quo q{quotes:none;display:block;font-family:var(--serif);font-style:italic;
+  font-size:clamp(24px,4vw,44px);line-height:1.2}
+.quo .by{margin-top:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-3)}
+.ch.dark .quo .by{color:var(--pale-3)}
+
+/* ── metrics + evidence ─────────────────────────────────────── */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:1px;
+  background:var(--rule-d);border:1px solid var(--rule-d);margin-top:clamp(34px,5vw,58px)}
+.ch:not(.dark) .metrics{background:var(--rule);border-color:var(--rule)}
+.metric{background:var(--carbon);padding:28px 24px 24px;transform-origin:50% 100%;
+  position:relative;transition:background .35s}
+.metric::after{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--pink);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.25,.7,.25,1)}
+.metric:hover::after{transform:scaleX(1)}
+.ch:not(.dark) .metric{background:var(--porcelain)}
+.metric .v{font-family:var(--disp);font-size:clamp(40px,5.4vw,68px);line-height:.9;margin-bottom:12px}
+.metric .k{font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
+  color:var(--pale-3);margin-bottom:14px}
+.ch:not(.dark) .metric .k{color:var(--ink-3)}
+.metric .def{font-size:14px;line-height:1.55;color:var(--pale-2);margin:0 0 14px;font-weight:300}
+.ch:not(.dark) .metric .def{color:var(--ink-2)}
+.metric .per{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale-3);
+  margin-bottom:14px;font-weight:500}
+.ch:not(.dark) .metric .per{color:var(--ink-3)}
+details.ev{border-top:1px solid var(--rule-d);padding-top:12px}
+.ch:not(.dark) details.ev{border-top-color:var(--rule)}
+details.ev summary{cursor:pointer;list-style:none;font-size:10.5px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:500;color:var(--pink);display:flex;align-items:center;gap:7px}
+details.ev summary::-webkit-details-marker{display:none}
+details.ev summary::after{content:"+";font-size:14px;line-height:1}
+details.ev[open] summary::after{content:"–"}
+details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3);font-weight:300}
+.ch:not(.dark) details.ev p{color:var(--ink-3)}
+
+/* ── the Freedom Group logo ─────────────────────────────────── */
+.fg-wrap{display:flex;justify-content:flex-start;margin:clamp(14px,2.4vw,30px) 0 clamp(22px,3.4vw,40px)}
+.fg-img{width:clamp(150px,17vw,230px);height:auto;
+  filter:drop-shadow(0 0 26px rgba(255,45,141,.22))}
+.fg-foot{width:clamp(150px,15vw,200px);height:auto;margin-bottom:18px;
+  filter:drop-shadow(0 0 22px rgba(255,45,141,.22))}
+.fg-rec{width:clamp(84px,8vw,112px);height:auto;margin-bottom:20px}
+
+/* ── 04 · the group ─────────────────────────────────────────── */
+.grp-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.vt{display:flex;gap:12px;align-items:center;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:500}
+.vt button{font:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  background:none;border:0;color:var(--pale-3);cursor:pointer;padding:2px 0;
+  border-bottom:1.5px solid transparent}
+.vt button[aria-pressed="true"]{color:var(--pink);border-bottom-color:var(--pink)}
+.vt s{color:var(--pale-3);text-decoration:none}
+.grp{display:grid;grid-template-columns:1fr 340px;gap:clamp(24px,3.6vw,52px);
+  margin-top:clamp(24px,3.4vw,44px);align-items:center}
+@media(max-width:1080px){.grp{grid-template-columns:1fr}}
+.map{position:relative;aspect-ratio:1.32/1;min-height:400px}
+.map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.map svg ellipse{fill:none;vector-effect:non-scaling-stroke}
+.map .tape{stroke:url(#mgp);stroke-width:2.4}
+.map .tapeGlow{stroke:url(#mgp);stroke-width:7;opacity:.26;filter:blur(3px);
+  animation:tapepulse 6s ease-in-out infinite}
+@keyframes tapepulse{50%{opacity:.42}}
+.map .ringB{stroke:rgba(255,61,154,.45);stroke-width:1.2}
+.map .ringC{stroke:rgba(255,255,255,.14);stroke-width:1;stroke-dasharray:1.5 3}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;
+  align-items:center;gap:8px;cursor:pointer;background:none;border:0;padding:6px;
+  color:var(--pale);font-family:var(--disp);text-transform:uppercase;line-height:1.05;
+  text-align:center}
+.node .orb{position:relative;border-radius:50%;width:var(--os);height:var(--os);flex:0 0 auto;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255,255,255,.95), rgba(255,255,255,0) 30%),
+    radial-gradient(circle at 36% 32%, var(--p1), var(--p2) 58%, var(--p3) 100%);
+  box-shadow:inset -8px -10px 16px rgba(0,0,0,.5), inset 3px 4px 8px rgba(255,255,255,.22),
+    0 12px 28px rgba(0,0,0,.55);
+  transition:transform .35s cubic-bezier(.2,.8,.25,1),box-shadow .35s}
+.node .orb::after{content:"";position:absolute;left:23%;top:17%;width:16%;height:11%;
+  border-radius:50%;background:rgba(255,255,255,.85);filter:blur(1px);
+  transform:rotate(-24deg)}
+.node .lbl{font-size:clamp(10px,1.05vw,14px)}
+.node .st{font-family:var(--sans);font-size:8.5px;letter-spacing:.16em;font-weight:500;
+  color:var(--pink);text-transform:uppercase}
+.node.core{--os:clamp(74px,9vw,104px);--p1:#ff9dcb;--p2:#ff3d9a;--p3:#8f0b55}
+/* the Freedom Group planet carries the world's coastlines in white, turning slowly */
+.node.core .orb{overflow:hidden}
+.node.core .orb::before{content:"";position:absolute;inset:0;border-radius:50%;
+  background:url("assets/world-white.webp") repeat-x 0 50%/200% 100%;opacity:.95;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 52%,rgba(0,0,0,.35) 66%,transparent 74%);
+  mask-image:radial-gradient(circle at 50% 50%,#000 52%,rgba(0,0,0,.35) 66%,transparent 74%);
+  animation:globe 80s linear infinite}
+@keyframes globe{to{background-position-x:200%}}
+.node.core .lbl{font-size:clamp(12px,1.35vw,17px)}
+/* the planets take the group model's own colours: blue for Global, green for Facilities,
+   orange for Distribution, gold for Form and Freight, violet for Fly and Fuel */
+.node[data-s="operating"]{--os:clamp(52px,6.6vw,70px)}
+.node[data-s="planned"]{--os:clamp(44px,5.6vw,58px)}
+.node[data-s="future"]{--os:clamp(34px,4.4vw,46px)}
+.node[data-k="global"]{--p1:#a6dcff;--p2:#1e8fff;--p3:#0a3a8c}
+.node[data-k="fac"]{--p1:#c2ffe4;--p2:#2ed491;--p3:#0b5a3c}
+.node[data-k="dist"]{--p1:#ffd0ad;--p2:#ff6a3d;--p3:#8a2a10}
+.node[data-k="form"],.node[data-k="freight"]{--p1:#fff2b8;--p2:#f0c24a;--p3:#8a6612}
+.node[data-k="fly"]{--p1:#e0ccff;--p2:#8b5cf6;--p3:#3b1d8a}
+.node[data-k="fuel"]{--p1:#c9b8ff;--p2:#6a48d8;--p3:#2a1466}
+.node[data-k="form"] .orb::before{content:"";position:absolute;left:-34%;top:36%;width:168%;height:26%;
+  border-radius:50%;border:2px solid rgba(240,194,74,.85);transform:rotate(-16deg);pointer-events:none}
+.node[data-s="future"] .lbl{color:var(--pale-2);font-size:clamp(9.5px,1vw,13px)}
+.node[data-s="future"] .st{color:var(--pale-3)}
+.node[data-s="planned"] .st{color:#5fe3a8}
+.node[data-k="global"] .st{color:#7cc1ff}
+.yrlbl{position:absolute;transform:translate(-50%,-50%);font-family:var(--sans);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--pale-3);border:1px solid rgba(255,255,255,.16);padding:3px 8px;border-radius:100px;
+  background:rgba(16,16,16,.85);white-space:nowrap;pointer-events:none}
+.node:hover .orb{transform:scale(1.1)}
+.node.sel .orb{box-shadow:inset -8px -10px 16px rgba(0,0,0,.5),
+  inset 3px 4px 8px rgba(255,255,255,.22),
+  0 0 0 2px #fff, 0 0 0 4.5px var(--pink), 0 0 40px 8px rgba(255,45,141,.5)}
+.panel{border:1px solid rgba(255,45,141,.45);background:#0b0b0b;padding:30px 26px 28px}
+.panel h3{font-size:clamp(21px,2.1vw,27px);margin-bottom:14px}
+.panel hr{border:0;border-top:1.5px solid var(--pink);width:46px;margin:0 0 18px}
+.panel .tagline{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  margin-bottom:14px}
+.panel p{margin:0 0 20px;font-size:15.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
+.panel .go{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--pink)}
+.grp-list{margin-top:clamp(30px,4vw,52px);border-top:1px solid var(--rule-d)}
+.grp-list h4{margin:34px 0 0;font-family:var(--sans);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+.grp-list ul{list-style:none;margin:14px 0 0;padding:0}
+.grp-list li{display:flex;gap:18px;align-items:baseline;padding:17px 0;
+  border-bottom:1px solid var(--rule-d);transition:padding-left .4s cubic-bezier(.25,.7,.25,1)}
+.grp-list li:hover{padding-left:14px}
+.grp-list li:hover .nm{color:var(--pink)}
+.grp-list .nm{transition:color .3s}
+.grp-list .nm{font-family:var(--disp);text-transform:uppercase;font-size:21px;flex:0 0 auto;
+  min-width:min(46%,290px)}
+.grp-list .ds{font-size:15px;color:var(--pale-2);font-weight:300}
+@media(max-width:700px){.grp-list li{flex-direction:column;gap:6px}.grp-list .nm{min-width:0}}
+body:not([data-grp="list"]) .grp-list{display:none}
+body[data-grp="list"] .grp{display:none}
+@media(max-width:760px){.grp{display:none!important}.grp-list{display:block!important}.vt{display:none}}
+
+/* ── full-bleed statement ───────────────────────────────────── */
+.slab{position:relative;min-height:100svh;display:grid;place-content:center;text-align:center;
+  background:var(--carbon);color:var(--pale);overflow:hidden;padding:0 var(--gut)}
+.slab .in-w{position:relative;z-index:2}
+.slab .k{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--pink);
+  margin-bottom:clamp(20px,4.5vh,44px);font-weight:500}
+.slab h2{font-size:clamp(48px,12.4vw,206px);line-height:.9;max-width:none}
+.slab .f{margin-top:clamp(22px,4.5vh,44px);font-size:clamp(13px,1.4vw,16px);letter-spacing:.15em;
+  text-transform:uppercase;color:var(--pale-3);font-weight:500}
+
+/* ── 07 ─────────────────────────────────────────────────────── */
+.next{text-align:center}
+.next h2{max-width:none;margin-inline:auto}
+.next .stand{margin-inline:auto}
+
+/* ── placeholders ───────────────────────────────────────────── */
+.tk{display:block;margin:24px 0;padding:19px 21px;border:1px dashed var(--pink-dim);
+  background:rgba(255,45,141,.05);font-size:15px;line-height:1.6;color:var(--ink-2);font-weight:300}
+.ch.dark .tk{color:var(--pale-2)}
+.tk b{display:block;font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--pink);
+  margin-bottom:8px;font-weight:600}
+.tk i{font-style:normal;font-weight:500;color:var(--ink)}
+.ch.dark .tk i{color:var(--pale)}
+.tk-in{background:rgba(255,45,141,.1);border-bottom:1px dashed var(--pink-dim);padding:1px 6px}
+
+/* ── verified record ────────────────────────────────────────── */
+#record{background:var(--porcelain);padding-top:78px}
+.rec-head{padding:clamp(48px,7vw,92px) 0 clamp(28px,4vw,44px);border-bottom:1px solid var(--rule)}
+.rec-head h2{font-size:clamp(36px,6.4vw,80px);max-width:18ch}
+.rec-head p{margin:22px 0 0;max-width:56ch;color:var(--ink-2);font-size:clamp(16px,1.8vw,19px);
+  font-weight:300}
+.rec-sec{padding:clamp(40px,6vw,72px) 0;border-bottom:1px solid var(--rule)}
+.rec-sec h3{font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--pink);margin-bottom:22px}
+.tbl{width:100%;border-collapse:collapse;font-size:15.5px}
+.tbl th,.tbl td{text-align:left;padding:14px 18px 14px 0;border-bottom:1px solid var(--rule);
+  vertical-align:top}
+.tbl th{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:500;width:36%}
+.tbl tr:last-child th,.tbl tr:last-child td{border-bottom:0}
+.pill{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:26px 0}
+@media(max-width:820px){.pill{grid-template-columns:1fr}}
+.pill div{background:var(--porcelain);padding:24px 22px}
+.pill h4{margin:0 0 9px;font-family:var(--disp);text-transform:uppercase;font-size:22px;font-weight:400}
+.pill p{margin:0;font-size:15px;color:var(--ink-2);font-weight:300;line-height:1.6}
+.src{margin-top:18px;font-size:13.5px;color:var(--ink-3)}
+.src a{color:var(--pink);border-bottom:1px solid var(--rule)}
+
+footer{background:var(--carbon);color:var(--pale-2);padding:0 0 48px;font-size:14px;line-height:1.6;
+  position:relative;z-index:6;border-top:1px solid var(--rule-d)}
+.ft-top{display:flex;justify-content:center;padding:clamp(40px,6vw,72px) 0 clamp(30px,4vw,52px);
+  border-bottom:1px solid var(--rule-d)}
+.totop{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;
+  color:var(--pale);padding:10px}
+.totop .ring{position:relative;width:72px;height:72px;border-radius:50%;border:1.5px dashed rgba(255,45,141,.7);
+  display:block;transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.totop .ring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--pink);
+  box-shadow:0 0 0 0 rgba(255,45,141,.35);transition:box-shadow .5s,transform .5s}
+.totop .arr{position:absolute;top:10px;left:50%;width:72px;height:72px;margin-left:-36px;display:grid;place-content:center;
+  font-family:var(--disp);font-size:30px;line-height:1;color:var(--carbon);transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.totop .lbl{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pale-3);transition:color .3s}
+.totop:hover .ring{transform:rotate(180deg)}
+.totop:hover .ring::after{box-shadow:0 0 0 14px rgba(255,45,141,0);transform:scale(1.08)}
+.totop:hover .arr{transform:translateY(-6px)}
+.totop:hover .lbl{color:var(--pink)}
+.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:clamp(24px,4vw,56px);padding-top:clamp(30px,4vw,48px)}
+@media(max-width:920px){.ft-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.ft-grid{grid-template-columns:1fr}}
+.ft-brand p{margin:0;color:var(--pale-2)}
+footer h4{margin:0 0 10px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pink)}
+footer p{margin:0}
+footer a{color:var(--pale);text-decoration:none;border-bottom:1px solid var(--rule-d);transition:color .2s,border-color .2s}
+footer a:hover{color:var(--pink);border-bottom-color:var(--pink)}
+.ft-legal{margin-top:clamp(30px,4vw,48px);padding-top:20px;border-top:1px solid var(--rule-d);display:flex;
+  justify-content:space-between;gap:12px 28px;flex-wrap:wrap;font-size:12px;letter-spacing:.06em;color:var(--pale-3)}
+.ft-legal span:last-child{font-family:var(--serif);font-style:italic;letter-spacing:0;font-size:15px;color:var(--pink)}
+
+/* ── motion ─────────────────────────────────────────────────── */
+.rv{opacity:0;transform:translateY(34px) scale(.982);filter:blur(7px);
+  transition:opacity .82s cubic-bezier(.22,.72,.24,1),transform .82s cubic-bezier(.22,.72,.24,1),
+             filter .82s cubic-bezier(.22,.72,.24,1)}
+.rv.in{opacity:1;transform:none;filter:blur(0)}
+.ch,.hero,.rec-head{perspective:1000px}
+.wa{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.04em}
+.wa i{display:inline-block;font-style:normal;transform:translateY(108%) rotate(2.4deg);
+  transition:transform .9s cubic-bezier(.2,.78,.22,1);transition-delay:var(--d,0s)}
+.in .wa i,.hero-type.in .wa i{transform:none}
+.metrics.in .metric{animation:slab .85s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
+@keyframes slab{from{opacity:0;transform:translateY(26px) scaleY(.9)}to{opacity:1;transform:none}}
+.map .node{opacity:0;transform:translate(-50%,-50%) scale(.35);
+  transition:opacity .6s ease,transform .95s cubic-bezier(.2,.92,.24,1),
+             border-color .3s,box-shadow .3s;transition-delay:var(--d,0s)}
+.map.in .node{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.map svg{opacity:0;transition:opacity 1.1s ease .35s}
+.map.in svg{opacity:1}
+.map.in .node[data-s="operating"] .orb{animation:breath 4.5s ease-in-out infinite;
+  animation-delay:calc(var(--d,0s) + 1s)}
+@keyframes breath{0%,100%{filter:brightness(1)}50%{filter:brightness(1.22)}}
+.map.in .node.sel .orb{animation:none}
+.grp-list.in li{animation:row .7s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
+@keyframes row{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+.plate img{clip-path:inset(0 0 100% 0);transition:clip-path 1.15s cubic-bezier(.25,.7,.25,1)}
+.plate.in img{clip-path:inset(0 0 0 0)}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  transition:stroke-dashoffset 2.1s cubic-bezier(.25,.6,.25,1)}
+.draw.in{stroke-dashoffset:0}
+body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;opacity:.05;
+  mix-blend-mode:multiply;background-repeat:repeat;background-size:170px 170px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;filter:none;transition:none}
+  .wa i{transform:none;transition:none}
+  .draw{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+  .map .node{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
+  .thread.landed .head::before,.thread.landed .head::after{animation:none}
+  .thread .endnote{transition:none}
+  .map svg{opacity:1}.tapeGlow{animation:none}
+  .map.in .node[data-s="operating"] .orb{animation:none}
+  .map.in .node[data-s="operating"]{animation:none}
+  .metrics.in .metric,.grp-list.in li{animation:none}
+  .hl{background-size:100% 100%;transition:none}
+  .sheet li{opacity:1;transform:none;transition:none}
+  .prog,.card{transition:none}
+  .topo g{animation:none}
+  .drift,.thread.landed .head,.thread.landed .halo,.thread.burst .knot,.node.core .orb::before{animation:none}
+  .thread .wave,.thread .spark{display:none}
+  .pw{opacity:.05}
+  .scr{transform:rotate(-7deg)}
+  .thread .spur{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+  .plate img{clip-path:none;transition:none}
+  .follow i{animation:none}
+  .enter,.cur,.wipe{display:none!important}
+  body::after{display:none}
+  html{scroll-behavior:auto}
+}
+@media print{
+  .chrome,.spine,.sheet,.hl-start,.hl-node,.follow,.thread,.enter,.cur,.wipe,.mq,.scene,
+  .prog,.card,.slab{display:none}
+  body,#record{background:#fff}
+  #explore{display:none}#record{display:block!important}
+  .rv{opacity:1;transform:none}
+}
+
+/* ── plan components: same tokens, same rhythm ──────────────── */
+.hero-acts{position:relative;z-index:4;display:flex;gap:clamp(14px,3vw,40px);flex-wrap:wrap;align-items:center}
+.hero-acts .follow{margin-top:clamp(24px,4vw,52px)}
+.follow.alt{color:var(--pink)}
+.follow.alt i{animation:none}
+.status{display:inline-block;font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding:3px 7px;
+  border:1px solid var(--pink);border-radius:2px;color:var(--pink);margin-right:8px;vertical-align:middle;line-height:1.4}
+.status.management{border-color:var(--rule);color:var(--ink-3)}
+.ch.dark .status.management{border-color:var(--rule-d);color:var(--pale-3)}
+.status.target{border-style:dashed;border-color:var(--ink-3);color:var(--ink-2)}
+.ch.dark .status.target{border-color:var(--pale-3);color:var(--pale-2)}
+.status.option{border-style:dotted;border-color:var(--pale-3);color:var(--pale-3)}
+.metric .v .sm{font-size:.42em;vertical-align:top;line-height:1.6}
+.film{position:relative;margin:clamp(34px,5vw,62px) 0 0;aspect-ratio:16/9;background:#000;overflow:hidden;
+  border:1px solid var(--rule-d)}
+.film img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.48;filter:grayscale(.35)}
+.film-in{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:24px;gap:12px;color:var(--pale)}
+.film .play{width:66px;height:66px;border-radius:50%;border:1.5px solid var(--pink);margin:0 auto 6px;position:relative;display:block}
+.film .play::after{content:"";position:absolute;left:26px;top:20px;border-left:16px solid var(--pink);
+  border-top:12px solid transparent;border-bottom:12px solid transparent}
+.film-t{font-family:var(--disp);text-transform:uppercase;font-size:clamp(28px,4.4vw,58px);line-height:.9}
+.film-s{max-width:50ch;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300;margin:0 auto}
+.film-k{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink);font-weight:500}
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin-top:clamp(34px,5vw,58px)}
+.stage{background:var(--porcelain);padding:26px 24px 28px}
+.stage .n{font-family:var(--disp);font-size:36px;line-height:1;color:var(--pink);margin-bottom:10px}
+.stage h3{font-size:24px;margin-bottom:16px}
+.stage dl{margin:0;display:grid;grid-template-columns:82px 1fr;gap:8px 14px;font-size:14px;line-height:1.55}
+.stage dt{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding-top:3px}
+.stage dd{margin:0;color:var(--ink-2);font-weight:300}
+.stories{margin-top:clamp(34px,5vw,58px);border-top:1px solid var(--rule)}
+details.story{border-bottom:1px solid var(--rule)}
+details.story summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:22px;padding:22px 0}
+details.story summary::-webkit-details-marker{display:none}
+details.story summary::after{content:"+";margin-left:auto;font-family:var(--serif);font-size:30px;line-height:1;color:var(--pink)}
+details.story[open] summary::after{content:"–"}
+.story .sn{font-family:var(--disp);font-size:clamp(28px,3.4vw,44px);color:var(--pink);line-height:1;flex:0 0 auto}
+.story .st{font-family:var(--disp);text-transform:uppercase;font-size:clamp(22px,3vw,40px);line-height:1;transition:color .25s}
+details.story summary:hover .st{color:var(--pink)}
+.story .sb{padding:0 0 30px}
+.story .lead{margin:0 0 14px;font-size:15px;color:var(--ink-3)}
+.story dl{margin:0;display:grid;grid-template-columns:150px 1fr;gap:12px 22px;font-size:15.5px;line-height:1.6}
+.story dt{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding-top:4px}
+.story dd{margin:0;color:var(--ink-2);font-weight:300;max-width:72ch}
+.story dd b{color:var(--ink);font-weight:600}
+@media(max-width:700px){.story dl,.stage dl{grid-template-columns:1fr;gap:4px 0}.story dd,.stage dd{margin-bottom:10px}}
+.horizons{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule-d);border:1px solid var(--rule-d);
+  margin-top:clamp(30px,4vw,52px)}
+@media(max-width:920px){.horizons{grid-template-columns:1fr}}
+.hz{background:var(--carbon);padding:26px 24px 28px}
+.hz .k{margin-bottom:14px}
+.hz h3{font-size:24px;margin-bottom:12px}
+.hz p{margin:0;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
+.os{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule-d);
+  border:1px solid var(--rule-d);margin-top:clamp(20px,3vw,36px)}
+.os div{background:#0b0b0b;padding:18px 16px}
+.os h4{margin:0 0 6px;font-family:var(--disp);text-transform:uppercase;font-size:17px;font-weight:400}
+.os p{margin:0;font-size:12.5px;color:var(--pale-3);line-height:1.5}
+.acts{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:clamp(26px,4vw,44px)}
+.act{border:1px solid var(--pink);padding:14px 22px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;color:var(--pale);transition:background .25s,color .25s}
+.act:hover{background:var(--pink);color:#fff}
+.dedic{margin:clamp(30px,5vw,60px) 0 0;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--pale-3)}
+.rec-tbl{width:100%;border-collapse:collapse;font-size:14px}
+.rec-tbl th,.rec-tbl td{text-align:left;vertical-align:top;padding:12px 14px 12px 0;border-bottom:1px solid var(--rule)}
+.rec-tbl thead th{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.rec-tbl td.v{font-family:var(--disp);font-size:22px;white-space:nowrap;line-height:1}
+.rec-tbl td.id{font-size:11px;letter-spacing:.08em;color:var(--ink-3);white-space:nowrap}
+.rec-tbl td.d{color:var(--ink-2);font-weight:300;line-height:1.55}
+.rec-wrap{overflow-x:auto}
+@media(min-width:900px){#proof.metrics{grid-template-columns:repeat(3,1fr)}}
+.metric .v.txt{font-size:clamp(30px,3.6vw,46px);line-height:1;padding-top:.15em;margin-bottom:16px}
+@media print{.film,.hero-acts{display:none}.rec-tbl{font-size:11px}}
+</style>
+</head>
+<body data-view="explore" data-grp="map">
+
+<a class="skip" href="#c01">Skip to the story</a>
+<a class="skip" href="#c01" id="skipAnim" style="left:calc(var(--gut) + 176px)">Skip animation</a>
+<a class="skip" href="#record" id="skipRec" style="left:calc(var(--gut) + 340px)">View evidence</a>
+
+<div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"></i></div>
+<div class="wipe" id="wipe" aria-hidden="true"></div>
+<div class="prog" id="prog" aria-hidden="true"></div>
+
+<aside class="card" id="card" aria-hidden="true">
+  <div class="k">Chapter</div>
+  <div class="n" id="cardN">00</div>
+  <div class="t" id="cardT">Tom Letcher</div>
+  <div class="d">Company 13589467</div>
+</aside>
+
+<div class="enter" id="enter" aria-hidden="true">
+  <div class="m">TL</div>
+  <svg viewBox="0 0 320 2" preserveAspectRatio="none"><path d="M0 1 H320"/></svg>
+</div>
+
+<header class="chrome" id="chrome">
+  <div class="wrap">
+    <a class="mono-mark" href="#top" data-mag aria-label="Tom Letcher — top">TL</a>
+    <span class="now" id="now" aria-hidden="true"><b id="nowN">00</b><span id="nowT">Tom Letcher</span></span>
+    <nav>
+      <a href="#c01">Story</a><a href="#c03">Proof</a>
+      <a href="#c04">Method</a><a href="#c06">Platform</a><a href="#c08">Next</a>
+    </nav>
+    <div class="mode" role="group" aria-label="View mode">
+      <button type="button" id="mExplore" aria-pressed="true">Explore</button>
+      <button type="button" id="mRecord" aria-pressed="false">Verified Record</button>
+    </div>
+    <button class="burger" id="burger" data-mag aria-label="Open chapter menu" aria-expanded="false">
+      <i></i><i></i></button>
+  </div>
+</header>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Chapters">
+  <button class="close" id="sheetClose">Close</button>
+  <ol>
+    <li><a href="#top"><span>00</span>Tom Letcher</a></li>
+    <li><a href="#c01"><span>01</span>The Spark</a></li>
+    <li><a href="#c02"><span>02</span>From Sale to System</a></li>
+    <li><a href="#c03"><span>03</span>Proof, Not Promise</a></li>
+    <li><a href="#c04"><span>04</span>How I Build</a></li>
+    <li><a href="#c05"><span>05</span>Built With People</a></li>
+    <li><a href="#c06"><span>06</span>The Platform Ahead</a></li>
+    <li><a href="#c07"><span>07</span>The Record</a></li>
+    <li><a href="#c08"><span>08</span>Still Building</a></li>
+  </ol>
+</div>
+
+<aside class="spine" id="spine">
+  <a href="#c01" data-t="c01">01</a><a href="#c02" data-t="c02">02</a>
+  <a href="#c03" data-t="c03">03</a><a href="#c04" data-t="c04">04</a>
+  <a href="#c05" data-t="c05">05</a><a href="#c06" data-t="c06">06</a>
+  <a href="#c07" data-t="c07">07</a><a href="#c08" data-t="c08">08</a>
+</aside>
+
+<div id="explore">
+
+<section class="hero" id="top">
+  <div class="hl-start" id="hlStart"><span>2019 — One extinguisher</span></div>
+  <div class="hl-node" id="hn0" aria-hidden="true"><b></b><span>Products</span></div>
+  <div class="hl-node" id="hn1" aria-hidden="true"><b></b><span>Channels</span></div>
+  <div class="hl-node" id="hn2" aria-hidden="true"><b></b><span>Systems</span></div>
+  <div class="hl-node" id="hn3" aria-hidden="true"><b></b><span>People</span></div>
+
+  <div class="wrap">
+    <div class="hero-stage">
+      <div class="hero-shot" id="shotWrap">
+        <img class="halo2 on" src="assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
+        <img class="halo on" src="assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
+        <img id="shot" src="assets/tom-mono.jpg"
+             srcset="assets/tom-mono-sm.jpg 440w, assets/tom-mono.jpg 682w"
+             sizes="(max-width:820px) 88vw, 46vw"
+             width="682" height="897" alt="Tom Letcher" decoding="async">
+      </div>
+      <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
+      <div class="hero-sub"><p>Founder. Operator. Builder.<br>From one second-hand fire extinguisher to a nationwide, multi-channel
+        safety business, and the systems, brands and people behind what comes next.</p></div>
+      <div class="hero-acts">
+        <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
+        <a class="follow alt" href="#record" data-view-record data-mag>View the verified record <i>→</i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bar" aria-label="Four verified snapshot figures">
+  <div class="wrap">
+    <div>Trading since 2019 · incorporated 2021</div><div>£1m+ combined sales · 2025</div>
+    <div>No. 1 eBay UK extinguisher seller · 2026</div><div>Runner-up · eBay UK Business Awards 2024</div>
+  </div>
+</div>
+
+<div class="mq" aria-hidden="true"><div class="mq-t" data-mq="1" data-base="FROM ONE EXTINGUISHER <i>—</i> TO A NATIONWIDE, MULTI-CHANNEL BUSINESS <i>—</i> BURY TO UK-WIDE <i>—</i> "></div></div>
+
+<section class="scene" id="ones" aria-label="2019 — where it started">
+  <div class="stick">
+    <div class="yr">Bury · March 2019</div>
+    <div class="phs" id="phs">
+      <div class="ph on"><h3>One second-hand extinguisher.</h3></div>
+      <div class="ph"><h3>One listing.</h3></div>
+      <div class="ph"><h3>One customer who paid.</h3></div>
+      <div class="ph"><h3>Everything since.</h3></div>
+    </div>
+    <div class="cnt">Sold on Facebook Marketplace · company <b>13589467</b> incorporated 27 August 2021</div>
+  </div>
+</section>
+
+<!-- ══ 01 THE SPARK ══ -->
+<section class="ch dark" id="c01" data-n="01">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">01 — The Spark</div>
+      <h2>It started with one rusty extinguisher.</h2>
+      <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
+      <p class="stand">Bury, March 2019. A background in architecture, a second-hand fire extinguisher nobody else
+      saw value in, and a Facebook Marketplace listing. No plan, no investors, no company.</p>
+    </div>
+    <div class="cols">
+      <aside class="side rv">
+        <p>Fire safety is a legal duty, not a discretionary purchase. That makes it a category people buy
+        carefully, from suppliers they trust, and one the established trade did not expect to change.</p>
+        <p>The first customer collected in person. The second wanted four hundred. The third asked whether it
+        could be posted. Each question turned out to be the next stage of the business.</p>
+      </aside>
+      <div class="body rv">
+        <p>Before Freedom Fire there was one overlooked object: <b>a rusty, second-hand extinguisher</b>, cleaned
+        up and listed for sale. One person took a chance on it. That single sale created the first customer, the
+        first bit of working capital and the first glimpse that value could be found where the rest of the
+        trade saw scrap.</p>
+        <p>In September 2019 a fire-training buyer in Bolton asked for hundreds of refurbished units for practice
+        drills. About 400 mixed extinguishers went out for £400, roughly a pound each. Counting the time, handling
+        and delivery it was probably a loss. It was also the first proof that <b><span class="hl">the demand was
+        real and it came in volume</span></b>.</p>
+        <p>In January 2020 a takeaway in Nottingham found the listing, paid online and asked for the extinguisher
+        to be sent. Extinguishers cannot go with any courier, so the parcel had to be packed properly and a
+        carrier found who would take it. Once it arrived, the business was no longer limited to people who could
+        drive to Bury.</p>
+        <p>By the summer of 2020 the operation was trading as Freedom Fire from a rented corner at the back of the
+        family warehouse, with students cleaning, refilling and preparing <b>hundreds of units a day</b>, pallets
+        going out to Scotland, Wales and London, and six containers of refurbished stock consolidated for
+        exporters into West and Central Africa. By 2021 it was processing 800 to 1,000 units a week, and the
+        supply of second-hand stock could no longer keep up. On 27 August 2021, <b>Freedom Fire &amp; Safety Ltd</b>
+        was incorporated.</p>
+      </div>
+    </div>
+
+    <figure class="film" id="film" aria-label="The two-minute founder story">
+      <img src="assets/journey/ch1-a.webp" width="1154" height="1342" alt="Rows of refurbished red fire extinguishers lined up along a warehouse wall, the stock the business began with" loading="lazy" decoding="async">
+      <div class="film-in">
+        <span class="play" aria-hidden="true"></span>
+        <div class="film-t">The two-minute story</div>
+        <div class="film-s">From the first second-hand extinguisher to the platform being built now. Filmed with the real
+        objects, listings, units and people. Captioned, with a transcript. No autoplay.</div>
+        <div class="film-k">Film · scheduled September 2026</div>
+      </div>
+    </figure>
+
+    <div class="years rv" aria-label="The origin, in five dated steps">
+      <div class="yhead">The origin, in five dated steps</div>
+      <div class="yrail" id="yrail">
+        <div class="ycard live"><div class="y">2019</div><div class="l">March · the first sale</div>
+          <div class="s">One second-hand extinguisher, refurbished, listed on Facebook Marketplace, collected by the buyer.</div>
+          <span class="vtag">Founder record</span></div>
+        <div class="ycard"><div class="y">2019</div><div class="l">September · the first bulk order</div>
+          <div class="s">About 400 refurbished units to a Bolton training buyer, £400 in total. The first proof of volume demand.</div></div>
+        <div class="ycard"><div class="y">2020</div><div class="l">January · the first remote order</div>
+          <div class="s">A Nottingham takeaway paid online and asked for delivery. Packaging and a willing carrier removed geography from the model.</div></div>
+        <div class="ycard"><div class="y">2020</div><div class="l">June · Freedom Fire</div>
+          <div class="s">Trading name adopted. A corner of the family warehouse, students on the bench, hundreds of units a day, pallets nationwide.</div></div>
+        <div class="ycard"><div class="y">2021</div><div class="l">27 August · incorporated</div>
+          <div class="s">Freedom Fire &amp; Safety Ltd, company 13589467. Director appointed on the day of incorporation.</div>
+          <span class="vtag">Verified</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 02 FROM SALE TO SYSTEM ══ -->
+<section class="ch" id="c02" data-n="02">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">02 — From Sale to System</div>
+      <h2>Every constraint became a build.</h2>
+      <em class="scr" aria-hidden="true" style="right:4%;top:6%">build.</em>
+      <p class="stand">Eight stages, in order. Each one starts with a problem the market set, and ends with
+      something that now runs on its own.</p>
+    </div>
+    <div class="stages rv">
+      <div class="stage"><div class="n">01</div><h3>Second-life stock</h3>
+        <dl><dt>Problem</dt><dd>No capital and no product. The trade scrapped serviceable extinguishers by the pallet.</dd>
+        <dt>Decision</dt><dd>Refurbish what others threw away, and sell it honestly for training and non-operational use.</dd>
+        <dt>Build</dt><dd>A cleaning, refilling and preparation bench, staffed with students. 2019 to 2021.</dd>
+        <dt>Result</dt><dd>800 to 1,000 units a week by 2021, sold to training providers, exporters and the public.</dd></dl></div>
+      <div class="stage"><div class="n">02</div><h3>Ecommerce proof</h3>
+        <dl><dt>Problem</dt><dd>Facebook Marketplace could not reach a national customer, and could not scale.</dd>
+        <dt>Decision</dt><dd>Test eBay with one listing from a personal account: a second-hand 2 kg CO2 extinguisher, December 2020.</dd>
+        <dt>Build</dt><dd>Nothing but the listing. No store, no branding, no advertising.</dd>
+        <dt>Result</dt><dd>Close to 8,000 units and more than £350,000 of sales from that one listing to date.</dd></dl></div>
+      <div class="stage"><div class="n">03</div><h3>Incorporation</h3>
+        <dl><dt>Problem</dt><dd>Sales had outgrown a sole trader, and servicing customers needed a company behind the certificate.</dd>
+        <dt>Decision</dt><dd>Incorporate, and run two engines: ecommerce and contracted servicing.</dd>
+        <dt>Build</dt><dd>Freedom Fire &amp; Safety Ltd, 27 August 2021.</dd>
+        <dt>Result</dt><dd>Servicing for colleges, warehouses, factories and shops alongside the online range.</dd></dl></div>
+      <div class="stage"><div class="n">04</div><h3>Warehouse and fulfilment</h3>
+        <dl><dt>Problem</dt><dd>A borrowed corner cannot hold a catalogue, and marketplace buyers expect next-day delivery.</dd>
+        <dt>Decision</dt><dd>Take a first unit of our own, then move when it filled.</dd>
+        <dt>Build</dt><dd>Unit 10, about 500 square feet, April 2022. Unit 19, about three times the space, fitted out over six months and occupied from November 2024. A DHL account for next-day delivery.</dd>
+        <dt>Result</dt><dd>Thousands of orders a month fulfilled from Bury.</dd></dl></div>
+      <div class="stage"><div class="n">05</div><h3>Direct manufacturing and Firestorm</h3>
+        <dl><dt>Problem</dt><dd>After marketplace fees, packaging and delivery, stock bought through UK distributors could not compete online. Several suppliers would not extend credit to a young business.</dd>
+        <dt>Decision</dt><dd>Buy like the biggest: go direct to the manufacturer and put our own name on the product.</dd>
+        <dt>Build</dt><dd>A direct relationship agreed at the NEC in April 2024, a first order of about £90,000 funded by borrowing, the FIRESTORM mark filed with effect from 9 August 2024, and the first container landed on Christmas Eve 2024.</dd>
+        <dt>Result</dt><dd>An owned brand, registered in classes 9 and 20, on every cylinder that followed.</dd></dl></div>
+      <div class="stage"><div class="n">06</div><h3>Multiple channels</h3>
+        <dl><dt>Problem</dt><dd>One marketplace is one point of failure.</dd>
+        <dt>Decision</dt><dd>Rebuild the same catalogue, compliance and fulfilment on each new channel in turn.</dd>
+        <dt>Build</dt><dd>eBay business store, January 2024. Temu UK's first dedicated fire extinguisher seller, 2025. Amazon, OnBuy and an own Shopify store in launch through summer 2026.</dd>
+        <dt>Result</dt><dd>More than £160,000 on Temu in its first three months, with fewer than ten live products.</dd></dl></div>
+      <div class="stage"><div class="n">07</div><h3>Service and B2B</h3>
+        <dl><dt>Problem</dt><dd>Marketplace revenue is lumpy; compliance work is recurring.</dd>
+        <dt>Decision</dt><dd>Keep the vans on the road while the store grows.</dd>
+        <dt>Build</dt><dd>Servicing, installation and contracted site work for commercial premises, nationwide from Bury.</dd>
+        <dt>Result</dt><dd>About £100,000 of servicing and site work in the first full year of scaled trading, growing alongside ecommerce.</dd></dl></div>
+      <div class="stage"><div class="n">08</div><h3>Systems and automation</h3>
+        <dl><dt>Problem</dt><dd>Thousands of SKUs and orders cannot be run from a spreadsheet by one person.</dd>
+        <dt>Decision</dt><dd>Build the tools so that other people can run the business.</dd>
+        <dt>Build</dt><dd>Order management and a support desk across channels, listing and pricing workflows, and a supply-chain tracker built in-house that follows every consignment from factory to the Bury warehouse.</dd>
+        <dt>Result</dt><dd>A team, not a founder, runs the day. That is the platform the next chapters stand on.</dd></dl></div>
+    </div>
+    <figure class="plate wide crop">
+      <img src="assets/journey/ch13-a.webp" width="934" height="1086" alt="Three members of the team standing in front of an open shipping container stacked with boxed Firestorm extinguishers, December 2024" loading="lazy" decoding="async">
+      <figcaption>Christmas Eve 2024. The first container of Firestorm extinguishers, ordered on money the business did not yet have.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ══ 03 PROOF, NOT PROMISE ══ -->
+<section class="ch dark" id="c03" data-n="03">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">03 — Proof, Not Promise</div>
+      <h2>Six numbers. Each one says what it counts.</h2>
+      <p class="stand">Value, definition, period, scope, source type and the date it was last checked. Marketplace
+      figures are management data from platform exports, gross of refunds. They are not statutory turnover,
+      which the accountant reconciles separately.</p>
+    </div>
+
+    <div class="metrics rv" id="proof">
+      <div class="metric" data-ev="YF-GR-05">
+        <div class="v">£1m+</div><div class="k">Combined sales · second full year</div>
+        <p class="def">About £890,000 of gross eBay sales, more than £160,000 on Temu in its first three months,
+        plus servicing and contracted site work. Gross of refunds; VAT-inclusive marketplace receipts.</p>
+        <div class="per">January 2025 – January 2026 · Freedom Fire &amp; Safety Ltd</div>
+        <details class="ev"><summary>Source and status</summary>
+          <p><span class="status management">Management data</span> eBay and Temu seller exports and the servicing
+          ledger. Evidence YF-GR-05. Last checked 5 September 2026. Platform exports available to assessors on request.</p></details>
+      </div>
+      <div class="metric" data-ev="YF-PR-01">
+        <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
+        <p class="def">Ranked by sales against every seller in the Fire Extinguishers category, GB, in eBay's own
+        listing quality report. Also third of 1,594 in Disposable Gloves and fifth of 2,751 in Single Use Batteries.</p>
+        <div class="per">12 months to end of July 2026 · eBay storefront</div>
+        <details class="ev"><summary>Source and status</summary>
+          <p><span class="status management">Management data</span> eBay listing quality report, July 2026, exported
+          from seller hub. Evidence YF-PR-01 to 03. Last checked 5 September 2026.</p></details>
+      </div>
+      <div class="metric" data-ev="YF-RC-01">
+        <div class="v txt">Runner-up</div><div class="k">eBay UK Business Awards</div>
+        <p class="def">Named runner-up in 2024, followed by an invitation to Belfast to meet eBay's UK leadership
+        and tell the story behind the company.</p>
+        <div class="per">2024 · external recognition</div>
+        <details class="ev"><summary>Source and status</summary>
+          <p><span class="status management">Management data</span> Event record, invitation and photographs held.
+          Evidence YF-RC-01. Last checked 5 September 2026.</p></details>
+      </div>
+      <div class="metric" data-ev="YF-IP-01">
+        <div class="v">3</div><div class="k">Registered brands</div>
+        <p class="def">FIRESTORM, filed with effect from 9 August 2024 and entered on the UK register on 1 November
+        2024 in the company's name, classes 9 and 20. FXL and SKYLINE followed in February and March 2026. Only
+        registered marks are counted; a wider portfolio of about twelve names is in use or in application.</p>
+        <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
+        <details class="ev"><summary>Source and status</summary>
+          <p><span class="status verified">Verified</span> UK Intellectual Property Office trade mark register.
+          Evidence YF-IP-01. Last checked 5 September 2026.</p></details>
+      </div>
+      <div class="metric" data-ev="YF-OP-02">
+        <div class="v">3×</div><div class="k">Warehouse floor space</div>
+        <p class="def">From Unit 10, about 500 square feet from April 2022, to Unit 19 on the same estate, about
+        three times the floor space, fitted out over six months and occupied from November 2024.</p>
+        <div class="per">April 2022 – November 2024 · Pilsworth Industrial Estate, Bury</div>
+        <details class="ev"><summary>Source and status</summary>
+          <p><span class="status management">Management data</span> Lease agreements and move dates.
+          Evidence YF-OP-02. Last checked 5 September 2026.</p></details>
+      </div>
+      <div class="metric" data-ev="YF-GR-04">
+        <div class="v">£160k+</div><div class="k">Temu · first three months</div>
+        <p class="def">Gross sales in the first three months as Temu UK's first dedicated fire extinguisher seller,
+        with fewer than ten live products. Two Firestorm products held first and second place in Temu's Safety
+        &amp; Security best-seller ranking.</p>
+        <div class="per">Fourth quarter 2025 · Temu storefront</div>
+        <details class="ev"><summary>Source and status</summary>
+          <p><span class="status management">Management data</span> Temu seller centre export and dated ranking
+          screenshots. Evidence YF-GR-04, YF-RC-02. Last checked 5 September 2026.</p></details>
+      </div>
+    </div>
+
+    <div class="cols">
+      <aside class="side rv">
+        <p><b style="color:var(--pale)">Channel growth, year by year.</b> The same catalogue, rebuilt on each
+        channel in turn. Figures are gross marketplace sales for the period shown.</p>
+        <p>The Amazon, OnBuy and Shopify launches of summer 2026 are targets until live sales are reported, and
+        are shown that way everywhere on this page.</p>
+      </aside>
+      <div class="body rv">
+        <table class="tbl">
+          <tr><th>Jan – May 2024</th><td>eBay business store launches. £143,000 of sales in five months. Next-day delivery through DHL.</td></tr>
+          <tr><th>Jan 2024 – Jan 2025</th><td>eBay passes £500,000 in the first full year; servicing and site work add about £100,000.</td></tr>
+          <tr><th>Jan 2025 – Jan 2026</th><td>eBay about £890,000, nearly double. Temu adds more than £160,000 in its first three months. Combined sales pass £1 million.</td></tr>
+          <tr><th>Summer 2026</th><td><span class="status target">Target</span> Amazon storefront, OnBuy rollout and an own Shopify store in launch. Counted only once live.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <figure class="plate wide crop">
+      <img src="assets/journey/ch21a.webp" width="1350" height="1568" alt="eBay sales rank graphic: Fire Extinguishers, number one, one out of 1,193 sellers, GB, August 2026" loading="lazy" decoding="async">
+      <figcaption>eBay's listing quality report, July 2026: first of 1,193 sellers in the category where the business began.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ══ 04 HOW I BUILD ══ -->
+<section class="ch" id="c04" data-n="04">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">04 — How I Build</div>
+      <h2>Five decisions, and what they cost.</h2>
+      <em class="scr" aria-hidden="true" style="right:5%;top:0">decide.</em>
+      <p class="stand">The same shape every time: a constraint the market set, a decision, what was actually built,
+      the measurable result, and where the evidence sits.</p>
+    </div>
+    <div class="stories rv">
+
+      <details class="story" open>
+        <summary><span class="sn">01</span><span class="st">Rethinking a traditional category</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>Fire safety was sold by distributors to engineers, on account, with catalogues. Nobody was
+            selling it well to a person with a phone and a problem.</dd>
+            <dt>Decision</dt><dd>Treat the category like any other online essential: own the product, explain it plainly,
+            ship it next day, and build the tools that answer the question before the customer has to ask.</dd>
+            <dt>Implementation</dt><dd>Second-life stock (2019), the first eBay listing (2020), a business store built over twelve
+            months before it opened (2023), direct manufacturing and the Firestorm brand (2024), and digital buying that
+            replaces a phone call: clear specifications, kits and delivery you can track.</dd>
+            <dt>Result</dt><dd>First of 1,193 sellers in the category on eBay UK by July 2026. Three registered brands. Temu's first
+            dedicated fire extinguisher seller.</dd>
+            <dt>Evidence</dt><dd>YF-CH-01, YF-IP-01, YF-PR-01, YF-GR-04.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">02</span><span class="st">Turning traction into influence</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>A young company from Bury had no standing with manufacturers, marketplaces or the trade.</dd>
+            <dt>Decision</dt><dd>Let the numbers speak first, then use every invitation to tell the story of how they were made.</dd>
+            <dt>Implementation</dt><dd>eBay sales of £143,000 in the store's first five months, then more than £500,000 in year one and
+            about £890,000 in year two. Named runner-up in the eBay UK Business Awards 2024 and invited to Belfast to meet
+            eBay's UK leadership. Approached by Temu UK to open its fire extinguisher category and worked with its UK and
+            China compliance teams to set it up around compliant, UK-held stock. A direct manufacturing partner who chose a
+            small Bury warehouse as its first UK client.</dd>
+            <dt>Result</dt><dd>Growth over two comparable years, external recognition on the record, and a seat in the conversations
+            that decide how the category is sold.</dd>
+            <dt>Evidence</dt><dd>YF-GR-01, YF-GR-02, YF-GR-05, YF-RC-01, YF-OP-04.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">03</span><span class="st">Designing the operating system</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>Every new channel and brand multiplied the work. Done by hand, the founder becomes the bottleneck.</dd>
+            <dt>Decision</dt><dd>Build one set of shared infrastructure that every product, channel and person plugs into, then
+            hire and train people to run it.</dd>
+            <dt>Implementation</dt><dd>Direct sourcing with a supply-chain tracker built in-house. One warehouse and fulfilment
+            operation serving every channel. Order management and a shared support desk. Listing, pricing and compliance
+            workflows that were built once for eBay and reused for Temu, then Amazon, OnBuy and Shopify. Brand and IP held in
+            the company's name. People brought in through placements and trained on the systems.</dd>
+            <dt>Result</dt><dd>The same category rebuilt on a second marketplace produced more than £160,000 in three months with
+            fewer than ten products. Three more channels were prepared at the same time in 2026 without a second warehouse.</dd>
+            <dt>Evidence</dt><dd>YF-GR-04, YF-OP-02, YF-CH-02, YF-PE-02.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">04</span><span class="st">Adapting under pressure</span></summary>
+        <div class="sb">
+          <p class="lead">Three cases, each with a date, the decision, and what it produced.</p>
+          <dl>
+            <dt>Supplier rejection</dt><dd><b>2023 to 2024.</b> Manufacturers did not believe extinguishers belonged online and would not
+            extend credit; distributor pricing left no margin after marketplace fees. Decision: go direct. A manufacturing
+            relationship agreed at the NEC in April 2024, a first order of about £90,000 met by borrowing and trading cash, the
+            first container on 24 December 2024. Result: an owned brand, transformative unit costs, and availability that no
+            longer depended on a distributor's stock list.</dd>
+            <dt>Platform dependence</dt><dd><b>2025 to 2026.</b> More than nine tenths of online sales sat on one marketplace. Decision:
+            rebuild the model on a second channel before it was needed, then a third and fourth. Temu went live in 2025 and
+            returned more than £160,000 in three months; Amazon, OnBuy and an own store followed in 2026. Result: the second
+            full year passed £1 million with growth no longer resting on a single listing or platform.</dd>
+            <dt>Capital and space</dt><dd><b>2023 to November 2024.</b> £17,000 of savings and £5,000 borrowed from family went almost
+            entirely into stock for a store that had not yet sold anything. Unit 10 filled within two years. Decision: staged
+            scale, reinvesting trading cash, taking the unit opposite when it came free, and fitting it out over six months
+            while still shipping. Result: about three times the floor space, thousands of orders a month, and adjacent
+            categories such as batteries brought in on the back of it.</dd>
+            <dt>Evidence</dt><dd>YF-OP-04, YF-OP-03, YF-GR-04, YF-GR-05, YF-FN-01, YF-OP-02.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">05</span><span class="st">Listening at scale</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>Tens of thousands of customers, most of whom will never phone. The signal arrives as ratings,
+            support cases, returns and the questions people ask before they buy.</dd>
+            <dt>The loop</dt><dd>Marketplace ratings and review counts by period; support cases, response and resolution times in
+            the shared desk; refund, return, damage and defect rates; dispatch and order accuracy from the order system and
+            carrier records. No satisfaction score is quoted here because none was formally collected before 2026; a baseline
+            for those measures began this year and will be reported once it has a full period behind it.</dd>
+            <dt>Feedback that changed something</dt><dd><b>January 2020.</b> A remote customer asked for delivery; the answer was
+            proper packaging and a carrier who would take extinguishers, which became the fulfilment model.
+            <b>2024.</b> Smoke-alarm customers kept asking for the right batteries; batteries became a category and brand
+            relationships followed. <b>2025.</b> Temu's compliance teams needed a compliant, UK-held range with fast domestic
+            delivery; the range was built to that specification and took the top two places in its ranking.</dd>
+            <dt>Result</dt><dd>Each change is dated, each has a measurable outcome, and the loop now runs from a shared desk rather
+            than the founder's inbox.</dd>
+            <dt>Evidence</dt><dd>YF-OR-03, YF-OP-02, YF-GR-04, YF-RC-02.</dd>
+          </dl>
+        </div>
+      </details>
+    </div>
+
+    <div class="quo rv">
+      <q>Find the constraint, design a response, prove it in the market, then turn what you learned into something
+      other people can run.</q>
+      <div class="by">Tom Letcher, founder</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 05 BUILT WITH PEOPLE ══ -->
+<section class="ch dark" id="c05" data-n="05">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">05 — Built With People</div>
+      <h2>A founder who hires is not the same as one who delegates.</h2>
+      <em class="scr" aria-hidden="true" style="right:3%;top:8%">people.</em>
+      <p class="stand">The roles that exist now, how responsibility was handed over, and what was built so that other
+      people could run the work without asking.</p>
+    </div>
+    <div class="cols">
+      <aside class="side rv">
+        <p>Placements have been hosted since 2021, beginning with learners from Newbridge College, including young people
+        with additional needs. One of the earliest placements progressed into long-term, full-time employment.</p>
+        <p>In September 2025 the company began formal T Level industry placements with support from the Growth Company.
+        By June 2026 all three students had been offered long-term roles.</p>
+        <p>The fuller story of how people come into the company is told on <a href="https://thewayin.freedomfireandsafety.co.uk/" style="color:var(--pink)">The Way In</a>. It is not repeated here.</p>
+      </aside>
+      <div class="body rv">
+        <p><b>Roles created.</b> Web development, warehouse and fulfilment, IT, ecommerce operations and servicing, most of
+        them filled by people who came in on a placement, through the Job Centre, or while still studying, and trained on
+        the job.</p>
+        <p><b>Responsibility delegated.</b> The website and storefronts are designed and run by the web team. Fulfilment
+        runs from the warehouse team's own order queue. The Amazon launch was handed to a specialist agency in May 2026
+        rather than absorbed by the founder. Suppliers, carriers and marketplace compliance each have a named owner.</p>
+        <p><b>Systems built for others to use.</b> The order system, the shared support desk, the listing workflows and the
+        supply-chain tracker exist so that a new starter can do useful work in their first week, and so that nothing
+        depends on one person remembering.</p>
+        <div class="quo">
+          <q>I thought the placement would be a basic storefront. A few product pages, prices on, done. Instead I was given
+          creative freedom. Told what the business needed, then trusted to work out how it should look and work. It turned
+          into a proper, highly designed website. Not many places would hand that much responsibility to someone on a
+          placement, and when I got things wrong, they showed me why and let me fix it.</q>
+          <div class="by">Bill, web developer · joined on a T Level placement, September 2025</div>
+        </div>
+      </div>
+    </div>
+    <figure class="plate wide crop">
+      <img src="assets/journey/ch15-a.webp" width="1078" height="1254" alt="A young member of the team standing beside a laptop showing a Freedom Group presentation, in front of the Freedom Group sign" loading="lazy" decoding="async">
+      <figcaption>A T Level student presenting to the company, 2025.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ══ 06 THE PLATFORM AHEAD ══ -->
+<section class="ch dark" id="c06" data-n="06">
+  <div class="wrap">
+    <div class="rv">
+      <div class="grp-head">
+        <div>
+          <div class="ch-tag">06 — The Platform Ahead</div>
+          <h2>What is trading, what is being built, and what is only an option.</h2>
+          <em class="scr" aria-hidden="true" style="right:2%;top:52%">system.</em>
+        </div>
+        <div class="vt" role="group" aria-label="Group view">
+          <button type="button" id="vMap" aria-pressed="true">Map</button><s>/</s>
+          <button type="button" id="vList" aria-pressed="false">List</button>
+        </div>
+      </div>
+      <p class="stand">One operating system, three horizons. Companies with a number on the register are facts. Everything
+      else is labelled proposed or option, and stays that way until it is registered and trading.</p>
+    </div>
+
+    <div class="horizons rv">
+      <div class="hz"><div class="k"><span class="status verified">Trading now</span></div>
+        <h3>Freedom Fire &amp; Safety Ltd</h3>
+        <p>Company 13589467. Owned brands Firestorm, FXL and Skyline. Direct sourcing, one warehouse in Bury, servicing
+        nationwide, storefronts on eBay and Temu and an own site. Freedom Global is the trading identity for the
+        multi-category ecommerce operation; the legal company is unchanged.</p></div>
+      <div class="hz"><div class="k"><span class="status target">Building · 24 to 36 months</span></div>
+        <h3>Proposed operating companies</h3>
+        <p>Freedom Facilities, for compliance, servicing and facilities on recurring contracts. Freedom Distribution, for
+        trade and B2B supply of the owned brands. The brand portfolio taken to about twelve registered marks. Amazon,
+        OnBuy and Shopify from launch to established channels. Neither company is registered yet.</p></div>
+      <div class="hz"><div class="k"><span class="status option">Long-term options</span></div>
+        <h3>Optionality, not plans</h3>
+        <p>Property, freight, aerial services and forecourt retail are strategic options the group model keeps open.
+        None is registered, none has a date promised, and none is counted anywhere on this page.</p></div>
+    </div>
+
+    <div class="os rv" aria-label="The operating system">
+      <div><h4>Brands and IP</h4><p>Registered in the company's name; licensed, not sold.</p></div>
+      <div><h4>Sourcing</h4><p>Direct manufacturing, tracked from factory to Bury.</p></div>
+      <div><h4>Warehousing</h4><p>One site, every channel.</p></div>
+      <div><h4>Technology</h4><p>Orders, support, listings, tracking.</p></div>
+      <div><h4>Marketplaces</h4><p>eBay, Temu; Amazon, OnBuy, Shopify in launch.</p></div>
+      <div><h4>B2B</h4><p>Trade supply of the owned brands.</p></div>
+      <div><h4>Services</h4><p>Servicing and compliance on site.</p></div>
+    </div>
+
+    <div class="fg-wrap">
+      <img class="fg-img" src="assets/group-orbit-600.png"
+           srcset="assets/group-orbit-320.png 320w, assets/group-orbit-600.png 600w"
+           sizes="clamp(150px,17vw,230px)" width="600" height="607"
+           alt="The Freedom Group" loading="lazy" decoding="async">
+    </div>
+
+    <div class="grp rv">
+      <div class="map" id="map">
+        <svg viewBox="0 0 100 76" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="mgp" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff74b8"/>
+              <stop offset=".45" stop-color="#ff3d9a"/>
+              <stop offset="1" stop-color="#c60f6e"/>
+            </linearGradient>
+          </defs>
+          <g transform="rotate(-16 50 38)">
+            <ellipse class="tapeGlow" cx="50" cy="38" rx="33" ry="13"/>
+            <ellipse class="tape" cx="50" cy="38" rx="33" ry="13"/>
+            <ellipse class="ringB" cx="50" cy="38" rx="43" ry="20.5"/>
+            <ellipse class="ringC" cx="50" cy="38" rx="51" ry="28"/>
+          </g>
+        </svg>
+        <span class="yrlbl" data-ring="A" data-ang="128">Now</span>
+        <span class="yrlbl" data-ring="B" data-ang="95">24 – 36 months</span>
+        <span class="yrlbl" data-ring="C" data-ang="232">Options</span>
+        <button class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0" aria-pressed="true">
+          <span class="orb"></span><span class="lbl">Freedom Group</span>
+          <span class="st">Strategy</span></button>
+        <button class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
+          <span class="orb"></span><span class="lbl">Freedom Fire &amp; Safety Ltd</span>
+          <span class="st">Trading · 13589467</span></button>
+        <button class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200">
+          <span class="orb"></span><span class="lbl">Freedom Facilities</span>
+          <span class="st">Proposed</span></button>
+        <button class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="35">
+          <span class="orb"></span><span class="lbl">Freedom Distribution</span>
+          <span class="st">Proposed</span></button>
+        <button class="node" data-k="form" data-s="future" data-ring="C" data-ang="250">
+          <span class="orb"></span><span class="lbl">Property</span>
+          <span class="st">Option</span></button>
+        <button class="node" data-k="freight" data-s="future" data-ring="C" data-ang="20">
+          <span class="orb"></span><span class="lbl">Freight</span>
+          <span class="st">Option</span></button>
+        <button class="node" data-k="fly" data-s="future" data-ring="C" data-ang="300">
+          <span class="orb"></span><span class="lbl">Aerial services</span>
+          <span class="st">Option</span></button>
+        <button class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="150">
+          <span class="orb"></span><span class="lbl">Forecourts</span>
+          <span class="st">Option</span></button>
+      </div>
+      <div class="panel" id="panel" aria-live="polite">
+        <h3 id="pName">Freedom Group</h3><hr>
+        <div class="tagline" id="pTag">Group strategy and brand architecture.</div>
+        <p id="pBody">The operating model that the trading company runs on today, and the shape the next companies would
+        take. Not a registered company. Select a planet.</p>
+        <a class="go" id="pGo" href="https://www.freedomgroup.uk" target="_blank" rel="noopener" style="display:none">Explore ↗</a>
+      </div>
+    </div>
+
+    <div class="grp-list rv">
+      <h4>Trading now</h4>
+      <ul>
+        <li><span class="nm">Freedom Fire &amp; Safety Ltd</span><span class="ds">Company 13589467, incorporated 27 August
+          2021. Owned brands, direct sourcing, one warehouse, servicing nationwide, eBay and Temu storefronts and an own site.
+          Trades online as Freedom Global.</span></li>
+      </ul>
+      <h4>Proposed · 24 to 36 months</h4>
+      <ul>
+        <li><span class="nm">Freedom Facilities</span><span class="ds">Compliance, servicing and facilities on recurring
+          contracts. Not yet registered.</span></li>
+        <li><span class="nm">Freedom Distribution</span><span class="ds">Trade and B2B supply of the owned brands to
+          retailers, wholesalers and distributors. Not yet registered.</span></li>
+      </ul>
+      <h4>Long-term options</h4>
+      <ul>
+        <li><span class="nm">Property</span><span class="ds">A commercial property platform for the group's own premises.</span></li>
+        <li><span class="nm">Freight</span><span class="ds">A logistics arm for imports and freight control.</span></li>
+        <li><span class="nm">Aerial services</span><span class="ds">Surveying and inspection.</span></li>
+        <li><span class="nm">Forecourts</span><span class="ds">Forecourt and convenience retail.</span></li>
+      </ul>
+      <p class="src" style="margin-top:22px;font-size:13px;color:var(--pale-3)">The full group portfolio is set out at
+        <a href="https://www.freedomgroup.uk" style="color:var(--pink)">freedomgroup.uk</a>. Only Freedom Fire &amp; Safety Ltd is on the register; see the Verified Record.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slab dark" id="slab">
+  <div class="in-w rv">
+    <div class="k">Seven years</div>
+    <h2>From one extinguisher<br>to a platform.</h2>
+    <em class="scr" aria-hidden="true" style="right:-4%;bottom:8%;position:absolute">platform.</em>
+    <div class="f">Bury · 2019 — present</div>
+  </div>
+</section>
+
+<!-- ══ 07 THE RECORD ══ -->
+<section class="ch" id="c07" data-n="07" style="padding-top:0">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">07 — The Record</div>
+      <h2>Everything a stranger can check.</h2>
+      <p class="stand">Company facts, dated commercial figures, intellectual property, recognition and people, each with an
+      evidence reference, a status and a source. Collected so nobody has to take a claim on trust.</p>
+    </div>
+    <div class="cols">
+      <aside class="side rv">
+        <p>The full, printable version lives under <b style="color:var(--ink)">Verified Record</b> in the header. It carries
+        every evidence ID used on this page, states which sources are public and which are supplied on request, and shows
+        the date each entry was last checked.</p>
+        <p><a href="#record" data-view-record style="color:var(--pink)">Open the verified record →</a></p>
+      </aside>
+      <div class="body rv">
+        <table class="tbl">
+          <tr><th>Company</th><td>Freedom Fire &amp; Safety Ltd</td></tr>
+          <tr><th>Company number</th><td>13589467</td></tr>
+          <tr><th>Incorporated</th><td>27 August 2021, England and Wales</td></tr>
+          <tr><th>Status</th><td>Active</td></tr>
+          <tr><th>Nature of business</th><td>SIC 84250 — Fire service activities</td></tr>
+          <tr><th>Director</th><td>Tom Letcher — appointed 27 August 2021</td></tr>
+          <tr><th>Registered office</th><td>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE</td></tr>
+          <tr><th>Trading before incorporation</th><td>Sole trader from March 2019, trading as Freedom Fire from June 2020</td></tr>
+          <tr><th>Registered marks</th><td>FIRESTORM (registered 1 November 2024, classes 9 and 20), FXL and SKYLINE (2026)</td></tr>
+        </table>
+        <p class="src">Source: Companies House register, verified 30 August 2026 —
+          <a href="https://find-and-update.company-information.service.gov.uk/company/13589467">company
+          13589467</a>. Record last updated 5 September 2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mq-t" data-mq="-1" data-base="STILL BUILDING <i>—</i> THE LINE DOES NOT STOP <i>—</i> "></div></div>
+
+<!-- ══ 08 STILL BUILDING ══ -->
+<section class="ch dark next" id="c08" data-n="08">
+  <div class="wrap rv">
+    <div class="ch-tag" style="justify-content:center">08 — Still Building</div>
+    <h2>The line does not stop here.</h2>
+    <p class="stand">The next stage is not a forecast. It is the same method applied again: find the constraint, design the
+    response, prove it in the market, and turn it into something other people can run. The trading company has the
+    brands, the sourcing, the warehouse, the systems and the people. What is being built now is the second and third
+    channel at full scale, the trade side of the business, and the next owned brands. Everything beyond that is an
+    option the model keeps open, and it will be described as an option until the register says otherwise.</p>
+    <div class="acts">
+      <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
+      <a class="act" href="mailto:tom.letcher@freedom-fire.co.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
+      <a class="act" href="mailto:tom.letcher@freedom-fire.co.uk" data-mag>Contact Tom</a>
+    </div>
+    <p class="dedic">For Mum, and for Nana.</p>
+  </div>
+</section>
+
+<div class="thread" id="thread" aria-hidden="true">
+  <svg id="threadSvg" preserveAspectRatio="none">
+    <path class="track" id="tTrack"></path>
+    <path class="live" id="tLive"></path>
+    <path class="spur" id="sp0"></path><path class="spur" id="sp1"></path>
+    <path class="spur" id="sp2"></path><path class="spur" id="sp3"></path>
+  </svg>
+  <i class="head" id="tHead"></i>
+</div>
+
+</div><!-- /explore -->
+
+<div id="record">
+  <div class="rec-head"><div class="wrap">
+    <img class="fg-rec" src="assets/group-logo-sm.png" width="420" height="424"
+         alt="The Freedom Group" decoding="async">
+    <div class="ch-tag">Verified Record · last updated 5 September 2026</div>
+    <h2>The evidence, without the cinema.</h2>
+    <p>A clean, printable summary for assessors, journalists, lenders and due diligence. Every entry carries an evidence
+    reference, a status and a source. <b>Verified</b> means a public or independent source or a signed formal record.
+    <b>Management data</b> means a named internal system or platform export, dated. <b>Target</b> means an ambition with
+    its assumptions stated. Public sources are linked; private sources are described and supplied on request.</p>
+  </div></div>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Registration</h3>
+      <table class="tbl">
+        <tr><th>Full name</th><td>Tom Letcher</td></tr>
+        <tr><th>Position</th><td>Director — appointed 27 August 2021; sole director since</td></tr>
+        <tr><th>Nationality</th><td>British</td></tr>
+        <tr><th>Company</th><td>Freedom Fire &amp; Safety Ltd</td></tr>
+        <tr><th>Company number</th><td>13589467</td></tr>
+        <tr><th>Incorporated</th><td>27 August 2021, England and Wales</td></tr>
+        <tr><th>Status</th><td>Active</td></tr>
+        <tr><th>Nature of business</th><td>SIC 84250 — Fire service activities. The company also trades substantially in ecommerce and distribution; whether the SIC record should be updated is with the accountant.</td></tr>
+        <tr><th>Registered office</th><td>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE</td></tr>
+        <tr><th>Telephone</th><td>0333 772 2723</td></tr>
+        <tr><th>Website</th><td>freedom-fire.co.uk</td></tr>
+        <tr><th>Trading history</th><td>Sole trader from March 2019; trading as Freedom Fire from June 2020; incorporated August 2021. Pre-company trading is stated separately from company figures throughout.</td></tr>
+      </table>
+      <p class="src"><span class="status verified">Verified</span> Companies House register, checked 30 August 2026 —
+        <a href="https://find-and-update.company-information.service.gov.uk/company/13589467">company 13589467</a> ·
+        <a href="https://find-and-update.company-information.service.gov.uk/company/13589467/officers">officers</a>. Evidence YF-CO-01.</p>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>The business</h3>
+      <div class="body"><p>Freedom Fire &amp; Safety Ltd supplies fire safety equipment to businesses and the public through
+        its own online storefronts, owns and sources its own product brands directly from manufacturers, and services,
+        installs and maintains fire safety equipment on site. It trades nationwide from one warehouse in Bury.</p></div>
+      <div class="pill">
+        <div><h4>Ecommerce</h4><p>Owned brands and a broad safety range on eBay, Temu and an own site; Amazon, OnBuy and a
+          Shopify store in launch through summer 2026.</p></div>
+        <div><h4>Brands and sourcing</h4><p>Firestorm, FXL and Skyline registered in the company's name; direct
+          manufacturing relationships with consignments tracked from factory to Bury.</p></div>
+        <div><h4>Servicing</h4><p>Extinguisher and equipment servicing, installation and contracted site work for
+          commercial premises, education, warehousing and retail.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Commercial record</h3>
+      <div class="body"><p>Every figure used on this site, with its definition, period, scope, source and status. Marketplace
+        figures are gross of refunds and cancellations and are not statutory turnover; the accountant's reconciled turnover
+        by financial year is supplied through the application route.</p></div>
+      <!-- @metrics -->
+      <div class="rec-wrap"><table class="rec-tbl"><thead><tr><th>Value</th><th>Claim and definition</th><th>Period and scope</th><th>Status and source</th><th>Evidence · checked</th></tr></thead><tbody>
+<tr><td class="v">27 Aug 2021</td><td class="d"><b>Incorporated.</b> Freedom Fire &amp; Safety Ltd registered in England and Wales, company 13589467; Tom Letcher appointed director on the day of incorporation. Sole director since.</td><td class="d">27 August 2021<br><small>FFSL</small></td><td class="d"><span class="status verified">Verified</span><br><a href="https://find-and-update.company-information.service.gov.uk/company/13589467">Companies House register, Freedom Fire &amp; Safety Ltd (13589467)</a></td><td class="id">YF-CO-01<br>2026-09-05</td></tr>
+<tr><td class="v">£1m+</td><td class="d"><b>Combined sales, second full year.</b> Gross marketplace sales on eBay (about £890,000) and Temu (more than £160,000 in its first three months) plus servicing and contracted site work. Gross of refunds and cancellations, VAT-inclusive marketplace receipts. Not statutory turnover; the reconciled figure comes from the accountant.</td><td class="d">January 2025 to January 2026<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>eBay seller hub sales exports, by period (platform export) · on request</td><td class="id">YF-GR-05<br>2026-09-05</td></tr>
+<tr><td class="v">1st of 1,193</td><td class="d"><b>eBay UK fire extinguisher sellers.</b> Sales rank against every seller in the Fire Extinguishers category, GB, in eBay's own listing quality report.</td><td class="d">12 months to end of July 2026<br><small>FFSL eBay storefront</small></td><td class="d"><span class="status management">Management data</span><br>eBay listing quality report, GB, category sales rank, end of July 2026 (platform export) · on request</td><td class="id">YF-PR-01<br>2026-09-05</td></tr>
+<tr><td class="v">Runner-up</td><td class="d"><b>eBay UK Business Awards.</b> Named runner-up in the eBay UK Business Awards, followed by an invitation to meet eBay's UK leadership in Belfast.</td><td class="d">2024<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>eBay UK Business Awards 2024, runner-up: event record, invitation and photographs · on request</td><td class="id">YF-RC-01<br>2026-09-05</td></tr>
+<tr><td class="v">3</td><td class="d"><b>Registered brands.</b> FIRESTORM: filed with effect from 9 August 2024, entered on the UK register 1 November 2024 in the name of Freedom Fire &amp; Safety Ltd, classes 9 and 20. FXL and SKYLINE followed in February and March 2026. A wider portfolio of about twelve names is in use or in application; only registered marks are counted here.</td><td class="d">August 2024 to March 2026<br><small>FFSL-owned marks</small></td><td class="d"><span class="status verified">Verified</span><br><a href="https://www.gov.uk/search-for-trademark">UK Intellectual Property Office trade mark register, FIRESTORM (classes 9 and 20)</a></td><td class="id">YF-IP-01<br>2026-09-05</td></tr>
+<tr><td class="v">3×</td><td class="d"><b>Warehouse floor space.</b> Move from Unit 10 (about 500 square feet, from April 2022) to Unit 19 on the same estate, about three times the floor space, fitted out over six months and occupied from around November 2024.</td><td class="d">April 2022 to November 2024<br><small>FFSL premises, Pilsworth Industrial Estate, Bury</small></td><td class="d"><span class="status management">Management data</span><br>Unit 10 and Unit 19 lease agreements and move dates · on request</td><td class="id">YF-OP-02<br>2026-09-05</td></tr>
+<tr><td class="v">£160,000+</td><td class="d"><b>Temu, first three months.</b> Gross sales on Temu UK in the first three months of trading with fewer than ten live products, as Temu's first dedicated fire extinguisher seller. Two Firestorm products held first and second place in Temu's Safety &amp; Security best-seller ranking in the period.</td><td class="d">Fourth quarter 2025<br><small>FFSL Temu storefront</small></td><td class="d"><span class="status management">Management data</span><br>Temu seller centre sales export and best-seller ranking screenshots (platform export) · on request</td><td class="id">YF-GR-04<br>2026-09-05</td></tr>
+<tr><td class="v">£143,000</td><td class="d"><b>eBay store, first five months.</b> Gross eBay sales between the business store launch in January 2024 and the end of May 2024.</td><td class="d">January to May 2024<br><small>FFSL eBay storefront</small></td><td class="d"><span class="status management">Management data</span><br>eBay seller hub sales exports, by period (platform export) · on request</td><td class="id">YF-GR-01<br>2026-09-05</td></tr>
+<tr><td class="v">£600,000+</td><td class="d"><b>First full year of scaled trading.</b> More than £500,000 of gross eBay sales plus about £100,000 of servicing and contracted site work.</td><td class="d">January 2024 to January 2025<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>eBay seller hub sales exports, by period (platform export) · on request</td><td class="id">YF-GR-02<br>2026-09-05</td></tr>
+<tr><td class="v">~8,000</td><td class="d"><b>Units sold from one listing.</b> The first eBay listing, a second-hand 2 kg CO2 extinguisher posted in December 2020 from a personal account, has sold close to 8,000 units and more than £350,000 in gross sales to date.</td><td class="d">December 2020 to 2026<br><small>One eBay listing</small></td><td class="d"><span class="status management">Management data</span><br>eBay seller hub sales exports, by period (platform export) · on request</td><td class="id">YF-CH-01<br>2026-09-05</td></tr>
+<tr><td class="v">~£90,000</td><td class="d"><b>First direct manufacturing order.</b> Minimum first order with the manufacturer met at the National Fire Safety show at the NEC in April 2024; Freedom Fire was the manufacturer's first UK client. Funded by borrowing and trading cash, not equity.</td><td class="d">2024<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>Direct manufacturing agreement, first purchase order and shipping documents · on request</td><td class="id">YF-OP-04<br>2026-09-05</td></tr>
+<tr><td class="v">24 Dec 2024</td><td class="d"><b>First Firestorm container.</b> First container of Firestorm-branded extinguishers, several thousand units, landed in the UK on Christmas Eve 2024.</td><td class="d">December 2024<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>Bill of lading and arrival record, first Firestorm container, December 2024 · on request</td><td class="id">YF-OP-03<br>2026-09-05</td></tr>
+<tr><td class="v">£22,000</td><td class="d"><b>Capital behind the store build.</b> £17,000 of the founder's savings and £5,000 borrowed from family, almost all of it spent on stock ahead of the 2024 store launch. The business has been built without institutional equity investment: savings, family borrowing, trading cash and later working-capital finance.</td><td class="d">2023<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>Sole-trader bank and marketplace records, 2019 to 2021 · on request</td><td class="id">YF-FN-01<br>2026-09-05</td></tr>
+<tr><td class="v">March 2019</td><td class="d"><b>The first sale.</b> One second-hand fire extinguisher, bought for next to nothing, refurbished and sold through a Facebook Marketplace listing to a customer who collected it.</td><td class="d">March 2019<br><small>Sole trader, before incorporation</small></td><td class="d"><span class="status management">Management data</span><br>Founder's dated account, with listings, messages and photographs from the period · on request</td><td class="id">YF-OR-01<br>2026-09-05</td></tr>
+<tr><td class="v">£400</td><td class="d"><b>The first bulk order.</b> About 400 mixed refurbished units supplied to a Bolton fire-training buyer for around £1 each; probably loss-making once time and delivery were counted, and the first proof of volume demand.</td><td class="d">September 2019<br><small>Sole trader, before incorporation</small></td><td class="d"><span class="status management">Management data</span><br>Sole-trader bank and marketplace records, 2019 to 2021 · on request</td><td class="id">YF-OR-02<br>2026-09-05</td></tr>
+<tr><td class="v">January 2020</td><td class="d"><b>The first remote order.</b> A takeaway in Nottingham paid online for a refurbished extinguisher to be sent, which required a carrier willing to take the item and packaging that would pass; the first proof that the business was not limited to collection.</td><td class="d">January 2020<br><small>Sole trader, before incorporation</small></td><td class="d"><span class="status management">Management data</span><br>Founder's dated account, with listings, messages and photographs from the period · on request</td><td class="id">YF-OR-03<br>2026-09-05</td></tr>
+<tr><td class="v">800 to 1,000</td><td class="d"><b>Refurbished units a week.</b> Weekly throughput of the refurbishment operation at the back of the family warehouse by 2021, with students employed to clean, refill and prepare stock; the ceiling that made incorporation and new supply necessary.</td><td class="d">2020 to 2021<br><small>Trading as Freedom Fire, before incorporation</small></td><td class="d"><span class="status management">Management data</span><br>Founder's dated account, with listings, messages and photographs from the period · on request</td><td class="id">YF-OR-04<br>2026-09-05</td></tr>
+<tr><td class="v">Since 2021</td><td class="d"><b>Placements hosted.</b> Placements for learners from Newbridge College, including young people with additional needs, from 2021; one early placement progressed to long-term full-time employment.</td><td class="d">2021 to date<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>Placement agreements, college correspondence and T Level paperwork (Growth Company) · on request</td><td class="id">YF-PE-01<br>2026-09-05</td></tr>
+<tr><td class="v">3</td><td class="d"><b>T Level placements, 2025.</b> Formal T Level industry placements began in September 2025 with support from the Growth Company: three students, each offered a long-term role by June 2026.</td><td class="d">September 2025 to June 2026<br><small>FFSL</small></td><td class="d"><span class="status management">Management data</span><br>Placement agreements, college correspondence and T Level paperwork (Growth Company) · on request</td><td class="id">YF-PE-02<br>2026-09-05</td></tr>
+<tr><td class="v">3</td><td class="d"><b>Marketplaces trading.</b> eBay (business store since January 2024), Temu (since 2025) and the company's own site. Amazon, OnBuy and a Shopify store were in launch during summer 2026 and are counted as targets until live sales are reported.</td><td class="d">As at September 2026<br><small>FFSL</small></td><td class="d"><span class="status target">Target</span><br>eBay seller hub sales exports, by period (platform export) · on request</td><td class="id">YF-CH-02<br>2026-09-05</td></tr>
+</tbody></table></div>
+      <!-- @/metrics -->
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Timeline</h3>
+      <div class="body"><p>Dated milestones from the first sale to the most recent independent measure, with the entity each
+        belongs to and the evidence reference behind it.</p></div>
+      <!-- @timeline -->
+      <div class="rec-wrap"><table class="rec-tbl"><thead><tr><th>When</th><th>Milestone</th><th>Entity</th><th>Evidence</th></tr></thead><tbody>
+<tr><th>March 2019</th><td class="d">One second-hand extinguisher sold on Facebook Marketplace</td><td class="d">Sole trader</td><td class="id">YF-OR-01</td></tr>
+<tr><th>September 2019</th><td class="d">About 400 refurbished units to a Bolton training buyer, £400</td><td class="d">Sole trader</td><td class="id">YF-OR-02</td></tr>
+<tr><th>January 2020</th><td class="d">First remote order, paid online and sent to Nottingham</td><td class="d">Sole trader</td><td class="id">YF-OR-03</td></tr>
+<tr><th>June 2020</th><td class="d">Trading as Freedom Fire from the back of the family warehouse; hundreds of units a day; pallets nationwide; six export containers</td><td class="d">Sole trader</td><td class="id">YF-OR-04</td></tr>
+<tr><th>December 2020</th><td class="d">First eBay listing: one second-hand CO2 extinguisher</td><td class="d">Sole trader</td><td class="id">YF-CH-01</td></tr>
+<tr><th>27 August 2021</th><td class="d">Freedom Fire &amp; Safety Ltd incorporated, company 13589467</td><td class="d">FFSL</td><td class="id">YF-CO-01</td></tr>
+<tr><th>April 2022</th><td class="d">Unit 10, about 500 square feet: the first dedicated warehouse</td><td class="d">FFSL</td><td class="id">YF-OP-02</td></tr>
+<tr><th>2023</th><td class="d">Twelve months building the store: thousands of listings prepared, £22,000 of savings and family borrowing into stock</td><td class="d">FFSL</td><td class="id">YF-FN-01</td></tr>
+<tr><th>January 2024</th><td class="d">eBay business store launches; DHL account for next-day delivery; £143,000 of sales by May</td><td class="d">FFSL</td><td class="id">YF-GR-01</td></tr>
+<tr><th>April 2024</th><td class="d">National Fire Safety show, NEC: direct manufacturing relationship agreed</td><td class="d">FFSL</td><td class="id">YF-OP-04</td></tr>
+<tr><th>9 August 2024</th><td class="d">FIRESTORM trade mark filed with effect from this date; registered 1 November 2024</td><td class="d">FFSL</td><td class="id">YF-IP-01</td></tr>
+<tr><th>2024</th><td class="d">Runner-up, eBay UK Business Awards</td><td class="d">FFSL</td><td class="id">YF-RC-01</td></tr>
+<tr><th>November 2024</th><td class="d">Move to Unit 19, about three times the floor space</td><td class="d">FFSL</td><td class="id">YF-OP-02</td></tr>
+<tr><th>24 December 2024</th><td class="d">First container of Firestorm extinguishers lands</td><td class="d">FFSL</td><td class="id">YF-OP-03</td></tr>
+<tr><th>January 2025</th><td class="d">First full year of scaled trading closes above £600,000</td><td class="d">FFSL</td><td class="id">YF-GR-02</td></tr>
+<tr><th>September 2025</th><td class="d">T Level placements begin with the Growth Company: three students</td><td class="d">FFSL</td><td class="id">YF-PE-02</td></tr>
+<tr><th>Autumn 2025</th><td class="d">Temu UK's first dedicated fire extinguisher seller; £160,000+ in three months</td><td class="d">FFSL</td><td class="id">YF-GR-04</td></tr>
+<tr><th>January 2026</th><td class="d">Second full year passes £1 million of combined sales</td><td class="d">FFSL</td><td class="id">YF-GR-05</td></tr>
+<tr><th>February to March 2026</th><td class="d">FXL and SKYLINE registered: the second and third owned brands</td><td class="d">FFSL</td><td class="id">YF-IP-01</td></tr>
+<tr><th>June 2026</th><td class="d">All three T Level students offered long-term roles; Amazon, OnBuy and Shopify in launch</td><td class="d">FFSL</td><td class="id">YF-PE-02</td></tr>
+<tr><th>July 2026</th><td class="d">eBay's listing quality report ranks the store first of 1,193 fire extinguisher sellers in GB</td><td class="d">FFSL</td><td class="id">YF-PR-01</td></tr>
+</tbody></table></div>
+      <!-- @/timeline -->
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Intellectual property</h3>
+      <table class="tbl">
+        <tr><th>FIRESTORM</th><td><span class="status verified">Verified</span> UK trade mark, classes 9 and 20 (fire safety
+          equipment and related storage and transport). Filed with effect from 9 August 2024; entered on the register
+          1 November 2024 in the name of Freedom Fire &amp; Safety Ltd. Evidence YF-IP-01.</td></tr>
+        <tr><th>FXL · SKYLINE</th><td><span class="status management">Management data</span> The second and third protected
+          brands, February and March 2026, extending the model into aerosols and line marking. Registration references are
+          held with the company's IP records. Evidence YF-IP-01.</td></tr>
+        <tr><th>Wider portfolio</th><td><span class="status target">Target</span> About twelve names in use or in application
+          across fire, batteries, PPE, cleaning and automotive. Only registered marks are counted on this site.</td></tr>
+      </table>
+      <p class="src">Public source: <a href="https://www.gov.uk/search-for-trademark">UK Intellectual Property Office, search for a trade mark</a>.</p>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Recognition</h3>
+      <table class="tbl">
+        <tr><th>eBay UK Business Awards</th><td><span class="status management">Management data</span> Runner-up, 2024; invited
+          to Belfast to meet eBay's UK leadership. Event record, invitation and photographs held. Evidence YF-RC-01.</td></tr>
+        <tr><th>eBay listing quality report</th><td><span class="status management">Management data</span> First of 1,193
+          sellers in Fire Extinguishers; third of 1,594 in Disposable Gloves; fifth of 2,751 in Single Use Batteries. GB, ranked
+          by sales, 12 months to end of July 2026. Platform export. Evidence YF-PR-01 to 03.</td></tr>
+        <tr><th>Temu UK</th><td><span class="status management">Management data</span> First dedicated fire extinguisher
+          seller on the platform, 2025; two Firestorm products first and second in the Safety &amp; Security best-seller
+          ranking, fourth quarter 2025. Dated screenshots. Evidence YF-RC-02.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Group structure</h3>
+      <div class="body">
+        <p><b>Registered and trading:</b> Freedom Fire &amp; Safety Ltd, company 13589467, which trades online as Freedom
+        Global. <b>Freedom Group</b> is the group strategy and brand architecture; it is not a registered company.<br>
+        <b>Proposed within 24 to 36 months:</b> Freedom Facilities and Freedom Distribution as separate operating companies.
+        Neither is registered. Evidence YF-TG-02.<br>
+        <b>Long-term options:</b> property, freight, aerial services and forecourt retail. None registered, no dates
+        promised. Evidence YF-TG-03.</p>
+        <p class="src"><span class="status verified">Verified</span> Companies House shows one registered company for the
+          director, checked 30 August 2026. The full group model is published at
+          <a href="https://www.freedomgroup.uk">freedomgroup.uk</a> and is presented there as strategy.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>People and opportunity</h3>
+      <table class="tbl">
+        <tr><th>Placements hosted</th><td><span class="status management">Management data</span> Since 2021, beginning with
+          learners from Newbridge College, including young people with additional needs; one early placement progressed to
+          long-term full-time employment. Evidence YF-PE-01.</td></tr>
+        <tr><th>T Level placements</th><td><span class="status management">Management data</span> From September 2025 with
+          the Growth Company: three students, each offered a long-term role by June 2026. Evidence YF-PE-02.</td></tr>
+        <tr><th>Headcount</th><td>Stated only on a payroll or full-time-equivalent definition, which is supplied through the
+          application route. No company-size bracket is used on this site.</td></tr>
+        <tr><th>The Way In</th><td>The programme, the people and the evidence for the Promoting Opportunity category are set
+          out separately at <a href="https://thewayin.freedomfireandsafety.co.uk/">The Way In</a>, on the company's own site. Individual histories are
+          not repeated here.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Sources and method</h3>
+      <div class="body">
+        <p><b>Public sources</b> are linked wherever they exist: the Companies House register and officer record, and the
+        UK Intellectual Property Office register. <b>Private sources</b> are described by type, never linked, and supplied
+        through the accepted application route or on due-diligence request: platform sales exports, the eBay listing
+        quality report, Temu ranking screenshots, lease agreements, the direct manufacturing agreement and shipping
+        documents, the container arrival record, sole-trader bank and marketplace records for 2019 to 2021, placement
+        paperwork, and the founder's dated account of the origin with listings, messages and photographs.</p>
+        <p>The claim register behind this page is held as structured data (claims, metrics, timeline, sources and approved
+        people fields) with an owner and a last-checked date for every entry. Confidential records — management accounts,
+        payroll, individual personal data, supplier and customer contracts — are not published and are not present in the
+        page's data files.</p>
+        <p>The exact release of this site submitted with any application is frozen and retained so the evidence seen at the
+        deadline can be reproduced.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rec-sec">
+    <div class="wrap">
+      <h3>Contact</h3>
+      <div class="pill">
+        <div><h4>Direct</h4><p><a href="mailto:tom.letcher@freedom-fire.co.uk">tom.letcher@freedom-fire.co.uk</a></p></div>
+        <div><h4>Company</h4><p><a href="tel:+443337722723">0333 772 2723</a><br>
+          <a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p></div>
+        <div><h4>Registered office</h4><p>Unit 19, Pilsworth Industrial Estate,<br>Bury, Greater Manchester, BL9 8RE</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="ft-top">
+      <a class="totop" href="#top" id="totop" data-mag aria-label="Back to the start of the page">
+        <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
+      </a>
+    </div>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <img class="fg-foot" src="assets/group-orbit-600.png" width="600" height="607"
+             alt="The Freedom Group" loading="lazy" decoding="async">
+        <p>Tom Letcher · founder<br>Freedom Fire &amp; Safety Ltd, company no. 13589467<br>Bury, Greater Manchester</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p><a href="mailto:tom.letcher@freedom-fire.co.uk">tom.letcher@freedom-fire.co.uk</a><br>
+          <a href="tel:+443337722723">0333 772 2723</a><br>
+          <a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p>
+      </div>
+      <div>
+        <h4>Registered office</h4>
+        <p>Unit 19, Pilsworth Industrial Estate<br>Bury, Greater Manchester<br>BL9 8RE</p>
+      </div>
+      <div>
+        <h4>Elsewhere</h4>
+        <p><a href="https://www.freedomgroup.uk">Freedom Group</a><br>
+          <a href="https://thewayin.freedomfireandsafety.co.uk/">The Way In</a><br>
+          <a href="https://find-and-update.company-information.service.gov.uk/company/13589467">Companies House record</a></p>
+      </div>
+    </div>
+    <div class="ft-legal"><span>© 2026 Freedom Fire &amp; Safety Ltd · record last updated 5 September 2026</span><span>The line is still drawing.</span></div>
+  </div>
+</footer>
+
+<script src="thread.js"></script>
+</body>
+</html>

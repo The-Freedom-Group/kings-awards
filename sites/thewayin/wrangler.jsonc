@@ -1,0 +1,11 @@
+// Static-asset Worker: Cloudflare serves ./public and nothing else.
+// Deployed by Workers Builds from The-Freedom-Group/kings-awards with
+// the root directory set to sites/thewayin. Custom domain: https://thewayin.freedomfireandsafety.co.uk/
+{
+  "name": "thewayin",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  }
+}
