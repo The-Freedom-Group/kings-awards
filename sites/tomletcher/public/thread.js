@@ -240,7 +240,7 @@
     { id: "c08",  side: "C", y: 0.52 }
   ];
 
-  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1;
+  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [];
   var endPt = null, endFrac = 1, endNote = null;
 
   function buildPath() {
@@ -368,7 +368,7 @@
 
     knots.forEach(function (k) { k.remove(); });
     knots = []; knotAt = [];
-    var SAMPLES = 280, samples = [];
+    var SAMPLES = 1200, samples = [];
     for (var s = 0; s <= SAMPLES; s++) {
       var pt = live.getPointAtLength(totalLen * s / SAMPLES);
       samples.push({ x: pt.x, y: pt.y, l: totalLen * s / SAMPLES });
@@ -387,6 +387,7 @@
       knots.push(k); knotAt.push(best.l / totalLen);
     });
 
+    ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
     /* the furthest the reader can scroll is the foot of the page; the
@@ -433,10 +434,22 @@
     setTimeout(function () { bits.forEach(function (b) { b.remove(); }); thread.classList.remove("burst"); }, 2200);
   }
 
+  /* the line descends monotonically, so the point level with a given page
+     height can be found by bisection over the samples; the tip is drawn to
+     the point 62% down the viewport, so it is always on screen as you read */
+  function fracAtY(ty) {
+    var s = ySamples, n = s.length;
+    if (!n) return 0;
+    if (ty <= s[0].y) return 0;
+    if (ty >= s[n - 1].y) return 1;
+    var lo = 0, hi = n - 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (s[mid].y < ty) lo = mid; else hi = mid; }
+    var a = s[lo], b = s[hi], t = b.y > a.y ? (ty - a.y) / (b.y - a.y) : 0;
+    return (a.l + (b.l - a.l) * t) / totalLen;
+  }
   function drawThread(y) {
     if (!totalLen || thread.style.display === "none") return;
-    var h = explore.offsetHeight || 1;
-    var p = clamp((y + window.innerHeight * 0.62) / h * pScale, 0, 1);
+    var p = clamp(fracAtY(y + window.innerHeight * 0.62), 0, 1);
     p = Math.max(p, heroFrac * heroIn);
     live.style.strokeDashoffset = totalLen * (1 - p);
     thread.classList.toggle("on", p > 0.004);
