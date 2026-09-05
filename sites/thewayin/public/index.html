@@ -30,7 +30,7 @@
    cursor, smooth scrolling with parallax, separators that grow,
    headings that arrive a word at a time, nine full-width tiles
    ticked present as you reach them, a black-to-white wipe, a red 3D
-   cube that flies into the footer. Built with GSAP.
+   Firestorm extinguisher that rides the page. Built with GSAP.
    ══════════════════════════════════════════════════════════════════ */
 :root{
   --white:#FFFFFF; --paper:#F4F4F1; --paper-2:#E9E9E4; --black:#111111; --black-2:#1C1C1C;
@@ -119,19 +119,18 @@ html.js.has-gsap .chrome{opacity:0}
 .hero .ph{position:absolute;inset:-6% 0}
 .hero .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 58%;filter:grayscale(1) brightness(.55) contrast(1.05);transform:scale(1.06);transition:filter 1.4s ease,transform 2.2s cubic-bezier(.2,.8,.2,1)}
 .hero .ph img{filter:grayscale(.6) brightness(.45) contrast(1.05)}
-.hero.open .ph img{filter:grayscale(.15) brightness(.74) contrast(1.05);transform:scale(1);transition-delay:.9s}
+.hero.open .ph img{filter:grayscale(.15) brightness(.74) contrast(1.05);transform:scale(1)}
 /* the roller shutter: steel slats that roll up into the housing at the top */
 .shutter{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
 .shutter .slats{position:absolute;inset:0;
   background:repeating-linear-gradient(180deg,#55534f 0 5px,#3e3d3a 5px 26px,#26251f 26px 31px,#6a6864 31px 33px);
-  box-shadow:inset 0 0 160px rgba(0,0,0,.6);transform:translateY(0);will-change:transform;
-  transition:transform 2.1s cubic-bezier(.7,0,.25,1)}
+  box-shadow:inset 0 0 160px rgba(0,0,0,.6);transform:translateY(0);will-change:transform}
 .shutter .slats::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.45),transparent 10%,transparent 90%,rgba(0,0,0,.45))}
 .shutter .slats::after{content:"";position:absolute;left:0;right:0;top:calc(72px + clamp(40px,5vh,58px) + 14px);height:clamp(34px,4.6vh,46px);background:var(--red);opacity:.92;
   box-shadow:0 2px 0 rgba(0,0,0,.35),0 -2px 0 rgba(0,0,0,.35)}
 .shutter .stencil{position:absolute;left:0;right:0;top:calc(72px + clamp(40px,5vh,58px) + 14px + clamp(17px,2.3vh,23px));transform:translateY(-50%);z-index:1;text-align:left;padding-left:calc(var(--strip) + var(--gut));
   font-family:var(--disp);font-variation-settings:"wdth" 122,"wght" 900;text-transform:uppercase;color:#fff;
-  font-size:clamp(11px,1.1vw,15px);letter-spacing:.3em;line-height:1;pointer-events:none;transition:transform 2.1s cubic-bezier(.7,0,.25,1),opacity .6s}
+  font-size:clamp(11px,1.1vw,15px);letter-spacing:.3em;line-height:1;pointer-events:none}
 .shutter .stencil small{display:inline;font-family:var(--mono);font-size:clamp(9px,.8vw,11px);letter-spacing:.24em;margin-left:18px;opacity:.85}
 .shutter .housing{position:absolute;left:0;right:0;top:72px;height:clamp(40px,5vh,58px);z-index:3;
   background:linear-gradient(#34332f,#1c1b18);border-bottom:5px solid #0d0d0c;box-shadow:0 14px 40px rgba(0,0,0,.65)}
@@ -141,10 +140,8 @@ html.js.has-gsap .chrome{opacity:0}
 .hero.open .shutter .slats{transform:translateY(-102%)}
 .hero.open .shutter .stencil{transform:translateY(-100vh);opacity:0}
 .daylight{position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none}
-.hero.open .daylight{animation:daylight 1.8s ease-out 1}
-@keyframes daylight{0%{opacity:0}30%{opacity:.28}100%{opacity:0}}
 .hero .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,17,.45),rgba(17,17,17,.2) 35%,rgba(17,17,17,.92))}
-.hero .in{position:absolute;inset:0;z-index:5;display:grid;grid-template-rows:1fr auto;padding:84px var(--gut) clamp(112px,13vh,130px)}
+.hero .in{position:absolute;inset:0;z-index:5;display:grid;align-content:end;padding:84px var(--gut) clamp(112px,13vh,130px)}
 .cpwrap{justify-self:center;align-self:center;display:grid;justify-items:center;gap:14px;transition:transform 1s cubic-bezier(.6,0,.2,1)}
 .cpanim{display:grid;justify-items:center;gap:14px}
 html.js.has-gsap .cpanim{opacity:0}
@@ -167,8 +164,11 @@ html.js.has-gsap .cpanim{opacity:0}
 .hero.open .cp:hover{transform:none}
 .hero .hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pale-2);white-space:nowrap;pointer-events:none;transition:opacity .3s}
 .hero.open .hint{opacity:0}
-.hero .opened{display:none}.hero.open .opened{display:block}.hero.open .closed{display:none}
-.hero.open .foot{opacity:0;transition:opacity .4s}
+.hero .head{display:grid}.hero .head>div{grid-area:1/1}
+.hero .closed{opacity:1}.hero .opened{opacity:0;pointer-events:none}
+.hero.open .opened{opacity:1;pointer-events:auto}.hero.open .closed{opacity:0;pointer-events:none}
+html.no-gsap .hero .shutter,html.no-gsap .hero .fm{display:none}
+.hero.open .fm{opacity:0;transition:opacity .4s}
 .hero .head{align-self:end;position:relative;z-index:4;max-width:1180px}
 .hero .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey-2);margin-bottom:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .hero h1{font-size:clamp(44px,min(7.4vw,9.4vh),124px);line-height:.86;color:#fff;letter-spacing:-.02em}
@@ -240,18 +240,6 @@ html.js.has-gsap .hero .fm{opacity:0}
 .intro p{max-width:66ch;color:var(--pale-2);font-size:16px;line-height:1.7;margin:clamp(24px,3vw,40px) 0 clamp(28px,3.4vw,44px);transition:color .5s}
 .intro.on-white p{color:var(--ink-2)}
 
-/* the cube that rides the page */
-.cube-fixed{position:fixed;right:1.5vw;top:11vh;width:min(12vw,150px);aspect-ratio:1;z-index:60;pointer-events:none;transition:opacity .5s;will-change:top;transform:rotate(var(--spin,0deg))}
-.cube-fixed.hide,body.prof-open .cube-fixed,body.menu-open .cube-fixed{opacity:0;pointer-events:none}
-@media(max-width:760px),(max-height:520px){.cube-fixed{display:none}}
-.cube-box{position:relative;width:100%;height:100%;perspective:1400px;transform-style:preserve-3d}
-.cube{--d:calc(var(--w,200px) / 2);position:absolute;left:50%;top:50%;width:52%;height:52%;transform-style:preserve-3d;margin:-26% 0 0 -26%;animation:spin 28s linear infinite}
-@keyframes spin{from{transform:rotateX(-18deg) rotateY(0deg) rotateZ(10deg)}to{transform:rotateX(-18deg) rotateY(360deg) rotateZ(10deg)}}
-.cube .f{position:absolute;inset:0;border:2px solid rgba(255,255,255,.7);border-radius:4%;background:linear-gradient(135deg,rgba(225,6,0,.96),rgba(184,5,0,.92));box-shadow:inset 0 0 40px rgba(0,0,0,.25);display:grid;place-content:center;}
-.cube .f::before{content:"";position:absolute;inset:22%;background:var(--black);border-radius:3%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14)}
-.cube .f::after{content:"THIS WAY IN";position:absolute;inset:0;display:grid;place-content:center;font-family:var(--disp);font-variation-settings:"wdth" 122,"wght" 900;font-size:calc(var(--w,200px) * .09);letter-spacing:.02em;color:#fff;text-align:center;line-height:1}
-.cube .f1{transform:translateZ(var(--d))}.cube .f2{transform:rotateY(180deg) translateZ(var(--d))}.cube .f3{transform:rotateY(90deg) translateZ(var(--d))}.cube .f4{transform:rotateY(-90deg) translateZ(var(--d))}.cube .f5{transform:rotateX(90deg) translateZ(var(--d))}.cube .f6{transform:rotateX(-90deg) translateZ(var(--d))}
-.cube-box .halo{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle,rgba(225,6,0,.35),rgba(225,6,0,.1) 45%,transparent 70%);filter:blur(40px)}
 
 /* ══ CHAPTERS ══════════════════════════════════════════════════ */
 .ch{padding:clamp(72px,10vw,150px) 0;position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
@@ -486,9 +474,9 @@ footer .ff{height:24px;width:auto;margin-bottom:16px}
 @media(prefers-reduced-motion:reduce){
   .rv,.flip>*{opacity:1;transform:none;transition:none}.ch h2 .wipe{clip-path:none;transition:none}
   .shutter .slats,.shutter .stencil,.daylight,.cp,.hero .ph img,.route .lit,.sq,.tile .pres i::after,.floor::before{transition:none;animation:none}
-  .hero.open .daylight{animation:none}.route .lit::after{animation:none}.cube,.hero .fm svg{animation:none}
+  .hero.open .daylight{animation:none}.route .lit::after{animation:none}.hero .fm svg{animation:none}
   .preloader{display:none}html.js.has-gsap .chrome,html.js.has-gsap .cpanim,html.js.has-gsap .hero .fm{opacity:1}.cpwrap{transition:none}.hero h1 .line span{transform:none!important}}
-@media print{.chrome,.prog,.route,.daylight,.shutter,.hero .hint,.cp,.totop,.bigman,.preloader,.cur-dot,.cur-ring,.cube-fixed,.hero .foot{display:none}.hero{height:auto;min-height:0;background:#fff;color:#000}.hero .ph{position:relative;height:50vh}.hero .in{position:relative;padding:20px 0}.hero h1{color:#000}
+@media print{.chrome,.prog,.route,.daylight,.shutter,.totop,.bigman,.preloader,.cur-dot,.cur-ring,.cube-fixed,.hero .foot{display:none}.hero{height:auto;min-height:0;background:#fff;color:#000}.hero .ph{position:relative;height:50vh}.hero .in{position:relative;padding:20px 0}.hero h1{color:#000}
   .ch,.ch.dark,.ch.on-red,.entrance,.intro,body,footer{background:#fff;color:#000}}
 
 /* ── plan components: same tokens ───────────────────────────── */
@@ -552,7 +540,26 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 .ppend{margin:18px 0 0;font-size:13.5px;color:var(--ink-3);border:1px dashed var(--grey-2);padding:12px 14px;line-height:1.55}
 .prof.pending .pfields .opt,.prof.pending .pwords,.prof.pending .vid{display:none}
 .prof:not(.pending) .ppend{display:none}
-@media print{.skip,.cube-fixed{display:none}.rec-tbl{font-size:11px}}
+@media print{.skip,.travel,.more{display:none}.rec-tbl{font-size:11px}}
+
+/* ── the extinguisher that rides the page ───────────────────── */
+.travel{position:fixed;right:1.6vw;top:11vh;width:min(8vw,96px);z-index:60;pointer-events:none;transition:opacity .5s;will-change:top,transform;
+  transform:rotate(var(--sway,0deg));transform-origin:50% 22%;filter:drop-shadow(0 18px 28px rgba(0,0,0,.45))}
+.travel.hide,body.prof-open .travel,body.menu-open .travel{opacity:0}
+.travel .ext{width:100%;height:auto;display:block}
+@media(max-width:760px),(max-height:520px){.travel{display:none}}
+/* ── "+" popovers: the detail lives behind a small circle ────── */
+.more{display:inline-block;position:relative;vertical-align:middle;margin-left:8px;font-family:var(--sans);font-weight:400;letter-spacing:0;text-transform:none;text-align:left}
+.more summary{list-style:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--red);color:var(--red);display:grid;place-content:center;font-family:var(--mono);font-size:15px;line-height:1;cursor:pointer;background:transparent;transition:background .2s,color .2s,transform .3s}
+.more summary::-webkit-details-marker{display:none}
+.more summary:hover{transform:scale(1.1)}
+.more[open] summary{background:var(--red);color:#fff;transform:rotate(45deg)}
+.more .pop{position:absolute;left:0;top:34px;z-index:40;width:min(360px,80vw);background:var(--white);color:var(--ink);border:2px solid var(--black);border-radius:4px;padding:14px 16px;font-size:13.5px;line-height:1.55;box-shadow:0 20px 50px rgba(0,0,0,.35);font-weight:400}
+.more .pop b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+.more.r .pop{left:auto;right:0}
+.proof .more,.partner .more,.plate .more,.actcard .more{margin:14px 0 0}
+.on-red .more summary{border-color:#fff;color:#fff}
+@media(max-width:600px){.more .pop{width:min(320px,86vw)}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -577,9 +584,9 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
     <span class="now" id="now" aria-hidden="true"><span class="num" id="nowN">00</span><span id="nowT">The way in</span></span>
     <nav aria-label="Sections">
       <a href="#why">Why</a><a href="#programme">The route</a><a href="#people">The people</a>
-      <a href="#impact">Impact</a><a href="#partners">Partners</a><a href="#timeline">Timeline</a><a href="#record">Record</a>
+      <a href="#impact">Impact</a><a href="#partners">Partners</a><a href="#timeline">Timeline</a>
     </nav>
-    <button class="cp-btn" id="cpTop" type="button" data-cur>Open the door</button>
+    <a class="cp-btn" href="#record" data-cur>Evidence record</a>
   </div>
 </header>
 <div class="menu" id="menu" aria-hidden="true"><button class="x" id="menuX" type="button" aria-label="Close">×</button>
@@ -590,53 +597,48 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 <main>
 <div id="story">
 
-<!-- ══ THE HERO ══ -->
+<!-- ══ THE HERO: the shutter opens as you scroll ══ -->
 <section class="hero" id="top" aria-label="The way in">
   <div class="ph" id="heroPh"><img src="assets/team.jpg" srcset="assets/team-sm.jpg 600w, assets/team.jpg 900w" sizes="100vw" width="900" height="1200" alt="The Freedom Fire and Safety team standing inside an open shipping container on a lorry" decoding="async"></div>
-  <div class="shutter" aria-hidden="true"><div class="slats"></div><div class="stencil">Freedom Fire &amp; Safety<small>Unit 19 · Pilsworth Industrial Estate · Bury</small></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
-  <div class="daylight" aria-hidden="true"></div>
+  <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="stencil" id="stencil">Freedom Fire &amp; Safety<small>Unit 19 · Pilsworth Industrial Estate · Bury</small></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
+  <div class="daylight" id="daylight" aria-hidden="true"></div>
   <div class="in" id="heroIn">
-    <div class="cpwrap" id="cpwrap"><div class="cpanim" id="cpanim"><button class="cp" id="cp" type="button" aria-pressed="false" aria-label="Open the shutter — reveal the team" data-cur>
-      <span class="t"><small>Roller shutter · Unit 19</small>In case of missed potential</span>
-      <span class="pane"><i class="lamp" aria-hidden="true"></i><i class="arrow" aria-hidden="true"></i><b><em id="cpWord">Open</em>the door</b></span>
-      <span class="f"><span>Freedom Fire &amp; Safety</span><span>Bury · Unit 19</span></span>
-    </button>
-    <div class="hint" id="hint">Press to open the shutter</div></div></div>
     <div class="head" id="heroHead">
-      <div class="closed">
-        <div class="k"><span class="sign red">Freedom Fire &amp; Safety</span><span>King's Awards for Enterprise · Promoting Opportunity through social mobility</span></div>
+      <div class="closed" id="hClosed">
+        <div class="k"><span class="sign red">Freedom Fire &amp; Safety</span><span>King's Awards for Enterprise · Promoting Opportunity</span></div>
         <h1 aria-label="Not everyone arrives by the same route."><div class="line"><span>Not everyone</span></div><div class="line"><span>arrives by</span></div><div class="line"><span>the same <em class="s">route.</em></span></div></h1>
-        <p class="strap">Exit signs point out. This one points in. A fire safety business in Bury with a working route from potential that conventional hiring misses to skills, responsibility and lasting work. <b>Open the door.</b></p>
+        <p class="strap">Exit signs point out. This one points in.</p>
       </div>
-      <div class="opened">
+      <div class="opened" id="hOpened">
         <div class="k"><span class="sign green">Promoting Opportunity through social mobility</span><span>The programme, the people, the evidence</span></div>
         <h1 aria-label="Everyone deserves a way in."><div class="line"><span>Everyone</span></div><div class="line"><span>deserves</span></div><div class="line"><span>a way <em class="s">in.</em></span></div></h1>
-        <p class="strap">Real work. Practical support. A route into lasting employment. <b>Eight people came in this way.</b> This is the programme, the people, and the evidence behind it.</p>
+        <p class="strap">Real work. Practical support. A route into lasting employment. <b>Eight people came in this way.</b></p>
         <div class="cta">
           <a class="btn" href="#people" data-cur>Meet the people <i>→</i></a>
-          <a class="btn ghost" href="#impact" data-cur>View the impact record <i>→</i></a>
+          <a class="btn ghost" href="#impact" data-cur>The impact <i>→</i></a>
         </div>
       </div>
     </div>
   </div>
   <div class="foot" id="heroFoot">
     <div class="fl" id="fl">Bury → UK-wide</div>
-    <div class="fm" id="fm" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">Scroll down · This way in ·</textPath></text></svg></div>
+    <div class="fm" id="fm" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">Scroll to open the door ·</textPath></text></svg></div>
     <div class="fr" id="fr"><a href="#partners"><span>Newbridge College</span></a><a href="#partners"><span>The Growth Company</span></a><a href="#record"><span>Evidence record</span></a></div>
   </div>
 </section>
 
 <div class="band" aria-label="Four programme numbers, with periods"><div class="wrap">
-  <div><b>8</b>People supported · 2021 – 2026</div><div><b>3</b>T Level placements · from Sept 2025</div><div><b>3 of 3</b>Offered long-term roles · June 2026</div><div><b>3</b>Referral partners · college, T Levels, Jobcentre</div>
+  <div><b>8</b>People supported · 2021 – 2026</div><div><b>3</b>T Level placements · from Sept 2025</div><div><b>3 of 3</b>Offered long-term roles · June 2026</div><div><b>3</b>Referral partners</div>
 </div></div>
 
-<!-- ══ 01 WHY IT EXISTS (the wipe) ══ -->
+<!-- ══ 01 WHY IT EXISTS ══ -->
 <div class="colour-divider" aria-hidden="true"></div>
 <section class="intro" id="why" data-n="01">
   <div class="wrap">
     <div class="sep with-text">Part 01 / Why it exists</div>
-    <h2 class="fi">We're Freedom Fire<span class="ava"><img src="assets/team-sm.jpg" alt=""></span>a fire safety business in Bury that supplies, installs and services the equipment that keeps buildings compliant, and sells it nationwide online. Hiring by CV alone kept <em class="s">missing people who could do the work.</em></h2>
-    <p class="fu-1">A CV-first process rewards a polished history. It says little about whether someone can learn a warehouse, a service van or a storefront, and nothing about what they will do with a real chance. Since 2021 the company has hosted placements from a local college, opened its vacancies to Jobcentre referrals, and from September 2025 taken T Level students on industry placements. People come in on a route, get practical support and real responsibility, and are kept on where the work justifies it. The Way In is that route, written down, with its evidence. Fire safety remains what the business is for; this is how it is crewed.</p>
+    <h2 class="fi">We're Freedom Fire<span class="ava"><img src="assets/team-sm.jpg" alt=""></span>a fire safety business in Bury. Hiring by CV kept <em class="s">missing people who could do the work.</em></h2>
+    <p class="fu-1">Since 2021: college placements, Jobcentre referrals and, from 2025, T Level industry placements. Real roles, practical support, kept on where the work justifies it. Fire safety is the business; this is how it is crewed.
+      <details class="more"><summary aria-label="More on why">+</summary><div class="pop"><b>Why CV-first hiring misses people</b>A polished history says little about whether someone can learn a warehouse, a service van or a storefront, and nothing about what they will do with a real chance. The programme recruits for that.</div></details></p>
     <a class="btn" href="#programme" data-cur>The route in <i>→</i></a>
   </div>
 </section>
@@ -649,40 +651,35 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">02</span>The route in</div>
         <h2 class="wd">One route. <em class="s">Six stages.</em></h2>
-        <p class="stand">The programme is a repeatable process, not a set of stories. Every person who has come in has moved along the same six stages, and each stage has an owner and a record.</p>
+        <p class="stand">The same process for everyone, with an owner and a record at each stage.</p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#fff"/><path d="M26 60h50M56 38l22 22-22 22" fill="none" stroke="#111" stroke-width="10" stroke-linecap="square"/><rect x="86" y="24" width="10" height="72" fill="#111"/></svg></div>
     </div>
     <div class="plan rv">
-      <div class="ph"><span class="sign green">Pathway</span>From referral to the next person's mentor</div>
+      <div class="ph"><span class="sign green">Pathway</span>From referral to mentoring the next person</div>
       <div class="floor" id="floor">
-        <div class="st"><div class="no">Stage 1</div><h3>Referral or placement</h3><p>A college placement, a T Level industry placement, a Jobcentre referral, or a student who needs work that fits around study.</p></div>
-        <div class="st"><div class="no">Stage 2</div><h3>Supported start</h3><p>A named person to learn from, the adjustments the job needs to fit the person, and a first task that is real.</p></div>
-        <div class="st"><div class="no">Stage 3</div><h3>Workplace skills</h3><p>Learned by doing: warehouse and fulfilment, service and installation, web and ecommerce, IT.</p></div>
-        <div class="st"><div class="no">Stage 4</div><h3>Responsibility</h3><p>Something the person owns, from an order queue to a storefront, with the trust to get it wrong and fix it.</p></div>
-        <div class="st"><div class="no">Stage 5</div><h3>Paid work or next step</h3><p>A long-term role at Freedom Fire where the work justifies it, or a clear next destination in work or education.</p></div>
-        <div class="st"><div class="no">Stage 6</div><h3>Progression and mentoring</h3><p>Showing the next person the same route, and moving up the business as it grows.</p></div>
+        <div class="st"><div class="no">Stage 1</div><h3>Referral or placement</h3><p>College, T Level, Jobcentre, or alongside study.</p></div>
+        <div class="st"><div class="no">Stage 2</div><h3>Supported start</h3><p>A named person to learn from. Adjustments written in.</p></div>
+        <div class="st"><div class="no">Stage 3</div><h3>Workplace skills</h3><p>Warehouse, vans, web and ecommerce, IT.</p></div>
+        <div class="st"><div class="no">Stage 4</div><h3>Responsibility</h3><p>Something the person owns.</p></div>
+        <div class="st"><div class="no">Stage 5</div><h3>Paid work or next step</h3><p>A long-term role, or a clear next destination.</p></div>
+        <div class="st"><div class="no">Stage 6</div><h3>Mentoring</h3><p>Showing the next person the route.</p></div>
       </div>
     </div>
     <div class="acts rv" id="activities">
-      <div class="ph"><span class="sign green">Qualifying activities</span>Only the activities with evidence are counted</div>
+      <div class="ph"><span class="sign green">Qualifying activities</span>Only those with evidence are counted</div>
       <div class="actgrid">
         <div class="actcard"><div class="k"><span class="num">a</span>Work experience and placements</div>
-          <dl><dt>Since</dt><dd>2021, with learners from Newbridge College; T Level industry placements from September 2025 with the Growth Company</dd>
-          <dt>Volume</dt><dd>Eight people to date, five of them on placements</dd>
-          <dt>Delivered by</dt><dd>On the job, alongside experienced staff, in the warehouse, on the vans and in the web and ecommerce team</dd>
-          <dt>Owner</dt><dd>Tom Letcher, founder and programme sponsor</dd>
-          <dt>Outcome measured</dt><dd>Progression to a paid role, or a confirmed next destination</dd>
-          <dt>Evidence</dt><dd>PO-AC-01 · placement agreements and college correspondence</dd></dl></div>
+          <dl><dt>Since</dt><dd>2021 · Newbridge College. T Levels from September 2025.</dd>
+          <dt>Volume</dt><dd>Five of the eight came in on a placement.</dd>
+          <dt>Outcome</dt><dd>Progression to a paid role, or a confirmed next destination.</dd></dl>
+          <details class="more"><summary aria-label="Owner and evidence">+</summary><div class="pop"><b>Delivery, owner, evidence</b>On the job alongside experienced staff. Owner: Tom Letcher, founder and programme sponsor. Evidence PO-AC-01: placement agreements and college correspondence.</div></details></div>
         <div class="actcard"><div class="k"><span class="num">d</span>Recruitment open to everyone</div>
-          <dl><dt>Since</dt><dd>Vacancies open to Jobcentre Plus referrals; two of the eight came this way</dd>
-          <dt>Volume</dt><dd>Two referrals hired to date</dd>
-          <dt>Delivered by</dt><dd>No degree filter, no experience wall; adjustments offered before the interview; attitude is what is screened for</dd>
-          <dt>Owner</dt><dd>Tom Letcher</dd>
-          <dt>Outcome measured</dt><dd>Referrals hired and retained</dd>
-          <dt>Evidence</dt><dd>PO-AC-02 · referral and offer records</dd></dl></div>
+          <dl><dt>Since</dt><dd>Vacancies open to Jobcentre Plus referrals.</dd>
+          <dt>Volume</dt><dd>Two of the eight came in this way.</dd>
+          <dt>Outcome</dt><dd>Referrals hired and retained.</dd></dl>
+          <details class="more r"><summary aria-label="Owner and evidence">+</summary><div class="pop"><b>Delivery, owner, evidence</b>No degree filter, no experience wall; adjustments offered before the interview. Owner: Tom Letcher. Evidence PO-AC-02: referral and offer records. Mentoring and training happen inside every placement but are not counted until hours are logged, from September 2026.</div></details></div>
       </div>
-      <p class="fnote">Mentoring and job-related training happen inside every placement, but they are not counted as separate activities until mentor hours are logged. Logging began in September 2026.</p>
     </div>
   </div>
 </section>
@@ -695,62 +692,62 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">03</span>The people</div>
         <h2 class="wd">Eight people. <em class="s">Their own words, or none.</em></h2>
-        <p class="stand">Ticked present as you reach them. Each card shows a first name, a role and the route in. A full profile appears only once the person has approved every word of it, and says only what they choose to say.</p>
+        <p class="stand">First name, role and route in. A full profile appears only with the person's approval.
+          <details class="more"><summary aria-label="Consent">+</summary><div class="pop"><b>Consent</b>Each person chose whether to appear, with what name and what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to info@freedom-fire.co.uk. Nothing about health, background or personal history is published unless the person writes it.</div></details></p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#E10600"/><g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="square"><path d="M18 18l22 22M102 18L80 40M18 102l22-22M102 102L80 80"/></g><g fill="#fff"><circle cx="52" cy="52" r="6"/><circle cx="68" cy="52" r="6"/><circle cx="52" cy="68" r="6"/><circle cx="68" cy="68" r="6"/></g></svg></div>
     </div>
     <div class="legend rv" aria-label="Route bands">
-      <span><i style="--b:#111"></i>T Level placement</span><span><i style="--b:#8A8A85"></i>Jobcentre referral</span><span><i style="--b:#C9C9C4"></i>College placement</span><span><i style="--b:#fff"></i>Student, alongside study</span>
+      <span><i style="--b:#111"></i>T Level placement</span><span><i style="--b:#8A8A85"></i>Jobcentre referral</span><span><i style="--b:#C9C9C4"></i>College placement</span><span><i style="--b:#fff"></i>Alongside study</span>
     </div>
     <div class="tiles" id="register">
-      <button class="tile" type="button" data-cur data-k="bill" data-name="Bill" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-b="#111" data-consent="approved" data-support="Given a real brief and the room to make design decisions, with feedback when they went wrong" data-skills="Front-end development, storefront design, launching a live site" data-resp="The company's website and its storefront design" data-next="Offered a long-term role, June 2026" aria-haspopup="dialog" style="--b:#111;--a:rgba(138,138,133,.35)">
+      <button class="tile" type="button" data-cur data-k="bill" data-name="Bill" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-b="#111" data-consent="approved" data-support="A real brief and the room to make design decisions, with feedback when they went wrong" data-skills="Front-end development, storefront design, launching a live site" data-resp="The company's website and its storefront design" data-next="Offered a long-term role, June 2026" aria-haspopup="dialog" style="--b:#111;--a:rgba(138,138,133,.35)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
         <span class="no"><i>001</i>T Level placement</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in on a T Level industry placement in September 2025. Now runs the website.</span>
-        <span class="cap"><b>Bill</b><span>Web developer · T Level placement</span></span>
+        <span class="q">T Level placement, September 2025. Now runs the website.</span>
+        <span class="cap"><b>Bill</b><span>Web developer</span></span>
         <template class="story">I thought the placement would be a basic storefront. A few product pages, prices on, done. Instead I was given creative freedom. Told what the business needed, then trusted to work out how it should look and work. It turned into a proper, highly designed website. I'm grateful for that. Not many places would hand that much responsibility to someone on a placement, and when I got things wrong, they showed me why and let me fix it. Real work, real trust, and people kind enough to expect me to get good at it.</template></button>
       <button class="tile" type="button" data-cur data-k="harrison" data-name="Harrison" data-role="Warehouse operative" data-route="T Level industry placement" data-since="September 2025" data-b="#111" data-consent="pending" aria-haspopup="dialog" style="--b:#111;--a:rgba(225,6,0,.3)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">H</span>
         <span class="no"><i>002</i>T Level placement</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in on a T Level industry placement in September 2025. Works in the warehouse.</span>
-        <span class="cap"><b>Harrison</b><span>Warehouse operative · T Level placement</span></span></button>
+        <span class="q">T Level placement, September 2025. Warehouse.</span>
+        <span class="cap"><b>Harrison</b><span>Warehouse operative</span></span></button>
       <button class="tile" type="button" data-cur data-k="gabriel" data-name="Gabriel" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-b="#111" data-consent="pending" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.28)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">G</span>
         <span class="no"><i>003</i>T Level placement</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in on a T Level industry placement in September 2025. Builds the storefronts.</span>
-        <span class="cap"><b>Gabriel</b><span>Web developer · T Level placement</span></span></button>
+        <span class="q">T Level placement, September 2025. Builds the storefronts.</span>
+        <span class="cap"><b>Gabriel</b><span>Web developer</span></span></button>
       <button class="tile" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="One of the earliest placements" data-b="#C9C9C4" data-consent="pending" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
         <span class="no"><i>004</i>College placement</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in on a college placement, one of the earliest. Now in a long-term role.</span>
-        <span class="cap"><b>Jojo</b><span>Warehouse operative · College placement</span></span></button>
+        <span class="q">College placement, one of the earliest. Now in a long-term role.</span>
+        <span class="cap"><b>Jojo</b><span>Warehouse operative</span></span></button>
       <button class="tile" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Student, working alongside study" data-since="Alongside study" data-b="#fff" data-consent="pending" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">E</span>
         <span class="no"><i>005</i>Alongside study</span><span class="pres"><i></i>Present</span>
-        <span class="q">Works on the storefronts while studying, with hours that fit around the course.</span>
-        <span class="cap"><b>Elliot</b><span>Ecommerce assistant · alongside study</span></span></button>
+        <span class="q">Works on the storefronts around a course.</span>
+        <span class="cap"><b>Elliot</b><span>Ecommerce assistant</span></span></button>
       <button class="tile" type="button" data-cur data-k="dylan" data-name="Dylan" data-role="Warehouse operative" data-route="Jobcentre Plus referral" data-since="Referral" data-b="#8A8A85" data-consent="pending" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(225,6,0,.5)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">D</span>
         <span class="no"><i>006</i>Jobcentre referral</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in through a Jobcentre Plus referral. Works in the warehouse.</span>
-        <span class="cap"><b>Dylan</b><span>Warehouse operative · Jobcentre referral</span></span></button>
+        <span class="q">Jobcentre Plus referral. Warehouse.</span>
+        <span class="cap"><b>Dylan</b><span>Warehouse operative</span></span></button>
       <button class="tile" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="T Level industry placement" data-since="Placement" data-b="#111" data-consent="pending" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.25)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
         <span class="no"><i>007</i>T Level placement</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in on a T Level placement. Runs the company's IT.</span>
-        <span class="cap"><b>Billy</b><span>IT technician · T Level placement</span></span></button>
+        <span class="q">T Level placement. Runs the company's IT.</span>
+        <span class="cap"><b>Billy</b><span>IT technician</span></span></button>
       <button class="tile" type="button" data-cur data-k="josh" data-name="Josh" data-role="Ecommerce assistant" data-route="Jobcentre Plus referral" data-since="Referral" data-b="#8A8A85" data-consent="pending" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(225,6,0,.38)">
         <span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
         <span class="no"><i>008</i>Jobcentre referral</span><span class="pres"><i></i>Present</span>
-        <span class="q">Came in through a Jobcentre Plus referral. Works on the storefronts.</span>
-        <span class="cap"><b>Josh</b><span>Ecommerce assistant · Jobcentre referral</span></span></button>
+        <span class="q">Jobcentre Plus referral. Storefronts.</span>
+        <span class="cap"><b>Josh</b><span>Ecommerce assistant</span></span></button>
     </div>
     <div class="founder rv">
       <div class="k">Not counted among the eight</div>
       <h3>Tom Letcher</h3>
-      <p>Founder, programme sponsor and mentor. Started the company in 2021 and still does the hiring. The programme is his decision to recruit for potential rather than for a finished CV; he is its owner, not one of its participants.</p>
+      <p>Founder, programme sponsor and mentor. The programme is his decision to hire for potential; he owns it and is not a participant.</p>
     </div>
-    <p class="consent-note rv">Every person here chose whether to appear, with what name, and with what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to <a href="mailto:info@freedom-fire.co.uk">info@freedom-fire.co.uk</a>. Nothing about health, background or personal history is published unless the person writes it themselves.</p>
   </div>
 </section>
 
@@ -761,25 +758,25 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
     <div class="ch-head rv">
       <div>
         <div class="ch-tag"><span class="num">04</span>The impact</div>
-        <h2 class="wd">Four groups. <em class="s">What changed for each.</em></h2>
-        <p class="stand">The award asks for benefits to the people supported, the organisation, its employees and the wider community. Each panel gives a number, says how it was counted, and where there is a voice, carries one.</p>
+        <h2 class="wd">Four groups. <em class="s">What changed.</em></h2>
+        <p class="stand">A number for each group the award names, with how it was counted behind the <b>+</b>.</p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#fff"/><path d="M28 62l18 18 46-46" fill="none" stroke="#E10600" stroke-width="12" stroke-linecap="square"/></svg></div>
     </div>
     <div class="proofs rv" aria-label="The four groups">
       <div class="proof"><div class="no">01</div><h3>The people supported</h3>
-        <p><b>Eight</b> people supported since 2021. <b>Three</b> T Level students offered long-term roles in June 2026, nine months after starting. <b>One</b> early college placement progressed to a long-term full-time role. Skills gained on the job: warehouse and fulfilment, IT, web development and ecommerce operations.</p>
-        <p class="meth">Counted from the participant register: unique people over 16, by route and start date. Sustained outcomes at 3, 6 and 12 months are being followed up from September 2026.</p>
-        <p class="voice">“Real work, real trust, and people kind enough to expect me to get good at it.” <span>Bill, web developer</span></p></div>
+        <p><b>Eight</b> since 2021. <b>Three</b> T Level students offered long-term roles, June 2026. <b>One</b> early placement now in long-term full-time work.</p>
+        <p class="voice">“Real work, real trust, and people kind enough to expect me to get good at it.” <span>Bill, web developer</span></p>
+        <details class="more"><summary aria-label="Method">+</summary><div class="pop"><b>How it was counted</b>Participant register: unique people over 16, by route and start date. Follow-up at 3, 6 and 12 months from September 2026. Evidence PO-PR-01, PO-PR-02, PO-PR-03.</div></details></div>
       <div class="proof"><div class="no">02</div><h3>The organisation</h3>
-        <p><b>Eight</b> roles filled through the programme, across the warehouse, IT, web and ecommerce, which is most of the team that runs the online business day to day. The company's website and storefronts were built by people who arrived on placements.</p>
-        <p class="meth">Counted from roles held as at September 2026 against the participant register. Retention is reported against the same register.</p></div>
+        <p><b>Eight</b> roles filled through the programme: warehouse, IT, web and ecommerce. The website and storefronts were built by people who arrived on placements.</p>
+        <details class="more"><summary aria-label="Method">+</summary><div class="pop"><b>How it was counted</b>Roles held at September 2026 against the participant register. Retention reported against the same register. Evidence PO-OR-01.</div></details></div>
       <div class="proof"><div class="no">03</div><h3>The employees</h3>
-        <p>Experienced staff mentor each new starter on the job, which gives them supervisory experience they would not otherwise have in a business this size. Placement students have moved from being mentored to mentoring the next intake.</p>
-        <p class="meth">Mentor hours were not logged before September 2026. Logging began then, and the first full period will be reported here with the count.</p></div>
+        <p>Experienced staff mentor every starter, gaining supervisory experience. Placement students now mentor the next intake.</p>
+        <details class="more"><summary aria-label="Method">+</summary><div class="pop"><b>How it is counted</b>Mentor hours were not logged before September 2026. Logging began then; the first full period is reported with the count. Evidence PO-TG-01.</div></details></div>
       <div class="proof"><div class="no">04</div><h3>The wider community</h3>
-        <p>Three standing partnerships: Newbridge College since 2021, the Growth Company for T Level placements from 2025, and Jobcentre Plus for referrals. Every person hired lives locally to Bury, and a trade wage now comes into households that did not have one before.</p>
-        <p class="meth">Counted from partner records and placement agreements. Partner confirmations of dates and cohorts are being collected for the record.</p></div>
+        <p><b>Three</b> standing partnerships. Every person hired lives locally to Bury, and a trade wage now comes into households that did not have one.</p>
+        <details class="more r"><summary aria-label="Method">+</summary><div class="pop"><b>How it was counted</b>Partner records and placement agreements. Partner confirmations of dates and cohorts are being collected. Evidence PO-PT-01 to 03.</div></details></div>
     </div>
   </div>
 </section>
@@ -792,19 +789,19 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">05</span>The partners</div>
         <h2 class="wd">Three doors <em class="s">the route comes through.</em></h2>
-        <p class="stand">Independent organisations that refer people to the programme or place them on it. Names only, until each has confirmed what appears here; a partner's letter carries more weight than anything the company says about itself.</p>
+        <p class="stand">Names only, until each has confirmed what appears here.</p>
       </div>
     </div>
     <div class="partners rv">
       <div class="partner"><div class="k">College placements · since 2021</div><h3>Newbridge College</h3>
-        <p>Placements for learners, including young people with additional needs, from 2021. The earliest partnership, and the one that produced the first progression into a long-term role.</p>
-        <dl><dt>Provides</dt><dd>Placement learners and their support plans</dd><dt>Relationship</dt><dd>Five years, repeat cohorts</dd><dt>Evidence</dt><dd>PO-PT-01 · placement agreements and correspondence; confirmation letter requested</dd></dl></div>
-      <div class="partner"><div class="k">T Level industry placements · since September 2025</div><h3>The Growth Company</h3>
-        <p>Supports the company's T Level industry placements. Three students in the first cohort, each offered a long-term role by June 2026.</p>
-        <dl><dt>Provides</dt><dd>T Level students, placement structure and employer support</dd><dt>Relationship</dt><dd>One year, first cohort complete, second in preparation</dd><dt>Evidence</dt><dd>PO-PT-02 · T Level placement paperwork; confirmation letter requested</dd></dl></div>
-      <div class="partner"><div class="k">Referrals · recruitment open to everyone</div><h3>Jobcentre Plus</h3>
-        <p>Vacancies are open to Jobcentre referrals with no degree or experience filter. Two of the eight came in this way.</p>
-        <dl><dt>Provides</dt><dd>Referred candidates</dd><dt>Relationship</dt><dd>Ongoing</dd><dt>Evidence</dt><dd>PO-PT-03 · referral and offer records</dd></dl></div>
+        <p>Placement learners, including young people with additional needs. The earliest partnership, and the first progression into a long-term role.</p>
+        <details class="more"><summary aria-label="Detail">+</summary><div class="pop"><b>Relationship and evidence</b>Five years, repeat cohorts. Provides placement learners and their support plans. Evidence PO-PT-01; confirmation letter requested.</div></details></div>
+      <div class="partner"><div class="k">T Level placements · since September 2025</div><h3>The Growth Company</h3>
+        <p>Supports the T Level industry placements. Three students in the first cohort, each offered a long-term role.</p>
+        <details class="more"><summary aria-label="Detail">+</summary><div class="pop"><b>Relationship and evidence</b>One year; first cohort complete, second in preparation. Provides students, placement structure and employer support. Evidence PO-PT-02; confirmation letter requested.</div></details></div>
+      <div class="partner"><div class="k">Referrals</div><h3>Jobcentre Plus</h3>
+        <p>Vacancies open to referrals with no degree or experience filter. Two of the eight came in this way.</p>
+        <details class="more r"><summary aria-label="Detail">+</summary><div class="pop"><b>Relationship and evidence</b>Ongoing. Provides referred candidates. Evidence PO-PT-03: referral and offer records.</div></details></div>
     </div>
   </div>
 </section>
@@ -817,23 +814,23 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">06</span>The timeline</div>
         <h2 class="wd">Five years, <em class="s">dated.</em></h2>
-        <p class="stand">The award needs at least two years of qualifying activity with a dated record behind it. This is the spine, from the earliest placement to the next cohort, with the entity each entry belongs to.</p>
+        <p class="stand">At least two years of qualifying activity, with a dated record behind it.</p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M14 20h92l-14 40 14 40H14z" fill="#C9C9C4" stroke="#111" stroke-width="6" stroke-linejoin="round"/><circle cx="34" cy="60" r="7" fill="#111"/><path d="M52 48h36M52 60h36M52 72h24" stroke="#111" stroke-width="6" stroke-linecap="round"/></svg></div>
     </div>
     <ol class="spine rv">
-      <li><span class="when">27 August 2021</span><span class="what">Freedom Fire &amp; Safety Ltd incorporated, company 13589467.</span><span class="ent">FFSL · Verified · PO-CO-01</span></li>
-      <li><span class="when">2021</span><span class="what">First placements for learners from Newbridge College, including young people with additional needs.</span><span class="ent">FFSL · Management data · PO-TL-01</span></li>
-      <li><span class="when">2021 – 2024</span><span class="what">An early college placement progresses into a long-term full-time role; placements continue each year.</span><span class="ent">FFSL · Management data · PO-TL-02</span></li>
-      <li><span class="when">September 2025</span><span class="what">T Level industry placements begin with the Growth Company: three students.</span><span class="ent">FFSL · Management data · PO-TL-03</span></li>
-      <li><span class="when">June 2026</span><span class="what">All three T Level students offered long-term roles.</span><span class="ent">FFSL · Management data · PO-TL-04</span></li>
-      <li><span class="when">September 2026</span><span class="what">Mentor-hour logging and outcome follow-up begin; the next cohort is in preparation.</span><span class="ent">FFSL · Target · PO-TL-05</span></li>
+      <li><span class="when">27 Aug 2021</span><span class="what">Freedom Fire &amp; Safety Ltd incorporated.</span><span class="ent">Verified · PO-CO-01</span></li>
+      <li><span class="when">2021</span><span class="what">First Newbridge College placements.</span><span class="ent">Management data · PO-TL-01</span></li>
+      <li><span class="when">2021 – 2024</span><span class="what">An early placement progresses to a long-term role; placements continue.</span><span class="ent">Management data · PO-TL-02</span></li>
+      <li><span class="when">Sept 2025</span><span class="what">T Level industry placements begin: three students.</span><span class="ent">Management data · PO-TL-03</span></li>
+      <li><span class="when">June 2026</span><span class="what">All three offered long-term roles.</span><span class="ent">Management data · PO-TL-04</span></li>
+      <li><span class="when">Sept 2026</span><span class="what">Mentor logging and follow-up begin; next cohort in preparation.</span><span class="ent">Target · PO-TL-05</span></li>
     </ol>
     <div class="tag blur-box" id="calc">
       <div>
         <h3>The two-year test</h3>
-        <p>Applications for the 2027 awards close on 8 September 2026, so the earliest dated record has to be from 8 September 2024 or before. The earliest placement agreement with Newbridge College is that record, and it has to belong to the company, not to the sole-trader years before it.</p>
-        <p>Enter the date on the earliest record and the tag gives its verdict.</p>
+        <p>Applications close 8 September 2026, so the earliest dated record must be from 8 September 2024 or before.
+          <details class="more"><summary aria-label="Detail">+</summary><div class="pop"><b>Which record</b>The earliest placement agreement with Newbridge College, and it has to belong to the company rather than to the sole-trader years before August 2021.</div></details></p>
       </div>
       <div>
         <label for="progStart">When does the earliest record date the programme from?</label>
@@ -845,7 +842,7 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
           <span class="yr">2022</span><span class="yr">2023</span><span class="yr">2024</span><span class="yr">2025</span><span class="yr">2026</span>
           <span class="cut" id="cut">Cut-off · 8 Sep 2024</span><span class="pin" id="pin"></span>
         </div>
-        <div class="fine">Nothing typed here is stored or sent anywhere. It is a ruler, not a record.</div>
+        <div class="fine">Nothing typed here is stored or sent anywhere.</div>
       </div>
     </div>
   </div>
@@ -859,22 +856,22 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">07</span>How we learn</div>
         <h2 class="wd">Feedback, <em class="s">then a change.</em></h2>
-        <p class="stand">A living programme adjusts. Three cases in the same shape: what was said, what was changed, and what was seen afterwards. Then what is being measured from now on.</p>
+        <p class="stand">Three cases. What was said, what changed, what followed.</p>
       </div>
     </div>
     <div class="cases rv">
       <div class="case"><div class="k">Placement students</div>
-        <dl><dt>Feedback</dt><dd>The first T Level cohort said the difference between a placement and a job was being trusted with something real.</dd>
-        <dt>Adjustment</dt><dd>Every placement now starts with a live brief the person owns, not shadowing. The company website is one result.</dd>
-        <dt>Observed</dt><dd>All three students offered long-term roles at the end of the placement, June 2026.</dd></dl></div>
+        <dl><dt>Said</dt><dd>Being trusted with something real is the difference.</dd>
+        <dt>Changed</dt><dd>Every placement now starts with a live brief the person owns.</dd>
+        <dt>Followed</dt><dd>All three offered long-term roles, June 2026.</dd></dl></div>
       <div class="case"><div class="k">Adjustments</div>
-        <dl><dt>Feedback</dt><dd>Some people needed the job shaped around them: hours around study, tasks matched to how they work best, a mentor they could ask without embarrassment.</dd>
-        <dt>Adjustment</dt><dd>Adjustments are offered before the interview and written into the start, rather than negotiated afterwards.</dd>
-        <dt>Observed</dt><dd>People who might not have got through a standard interview are now in long-term roles. Detail stays with the individuals.</dd></dl></div>
+        <dl><dt>Said</dt><dd>Some needed the job shaped around them.</dd>
+        <dt>Changed</dt><dd>Adjustments offered before the interview, written into the start.</dd>
+        <dt>Followed</dt><dd>People a standard interview would have missed are in long-term roles.</dd></dl></div>
       <div class="case"><div class="k">Measurement</div>
-        <dl><dt>Feedback</dt><dd>Reviewing the programme for this application showed that outcomes were real but the records were thin: no mentor hours, no follow-up dates.</dd>
-        <dt>Adjustment</dt><dd>From September 2026: a participant register with anonymous IDs, logged mentor hours, and follow-up at 3, 6 and 12 months.</dd>
-        <dt>Observed</dt><dd>The first full period is reported here when it exists. Until then this page says so rather than guessing.</dd></dl></div>
+        <dl><dt>Said</dt><dd>Outcomes were real; the records were thin.</dd>
+        <dt>Changed</dt><dd>From September 2026: a register, logged mentor hours, follow-up at 3, 6 and 12 months.</dd>
+        <dt>Followed</dt><dd>Reported here after the first full period.</dd></dl></div>
     </div>
   </div>
 </section>
@@ -887,7 +884,8 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">08</span>Evidence record</div>
         <h2 class="wd">Everything an assessor <em class="s">can check.</em></h2>
-        <p class="stand">The eligibility statement, the award's five tests with where each is answered, the current commitments, and every material claim with its status and source. Printable. Confidential records are described here and supplied through the application, never uploaded.</p>
+        <p class="stand">The five tests, the two commitments, and every claim with its status and source. Printable.
+          <details class="more"><summary aria-label="Status labels">+</summary><div class="pop"><b>Status labels</b>Verified: a public or independent source, or a signed formal record. Management data: a named internal system or record, dated. Target: an ambition with its assumptions stated. Anything outstanding is held back until resolved. Sole-trader history before August 2021 is not counted. Confidential records are supplied through the application, never uploaded.</div></details></p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#E10600"/><path d="M60 22v46" stroke="#fff" stroke-width="12" stroke-linecap="round"/><circle cx="60" cy="92" r="8" fill="#fff"/></svg></div>
     </div>
@@ -896,37 +894,37 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
       <div class="nh"><h3>Eligibility statement</h3><span>Freedom Fire &amp; Safety Ltd · 13589467 · Promoting Opportunity 2027</span></div>
       <div class="test"><div class="n">01</div>
-        <div><h4>A programme that supports people from disadvantaged backgrounds in improving their job skills and their chances of finding work</h4><p class="q">Defined, dated, with its outputs.</p></div>
-        <div class="a">The Way In: placements and open recruitment into real roles, with practical support and responsibility. Eight people since 2021.<br><a class="to" href="#programme">Part 02</a><a class="to" href="#people">Part 03</a></div>
+        <div><h4>A programme that helps people from disadvantaged backgrounds improve job skills and prospects</h4></div>
+        <div class="a">The Way In. Eight people since 2021.<br><a class="to" href="#programme">Part 02</a><a class="to" href="#people">Part 03</a></div>
         <div class="s"><span class="sign black">Answered</span></div></div>
       <div class="test"><div class="n">02</div>
-        <div><h4>One or more qualifying activities for at least two years</h4><p class="q">Work experience or careers advice · mentoring · interview and job-related training · recruitment open to everyone.</p></div>
-        <div class="a">Two activities counted: placements since 2021, and recruitment open to Jobcentre referrals. Mentoring and training are delivered but not counted until logged.<br><a class="to" href="#programme">The activities</a><a class="to" href="#timeline">The two-year test</a></div>
+        <div><h4>One or more qualifying activities for at least two years</h4></div>
+        <div class="a">Placements since 2021; recruitment open to Jobcentre referrals.<br><a class="to" href="#timeline">The two-year test</a></div>
         <div class="s"><span class="sign yellow">Earliest record</span><span id="twoYearState"></span></div></div>
       <div class="test"><div class="n">03</div>
-        <div><h4>Benefits for the people supported, the organisation, the employees and the wider community</h4><p class="q">Four groups, with numbers and method.</p></div>
-        <div class="a">One panel per group, each with a count and how it was counted.<br><a class="to" href="#impact">Part 04</a><a class="to" href="#partners">Part 05</a></div>
+        <div><h4>Benefits for the people supported, the organisation, employees and the wider community</h4></div>
+        <div class="a">One panel per group, with its count and method.<br><a class="to" href="#impact">Part 04</a></div>
         <div class="s"><span class="sign black">Answered</span></div></div>
       <div class="test"><div class="n">04</div>
-        <div><h4>Social mobility must not be the organisation's main focus</h4><p class="q">The exclusion.</p></div>
-        <div class="a">Fire safety is the business: supply, installation, servicing and online retail, from Bury, nationwide. The programme is how it is crewed.</div>
+        <div><h4>Social mobility must not be the organisation's main focus</h4></div>
+        <div class="a">Fire safety is the business. The programme is how it is crewed.</div>
         <div class="s"><span class="sign green">✓ Met</span></div></div>
       <div class="test"><div class="n">05</div>
-        <div><h4>Training providers and educational organisations may only apply with a business, or for their own employees</h4><p class="q">The second exclusion.</p></div>
-        <div class="a">Freedom Fire is a fire safety business training its own people. Neither restriction applies.</div>
+        <div><h4>Training providers may only apply with a business, or for their own employees</h4></div>
+        <div class="a">A fire safety business training its own people.</div>
         <div class="s"><span class="sign green">✓ Met</span></div></div>
       </div>
     </div>
 
     <div class="plates flip">
-      <div class="plate"><span class="seal">Listing<br>to link</span><span class="k">T Level Ambassador Network · employer ambassador</span>
+      <div class="plate"><span class="seal">Listing<br>to link</span><span class="k">T Level Ambassador Network</span>
         <h3>T Level Ambassadors</h3>
-        <p>Freedom Fire hosts T Level industry placements and speaks for them to other employers. Four of the eight people came through a T Level placement. This is the award's activity (a), work experience, as a standing arrangement.</p>
-        <span class="tk"><b>Evidence to supply</b>The ambassador listing or confirmation email, the date the company joined, and placements hosted per year.</span></div>
-      <div class="plate"><div class="badge"><img src="assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Disability Confident scheme · Department for Work and Pensions</span>
+        <p>Employer ambassador. Hosts T Level industry placements and speaks for them to other employers.</p>
+        <details class="more"><summary aria-label="Evidence">+</summary><div class="pop"><b>Evidence to supply</b>The ambassador listing or confirmation email, the date the company joined, and placements hosted per year. PO-CM-02.</div></details></div>
+      <div class="plate"><div class="badge"><img src="assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
         <h3>Disability Confident</h3>
-        <p>A public commitment to recruit, retain and adjust for disabled people. It is why recruitment is open to everyone in practice. Freedom Fire is Disability Confident Committed, Level 1, with Level 2 Employer accreditation in progress.</p>
-        <span class="tk"><b>Evidence to supply</b>The Level 1 confirmation and its date, and the adjustments policy in writing.</span></div>
+        <p>Committed, Level 1, with Level 2 Employer accreditation in progress. Why recruitment is open to everyone in practice.</p>
+        <details class="more"><summary aria-label="Evidence">+</summary><div class="pop"><b>Evidence to supply</b>The Level 1 confirmation and its date, and the adjustments policy in writing. PO-CM-01.</div></details></div>
     </div>
 
     <div class="rec rv">
@@ -934,19 +932,18 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div class="rec-wrap"><table class="rec-tbl">
         <thead><tr><th>Claim</th><th>Definition and period</th><th>Status and source</th><th>Evidence</th></tr></thead>
         <tbody>
-          <tr><td>Company incorporated 27 August 2021</td><td>Freedom Fire &amp; Safety Ltd, 13589467; sole director since incorporation</td><td><span class="sign black">Verified</span> Companies House register</td><td>PO-CO-01</td></tr>
-          <tr><td>Eight people supported</td><td>Unique people over 16, by route and start date, 2021 to September 2026; Tom excluded</td><td><span class="sign line">Management data</span> Participant register, placement agreements, contracts</td><td>PO-PR-01</td></tr>
-          <tr><td>Placements since 2021</td><td>Newbridge College learners from 2021; T Level placements from September 2025</td><td><span class="sign line">Management data</span> Placement agreements, college correspondence</td><td>PO-AC-01</td></tr>
-          <tr><td>Two Jobcentre referrals hired</td><td>Referred candidates offered and retained, to September 2026</td><td><span class="sign line">Management data</span> Referral and offer records</td><td>PO-AC-02</td></tr>
-          <tr><td>Three of three T Level students offered long-term roles</td><td>First cohort, September 2025 to June 2026</td><td><span class="sign line">Management data</span> Offer letters, T Level paperwork</td><td>PO-PR-02</td></tr>
-          <tr><td>One early placement progressed to long-term full-time work</td><td>College placement to employment; employing entity and dates confirmed in the record</td><td><span class="sign line">Management data</span> Contract and payroll, on request</td><td>PO-PR-03</td></tr>
-          <tr><td>Roles filled through the programme</td><td>Eight roles across warehouse, IT, web and ecommerce, as at September 2026</td><td><span class="sign line">Management data</span> HR records</td><td>PO-OR-01</td></tr>
-          <tr><td>Mentor hours and follow-up outcomes</td><td>Logged from September 2026; reported after the first full period</td><td><span class="sign line">Target</span> Mentor log, follow-up at 3, 6 and 12 months</td><td>PO-TG-01</td></tr>
-          <tr><td>Disability Confident</td><td>Committed, Level 1; Level 2 Employer in progress</td><td><span class="sign line">Management data</span> Level 1 confirmation</td><td>PO-CM-01</td></tr>
-          <tr><td>T Level Ambassador</td><td>Employer ambassador in the T Level Ambassador Network</td><td><span class="sign line">Management data</span> Network listing, to link</td><td>PO-CM-02</td></tr>
+          <tr><td>Incorporated 27 August 2021</td><td>Company 13589467; sole director since</td><td><span class="sign black">Verified</span> Companies House</td><td>PO-CO-01</td></tr>
+          <tr><td>Eight people supported</td><td>Unique people over 16, 2021 to Sept 2026; founder excluded</td><td><span class="sign line">Management data</span> Participant register</td><td>PO-PR-01</td></tr>
+          <tr><td>Placements since 2021</td><td>Newbridge College; T Levels from Sept 2025</td><td><span class="sign line">Management data</span> Placement agreements</td><td>PO-AC-01</td></tr>
+          <tr><td>Two Jobcentre referrals hired</td><td>Offered and retained, to Sept 2026</td><td><span class="sign line">Management data</span> Referral and offer records</td><td>PO-AC-02</td></tr>
+          <tr><td>Three of three offered long-term roles</td><td>First T Level cohort, Sept 2025 to June 2026</td><td><span class="sign line">Management data</span> Offer letters</td><td>PO-PR-02</td></tr>
+          <tr><td>One placement to long-term full-time work</td><td>Employing entity and dates confirmed in the record</td><td><span class="sign line">Management data</span> Contract and payroll, on request</td><td>PO-PR-03</td></tr>
+          <tr><td>Eight roles filled through the programme</td><td>Warehouse, IT, web, ecommerce, at Sept 2026</td><td><span class="sign line">Management data</span> HR records</td><td>PO-OR-01</td></tr>
+          <tr><td>Mentor hours and follow-up</td><td>Logged from Sept 2026</td><td><span class="sign line">Target</span> Mentor log</td><td>PO-TG-01</td></tr>
+          <tr><td>Disability Confident</td><td>Committed, Level 1; Level 2 in progress</td><td><span class="sign line">Management data</span> Level 1 confirmation</td><td>PO-CM-01</td></tr>
+          <tr><td>T Level Ambassador</td><td>Employer ambassador</td><td><span class="sign line">Management data</span> Network listing, to link</td><td>PO-CM-02</td></tr>
         </tbody>
       </table></div>
-      <p class="fnote">Statuses: <b>Verified</b> is a public or independent source or a signed formal record. <b>Management data</b> is a named internal system or record, dated. <b>Target</b> is an ambition with its assumptions stated. Anything outstanding is held back from this page until it is resolved. Sole-trader history before August 2021 is not counted in any figure here. Headcount is stated only on a payroll definition, through the application. The claim register behind this page is held as structured data with an owner and a last-checked date for every entry; no confidential file is published.</p>
     </div>
   </div>
 </section>
@@ -960,7 +957,7 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
       <div>
         <div class="ch-tag"><span class="num">09</span>What comes next</div>
         <h2 class="cta-h">The door <em class="s">stays</em> open.</h2>
-        <p class="stand">The programme continues whether or not an award follows. The next cohort of T Level placements is in preparation for the coming year. Mentoring becomes a formal role with logged hours. Outcomes are followed up at three, six and twelve months. Disability Confident moves to Level 2 when it is earned, not before. The college partnerships deepen, and the programme has one owner, Tom Letcher, who answers for it.</p>
+        <p class="stand">The next T Level cohort. Mentoring as a formal role with logged hours. Follow-up at three, six and twelve months. Disability Confident Level 2 when it is earned. One owner: Tom Letcher.</p>
         <div class="go"><a class="btn" href="mailto:info@freedom-fire.co.uk?subject=Refer%20a%20candidate%20to%20The%20Way%20In" data-cur>Refer a candidate <i>→</i></a><a class="btn ghost" href="mailto:info@freedom-fire.co.uk?subject=Partner%20with%20The%20Way%20In" data-cur>Partner with us <i>→</i></a><a class="btn ghost" href="tel:+443337722723" data-cur>0333 772 2723</a></div>
       </div>
     </div>
@@ -987,8 +984,22 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 </div><!-- /smooth-content -->
 </div><!-- /smooth-wrapper -->
 
-<div class="cube-fixed" id="cubeFixed" aria-hidden="true">
-  <div class="cube-box" id="cubeBox"><div class="halo"></div><div class="cube"><div class="f f1"></div><div class="f f2"></div><div class="f f3"></div><div class="f f4"></div><div class="f f5"></div><div class="f f6"></div></div></div>
+<div class="travel" id="travel" aria-hidden="true">
+  <svg class="ext" viewBox="0 0 70 160">
+    <defs><linearGradient id="extg" x1="0" x2="1"><stop offset="0" stop-color="#ff4b3f"/><stop offset=".45" stop-color="#E10600"/><stop offset="1" stop-color="#8c0400"/></linearGradient></defs>
+    <path d="M48 40 c14 8 12 46 -6 66" fill="none" stroke="#1a1a1a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M40 104 l6 6" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+    <rect x="18" y="40" width="34" height="100" rx="10" fill="url(#extg)"/>
+    <rect x="18" y="68" width="34" height="26" fill="#111"/>
+    <text x="35" y="85" text-anchor="middle" font-family="Archivo, Arial Black, sans-serif" font-weight="900" font-size="7.5" fill="#fff" letter-spacing=".5">FIRESTORM</text>
+    <path d="M24 40 v-8 a11 11 0 0 1 22 0 v8" fill="#b80500"/>
+    <rect x="29" y="14" width="12" height="14" rx="2" fill="#222"/>
+    <path d="M20 12 h30" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="26" cy="24" r="5" fill="#fff" stroke="#222" stroke-width="2"/>
+    <path d="M26 24 l3 -3" stroke="#E10600" stroke-width="1.5"/>
+    <rect x="22" y="140" width="26" height="8" rx="3" fill="#111"/>
+    <rect x="22" y="46" width="6" height="86" rx="3" fill="rgba(255,255,255,.22)"/>
+  </svg>
 </div>
 
 <div class="prof" id="prof" role="dialog" aria-modal="true" aria-labelledby="pfName" hidden>
@@ -1007,7 +1018,7 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
     </div>
     <div class="pwords" id="pfWords"><span class="pk">In their own words</span><p id="pfStory"></p></div>
     <div class="vid" id="pfVid"><span class="play" aria-hidden="true"></span><span class="vq" id="pfQ"></span><span class="vt">30 to 60 seconds · captions and transcript · the person approves the final edit</span></div>
-    <p class="ppend" id="pfPending">This profile is published with a first name, a role and the route in. The rest follows once the person has approved every word of it, and says only what they choose to say.</p>
+    <p class="ppend" id="pfPending">Published with a first name, a role and the route in. The rest follows once the person has approved every word of it.</p>
     <div class="pnav"><button type="button" id="pPrev">← Previous</button><button type="button" id="pNext">Next →</button></div>
   </div>
 </div>

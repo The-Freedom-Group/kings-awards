@@ -7,7 +7,7 @@
    that turn over, a floor plan that lights station by station, nine
    tiles ticked present as each arrives, the profile sheet, the
    two-year inspection tag, the closing line letter by letter, and
-   the cube that flies into the footer.
+   the extinguisher that rides the page.
    Everything falls back to a plain, readable page without GSAP.
    ══════════════════════════════════════════════════════════════════ */
 (function () {
@@ -21,7 +21,7 @@
   var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined" && typeof window.ScrollSmoother !== "undefined" && typeof window.SplitText !== "undefined";
   var html = document.documentElement;
 
-  if (!hasGsap) { html.classList.add("no-gsap"); var pl0 = $("#preloader"); if (pl0) pl0.style.display = "none"; }
+  if (!hasGsap) { html.classList.add("no-gsap"); var h0 = $("#top"); if (h0) h0.classList.add("open"); var pl0 = $("#preloader"); if (pl0) pl0.style.display = "none"; }
   else {
     html.classList.add("has-gsap");
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
@@ -54,7 +54,7 @@
     var px = -100, py = -100, rx = -100, ry = -100, shown = false;
     window.addEventListener("mousemove", function (e) { px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; } }, { passive: true });
     document.addEventListener("mouseover", function (e) {
-      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .cp, .totop, .pclose, .pnav button, .menu a, .menu .x, .quick button");
+      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .totop, .pclose, .pnav button, .menu a, .menu .x, .quick button, .more summary");
       document.body.classList.toggle("cur-big", !!t);
       document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, select")));
     });
@@ -68,28 +68,13 @@
     })();
   }
 
-  /* ── the cube that rides the page ─────────────────────── */
-  var cubeFixed = $("#cubeFixed");
-  function sizeCubes() { $$(".cube").forEach(function (c) { c.style.setProperty("--w", c.offsetWidth + "px"); }); }
-  sizeCubes(); window.addEventListener("resize", sizeCubes);
+  /* ── the extinguisher that rides the page ─────────────── */
+  var cubeFixed = $("#travel"), prevY = 0, swayV = 0;
+  function sizeCubes() {}
 
-  /* ── the shutter: a press rolls it up, a press rolls it down ── */
-  var cp = $("#cp"), cpTop = $("#cpTop"), cpWord = $("#cpWord"), heroSec = $("#top");
-  function setGlass(broken) {
-    if (!heroSec) return;
-    heroSec.classList.toggle("open", broken);
-    if (cp) { cp.setAttribute("aria-pressed", broken); cp.setAttribute("aria-label", broken ? "Close the shutter" : "Open the shutter — reveal the team"); }
-    if (cpWord) cpWord.textContent = broken ? "Close" : "Open";
-    if (cpTop) { cpTop.textContent = broken ? "Close the door" : "Open the door"; cpTop.classList.toggle("reset", broken); }
-    if (animate) {
-      var lines = $$(broken ? ".hero .opened .line span" : ".hero .closed .line span");
-      gsap.fromTo(lines, { y: "110%", rotation: 3 }, { y: "0%", rotation: 0, duration: 1.4, ease: "power4.out", stagger: .12, delay: broken ? 1.1 : 0 });
-      var rest = $$(broken ? ".hero .opened .k, .hero .opened .strap, .hero .opened .cta" : ".hero .closed .k, .hero .closed .strap");
-      gsap.fromTo(rest, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: .9, stagger: .1, delay: broken ? 1.5 : .2 });
-    }
-  }
-  if (cp) cp.addEventListener("click", function () { setGlass(!heroSec.classList.contains("open")); });
-  if (cpTop) cpTop.addEventListener("click", function () { var broken = !heroSec.classList.contains("open"); setGlass(broken); if (broken) scrollTo("#top"); });
+  /* ── the shutter opens as you scroll; without motion it stands open ── */
+  var heroSec = $("#top");
+  if (!animate && heroSec) heroSec.classList.add("open");
 
   /* ── reveal (IO, works with or without the library) ──────── */
   var watched = $$(".rv, .flip");
@@ -127,19 +112,24 @@
       .fromTo("#preloader", { autoAlpha: 1, y: "0vh" }, { autoAlpha: 0, y: "-100vh", duration: .5, ease: "expo.inOut" }, 1.55)
       .to(".hero .closed .line span", { y: "0%", rotation: 0, duration: 1.8, ease: "power4.out", stagger: .12 }, 1.65)
       .to(".hero .closed .k, .hero .closed .strap", { autoAlpha: 1, y: 0, duration: 1, stagger: .12 }, 2.05)
-      .fromTo("#cpanim", { autoAlpha: 0, y: "18vh" }, { autoAlpha: 1, y: "0vh", duration: 2.2, ease: "sine.out" }, 1.95)
       .fromTo("#chrome", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, 2.3)
       .fromTo("#fm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, 2.6)
       .fromTo("#fr a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, 2.45);
     var flSplit = new SplitText("#fl", { type: "chars" });
     intro.fromTo(flSplit.chars, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", duration: .7, stagger: .05 }, 2.45);
 
-    /* the hero blurs away as you leave it, the photo drifts */
-    gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom 20%", scrub: 1.5 } })
-      .fromTo("#heroFoot", { autoAlpha: 1 }, { filter: "blur(3px)", autoAlpha: 0 }, 0)
-      .fromTo("#heroHead", { autoAlpha: 1 }, { autoAlpha: 0, y: -60, filter: "blur(2px)" }, 0.2)
-      .fromTo("#cpanim", { y: 0 }, { y: -40 }, 0);
-    smoother.effects("#heroPh", { speed: .85 });
+    /* the shutter: the hero pins for a screen's worth of scroll while the slats roll up
+       into the housing, daylight washes in, and the headline changes from "points out"
+       to "a way in"; then the page continues */
+    gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "+=110%", pin: true, scrub: .6, anticipatePin: 1,
+        onUpdate: function (st) { heroSec.classList.toggle("open", st.progress > .55); } } })
+      .to("#slats", { yPercent: -102, ease: "none", duration: .7 }, 0)
+      .to("#stencil", { yPercent: -400, autoAlpha: 0, ease: "none", duration: .45 }, 0)
+      .fromTo("#daylight", { opacity: 0 }, { opacity: .32, duration: .12, ease: "none" }, .42)
+      .to("#daylight", { opacity: 0, duration: .22, ease: "none" }, .54)
+      .to("#hClosed", { autoAlpha: 0, y: -30, duration: .18 }, .32)
+      .fromTo("#hOpened", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .25 }, .56)
+      .to("#fm", { autoAlpha: 0, duration: .1 }, .5);
 
     /* separators with text: 25% → 100% */
     $$(".sep.with-text").forEach(function (el) {
@@ -186,7 +176,7 @@
       onUpdate: function (st) { introSec.classList.toggle("on-white", st.progress > .5); } } })
       .to(introSec, { backgroundColor: "#F4F4F1" }, 0);
 
-    /* the call, letter by letter; the cube flying into the footer; the footer arriving */
+    /* the call, letter by letter; the footer arriving */
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
     gsap.timeline({ scrollTrigger: { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
       .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
@@ -197,7 +187,7 @@
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
   } else if (hasGsap) {
-    gsap.set(["#chrome", "#cpanim", "#fm", "#fr a", "#fl"], { autoAlpha: 1 });
+    gsap.set(["#chrome", "#fm", "#fr a", "#fl"], { autoAlpha: 1 });
     gsap.set(".hero .line span", { y: 0 });
   }
 
@@ -217,6 +207,9 @@
   var floor = $("#floor"), stations = $$("#floor .st");
   function frame() {
     var y = scrollY();
+    /* the extinguisher sways with the scroll and settles when it stops */
+    var dy = y - prevY; prevY = y; swayV = swayV * 0.88 + clamp(dy, -40, 40) * 0.12;
+    if (cubeFixed && !reduce) cubeFixed.style.setProperty("--sway", (swayV * 0.45).toFixed(2) + "deg");
     if (y !== lastY) {
       lastY = y;
       var probe = y + window.innerHeight * 0.42, cur = null;
@@ -225,7 +218,7 @@
       var mx = (html.scrollHeight - window.innerHeight) || 1, pr = clamp(y / mx, 0, 1);
       if (prog) prog.style.transform = "scaleX(" + pr.toFixed(4) + ")";
       if (cubeFixed) { var vh = window.innerHeight, bh = cubeFixed.offsetHeight, ct = vh * 0.11 + (reduce ? 0 : pr * (vh * 0.97 - bh - vh * 0.11));
-        cubeFixed.style.top = ct.toFixed(1) + "px"; if (!reduce) cubeFixed.style.setProperty("--spin", (pr * 540).toFixed(1) + "deg");
+        cubeFixed.style.top = ct.toFixed(1) + "px";
         /* hidden while the people are on screen, so it never sits over a name */
         if (peopleSec) { var pb = peopleSec.getBoundingClientRect(); cubeFixed.classList.toggle("hide", pb.top < vh * 0.85 && pb.bottom > vh * 0.15); } }
       var meta = TITLES[cur]; if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }

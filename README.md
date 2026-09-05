@@ -163,9 +163,11 @@ impact (one panel per beneficiary group with a count, a method note and, where t
 05 The partners (Newbridge College, the Growth Company, Jobcentre Plus, names only until confirmed);
 06 The timeline (dated spine and the two-year inspection tag); 07 How we learn (feedback, adjustment,
 observed result); 08 Evidence record (eligibility statement, the five tests as a navigator, the two
-commitments, and every claim with status, source and evidence ID); 09 What comes next. The call point
-returns with the plan's microcopy, "In case of missed potential. Break glass", and the reveal from "Not
-everyone arrives by the same route" to "Everyone deserves a way in". Deficit labels, the nine-person and
+commitments, and every claim with status, source and evidence ID); 09 What comes next. The hero is a warehouse roller shutter that opens on scroll: the hero pins for a screen's worth of
+scrolling while the slats roll up into their housing, daylight washes in and the headline changes from "Not
+everyone arrives by the same route" to "Everyone deserves a way in"; there is no button. Copy was cut on
+5 September to the facts the application needs, with supporting detail behind small "+" popovers. A Firestorm
+extinguisher rides down the right-hand margin with the scroll, swaying as it goes and hiding over the people. Deficit labels, the nine-person and
 four-of-four claims, the headcount bracket, "paid from day one" and "certified trade" are gone. The claim
 register lives in `staff/data/` (PO- evidence IDs, consent flags in `people.json`). GSAP is self-hosted in
 `staff/vendor/`. The preloader fails safe at two seconds; skip-animation and view-evidence links sit at the
