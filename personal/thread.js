@@ -36,9 +36,10 @@
   function readyOnce() { if (!readied) { readied = true; ready(); } }
   if (reduce) { readyOnce(); }
   else {
-    if (document.readyState === "complete") { setTimeout(readyOnce, 900); }
-    else { window.addEventListener("load", function () { setTimeout(readyOnce, 900); }); }
-    setTimeout(readyOnce, 3200);
+    if (document.readyState === "complete") { setTimeout(readyOnce, 700); }
+    else { window.addEventListener("load", function () { setTimeout(readyOnce, 700); }); }
+    /* failsafe: nobody waits behind the monogram for more than two seconds */
+    setTimeout(readyOnce, 2000);
   }
 
   /* ── portrait load ────────────────────────────────────────── */
@@ -127,8 +128,8 @@
   });
 
   /* ── poster words, one per chapter ────────────────────────── */
-  var PW = { c01: "UNIT", c02: "BUILD", c03: "MOMENTUM", c04: "GROUP",
-             c05: "METHOD", c06: "RECORD", c07: "NEXT" };
+  var PW = { c01: "SPARK", c02: "SYSTEM", c03: "PROOF", c04: "METHOD",
+             c05: "PEOPLE", c06: "PLATFORM", c07: "RECORD", c08: "NEXT" };
   var pws = [];
   Object.keys(PW).forEach(function (id) {
     var sec = document.getElementById(id);
@@ -175,11 +176,11 @@
   });
 
   /* ── construct on entry, deconstruct on exit ──────────────── */
-  var watched = $$(".rv, .draw, .map, .plate");
+  var watched = $$(".rv, .draw, .map, .plate"), io = null;
   if (!("IntersectionObserver" in window) || reduce) {
     watched.forEach(function (e) { e.classList.add("in"); });
   } else {
-    var io = new IntersectionObserver(function (es) {
+    io = new IntersectionObserver(function (es) {
       es.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
     }, { rootMargin: "-4% 0px -10% 0px", threshold: 0.06 });
     watched.forEach(function (e) { io.observe(e); });
@@ -231,11 +232,12 @@
     { id: "c01",  side: "L", y: 0.42 },
     { id: "c02",  side: "R", y: 0.42 },
     { id: "c03",  side: "L", y: 0.42 },
-    { id: "c04",  side: "C", y: 0.40 },
-    { id: "c05",  side: "R", y: 0.42 },
+    { id: "c04",  side: "R", y: 0.42 },
+    { id: "c05",  side: "L", y: 0.42 },
+    { id: "c06",  side: "C", y: 0.40 },
     { id: "slab", side: "C", y: 0.50, noKnot: true },
-    { id: "c06",  side: "L", y: 0.42 },
-    { id: "c07",  side: "C", y: 0.52 }
+    { id: "c07",  side: "L", y: 0.42 },
+    { id: "c08",  side: "C", y: 0.52 }
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1;
@@ -525,15 +527,15 @@
 
   /* ══ MASTER LOOP ══════════════════════════════════════════ */
   var chapters = $$("#explore .ch, #explore .hero, #explore .scene, #explore .slab");
-  var yrail = $("#yrail"), c03El = document.getElementById("c03");
+  var yrail = $("#yrail"), c03El = yrail ? yrail.closest(".ch") : null;
   function W() { return explore ? explore.offsetWidth : window.innerWidth; }
   var chrome = $("#chrome"), spine = $$(".spine a");
   var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
-  var TITLES = { top:["00","Tom Letcher"], ones:["00","One Unit"], c01:["01","One Unit"],
-    c02:["02","The Build"], c03:["03","Momentum"], c04:["04","Freedom Group"],
-    c05:["05","How I Build"], slab:["—","Five Years"], c06:["06","The Record"],
-    c07:["07","Still Building"] };
+  var TITLES = { top:["00","Tom Letcher"], ones:["00","The Spark"], c01:["01","The Spark"],
+    c02:["02","Sale to System"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
+    c05:["05","Built With People"], c06:["06","The Platform Ahead"], slab:["—","Seven Years"],
+    c07:["07","The Record"], c08:["08","Still Building"] };
   var lastCard = "";
   var lastY = -1, velY = 0;
 
@@ -709,23 +711,23 @@
 
   /* ── the group map ────────────────────────────────────────── */
   var DATA = {
-    group:   { n: "Freedom Group Enterprise Ltd", t: "The holding company.",
-               b: "Owner of the group's brands, trademarks, intellectual property and long-term strategy, licensing them to each specialist operating company. Brands · IP · Strategy · Capital." },
-    global:  { n: "Freedom Global Ltd", t: "Active — currently trading as Freedom Fire &amp; Safety Ltd.",
-               b: "Consumer ecommerce and D2C: the group's established commercial engine, scaling owned brands across marketplaces, ecommerce channels and specialist online storefronts. Commerce ecosystem: Amazon, eBay, Shopify, Temu, TikTok Shop, OnBuy and specialist storefronts. Core brands: Firestorm™, Voltz™, Kunergy™, T3™, Crystal Cleaning Solutions™.",
+    group:   { n: "Freedom Group", t: "Group strategy and brand architecture. Not a registered company.",
+               b: "The operating model the trading company runs on today, and the shape the next companies would take: brands and IP held in the company's name, direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.freedomgroup.uk" },
+    global:  { n: "Freedom Fire &amp; Safety Ltd", t: "Trading. Company 13589467, incorporated 27 August 2021.",
+               b: "The registered company behind every figure on this page. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay and Temu and an own site, with Amazon, OnBuy and Shopify in launch; servicing and contracted site work nationwide. Trades online as Freedom Global.",
                u: "https://www.freedom-fire.co.uk" },
-    fac:     { n: "Freedom Facilities Ltd", t: "Planned — compliance · servicing · facilities.",
-               b: "A recurring-revenue operation delivering fire safety servicing, installation, compliance and facilities support. Core market: commercial premises, education, warehousing, construction, hospitality and the public sector." },
-    dist:    { n: "Freedom Distribution Ltd", t: "Planned — trade distribution · B2B.",
-               b: "A wholesale operation supplying the group's owned brands to national retailers, electrical wholesalers, trade partners, commercial distributors and export partners. Core categories: fire safety, batteries, PPE, cleaning, automotive." },
-    form:    { n: "Freedom Form Ltd", t: "Future, 2029 — property · development · design.",
-               b: "A future commercial property platform for the group's premises, acquisitions and growth." },
-    freight: { n: "Freedom Freight Ltd", t: "Future, 2029 — freight · imports · logistics.",
-               b: "A future logistics arm for imports, freight control and supply-chain efficiency." },
-    fly:     { n: "Freedom Fly Ltd", t: "Future, 2030+ — drone tech · aerial services.",
-               b: "A future specialist business focused on surveying, inspection and aerial visual services." },
-    fuel:    { n: "Freedom Fuel Ltd", t: "Future, 2036+ — forecourts · energy · retail.",
-               b: "A long-term ambition to develop or acquire petrol stations, forecourts and convenience-retail locations." }
+    fac:     { n: "Freedom Facilities", t: "Proposed, 24 to 36 months. Not yet registered.",
+               b: "A separate operating company for compliance, servicing and facilities on recurring contracts, taking the existing servicing work out of the trading company once it justifies its own management and accounts." },
+    dist:    { n: "Freedom Distribution", t: "Proposed, 24 to 36 months. Not yet registered.",
+               b: "A separate operating company for trade and B2B supply of the owned brands to retailers, wholesalers and distributors. Depends on the brand portfolio and direct sourcing already in place." },
+    form:    { n: "Property", t: "Long-term option. No company, no date.",
+               b: "A commercial property platform for the group's own premises, kept open as an option in the group model." },
+    freight: { n: "Freight", t: "Long-term option. No company, no date.",
+               b: "A logistics arm for imports and freight control. The in-house consignment tracker is the only part of this that exists today." },
+    fly:     { n: "Aerial services", t: "Long-term option. No company, no date.",
+               b: "Surveying and inspection. An option in the group model, not a plan." },
+    fuel:    { n: "Forecourts", t: "Long-term option. No company, no date.",
+               b: "Forecourt and convenience retail. An option in the group model, not a plan." }
   };
   var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
   $$(".node").forEach(function (nd) {
@@ -772,9 +774,22 @@
 
   /* ── a chapter link taken from the Verified Record returns to Explore first;
         otherwise the anchor sits inside a hidden block and the click does nothing ── */
-  $$(".chrome nav a, .sheet a, .mono-mark, .skip").forEach(function (a) {
+  $$(".chrome nav a, .sheet a, .mono-mark, .skip:not(#skipRec)").forEach(function (a) {
     a.addEventListener("click", function () {
       if (document.body.dataset.view === "record") applyView("explore");
     });
+  });
+
+  /* ── "View the verified record" and "View evidence" open the record view directly ── */
+  $$("[data-view-record], #skipRec").forEach(function (a) {
+    a.addEventListener("click", function (ev) { ev.preventDefault(); setView("record"); });
+  });
+
+  /* ── "Skip animation": everything readable at once, nothing waits on a reveal ── */
+  var skipAnim = $("#skipAnim");
+  if (skipAnim) skipAnim.addEventListener("click", function () {
+    readyOnce(); heroIn = 1;
+    $$(".rv, .draw, .map, .plate, .metrics, .grp-list, .hero-type").forEach(function (el) { el.classList.add("in"); });
+    if (io) { $$(".rv, .draw, .map, .plate").forEach(function (el) { io.unobserve(el); }); }
   });
 })();

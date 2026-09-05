@@ -1,0 +1,71 @@
+{
+  "_note": "Public sources carry a URL. Private sources are described, never linked; the underlying file is supplied through the application route or on due-diligence request. No private file paths appear in the client build.",
+  "CH-13589467": {
+    "kind": "public",
+    "name": "Companies House register, Freedom Fire & Safety Ltd (13589467)",
+    "url": "https://find-and-update.company-information.service.gov.uk/company/13589467"
+  },
+  "CH-OFFICERS": {
+    "kind": "public",
+    "name": "Companies House officers, Freedom Fire & Safety Ltd",
+    "url": "https://find-and-update.company-information.service.gov.uk/company/13589467/officers"
+  },
+  "UKIPO-FIRESTORM": {
+    "kind": "public",
+    "name": "UK Intellectual Property Office trade mark register, FIRESTORM (classes 9 and 20)",
+    "url": "https://www.gov.uk/search-for-trademark"
+  },
+  "EBAY-LQR-2026-07": {
+    "kind": "private",
+    "name": "eBay listing quality report, GB, category sales rank, end of July 2026 (platform export)"
+  },
+  "EBAY-SALES": {
+    "kind": "private",
+    "name": "eBay seller hub sales exports, by period (platform export)"
+  },
+  "TEMU-SALES": {
+    "kind": "private",
+    "name": "Temu seller centre sales export and best-seller ranking screenshots (platform export)"
+  },
+  "EBAY-AWARDS-2024": {
+    "kind": "private",
+    "name": "eBay UK Business Awards 2024, runner-up: event record, invitation and photographs"
+  },
+  "SERVICING-LEDGER": {
+    "kind": "private",
+    "name": "Servicing and contracted site work invoicing (accounting system)"
+  },
+  "LEASES": {
+    "kind": "private",
+    "name": "Unit 10 and Unit 19 lease agreements and move dates"
+  },
+  "SUPPLIER-JINDUN": {
+    "kind": "private",
+    "name": "Direct manufacturing agreement, first purchase order and shipping documents"
+  },
+  "CONTAINER-2024-12": {
+    "kind": "private",
+    "name": "Bill of lading and arrival record, first Firestorm container, December 2024"
+  },
+  "FOUNDER-ACCOUNT": {
+    "kind": "private",
+    "name": "Founder's dated account, with listings, messages and photographs from the period"
+  },
+  "BANK-2019-2020": {
+    "kind": "private",
+    "name": "Sole-trader bank and marketplace records, 2019 to 2021"
+  },
+  "PLACEMENT-RECORDS": {
+    "kind": "private",
+    "name": "Placement agreements, college correspondence and T Level paperwork (Growth Company)"
+  },
+  "PAYROLL": {
+    "kind": "private",
+    "name": "Payroll and contracts (FTE definition), confidential"
+  },
+  "GOVUK-KAE": {
+    "kind": "public",
+    "name": "King's Awards for Enterprise, eligibility",
+    "url": "https://www.gov.uk/kings-awards-for-enterprise/eligibility"
+  }
+}

@@ -128,21 +128,30 @@ and leave out anyone who would rather not appear.
 
 Two deliberately different registers, because they are for different readers.
 
-**Personal — The Freedom Line.** One pink line is drawn from the first unit to what comes
-next. It enters the hero from the left, lifts over the portrait, drops down the right with
-four spurs (Fire, Global, Distribution, Facilities), threads all seven chapters and settles
-at the foot of the page with a beacon and "still drawing". Porcelain, carbon and pink, with
-pink held to roughly 5% of the surface. Anton for display, Inter for text, Instrument Serif
-italic for the script accents. Around the chapters: an entrance line, a custom cursor,
-velocity marquees, a pinned 2021 scene ("One key. One unit. One director. Aged 25."),
-drifting topographic contours, poster words, a years rail that moves with the scroll, and
-a corner card naming the chapter. Chapter 04 is the group map drawn as the Freedom Group
-logo's orbital system — gradient planets on a tilted pink tape, operating companies lit,
-planned ones small and dark on the outer ring. **Explore ⇄ Verified Record** in the header
-swaps the whole thing for a clean printable page behind a pink wipe. Third person
-throughout, one first-person pull quote. Keyboard-navigable (skip link, focus-trapped
-chapter sheet), and `prefers-reduced-motion` collapses it all to a still, fully readable
-page.
+**Personal — Tom Letcher.** Rebuilt on 5 September 2026 to the founder portfolio master plan (Tom's
+document of 4 September), with the visual design locked: porcelain, carbon and pink, Anton, Inter and
+Instrument Serif, the pink line, the pinned scene, the group map and the Explore ⇄ Verified Record switch
+are all unchanged. What changed is the content hierarchy, the copy and the evidence. The origin now starts
+at the real object, one second-hand extinguisher sold on Facebook Marketplace in March 2019, with the
+dated steps to incorporation on 27 August 2021 stated separately. Eight chapters in the plan's order:
+01 The Spark, 02 From Sale to System (eight problem → decision → build → result stages), 03 Proof, Not
+Promise (six metrics, each with definition, period, scope, source type and last-checked date), 04 How I
+Build (five decision stories, including three dated resilience cases and three feedback-to-change cases),
+05 Built With People (with a link to The Way In rather than repeating it), 06 The Platform Ahead (three
+horizons: trading, proposed within 24 to 36 months, long-term options; the map relabelled so only the
+registered company is a fact), 07 The Record, 08 Still Building (a short long view, three actions and a
+restrained dedication). All TK placeholders, age copy and award-test language are gone from Explore.
+Statuses use three labels everywhere: Verified, Management data, Target. Outstanding items are held back
+from the live story and listed only in the register.
+
+The claim register lives in `personal/data/` as `claims.json`, `metrics.json`, `timeline.json`,
+`sources.json` and `people.json` (approved public fields only; no private file paths or personal data).
+`python personal/build_record.py` regenerates the Verified Record's commercial-record and timeline tables
+from it, so a figure is written once. The hero offers "Watch the two-minute story" (a film slot in
+chapter 01, scheduled for September 2026) and "View the verified record". Top-of-page links: skip to the
+story, skip animation, view evidence. The entrance loader fails safe at two seconds. Canonical URL is
+`https://tomletcher.co.uk/`; the page stays `noindex` until Tom wants it discoverable, and the 301 from
+the awards URL is set up when the domain is.
 
 **Staff — The Way In.** Built for one reader, the assessor, and cut back on 4 September 2026 to the
 Promoting Opportunity criteria and nothing else. Every chapter answers a line of the eligibility text, in
