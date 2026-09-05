@@ -97,7 +97,7 @@
       return seed / 0x7fffffff;
     };
   }
-  $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab").forEach(function (sec, si) {
+  $$("#explore .hero, #explore .ch, #explore .scene, #explore .slab, #explore .mq, footer").forEach(function (sec, si) {
     var rand = rnd(97 + si * 131);
 
 
@@ -328,7 +328,15 @@
                  id: p.id, el: el, noKnot: !!p.noKnot });
     });
     if (pts.length < 2) return false;
-    pts.push({ x: CX, y: H + 40, id: "beyond", el: null, noKnot: true });
+    /* the line's destination: the centre of the back-to-start button in the footer,
+       measured in the story's own coordinates (the footer sits below the story) */
+    var tt = document.querySelector("#totop .ring"), er = explore.getBoundingClientRect();
+    if (tt) {
+      var tr = tt.getBoundingClientRect();
+      pts.push({ x: tr.left + tr.width / 2 - er.left, y: tr.top + tr.height / 2 - er.top, id: "beyond", el: null, noKnot: true });
+    } else {
+      pts.push({ x: CX, y: H + 40, id: "beyond", el: null, noKnot: true });
+    }
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
     for (var i = 0; i < pts.length - 1; i++) {
@@ -379,26 +387,19 @@
       knots.push(k); knotAt.push(best.l / totalLen);
     });
 
-    /* where the head lands: the last point of the line still on the page */
-    endPt = null; endFrac = 1;
-    for (var e2 = 0; e2 < samples.length; e2++) {
-      if (samples[e2].y >= H - 90) {
-        endPt = samples[e2];
-        endFrac = samples[e2].l / totalLen;
-        break;
-      }
-    }
-    if (!endPt) { endPt = samples[samples.length - 1]; endFrac = 0.99; }
-    /* the furthest the reader can scroll is the foot of the story; the
-       scroll-to-line mapping is scaled so the tip arrives at the end point
+    /* where the head lands: the very end of the line, on the button */
+    endPt = samples[samples.length - 1]; endFrac = 0.999;
+    /* the furthest the reader can scroll is the foot of the page; the
+       scroll-to-line mapping is scaled so the tip arrives on the button
        exactly there - the burst fires only when it does */
-    var pReachRaw = (H - window.innerHeight * 0.38) / H;
+    var docH = document.documentElement.scrollHeight || H;
+    var pReachRaw = (docH - window.innerHeight * 0.38) / H;
     pScale = pReachRaw > 0 ? (endFrac + 0.001) / pReachRaw : 1;
     if (endNote) endNote.remove();
     endNote = document.createElement("span");
     endNote.className = "endnote";
     endNote.textContent = "— still drawing";
-    endNote.style.left = (endPt.x + 20) + "px";
+    endNote.style.left = (endPt.x + 54) + "px";
     endNote.style.top = endPt.y + "px";
     thread.appendChild(endNote);
     /* knots count back up the line, so the landing flash runs bottom to top */
@@ -443,6 +444,7 @@
     /* the head rides the line, then settles at the page's edge and beacons */
     var landed = p >= endFrac - 0.002;
     thread.classList.toggle("landed", landed);
+    document.body.classList.toggle("landed", landed);
     if (landed && !wasLanded) burst(endPt);
     wasLanded = landed;
     if (p > 0.004) {
