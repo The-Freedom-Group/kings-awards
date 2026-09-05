@@ -54,9 +54,9 @@
     var px = -100, py = -100, rx = -100, ry = -100, shown = false;
     window.addEventListener("mousemove", function (e) { px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; } }, { passive: true });
     document.addEventListener("mouseover", function (e) {
-      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .cp, .totop");
+      var t = e.target.closest && e.target.closest("[data-cur], .tile, .sq, .cp, .totop, .pclose, .pnav button, .menu a, .menu .x, .quick button");
       document.body.classList.toggle("cur-big", !!t);
-      document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, .prof-in, .menu")));
+      document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, select")));
     });
     document.addEventListener("mouseleave", function () { document.body.classList.add("cur-off"); });
     document.addEventListener("mouseenter", function () { document.body.classList.remove("cur-off"); });
