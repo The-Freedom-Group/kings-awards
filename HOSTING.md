@@ -3,7 +3,7 @@
 | Site | Source in this repo | Built output | Served from | Domain |
 |---|---|---|---|---|
 | Tom's founder portfolio | `personal/` | `sites/tomletcher/public/` | Cloudflare Worker `tomletcher` | **tomletcher.co.uk** |
-| The Way In (team site) | `staff/` | `sites/thewayin/public/` | Cloudflare Worker `thewayin` | **thewayin.freedomfireandsafety.co.uk** |
+| The Way In (team site) | `staff/` | `sites/thewayin/public/` | Cloudflare Worker `thewayin` | **thewayin.freedom-fire.co.uk** |
 | King's Awards gateway | `index.html` | `docs/` (with redirect stubs) | GitHub Pages | awards.freedomgroup.uk |
 
 `python build_sites.py` rebuilds all three outputs from the sources. Edit only the
@@ -41,17 +41,14 @@ directory**. Do this twice.
 
 ### Worker 2: `thewayin`
 
-The zone **freedomfireandsafety.co.uk does not resolve at all today** (checked
-5 September 2026), so this one needs a zone first.
+freedom-fire.co.uk is already on the same Cloudflare account, so this is the same job as
+Worker 1.
 
-1. If the domain is not yet registered, register it (Cloudflare Registrar is
-   simplest, since the site will be served from Cloudflare). If it is registered
-   elsewhere, **Websites → Add a domain** → follow the nameserver change.
-2. **Compute → Workers & Pages → Create → Import a repository** →
+1. **Compute → Workers & Pages → Create → Import a repository** →
    **kings-awards** again. Project name **thewayin**, **Root directory**
    `sites/thewayin`, build command empty, deploy `npx wrangler deploy`. Deploy.
-3. Worker → **Settings → Domains & Routes → Add → Custom domain** →
-   `thewayin.freedomfireandsafety.co.uk`. Cloudflare adds the record and the
+2. Worker → **Domains → Add → Custom domain** → domain freedom-fire.co.uk,
+   subdomain `thewayin`. Cloudflare adds the record and the
    certificate.
 
 Both Workers are **public** by design: these two sites are meant to be read by
@@ -99,6 +96,6 @@ git push origin kae-2027-submission
 ```bash
 curl -I https://tomletcher.co.uk/                          # 200, server: cloudflare
 curl -I https://tomletcher.co.uk/personal/                  # 301 -> /
-curl -I https://thewayin.freedomfireandsafety.co.uk/        # 200
+curl -I https://thewayin.freedom-fire.co.uk/        # 200
 curl -I https://awards.freedomgroup.uk/personal/            # 200 until cut-over; then the stub
 ```

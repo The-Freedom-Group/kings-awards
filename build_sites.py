@@ -13,7 +13,7 @@ import os, re, shutil, sys, json
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 TOM = "https://tomletcher.co.uk/"
-WAY = "https://thewayin.freedomfireandsafety.co.uk/"
+WAY = "https://thewayin.freedom-fire.co.uk/"
 AWARDS = "https://awards.freedomgroup.uk/"
 COMPAT = "2026-09-01"
 

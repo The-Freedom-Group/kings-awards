@@ -186,7 +186,7 @@ Both are responsive, keyboard-navigable, respect `prefers-reduced-motion`, and p
 ## Hosting
 
 Three sites, two domains, one repo. The founder portfolio is served at **tomletcher.co.uk** and
-The Way In at **thewayin.freedomfireandsafety.co.uk**, each as a Cloudflare static-asset Worker built
+The Way In at **thewayin.freedom-fire.co.uk**, each as a Cloudflare static-asset Worker built
 from this repo (`python build_sites.py` → `sites/tomletcher/` and `sites/thewayin/`). The gateway stays
 on GitHub Pages at **awards.freedomgroup.uk**, and once both domains are live its `/personal/` and
 `/staff/` paths become redirects (`docs/`). The dashboard steps, the DNS position of each domain and
