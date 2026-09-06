@@ -69,7 +69,7 @@
   }
 
   /* ── the extinguisher that rides the page ─────────────── */
-  var cubeFixed = $("#travel"), prevY = 0, swayV = 0;
+  var progP = 0, progT = 0;
   function sizeCubes() {}
 
   /* ── the shutter opens as you scroll; without motion it stands open ── */
@@ -196,38 +196,53 @@
   var chapters = $$("#story .ch, #story .hero, #story .intro");
   var TITLES = { top: ["00", "The way in"], why: ["01", "Why it exists"], programme: ["02", "The route in"], people: ["03", "The people"],
     impact: ["04", "The impact"], partners: ["05", "The partners"], timeline: ["06", "The timeline"], learn: ["07", "How we learn"],
-    record: ["08", "Evidence record"], next: ["09", "What comes next"] };
+    next: ["08", "What comes next"] };
+  /* the rail: a thin track from the foot of the hero to the end of the story, a red line
+     that eases towards how far you have read, a lamp at its head, and a tick per chapter */
+  var routeTrack = $("#routeTrack"), routeHead = $("#routeHead"), ticks = [], litP = 0;
+  function buildTicks() {
+    ticks.forEach(function (t) { t.remove(); }); ticks = [];
+    if (!route) return;
+    chapters.forEach(function (sec) {
+      if (sec.id === "top") return;
+      var t = document.createElement("i"); t.className = "tick"; t.sec = sec; route.appendChild(t); ticks.push(t);
+    });
+  }
   function drawRoute(y) {
     if (!route || !lit || !story) return;
-    var H = story.offsetHeight, top = hero ? hero.offsetHeight : 0, reach = clamp(y + window.innerHeight * 0.58, top, H - 30);
-    lit.style.top = top + "px"; lit.style.height = Math.max(0, reach - top) + "px";
-    route.classList.toggle("landed", reach >= H - 32);
+    var H = story.offsetHeight, top = hero ? hero.offsetHeight : 0, span = Math.max(1, H - 30 - top);
+    var target = clamp((y + window.innerHeight * 0.58 - top) / span, 0, 1);
+    litP = reduce ? target : litP + (target - litP) * 0.16;
+    if (Math.abs(target - litP) < 0.0004) litP = target;
+    var reach = top + litP * span;
+    lit.style.top = top + "px"; lit.style.height = span + "px"; lit.style.transform = "scaleY(" + litP.toFixed(4) + ")";
+    if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = span + "px"; }
+    if (routeHead) routeHead.style.top = reach.toFixed(1) + "px";
+    for (var i = 0; i < ticks.length; i++) {
+      var st = ticks[i].sec.offsetTop; ticks[i].style.top = st + "px"; ticks[i].classList.toggle("on", reach >= st - 2);
+    }
+    route.classList.toggle("landed", litP >= 0.999);
   }
   var peopleSec = $("#people"), prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
   var floor = $("#floor"), stations = $$("#floor .st");
   function frame() {
     var y = scrollY();
-    /* the extinguisher sways with the scroll and settles when it stops */
-    var dy = y - prevY; prevY = y; swayV = swayV * 0.88 + clamp(dy, -40, 40) * 0.12;
-    if (cubeFixed && !reduce) cubeFixed.style.setProperty("--sway", (swayV * 0.45).toFixed(2) + "deg");
     if (y !== lastY) {
       lastY = y;
       var probe = y + window.innerHeight * 0.42, cur = null;
       chapters.forEach(function (s) { if (probe >= s.offsetTop && probe < s.offsetTop + s.offsetHeight) cur = s.id; });
       if (!cur && chapters.length && probe >= chapters[chapters.length - 1].offsetTop) cur = chapters[chapters.length - 1].id;
       var mx = (html.scrollHeight - window.innerHeight) || 1, pr = clamp(y / mx, 0, 1);
-      if (prog) prog.style.transform = "scaleX(" + pr.toFixed(4) + ")";
-      if (cubeFixed) { var vh = window.innerHeight, bh = cubeFixed.offsetHeight, ct = vh * 0.11 + (reduce ? 0 : pr * (vh * 0.97 - bh - vh * 0.11));
-        cubeFixed.style.top = ct.toFixed(1) + "px";
-        /* hidden while the people are on screen, so it never sits over a name */
-        if (peopleSec) { var pb = peopleSec.getBoundingClientRect(); cubeFixed.classList.toggle("hide", pb.top < vh * 0.85 && pb.bottom > vh * 0.15); } }
+      progT = pr;
       var meta = TITLES[cur]; if (meta && cur !== lastCard) { lastCard = cur; if (now) { nowN.textContent = meta[0]; nowT.textContent = meta[1]; } }
       if (now) now.classList.toggle("on", y > window.innerHeight * 0.5);
       if (floor && stations.length) { var r = floor.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.85 - r.top) / (r.height + window.innerHeight * 0.25), 0, 1); floor.style.setProperty("--lp", lp.toFixed(3)); stations.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.5) / stations.length); }); }
-      drawRoute(y);
     }
+    drawRoute(y);
+    if (prog) { progP = reduce ? progT : progP + (progT - progP) * 0.16; if (Math.abs(progT - progP) < 0.0004) progP = progT; prog.style.transform = "scaleX(" + progP.toFixed(4) + ")"; }
     requestAnimationFrame(frame);
   }
+  buildTicks();
   requestAnimationFrame(frame);
   var rebuildTimer = null;
   function rebuild() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(function () { lastY = -1; sizeCubes(); }, 140); }
@@ -261,20 +276,27 @@
     $("#pfSupport").textContent = d.support || ""; $("#pfSkills").textContent = d.skills || "";
     $("#pfResp").textContent = d.resp || ""; $("#pfNext").textContent = d.next || "";
     $$("#pfFields .opt").forEach(function (el) { el.style.display = el.querySelector("b").textContent ? "" : "none"; });
-    var tpl = $("template.story", t); $("#pfStory").innerHTML = tpl ? tpl.innerHTML : "";
-    $("#pfWords").style.display = tpl ? "" : "none";
     $("#pfQ").textContent = "Film with " + d.name + ": to be recorded";
     $("#pfVid").style.setProperty("--a", getComputedStyle(t).getPropertyValue("--a"));
     var v = $("#pfVideo"), vid = $("#pfVid"), img = $("#pfImg"), note = $("#pfVnote");
-    if (v) { v.pause(); if (d.video) { if (v.getAttribute("src") !== d.video) v.src = d.video; v.poster = d.photo || ""; v.hidden = false; vid.classList.add("has-video"); } else { v.removeAttribute("src"); v.hidden = true; vid.classList.remove("has-video"); } }
-    if (note) note.hidden = !d.video;
+    /* a film on Cloudflare Stream arrives as the Stream player; the master is never scaled by us */
+    var oldFrame = vid.querySelector("iframe"); if (oldFrame) oldFrame.remove();
+    var cust = document.body.getAttribute("data-stream-customer");
+    if (d.stream && cust) {
+      if (v) { v.pause(); v.removeAttribute("src"); v.hidden = true; }
+      var fr = document.createElement("iframe");
+      fr.src = "https://customer-" + cust + ".cloudflarestream.com/" + d.stream + "/iframe?preload=metadata&letterboxColor=%23000000";
+      fr.allow = "accelerometer; gyroscope; encrypted-media; picture-in-picture; fullscreen"; fr.allowFullscreen = true;
+      fr.title = "Film with " + d.name; fr.loading = "lazy";
+      vid.appendChild(fr); vid.classList.add("has-video");
+    } else if (v) { v.pause(); if (d.video) { if (v.getAttribute("src") !== d.video) v.src = d.video; v.poster = d.photo || ""; v.hidden = false; vid.classList.add("has-video"); } else { v.removeAttribute("src"); v.hidden = true; vid.classList.remove("has-video"); } }
+    if (note) note.hidden = !(d.video || d.stream);
     if (img) { if (d.photo) { img.src = d.photo; img.hidden = false; } else { img.hidden = true; } }
     var was = !prof.hidden; prof.hidden = false; document.body.classList.add("prof-open"); if (smoother) smoother.paused(true); if (!was) pclose.focus();
     var inn = $(".prof-in"); if (inn) { inn.scrollTop = 0; inn.style.animation = "none"; void inn.offsetWidth; inn.style.animation = ""; }
   }
-  function closeProf() { if (!prof || prof.hidden) return; var v0 = $("#pfVideo"); if (v0) v0.pause(); prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
+  function closeProf() { if (!prof || prof.hidden) return; var v0 = $("#pfVideo"); if (v0) v0.pause(); var fr0 = $("#pfVid iframe"); if (fr0) fr0.remove(); prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
   tiles.forEach(function (t) { t.addEventListener("click", function () { openProf(t); }); });
-  var founderBtn = $("#founder"); if (founderBtn) founderBtn.addEventListener("click", function () { openProf(founderBtn); });
   if (pclose) pclose.addEventListener("click", closeProf);
   var pPrev = $("#pPrev"), pNext = $("#pNext");
   if (pPrev) pPrev.addEventListener("click", function () { openProf(tiles[(curIx - 1 + tiles.length) % tiles.length]); });

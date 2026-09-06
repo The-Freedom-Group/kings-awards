@@ -3,7 +3,9 @@
   "founder": {
     "name": "Tom Letcher",
     "role": "Founder, programme sponsor and mentor",
-    "counted_as_participant": false
+    "counted_as_participant": false,
+    "photo": "assets/people/tom.jpg",
+    "film": "recorded 2026-09-06, two-minute film and full master held; hosting pending"
   },
   "people": [
     {
@@ -26,7 +28,12 @@
       "role": "Warehouse operative",
       "route": "T Level industry placement",
       "since": "September 2025",
-      "consent": "pending"
+      "consent": "approved",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-06",
+      "photo": "assets/people/harrison.jpg",
+      "film": "recorded 2026-09-06, master held; hosting pending",
+      "film_recorded": "2026-09-06"
     },
     {
       "id": "P03",
@@ -48,14 +55,24 @@
       "role": "Warehouse operative",
       "route": "College placement",
       "since": "one of the earliest placements",
-      "consent": "pending"
+      "consent": "approved",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-06",
+      "photo": "assets/people/jojo.jpg",
+      "film": "recorded 2026-09-06, master held; hosting pending",
+      "film_recorded": "2026-09-06"
     },
     {
       "id": "P05",
       "name": "Elliot",
       "role": "Ecommerce assistant",
       "route": "Student, working alongside study",
-      "consent": "pending"
+      "consent": "approved",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-06",
+      "photo": "assets/people/elliot.jpg",
+      "film": "recorded 2026-09-06, master held; hosting pending",
+      "film_recorded": "2026-09-06"
     },
     {
       "id": "P06",
@@ -69,14 +86,23 @@
       "name": "Billy",
       "role": "IT technician",
       "route": "T Level industry placement",
-      "consent": "pending"
+      "consent": "approved",
+      "film": "recorded 2026-09-04, master held; no portrait yet; hosting pending",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-06",
+      "photo": "assets/people/billy.jpg"
     },
     {
       "id": "P08",
       "name": "Josh",
       "role": "Ecommerce assistant",
-      "route": "Jobcentre Plus referral",
-      "consent": "pending"
+      "route": "Recruited locally, no CV filter",
+      "consent": "approved",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-06",
+      "photo": "assets/people/josh.jpg",
+      "film": "recorded 2026-09-06, master held; hosting pending",
+      "film_recorded": "2026-09-06"
     }
   ],
   "withdrawal_contact": "info@freedom-fire.co.uk"
