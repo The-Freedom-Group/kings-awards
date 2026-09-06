@@ -56,7 +56,7 @@ DEPARTMENTS = [
      "people": [("Alex Parker", "Accounts", "PT", False),
                 ("Vishal Bhanderi", "Accounts & Bookkeeping", "PT", False),
                 ("Milad Shukri", "IT", "CT", False),
-                ("Billy Kelly", "IT", "CT", False)],
+                ("Billy Kelly", "IT", "VO", False)],
      "note": ""},
     {"name": "Early careers, placements and training",
      "people": [],
@@ -200,7 +200,7 @@ for i, d in enumerate(row2):
 ly = 7.4
 lx = L
 t = box(slide, lx, ly, 0.5, 0.18); text(t, [[("KEY", 6, True, BLACK)]], anchor=MSO_ANCHOR.MIDDLE); lx += 0.42
-for tag in ("FT", "PT", "CT"):
+for tag in ("FT", "PT", "CT", "VO"):
     label, fill, fg = TAG[tag]
     pill(slide, lx, ly + 0.01, label, fill, fg, w=0.74, border=(BLACK if tag == "CT" else GREY if tag == "VO" else None)); lx += 0.8
 box(slide, lx + 0.08, ly + 0.01, 0.05, 0.16, fill=RED)

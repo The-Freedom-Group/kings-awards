@@ -28,9 +28,9 @@ def metrics_table(metrics, sources, claims):
         src_html = ('<a href="%s">%s</a>' % (esc(src["url"]), esc(src["name"]))) if src["kind"] == "public" \
                    else esc(src["name"]) + " · on request"
         rows.append(
-            "<tr><td class=\"v\">%s</td><td class=\"d\"><b>%s.</b> %s</td><td class=\"d\">%s<br><small>%s</small></td>"
+            "<tr id=\"rec-%s\"><td class=\"v\">%s</td><td class=\"d\"><b>%s.</b> %s</td><td class=\"d\">%s<br><small>%s</small></td>"
             "<td class=\"d\"><span class=\"status %s\">%s</span><br>%s</td><td class=\"id\">%s<br>%s</td></tr>"
-            % (esc(m["value"]), esc(m["label"]), esc(m["definition"]), esc(m["period"]), esc(m["scope"]),
+            % (esc(m["id"]), esc(m["value"]), esc(m["label"]), esc(m["definition"]), esc(m["period"]), esc(m["scope"]),
                m["status"], STATUS[m["status"]], src_html, esc(m["id"]), esc(checked.get(m["id"], ""))))
     return ("<div class=\"rec-wrap\"><table class=\"rec-tbl\"><thead><tr><th>Value</th><th>Claim and definition</th>"
             "<th>Period and scope</th><th>Status and source</th><th>Evidence · checked</th></tr></thead><tbody>\n"

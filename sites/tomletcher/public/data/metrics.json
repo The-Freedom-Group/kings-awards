@@ -44,7 +44,7 @@
     "scope": "FFSL",
     "status": "management",
     "source": "EBAY-AWARDS-2024",
-    "site": "hero, 03, record",
+    "site": "hero, 04, record",
     "form": "Growth and industry influence"
   },
   {
@@ -116,7 +116,7 @@
     "scope": "One eBay listing",
     "status": "management",
     "source": "EBAY-SALES",
-    "site": "01, 02, record",
+    "site": "02, 03, record",
     "form": "Fresh ideas and creative thinking"
   },
   {
@@ -229,9 +229,9 @@
   },
   {
     "id": "YF-CH-02",
-    "value": "3",
+    "value": "2",
     "label": "Marketplaces trading",
-    "definition": "eBay (business store since January 2024), Temu (since 2025) and the company's own site. Amazon, OnBuy and a Shopify store were in launch during summer 2026 and are counted as targets until live sales are reported.",
+    "definition": "eBay (business store since January 2024) and Temu (since 2025). Amazon, OnBuy and the company's own Shopify store are being prepared for late 2026 and are counted as targets until live sales are reported.",
     "period": "As at September 2026",
     "scope": "FFSL",
     "status": "target",

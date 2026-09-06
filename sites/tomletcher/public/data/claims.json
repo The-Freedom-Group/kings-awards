@@ -288,9 +288,9 @@
     },
     {
       "evidence_id": "YF-CH-02",
-      "claim": "Marketplaces trading: 3",
+      "claim": "Marketplaces trading: 2",
       "entity": "FFSL",
-      "value_definition": "eBay (business store since January 2024), Temu (since 2025) and the company's own site. Amazon, OnBuy and a Shopify store were in launch during summer 2026 and are counted as targets until live sales are reported.",
+      "value_definition": "eBay (business store since January 2024) and Temu (since 2025). Amazon, OnBuy and the company's own Shopify store are being prepared for late 2026 and are counted as targets until live sales are reported.",
       "period": "As at September 2026",
       "source": "EBAY-SALES",
       "status": "target",

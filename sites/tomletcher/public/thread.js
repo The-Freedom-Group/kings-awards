@@ -396,13 +396,6 @@
     var docH = document.documentElement.scrollHeight || H;
     var pReachRaw = (docH - window.innerHeight * 0.38) / H;
     pScale = pReachRaw > 0 ? (endFrac + 0.001) / pReachRaw : 1;
-    if (endNote) endNote.remove();
-    endNote = document.createElement("span");
-    endNote.className = "endnote";
-    endNote.textContent = "— still drawing";
-    endNote.style.left = (endPt.x + 54) + "px";
-    endNote.style.top = endPt.y + "px";
-    thread.appendChild(endNote);
     /* knots count back up the line, so the landing flash runs bottom to top */
     knots.forEach(function (k, i) { k.style.setProperty("--i", knots.length - 1 - i); });
     if (head && !head.querySelector(".halo")) {
@@ -632,6 +625,8 @@
         if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
       });
       var exploring = document.body.dataset.view === "explore";
+      var inFooter = cur2 === null && y > window.innerHeight;
+      if (inFooter) dark = true;
       document.body.classList.toggle("dark-chrome", dark && exploring);
       spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
 
@@ -649,7 +644,7 @@
           if (card) { cardN.textContent = meta[0]; cardT.textContent = meta[1]; }
           if (now)  { nowN.textContent = meta[0]; nowT.textContent = meta[1]; }
         }
-        var early = y < window.innerHeight * 0.45;
+        var early = y < window.innerHeight * 0.45 || inFooter;
         if (card) card.classList.toggle("away", early);
         if (now)  now.classList.toggle("on", !early);
       }
@@ -664,13 +659,6 @@
             pws[pi].el.style.transform = "translate3d(" +
               ((pp - 0.5) * -W() * 0.22).toFixed(1) + "px,-50%,0)";
           }
-        }
-        /* the years rail drags with the scroll */
-        if (yrail && c03El && window.innerWidth > 820) {
-          var rp = clamp((y + window.innerHeight * 0.8 - c03El.offsetTop) /
-                         (c03El.offsetHeight * 0.9), 0, 1);
-          var over = Math.max(0, yrail.scrollWidth - yrail.parentElement.clientWidth);
-          yrail.style.transform = "translate3d(" + (-rp * over).toFixed(1) + "px,0,0)";
         }
       }
 
@@ -729,14 +717,14 @@
     window.scrollTo(0, 0);
     if (v === "explore") rebuild();
   }
-  function setView(v) {
-    if (document.body.dataset.view === v) return;
-    if (reduce || !wipe || !wipe.animate) { applyView(v); return; }
+  function setView(v, then) {
+    if (document.body.dataset.view === v) { if (then) then(); return; }
+    if (reduce || !wipe || !wipe.animate) { applyView(v); if (then) then(); return; }
     wipe.style.transformOrigin = "bottom";
     wipe.animate([{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }],
       { duration: 300, easing: "cubic-bezier(.6,0,.4,1)", fill: "forwards" })
       .onfinish = function () {
-        applyView(v);
+        applyView(v); if (then) then();
         wipe.style.transformOrigin = "top";
         wipe.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(0)" }],
           { duration: 340, easing: "cubic-bezier(.6,0,.4,1)", fill: "forwards" });
@@ -831,9 +819,25 @@
     });
   });
 
+  /* ── back to the start, in either view ── */
+  var totopA = $("#totop");
+  if (totopA) totopA.addEventListener("click", function (ev) {
+    ev.preventDefault();
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
   /* ── "View the verified record" and "View evidence" open the record view directly ── */
   $$("[data-view-record], #skipRec").forEach(function (a) {
-    a.addEventListener("click", function (ev) { ev.preventDefault(); setView("record"); });
+    a.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      /* a code link lands on its own row and lights it for a moment */
+      var h = a.getAttribute("href") || "", row = h.indexOf("#rec-") === 0 ? document.getElementById(h.slice(1)) : null;
+      setView("record", function () {
+        if (!row) return;
+        row.scrollIntoView({ block: "center" });
+        row.classList.add("hit"); setTimeout(function () { row.classList.remove("hit"); }, 2600);
+      });
+    });
   });
 
   /* ── "Skip animation": everything readable at once, nothing waits on a reveal ── */
