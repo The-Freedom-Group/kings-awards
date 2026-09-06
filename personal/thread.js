@@ -579,7 +579,7 @@
   var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], c01:["01","The Spark"],
     c02:["02","Sale to System"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
     c05:["05","Built With People"], c06:["06","The Platform Ahead"], slab:["—","Seven Years"],
-    c07:["07","The Record"], c08:["08","Still Building"] };
+    c07:["07","The Company"], c08:["08","Still Building"] };
   var lastCard = "";
   var lastY = -1, velY = 0;
 
@@ -711,8 +711,8 @@
     if (v === "record") {
       $$("#record .rv").forEach(function (e) { e.classList.add("in"); });
     }
-    mE.setAttribute("aria-pressed", v === "explore");
-    mR.setAttribute("aria-pressed", v === "record");
+    if (mE) mE.setAttribute("aria-pressed", v === "explore");
+    if (mR) mR.setAttribute("aria-pressed", v === "record");
     if (v === "record") document.body.classList.remove("dark-chrome");
     window.scrollTo(0, 0);
     if (v === "explore") rebuild();
@@ -750,22 +750,22 @@
 
   /* ── the group map ────────────────────────────────────────── */
   var DATA = {
-    group:   { n: "Freedom Group", t: "Group strategy and brand architecture. Not a registered company.",
+    group:   { n: "Freedom Group", t: "Group strategy and brand architecture.",
                b: "The operating model the trading company runs on today, and the shape the next companies would take: brands and IP held in the company's name, direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.freedomgroup.uk" },
-    global:  { n: "Freedom Fire &amp; Safety Ltd", t: "Trading. Company 13589467, incorporated 27 August 2021.",
-               b: "The registered company behind every figure on this page. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay and Temu and an own site, with Amazon, OnBuy and Shopify in launch; servicing and contracted site work nationwide. Trades online as Freedom Global.",
+    global:  { n: "Freedom Fire &amp; Safety Ltd", t: "Trading since 2019. Incorporated 27 August 2021.",
+               b: "The trading company. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay and Temu, with Amazon, OnBuy and Shopify in preparation; servicing and contracted site work nationwide. Trades online as Freedom Global.",
                u: "https://www.freedom-fire.co.uk" },
-    fac:     { n: "Freedom Facilities", t: "Proposed, 24 to 36 months. Not yet registered.",
+    fac:     { n: "Freedom Facilities", t: "Proposed, 24 to 36 months.",
                b: "A separate operating company for compliance, servicing and facilities on recurring contracts, taking the existing servicing work out of the trading company once it justifies its own management and accounts." },
-    dist:    { n: "Freedom Distribution", t: "Proposed, 24 to 36 months. Not yet registered.",
+    dist:    { n: "Freedom Distribution", t: "Proposed, 24 to 36 months.",
                b: "A separate operating company for trade and B2B supply of the owned brands to retailers, wholesalers and distributors. Depends on the brand portfolio and direct sourcing already in place." },
-    form:    { n: "Property", t: "Long-term option. No company, no date.",
+    form:    { n: "Property", t: "Long-term option. No date.",
                b: "A commercial property platform for the group's own premises, kept open as an option in the group model." },
-    freight: { n: "Freight", t: "Long-term option. No company, no date.",
+    freight: { n: "Freight", t: "Long-term option. No date.",
                b: "A logistics arm for imports and freight control. The in-house consignment tracker is the only part of this that exists today." },
-    fly:     { n: "Aerial services", t: "Long-term option. No company, no date.",
+    fly:     { n: "Aerial services", t: "Long-term option. No date.",
                b: "Surveying and inspection. An option in the group model, not a plan." },
-    fuel:    { n: "Forecourts", t: "Long-term option. No company, no date.",
+    fuel:    { n: "Forecourts", t: "Long-term option. No date.",
                b: "Forecourt and convenience retail. An option in the group model, not a plan." }
   };
   var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
