@@ -397,16 +397,34 @@ body.ready .hl-node{opacity:1}
   transform:scale(.94);filter:blur(10px);
   transition:opacity .55s ease,transform .55s ease,filter .55s ease}
 .scene .ph.on{opacity:1;transform:none;filter:none}
-.scene .ph h3{font-size:clamp(48px,10vw,150px);line-height:.88;max-width:12ch;text-align:center}
-.scene .cnt{margin-top:clamp(18px,4vh,36px);font-size:11px;letter-spacing:.22em;
+.scene .ph h3{font-size:clamp(48px,10vw,150px);line-height:.88;max-width:12ch;text-align:center;margin-inline:auto}
+.scene .ph em{display:none;font-style:normal;font-size:12px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);margin-bottom:clamp(14px,2.4vh,26px)}
+.scene .ph p{margin:clamp(14px,2.6vh,26px) auto 0;max-width:44ch;font-size:clamp(15px,1.45vw,19px);line-height:1.6;
+  color:var(--pale-2);font-weight:300}
+.scene .rail3{display:flex;align-items:center;margin:clamp(22px,4vh,44px) auto 0;width:min(440px,72vw)}
+.scene .rail3 i{position:relative;width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,45,141,.45);
+  background:var(--carbon);flex:0 0 auto;transition:border-color .4s,background .4s,box-shadow .4s,transform .4s}
+.scene .rail3 i::after{content:attr(data-l);position:absolute;top:19px;left:50%;transform:translateX(-50%);font-size:10px;
+  letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:var(--pale-3);transition:color .4s;white-space:nowrap}
+.scene .rail3 i.done{border-color:var(--pink);background:var(--pink)}
+.scene .rail3 i.on{border-color:var(--pink);background:var(--pink);transform:scale(1.3);
+  box-shadow:0 0 0 6px rgba(255,45,141,.16),0 0 26px rgba(255,45,141,.65)}
+.scene .rail3 i.on::after,.scene .rail3 i.done::after{color:var(--pale)}
+.scene .rail3 s{flex:1;height:1px;background:var(--rule-d);text-decoration:none;position:relative;overflow:hidden}
+.scene .rail3 s::after{content:"";position:absolute;inset:0;background:var(--pink);transform:scaleX(var(--f,0));
+  transform-origin:0 50%;transition:transform .45s ease}
+.scene .cnt{margin-top:clamp(30px,5vh,48px);font-size:11px;letter-spacing:.22em;
   text-transform:uppercase;font-weight:500;color:var(--pale-3)}
 .scene .cnt b{color:var(--pink);font-weight:600}
 @media(max-width:820px),(prefers-reduced-motion:reduce){
   .scene{height:auto;padding:clamp(70px,12vw,130px) 0}
   .scene .stick{position:static;height:auto;overflow:visible}
   .scene .phs{min-height:0;min-width:0;display:grid;gap:clamp(18px,4vw,34px)}
-  .scene .ph{position:static;opacity:1;transform:none;filter:none}
+    .scene .ph{position:static;opacity:1;transform:none;filter:none}
   .scene .ph h3{font-size:clamp(44px,11vw,110px)}
+  .scene .rail3,.scene .yr{display:none}
+  .scene .ph em{display:block}
 }
 
 /* ── chapters ───────────────────────────────────────────────── */
@@ -470,6 +488,36 @@ body.ready .hl-node{opacity:1}
 .metric .per{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale-3);
   margin-bottom:14px;font-weight:500}
 .ch:not(.dark) .metric .per{color:var(--ink-3)}
+/* ── "+" reveals: the detail sits behind a small pink circle, opened beside it ── */
+.more{display:inline-block;vertical-align:middle;margin-left:8px;position:relative;width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--pink);color:var(--pink);background:transparent;cursor:pointer;padding:0;font-size:0;line-height:0;
+  transition:background .2s,color .2s,transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.more::before,.more::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;background:currentColor;
+  transform:translate(-50%,-50%);border-radius:1px}
+.more::after{transform:translate(-50%,-50%) rotate(90deg)}
+.more:hover{transform:scale(1.12);box-shadow:0 0 0 6px rgba(255,45,141,.14)}
+.more.is-open{background:var(--pink);color:#fff;transform:rotate(45deg)}
+.more.blk,.stage .more,.metric .more,.hz .more{display:block;margin:14px 0 0}
+.pop{display:none}
+.popover{position:fixed;z-index:950;width:min(400px,calc(100vw - 32px));background:var(--carbon);color:var(--pale-2);
+  border:1px solid var(--pink);padding:18px 46px 18px 20px;font-family:var(--sans);font-size:14.5px;line-height:1.6;font-weight:300;
+  letter-spacing:0;text-transform:none;text-align:left;box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 6px rgba(255,45,141,.08);
+  opacity:0;transform:translateY(6px);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.popover.on{opacity:1;transform:none;pointer-events:auto}
+.popover b{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pink);margin-bottom:8px}
+.popover p{margin:0 0 10px}.popover p:last-child{margin:0}
+.popover dl{margin:0;display:grid;grid-template-columns:78px 1fr;gap:8px 14px}
+.popover dt{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-3);font-weight:500;padding-top:3px}
+.popover dd{margin:0}
+.popover .status{border-color:rgba(255,255,255,.25);color:var(--pale-2);margin-right:6px}
+.popover .x{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--pink);
+  background:var(--pink);cursor:pointer;font-size:0;padding:0}
+.popover .x::before,.popover .x::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;background:#fff;
+  transform:translate(-50%,-50%) rotate(45deg)}
+.popover .x::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.popover::before{content:"";position:absolute;left:var(--ax,20px);top:-7px;width:12px;height:12px;background:var(--carbon);
+  border-left:1px solid var(--pink);border-top:1px solid var(--pink);transform:rotate(45deg)}
+.popover.above::before{top:auto;bottom:-7px;transform:rotate(225deg)}
 details.ev{border-top:1px solid var(--rule-d);padding-top:12px}
 .ch:not(.dark) details.ev{border-top-color:var(--rule)}
 details.ev summary{cursor:pointer;list-style:none;font-size:10.5px;letter-spacing:.15em;
@@ -655,10 +703,22 @@ body.landed .totop .lbl{color:var(--pink)}
 .totop:hover .ring::after{box-shadow:0 0 0 14px rgba(255,45,141,0);transform:scale(1.08)}
 .totop:hover .arr{transform:translateY(-6px)}
 .totop:hover .lbl{color:var(--pink)}
-.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:clamp(24px,4vw,56px);padding-top:clamp(30px,4vw,48px)}
+.ft-grid{display:grid;grid-template-columns:1.4fr .9fr 1fr 1fr 1.1fr;gap:clamp(24px,3.5vw,52px);padding-top:clamp(30px,4vw,48px)}
+@media(max-width:1100px){.ft-grid{grid-template-columns:1fr 1fr 1fr}}
 @media(max-width:920px){.ft-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.ft-grid{grid-template-columns:1fr}}
 .ft-brand p{margin:0;color:var(--pale-2)}
+.ft-brand .ft-strap{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--pale);margin:0 0 12px}
+footer ol{list-style:none;margin:0;padding:0}
+footer ol li{display:flex;gap:10px;align-items:baseline;line-height:1.9}
+footer ol i{font-style:normal;font-family:var(--disp);font-size:13px;color:var(--pink);width:22px;flex:0 0 auto;letter-spacing:.06em}
+footer ol a{border-bottom:none}
+footer ol a:hover{border-bottom:1px solid var(--pink)}
+.ft-notes{margin-top:clamp(30px,4vw,48px);padding-top:22px;border-top:1px solid var(--rule-d);display:grid;
+  grid-template-columns:1fr 1fr 1fr;gap:18px clamp(24px,3.5vw,52px);font-size:12.5px;line-height:1.65;color:var(--pale-3)}
+.ft-notes h5{margin:0 0 6px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pale-2)}
+.ft-notes p{margin:0}
+@media(max-width:900px){.ft-notes{grid-template-columns:1fr}}
 .dc{margin-top:26px;display:grid;gap:8px;justify-items:start}
 .dc img{width:180px;height:auto;display:block;margin:-8% 0 -8% -4%}
 .dc small{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink-3);line-height:1.6}
@@ -812,7 +872,7 @@ details.story summary:hover .st{color:var(--pink)}
 .env .pill{margin:26px 0 18px}
 @media(min-width:900px){#proof.metrics{grid-template-columns:repeat(3,1fr)}}
 .metric .v.txt{font-size:clamp(30px,3.6vw,46px);line-height:1;padding-top:.15em;margin-bottom:16px}
-@media print{.film,.hero-acts{display:none}.rec-tbl{font-size:11px}}
+@media print{.film,.hero-acts,.more,.popover{display:none}.rec-tbl{font-size:11px}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -896,8 +956,7 @@ details.story summary:hover .st{color:var(--pink)}
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p>Founder. Operator. Builder.<br>From one second-hand fire extinguisher to a nationwide, multi-channel
-        safety business, and the systems, brands and people behind what comes next.</p></div>
+      <div class="hero-sub"><p>Founder. Operator. Builder.<br>From one second-hand fire extinguisher to a nationwide, multi-channel safety business.</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
         <a class="follow alt" href="#record" data-view-record data-mag>View the verified record <i>→</i></a>
@@ -915,16 +974,25 @@ details.story summary:hover .st{color:var(--pink)}
 
 <div class="mq" aria-hidden="true"><div class="mq-t" data-mq="1" data-base="FROM ONE EXTINGUISHER <i>—</i> TO A NATIONWIDE, MULTI-CHANNEL BUSINESS <i>—</i> BURY TO UK-WIDE <i>—</i> "></div></div>
 
-<section class="scene" id="ones" aria-label="2019 — where it started">
+<section class="scene" id="ones" aria-label="Start, now and next">
   <div class="stick">
-    <div class="yr">Bury · March 2019</div>
+    <div class="yr" id="sceneYr">The beginning · Bury · March 2019</div>
     <div class="phs" id="phs">
-      <div class="ph on"><h3>One second-hand extinguisher.</h3></div>
-      <div class="ph"><h3>One listing.</h3></div>
-      <div class="ph"><h3>One customer who paid.</h3></div>
-      <div class="ph"><h3>Everything since.</h3></div>
+      <div class="ph on" data-yr="The beginning · Bury · March 2019"><div>
+        <em>The beginning</em>
+        <h3>One rusty extinguisher.</h3>
+        <p>Second-hand, refurbished, listed on Facebook Marketplace and collected by the buyer. No plan, no investors, no company.</p></div></div>
+      <div class="ph" data-yr="Currently · Bury · September 2026"><div>
+        <em>Currently</em>
+        <h3>Number one on eBay UK.</h3>
+        <p>£1m+ of combined sales in the second full year, three registered brands, one warehouse and a team that runs the day.</p></div></div>
+      <div class="ph" data-yr="The future · 2027 and beyond"><div>
+        <em>The future</em>
+        <h3>A platform, not a shop.</h3>
+        <p>Amazon, OnBuy and an own store at full scale, the trade side of the business, and the next owned brands. Everything else stays an option.</p></div></div>
     </div>
-    <div class="cnt">Sold on Facebook Marketplace · company <b>13589467</b> incorporated 27 August 2021</div>
+    <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
+    <div class="cnt">Company <b>13589467</b> · incorporated 27 August 2021 · Bury, Greater Manchester</div>
   </div>
 </section>
 
@@ -935,35 +1003,23 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started with one rusty extinguisher.</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, March 2019. A background in architecture, a second-hand fire extinguisher nobody else
-      saw value in, and a Facebook Marketplace listing. No plan, no investors, no company.</p>
+      <p class="stand">Bury, March 2019. An architecture background, a second-hand extinguisher nobody else saw value in,
+      and a Facebook Marketplace listing.</p>
     </div>
     <div class="cols">
       <aside class="side rv">
-        <p>Fire safety is a legal duty, not a discretionary purchase. That makes it a category people buy
-        carefully, from suppliers they trust, and one the established trade did not expect to change.</p>
         <p>The first customer collected in person. The second wanted four hundred. The third asked whether it
-        could be posted. Each question turned out to be the next stage of the business.</p>
+        could be posted. Each question became the next stage of the business.</p>
+        <button class="more blk" type="button" data-pop="p-why" aria-label="Why fire safety"></button><div class="pop" id="p-why" hidden><b>Why fire safety</b><p>Fire safety is a legal duty, not a discretionary purchase. People buy it carefully, from suppliers they trust, and the established trade did not expect the category to change.</p></div>
       </aside>
       <div class="body rv">
         <p>Before Freedom Fire there was one overlooked object: <b>a rusty, second-hand extinguisher</b>, cleaned
-        up and listed for sale. One person took a chance on it. That single sale created the first customer, the
-        first bit of working capital and the first glimpse that value could be found where the rest of the
-        trade saw scrap.</p>
-        <p>In September 2019 a fire-training buyer in Bolton asked for hundreds of refurbished units for practice
-        drills. About 400 mixed extinguishers went out for £400, roughly a pound each. Counting the time, handling
-        and delivery it was probably a loss. It was also the first proof that <b><span class="hl">the demand was
-        real and it came in volume</span></b>.</p>
-        <p>In January 2020 a takeaway in Nottingham found the listing, paid online and asked for the extinguisher
-        to be sent. Extinguishers cannot go with any courier, so the parcel had to be packed properly and a
-        carrier found who would take it. Once it arrived, the business was no longer limited to people who could
-        drive to Bury.</p>
-        <p>By the summer of 2020 the operation was trading as Freedom Fire from a rented corner at the back of the
-        family warehouse, with students cleaning, refilling and preparing <b>hundreds of units a day</b>, pallets
-        going out to Scotland, Wales and London, and six containers of refurbished stock consolidated for
-        exporters into West and Central Africa. By 2021 it was processing 800 to 1,000 units a week, and the
-        supply of second-hand stock could no longer keep up. On 27 August 2021, <b>Freedom Fire &amp; Safety Ltd</b>
-        was incorporated.</p>
+        up and listed for sale. One person took a chance on it. That sale paid for the next, and what the trade
+        called scrap turned out to be a market.</p>
+        <p>A Bolton training buyer took 400 units for £400. A Nottingham takeaway paid online and asked for
+        delivery. By 2021 a corner of the family warehouse was turning out <b>800 to 1,000 units a week</b>, and
+        on 27 August 2021 <b>Freedom Fire &amp; Safety Ltd</b> was incorporated. <button class="more" type="button" data-pop="p-origin" aria-label="The full origin"></button></p>
+        <div class="pop" id="p-origin" hidden><b>The full origin</b><p><b>September 2019.</b> About 400 mixed extinguishers to a fire-training buyer in Bolton for £400, roughly a pound each and probably a loss once time and delivery were counted. The first proof that demand was real and came in volume.</p><p><b>January 2020.</b> A Nottingham takeaway paid online and asked for the extinguisher to be sent. Extinguishers cannot go with any courier, so the parcel had to be packed properly and a carrier found. From then on the business was not limited to people who could drive to Bury.</p><p><b>Summer 2020.</b> Trading as Freedom Fire from a rented corner of the family warehouse: students cleaning and refilling hundreds of units a day, pallets to Scotland, Wales and London, and six containers of refurbished stock for exporters into West and Central Africa. By 2021 the supply of second-hand stock could no longer keep up.</p></div>
       </div>
     </div>
 
@@ -972,8 +1028,8 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="film-in">
         <span class="play" aria-hidden="true"></span>
         <div class="film-t">The two-minute story</div>
-        <div class="film-s">From the first second-hand extinguisher to the platform being built now. Filmed with the real
-        objects, listings, units and people. Captioned, with a transcript. No autoplay.</div>
+        <div class="film-s">From the first extinguisher to the platform being built now. Real objects, listings, units and people.
+        Captioned, with a transcript.</div>
         <div class="film-k">Film · scheduled September 2026</div>
       </div>
     </figure>
@@ -1005,50 +1061,42 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="ch-tag">02 — From Sale to System</div>
       <h2>Every constraint became a build.</h2>
       <em class="scr" aria-hidden="true" style="right:4%;top:6%">build.</em>
-      <p class="stand">Eight stages, in order. Each one starts with a problem the market set, and ends with
-      something that now runs on its own.</p>
+      <p class="stand">Eight stages, in order. Each starts with a problem the market set and ends with something
+      that now runs on its own. Press <span class="more" style="pointer-events:none;margin:0 2px;width:18px;height:18px;transform:translateY(-1px)"></span> for the decision and what was built.</p>
     </div>
     <div class="stages rv">
       <div class="stage"><div class="n">01</div><h3>Second-life stock</h3>
         <dl><dt>Problem</dt><dd>No capital and no product. The trade scrapped serviceable extinguishers by the pallet.</dd>
-        <dt>Decision</dt><dd>Refurbish what others threw away, and sell it honestly for training and non-operational use.</dd>
-        <dt>Build</dt><dd>A cleaning, refilling and preparation bench, staffed with students. 2019 to 2021.</dd>
-        <dt>Result</dt><dd>800 to 1,000 units a week by 2021, sold to training providers, exporters and the public.</dd></dl></div>
+        <dt>Result</dt><dd>800 to 1,000 refurbished units a week by 2021, sold to training providers, exporters and the public.</dd></dl>
+        <button class="more" type="button" data-pop="st01" aria-label="Decision and build, stage 01"></button><div class="pop" id="st01" hidden><b>01 · Second-life stock</b><dl><dt>Decision</dt><dd>Refurbish what others threw away, and sell it honestly for training and non-operational use.</dd><dt>Build</dt><dd>A cleaning, refilling and preparation bench, staffed with students. 2019 to 2021.</dd></dl></div></div>
       <div class="stage"><div class="n">02</div><h3>Ecommerce proof</h3>
         <dl><dt>Problem</dt><dd>Facebook Marketplace could not reach a national customer, and could not scale.</dd>
-        <dt>Decision</dt><dd>Test eBay with one listing from a personal account: a second-hand 2 kg CO2 extinguisher, December 2020.</dd>
-        <dt>Build</dt><dd>Nothing but the listing. No store, no branding, no advertising.</dd>
-        <dt>Result</dt><dd>Close to 8,000 units and more than £350,000 of sales from that one listing to date.</dd></dl></div>
+        <dt>Result</dt><dd>Close to 8,000 units and more than £350,000 of sales from one listing to date.</dd></dl>
+        <button class="more" type="button" data-pop="st02" aria-label="Decision and build, stage 02"></button><div class="pop" id="st02" hidden><b>02 · Ecommerce proof</b><dl><dt>Decision</dt><dd>Test eBay with one listing from a personal account: a second-hand 2 kg CO2 extinguisher, December 2020.</dd><dt>Build</dt><dd>Nothing but the listing. No store, no branding, no advertising.</dd></dl></div></div>
       <div class="stage"><div class="n">03</div><h3>Incorporation</h3>
         <dl><dt>Problem</dt><dd>Sales had outgrown a sole trader, and servicing customers needed a company behind the certificate.</dd>
-        <dt>Decision</dt><dd>Incorporate, and run two engines: ecommerce and contracted servicing.</dd>
-        <dt>Build</dt><dd>Freedom Fire &amp; Safety Ltd, 27 August 2021.</dd>
-        <dt>Result</dt><dd>Servicing for colleges, warehouses, factories and shops alongside the online range.</dd></dl></div>
+        <dt>Result</dt><dd>Freedom Fire &amp; Safety Ltd, 27 August 2021. Servicing for colleges, warehouses, factories and shops alongside the online range.</dd></dl>
+        <button class="more" type="button" data-pop="st03" aria-label="Decision and build, stage 03"></button><div class="pop" id="st03" hidden><b>03 · Incorporation</b><dl><dt>Decision</dt><dd>Incorporate, and run two engines: ecommerce and contracted servicing.</dd><dt>Build</dt><dd>The company, then the servicing side built around it: certificates, site visits and contracted work.</dd></dl></div></div>
       <div class="stage"><div class="n">04</div><h3>Warehouse and fulfilment</h3>
         <dl><dt>Problem</dt><dd>A borrowed corner cannot hold a catalogue, and marketplace buyers expect next-day delivery.</dd>
-        <dt>Decision</dt><dd>Take a first unit of our own, then move when it filled.</dd>
-        <dt>Build</dt><dd>Unit 10, about 500 square feet, April 2022. Unit 19, about three times the space, fitted out over six months and occupied from November 2024. A DHL account for next-day delivery.</dd>
-        <dt>Result</dt><dd>Thousands of orders a month fulfilled from Bury.</dd></dl></div>
-      <div class="stage"><div class="n">05</div><h3>Direct manufacturing and Firestorm</h3>
-        <dl><dt>Problem</dt><dd>After marketplace fees, packaging and delivery, stock bought through UK distributors could not compete online. Several suppliers would not extend credit to a young business.</dd>
-        <dt>Decision</dt><dd>Buy like the biggest: go direct to the manufacturer and put our own name on the product.</dd>
-        <dt>Build</dt><dd>A direct relationship agreed at the NEC in April 2024, a first order of about £90,000 funded by borrowing, the FIRESTORM mark filed with effect from 9 August 2024, and the first container landed on Christmas Eve 2024.</dd>
-        <dt>Result</dt><dd>An owned brand, registered in classes 9 and 20, on every cylinder that followed. Stock travels by sea in full containers, the lowest-carbon way to move freight per unit, and is held once, in Bury, before dispatch.</dd></dl></div>
+        <dt>Result</dt><dd>Thousands of orders a month fulfilled from Bury.</dd></dl>
+        <button class="more" type="button" data-pop="st04" aria-label="Decision and build, stage 04"></button><div class="pop" id="st04" hidden><b>04 · Warehouse and fulfilment</b><dl><dt>Decision</dt><dd>Take a first unit of our own, then move when it filled.</dd><dt>Build</dt><dd>Unit 10, about 500 square feet, April 2022. Unit 19, about three times the space, fitted out over six months and occupied from November 2024. A DHL account for next-day delivery.</dd></dl></div></div>
+      <div class="stage"><div class="n">05</div><h3>Direct manufacturing</h3>
+        <dl><dt>Problem</dt><dd>Distributor stock could not compete online after fees, packaging and delivery, and suppliers would not extend credit.</dd>
+        <dt>Result</dt><dd>An owned brand, registered in classes 9 and 20, on every cylinder that followed.</dd></dl>
+        <button class="more" type="button" data-pop="st05" aria-label="Decision and build, stage 05"></button><div class="pop" id="st05" hidden><b>05 · Direct manufacturing and Firestorm</b><dl><dt>Decision</dt><dd>Buy like the biggest: go direct to the manufacturer and put our own name on the product.</dd><dt>Build</dt><dd>A direct relationship agreed at the NEC in April 2024, a first order of about £90,000 funded by borrowing, the FIRESTORM mark filed with effect from 9 August 2024, and the first container landed on Christmas Eve 2024. Stock travels by sea in full containers and is held once, in Bury, before dispatch.</dd></dl></div></div>
       <div class="stage"><div class="n">06</div><h3>Multiple channels</h3>
         <dl><dt>Problem</dt><dd>One marketplace is one point of failure.</dd>
-        <dt>Decision</dt><dd>Rebuild the same catalogue, compliance and fulfilment on each new channel in turn.</dd>
-        <dt>Build</dt><dd>eBay business store, January 2024. Temu UK's first dedicated fire extinguisher seller, 2025. Amazon, OnBuy and an own Shopify store in launch through summer 2026.</dd>
-        <dt>Result</dt><dd>More than £160,000 on Temu in its first three months, with fewer than ten live products.</dd></dl></div>
+        <dt>Result</dt><dd>More than £160,000 on Temu in its first three months, with fewer than ten live products.</dd></dl>
+        <button class="more" type="button" data-pop="st06" aria-label="Decision and build, stage 06"></button><div class="pop" id="st06" hidden><b>06 · Multiple channels</b><dl><dt>Decision</dt><dd>Rebuild the same catalogue, compliance and fulfilment on each new channel in turn.</dd><dt>Build</dt><dd>eBay business store, January 2024. Temu UK's first dedicated fire extinguisher seller, 2025. Amazon, OnBuy and an own Shopify store in launch through summer 2026.</dd></dl></div></div>
       <div class="stage"><div class="n">07</div><h3>Service and B2B</h3>
         <dl><dt>Problem</dt><dd>Marketplace revenue is lumpy; compliance work is recurring.</dd>
-        <dt>Decision</dt><dd>Keep the vans on the road while the store grows.</dd>
-        <dt>Build</dt><dd>Servicing, installation and contracted site work for commercial premises, nationwide from Bury.</dd>
-        <dt>Result</dt><dd>About £100,000 of servicing and site work in the first full year of scaled trading, growing alongside ecommerce.</dd></dl></div>
+        <dt>Result</dt><dd>About £100,000 of servicing and site work in the first full year of scaled trading.</dd></dl>
+        <button class="more" type="button" data-pop="st07" aria-label="Decision and build, stage 07"></button><div class="pop" id="st07" hidden><b>07 · Service and B2B</b><dl><dt>Decision</dt><dd>Keep the vans on the road while the store grows.</dd><dt>Build</dt><dd>Servicing, installation and contracted site work for commercial premises, nationwide from Bury.</dd></dl></div></div>
       <div class="stage"><div class="n">08</div><h3>Systems and automation</h3>
         <dl><dt>Problem</dt><dd>Thousands of SKUs and orders cannot be run from a spreadsheet by one person.</dd>
-        <dt>Decision</dt><dd>Build the tools so that other people can run the business.</dd>
-        <dt>Build</dt><dd>Order management and a support desk across channels, listing and pricing workflows, and a supply-chain tracker built in-house that follows every consignment from factory to the Bury warehouse.</dd>
-        <dt>Result</dt><dd>A team, not a founder, runs the day. That is the platform the next chapters stand on.</dd></dl></div>
+        <dt>Result</dt><dd>A team, not a founder, runs the day. That is the platform the next chapters stand on.</dd></dl>
+        <button class="more" type="button" data-pop="st08" aria-label="Decision and build, stage 08"></button><div class="pop" id="st08" hidden><b>08 · Systems and automation</b><dl><dt>Decision</dt><dd>Build the tools so that other people can run the business.</dd><dt>Build</dt><dd>Order management and a support desk across channels, listing and pricing workflows, and an in-house supply-chain tracker that follows every consignment from factory to Bury.</dd></dl></div></div>
     </div>
     <figure class="plate wide crop">
       <img src="assets/journey/ch13-a.webp" width="934" height="1086" alt="Three members of the team standing in front of an open shipping container stacked with boxed Firestorm extinguishers, December 2024" loading="lazy" decoding="async">
@@ -1063,76 +1111,53 @@ details.story summary:hover .st{color:var(--pink)}
     <div class="rv">
       <div class="ch-tag">03 — Proof, Not Promise</div>
       <h2>Six numbers. Each one says what it counts.</h2>
-      <p class="stand">Value, definition, period, scope, source type and the date it was last checked. Marketplace
-      figures are management data from platform exports, gross of refunds. They are not statutory turnover,
-      which the accountant reconciles separately.</p>
+      <p class="stand">Six numbers. Each states what it counts, over what period, and where the source sits. Marketplace
+      figures are management data from platform exports, gross of refunds, not statutory turnover.</p>
     </div>
 
     <div class="metrics rv" id="proof">
       <div class="metric" data-ev="YF-GR-05">
         <div class="v">£1m+</div><div class="k">Combined sales · second full year</div>
-        <p class="def">About £890,000 of gross eBay sales, more than £160,000 on Temu in its first three months,
-        plus servicing and contracted site work. Gross of refunds; VAT-inclusive marketplace receipts.</p>
+        <p class="def">About £890,000 gross on eBay, more than £160,000 on Temu in its first three months, plus servicing and site work.</p>
         <div class="per">January 2025 – January 2026 · Freedom Fire &amp; Safety Ltd</div>
-        <details class="ev"><summary>Source and status</summary>
-          <p><span class="status management">Management data</span> eBay and Temu seller exports and the servicing
-          ledger. Evidence YF-GR-05. Last checked 5 September 2026. Platform exports available to assessors on request.</p></details>
+        <button class="more" type="button" data-pop="m1" aria-label="Source and status, YF-GR-05"></button><div class="pop" id="m1" hidden><b>Source and status</b><p><span class="status management">Management data</span> eBay and Temu seller exports and the servicing ledger. Gross of refunds; VAT-inclusive marketplace receipts. Evidence YF-GR-05. Last checked 5 September 2026. Exports available to assessors on request.</p></div>
       </div>
       <div class="metric" data-ev="YF-PR-01">
         <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
-        <p class="def">Ranked by sales against every seller in the Fire Extinguishers category, GB, in eBay's own
-        listing quality report. Also third of 1,594 in Disposable Gloves and fifth of 2,751 in Single Use Batteries.</p>
+        <p class="def">Ranked by sales against every seller in the Fire Extinguishers category, GB, in eBay's own listing quality report.</p>
         <div class="per">12 months to end of July 2026 · eBay storefront</div>
-        <details class="ev"><summary>Source and status</summary>
-          <p><span class="status management">Management data</span> eBay listing quality report, July 2026, exported
-          from seller hub. Evidence YF-PR-01 to 03. Last checked 5 September 2026.</p></details>
+        <button class="more" type="button" data-pop="m2" aria-label="Source and status, YF-PR-01"></button><div class="pop" id="m2" hidden><b>Source and status</b><p><span class="status management">Management data</span> eBay listing quality report, July 2026, exported from seller hub. Also third of 1,594 in Disposable Gloves and fifth of 2,751 in Single Use Batteries. Evidence YF-PR-01 to 03. Last checked 5 September 2026.</p></div>
       </div>
       <div class="metric" data-ev="YF-RC-01">
         <div class="v txt">Runner-up</div><div class="k">eBay UK Business Awards</div>
-        <p class="def">Named runner-up in 2024, followed by an invitation to Belfast to meet eBay's UK leadership
-        and tell the story behind the company.</p>
+        <p class="def">Named runner-up in 2024, then invited to Belfast to meet eBay's UK leadership.</p>
         <div class="per">2024 · external recognition</div>
-        <details class="ev"><summary>Source and status</summary>
-          <p><span class="status management">Management data</span> Event record, invitation and photographs held.
-          Evidence YF-RC-01. Last checked 5 September 2026.</p></details>
+        <button class="more" type="button" data-pop="m3" aria-label="Source and status, YF-RC-01"></button><div class="pop" id="m3" hidden><b>Source and status</b><p><span class="status management">Management data</span> Event record, invitation and photographs held. Evidence YF-RC-01. Last checked 5 September 2026.</p></div>
       </div>
       <div class="metric" data-ev="YF-IP-01">
         <div class="v">3</div><div class="k">Registered brands</div>
-        <p class="def">FIRESTORM, filed with effect from 9 August 2024 and entered on the UK register on 1 November
-        2024 in the company's name, classes 9 and 20. FXL and SKYLINE followed in February and March 2026. Only
-        registered marks are counted; a wider portfolio of about twelve names is in use or in application.</p>
+        <p class="def">FIRESTORM, FXL and SKYLINE, registered in the company's name. Only registered marks are counted.</p>
         <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
-        <details class="ev"><summary>Source and status</summary>
-          <p><span class="status verified">Verified</span> UK Intellectual Property Office trade mark register.
-          Evidence YF-IP-01. Last checked 5 September 2026.</p></details>
+        <button class="more" type="button" data-pop="m4" aria-label="Source and status, YF-IP-01"></button><div class="pop" id="m4" hidden><b>Source and status</b><p><span class="status verified">Verified</span> UK Intellectual Property Office register. FIRESTORM filed with effect from 9 August 2024 and entered on the register on 1 November 2024, classes 9 and 20. FXL and SKYLINE followed in February and March 2026. A wider portfolio of about twelve names is in use or in application. Evidence YF-IP-01. Last checked 5 September 2026.</p></div>
       </div>
       <div class="metric" data-ev="YF-OP-02">
         <div class="v">3×</div><div class="k">Warehouse floor space</div>
-        <p class="def">From Unit 10, about 500 square feet from April 2022, to Unit 19 on the same estate, about
-        three times the floor space, fitted out over six months and occupied from November 2024.</p>
+        <p class="def">From Unit 10, about 500 square feet, to Unit 19 on the same estate, occupied from November 2024.</p>
         <div class="per">April 2022 – November 2024 · Pilsworth Industrial Estate, Bury</div>
-        <details class="ev"><summary>Source and status</summary>
-          <p><span class="status management">Management data</span> Lease agreements and move dates.
-          Evidence YF-OP-02. Last checked 5 September 2026.</p></details>
+        <button class="more" type="button" data-pop="m5" aria-label="Source and status, YF-OP-02"></button><div class="pop" id="m5" hidden><b>Source and status</b><p><span class="status management">Management data</span> Lease agreements and move dates. Unit 10 from April 2022; Unit 19 fitted out over six months. Evidence YF-OP-02. Last checked 5 September 2026.</p></div>
       </div>
       <div class="metric" data-ev="YF-GR-04">
         <div class="v">£160k+</div><div class="k">Temu · first three months</div>
-        <p class="def">Gross sales in the first three months as Temu UK's first dedicated fire extinguisher seller,
-        with fewer than ten live products. Two Firestorm products held first and second place in Temu's Safety
-        &amp; Security best-seller ranking.</p>
+        <p class="def">Temu UK's first dedicated fire extinguisher seller, with fewer than ten live products.</p>
         <div class="per">Fourth quarter 2025 · Temu storefront</div>
-        <details class="ev"><summary>Source and status</summary>
-          <p><span class="status management">Management data</span> Temu seller centre export and dated ranking
-          screenshots. Evidence YF-GR-04, YF-RC-02. Last checked 5 September 2026.</p></details>
+        <button class="more" type="button" data-pop="m6" aria-label="Source and status, YF-GR-04"></button><div class="pop" id="m6" hidden><b>Source and status</b><p><span class="status management">Management data</span> Temu seller centre export and dated ranking screenshots. Two Firestorm products held first and second place in Temu's Safety &amp; Security best-seller ranking. Evidence YF-GR-04, YF-RC-02. Last checked 5 September 2026.</p></div>
       </div>
     </div>
 
     <div class="cols">
       <aside class="side rv">
         <p><b style="color:var(--pale)">Channel growth, year by year.</b> The same catalogue, rebuilt on each
-        channel in turn. Figures are gross marketplace sales for the period shown.</p>
-        <p>The Amazon, OnBuy and Shopify launches of summer 2026 are targets until live sales are reported, and
-        are shown that way everywhere on this page.</p>
+        channel in turn. Gross marketplace sales for the period shown.</p>
       </aside>
       <div class="body rv">
         <table class="tbl">
@@ -1158,8 +1183,8 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="ch-tag">04 — How I Build</div>
       <h2>Five decisions, and what they cost.</h2>
       <em class="scr" aria-hidden="true" style="right:5%;top:0">decide.</em>
-      <p class="stand">The same shape every time: a constraint the market set, a decision, what was actually built,
-      the measurable result, and where the evidence sits.</p>
+      <p class="stand">The same shape every time: a constraint, a decision, what was built, the result, and where the
+      evidence sits.</p>
     </div>
     <div class="stories rv">
 
@@ -1172,8 +1197,8 @@ details.story summary:hover .st{color:var(--pink)}
             <dt>Decision</dt><dd>Treat the category like any other online essential: own the product, explain it plainly,
             ship it next day, and build the tools that answer the question before the customer has to ask.</dd>
             <dt>Implementation</dt><dd>Second-life stock (2019), the first eBay listing (2020), a business store built over twelve
-            months before it opened (2023), direct manufacturing and the Firestorm brand (2024), and digital buying that
-            replaces a phone call: clear specifications, kits and delivery you can track.</dd>
+            months (2023), direct manufacturing and the Firestorm brand (2024), and buying that replaces a phone call:
+            clear specifications, kits and tracked delivery.</dd>
             <dt>Result</dt><dd>First of 1,193 sellers in the category on eBay UK by July 2026. Three registered brands. Temu's first
             dedicated fire extinguisher seller.</dd>
             <dt>Evidence</dt><dd>YF-CH-01, YF-IP-01, YF-PR-01, YF-GR-04.</dd>
@@ -1187,13 +1212,12 @@ details.story summary:hover .st{color:var(--pink)}
           <dl>
             <dt>Constraint</dt><dd>A young company from Bury had no standing with manufacturers, marketplaces or the trade.</dd>
             <dt>Decision</dt><dd>Let the numbers speak first, then use every invitation to tell the story of how they were made.</dd>
-            <dt>Implementation</dt><dd>eBay sales of £143,000 in the store's first five months, then more than £500,000 in year one and
-            about £890,000 in year two. Named runner-up in the eBay UK Business Awards 2024 and invited to Belfast to meet
-            eBay's UK leadership. Approached by Temu UK to open its fire extinguisher category and worked with its UK and
-            China compliance teams to set it up around compliant, UK-held stock. A direct manufacturing partner who chose a
-            small Bury warehouse as its first UK client.</dd>
-            <dt>Result</dt><dd>Growth over two comparable years, external recognition on the record, and a seat in the conversations
-            that decide how the category is sold.</dd>
+            <dt>Implementation</dt><dd>eBay sales of £143,000 in the store's first five months, more than £500,000 in year one and about
+            £890,000 in year two. Runner-up in the eBay UK Business Awards 2024, with an invitation to Belfast to meet eBay's
+            UK leadership. Approached by Temu UK to open its fire extinguisher category. A direct manufacturing partner that
+            chose a small Bury warehouse as its first UK client.</dd>
+            <dt>Result</dt><dd>Growth over two comparable years, recognition on the record, and a seat in the conversations that decide
+            how the category is sold.</dd>
             <dt>Evidence</dt><dd>YF-GR-01, YF-GR-02, YF-GR-05, YF-RC-01, YF-OP-04.</dd>
           </dl>
         </div>
@@ -1206,12 +1230,12 @@ details.story summary:hover .st{color:var(--pink)}
             <dt>Constraint</dt><dd>Every new channel and brand multiplied the work. Done by hand, the founder becomes the bottleneck.</dd>
             <dt>Decision</dt><dd>Build one set of shared infrastructure that every product, channel and person plugs into, then
             hire and train people to run it.</dd>
-            <dt>Implementation</dt><dd>Direct sourcing with a supply-chain tracker built in-house. One warehouse and fulfilment
-            operation serving every channel. Order management and a shared support desk. Listing, pricing and compliance
-            workflows that were built once for eBay and reused for Temu, then Amazon, OnBuy and Shopify. Brand and IP held in
-            the company's name. People brought in through placements and trained on the systems.</dd>
+            <dt>Implementation</dt><dd>Direct sourcing with an in-house supply-chain tracker. One warehouse serving every channel. Order
+            management and a shared support desk. Listing, pricing and compliance workflows built once for eBay and reused
+            for Temu, Amazon, OnBuy and Shopify. Brand and IP held in the company's name. People brought in through
+            placements and trained on the systems.</dd>
             <dt>Result</dt><dd>The same category rebuilt on a second marketplace produced more than £160,000 in three months with
-            fewer than ten products. Three more channels were prepared at the same time in 2026 without a second warehouse.</dd>
+            fewer than ten products. Three more channels were prepared in 2026 without a second warehouse.</dd>
             <dt>Evidence</dt><dd>YF-GR-04, YF-OP-02, YF-CH-02, YF-PE-02.</dd>
           </dl>
         </div>
@@ -1223,19 +1247,17 @@ details.story summary:hover .st{color:var(--pink)}
           <p class="lead">Three cases, each with a date, the decision, and what it produced.</p>
           <dl>
             <dt>Supplier rejection</dt><dd><b>2023 to 2024.</b> Manufacturers did not believe extinguishers belonged online and would not
-            extend credit; distributor pricing left no margin after marketplace fees. Decision: go direct. A manufacturing
-            relationship agreed at the NEC in April 2024, a first order of about £90,000 met by borrowing and trading cash, the
-            first container on 24 December 2024. Result: an owned brand, transformative unit costs, and availability that no
-            longer depended on a distributor's stock list.</dd>
+            extend credit; distributor pricing left no margin after fees. Decision: go direct. A relationship agreed at the
+            NEC in April 2024, a first order of about £90,000 met by borrowing and trading cash, the first container on
+            24 December 2024. Result: an owned brand, and unit costs that changed the model.</dd>
             <dt>Platform dependence</dt><dd><b>2025 to 2026.</b> More than nine tenths of online sales sat on one marketplace. Decision:
-            rebuild the model on a second channel before it was needed, then a third and fourth. Temu went live in 2025 and
-            returned more than £160,000 in three months; Amazon, OnBuy and an own store followed in 2026. Result: the second
-            full year passed £1 million with growth no longer resting on a single listing or platform.</dd>
-            <dt>Capital and space</dt><dd><b>2023 to November 2024.</b> £17,000 of savings and £5,000 borrowed from family went almost
-            entirely into stock for a store that had not yet sold anything. Unit 10 filled within two years. Decision: staged
-            scale, reinvesting trading cash, taking the unit opposite when it came free, and fitting it out over six months
-            while still shipping. Result: about three times the floor space, thousands of orders a month, and adjacent
-            categories such as batteries brought in on the back of it.</dd>
+            rebuild the model on a second channel before it was needed, then a third and fourth. Temu returned more than
+            £160,000 in three months; Amazon, OnBuy and an own store followed in 2026. Result: the second full year passed
+            £1 million without resting on one platform.</dd>
+            <dt>Capital and space</dt><dd><b>2023 to November 2024.</b> £17,000 of savings and £5,000 from family went almost entirely into
+            stock for a store that had not yet sold anything. Unit 10 filled within two years. Decision: staged scale,
+            reinvesting trading cash and fitting out the unit opposite over six months while still shipping. Result: three
+            times the floor space and thousands of orders a month.</dd>
             <dt>Evidence</dt><dd>YF-OP-04, YF-OP-03, YF-GR-04, YF-GR-05, YF-FN-01, YF-OP-02.</dd>
           </dl>
         </div>
@@ -1246,18 +1268,15 @@ details.story summary:hover .st{color:var(--pink)}
         <div class="sb">
           <dl>
             <dt>Constraint</dt><dd>Tens of thousands of customers, most of whom will never phone. The signal arrives as ratings,
-            support cases, returns and the questions people ask before they buy.</dd>
-            <dt>The loop</dt><dd>Marketplace ratings and review counts by period; support cases, response and resolution times in
-            the shared desk; refund, return, damage and defect rates; dispatch and order accuracy from the order system and
-            carrier records. No satisfaction score is quoted here because none was formally collected before 2026; a baseline
-            for those measures began this year and will be reported once it has a full period behind it.</dd>
-            <dt>Feedback that changed something</dt><dd><b>January 2020.</b> A remote customer asked for delivery; the answer was
-            proper packaging and a carrier who would take extinguishers, which became the fulfilment model.
-            <b>2024.</b> Smoke-alarm customers kept asking for the right batteries; batteries became a category and brand
-            relationships followed. <b>2025.</b> Temu's compliance teams needed a compliant, UK-held range with fast domestic
-            delivery; the range was built to that specification and took the top two places in its ranking.</dd>
-            <dt>Result</dt><dd>Each change is dated, each has a measurable outcome, and the loop now runs from a shared desk rather
-            than the founder's inbox.</dd>
+            support cases, returns and pre-sale questions.</dd>
+            <dt>The loop</dt><dd>Ratings and review counts by period; support cases and resolution times in the shared desk; refund,
+            return and defect rates; dispatch accuracy from the order system and carrier records. No satisfaction score is
+            quoted because none was formally collected before 2026; a baseline began this year.</dd>
+            <dt>Feedback that changed something</dt><dd><b>January 2020.</b> A remote customer asked for delivery; packaging and a willing carrier became
+            the fulfilment model. <b>2024.</b> Smoke-alarm customers kept asking for the right batteries; batteries became a
+            category. <b>2025.</b> Temu's compliance teams needed a compliant, UK-held range with fast delivery; the range
+            was built to that specification and took the top two places in its ranking.</dd>
+            <dt>Result</dt><dd>Each change is dated and measurable, and the loop runs from a shared desk, not the founder's inbox.</dd>
             <dt>Evidence</dt><dd>YF-OR-03, YF-OP-02, YF-GR-04, YF-RC-02.</dd>
           </dl>
         </div>
@@ -1279,27 +1298,25 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="ch-tag">05 — Built With People</div>
       <h2>A founder who hires is not the same as one who delegates.</h2>
       <em class="scr" aria-hidden="true" style="right:3%;top:8%">people.</em>
-      <p class="stand">The roles that exist now, how responsibility was handed over, and what was built so that other
-      people could run the work without asking.</p>
+      <p class="stand">The roles that exist now, how responsibility was handed over, and what was built so other people
+      can run the work.</p>
     </div>
     <div class="cols">
       <aside class="side rv">
-        <p>Placements have been hosted since 2021, beginning with learners from Newbridge College, including young people
-        with additional needs. One of the earliest placements progressed into long-term, full-time employment.</p>
-        <p>In September 2025 the company began formal T Level industry placements with support from the Growth Company.
-        By June 2026 all three students had been offered long-term roles.</p>
-        <p>The fuller story of how people come into the company is told on <a href="https://thewayin.freedom-fire.co.uk/" style="color:var(--pink)">The Way In</a>. It is not repeated here.</p>
+        <p>Placements have been hosted since 2021. Formal T Level industry placements began in September 2025; by June
+        2026 all three students had been offered long-term roles. <button class="more" type="button" data-pop="p-place" aria-label="More on placements"></button></p>
+        <div class="pop" id="p-place" hidden><b>Placements</b><p>The first learners came from Newbridge College, including young people with additional needs. One of the earliest placements progressed into long-term, full-time employment. The T Level placements run with support from the Growth Company.</p></div>
+        <p>How people come into the company is told on <a href="https://thewayin.freedom-fire.co.uk/" style="color:var(--pink)">The Way In</a>.</p>
       </aside>
       <div class="body rv">
-        <p><b>Roles created.</b> Web development, warehouse and fulfilment, IT, ecommerce operations and servicing, most of
-        them filled by people who came in on a placement, through the Job Centre, or while still studying, and trained on
-        the job.</p>
-        <p><b>Responsibility delegated.</b> The website and storefronts are designed and run by the web team. Fulfilment
-        runs from the warehouse team's own order queue. The Amazon launch was handed to a specialist agency in May 2026
-        rather than absorbed by the founder. Suppliers, carriers and marketplace compliance each have a named owner.</p>
-        <p><b>Systems built for others to use.</b> The order system, the shared support desk, the listing workflows and the
-        supply-chain tracker exist so that a new starter can do useful work in their first week, and so that nothing
-        depends on one person remembering.</p>
+        <p><b>Roles created.</b> Web development, warehouse and fulfilment, IT, ecommerce operations and servicing, most
+        filled by people who came in on a placement, through the Job Centre or while still studying.</p>
+        <p><b>Responsibility delegated.</b> The website and storefronts are run by the web team. Fulfilment runs from the
+        warehouse team's own order queue. The Amazon launch went to a specialist agency in May 2026. Suppliers, carriers
+        and marketplace compliance each have a named owner.</p>
+        <p><b>Systems built for others.</b> The order system, the support desk, the listing workflows and the supply-chain
+        tracker exist so a new starter can do useful work in their first week, and nothing depends on one person
+        remembering.</p>
         <div class="quo">
           <q>I thought the placement would be a basic storefront. A few product pages, prices on, done. Instead I was given
           creative freedom. Told what the business needed, then trusted to work out how it should look and work. It turned
@@ -1327,25 +1344,23 @@ details.story summary:hover .st{color:var(--pink)}
           <button type="button" id="vList" aria-pressed="false">List</button>
         </div>
       </div>
-      <p class="stand">One operating system, three horizons. Companies with a number on the register are facts. Everything
-      else is labelled proposed or option, and stays that way until it is registered and trading.</p>
+      <p class="stand">One operating system, three horizons. Companies on the register are facts. Everything else is
+      labelled proposed or option until it is registered and trading.</p>
     </div>
 
     <div class="horizons rv">
       <div class="hz"><div class="k"><span class="status verified">Trading now</span></div>
         <h3>Freedom Fire &amp; Safety Ltd</h3>
-        <p>Company 13589467. Owned brands Firestorm, FXL and Skyline. Direct sourcing, one warehouse in Bury, servicing
-        nationwide, storefronts on eBay and Temu and an own site. Freedom Global is the trading identity for the
-        multi-category ecommerce operation; the legal company is unchanged.</p></div>
+        <p>Company 13589467. Brands Firestorm, FXL and Skyline. Direct sourcing, one warehouse in Bury, servicing
+        nationwide, storefronts on eBay and Temu and an own site. Trades online as Freedom Global.</p></div>
       <div class="hz"><div class="k"><span class="status target">Building · 24 to 36 months</span></div>
         <h3>Proposed operating companies</h3>
         <p>Freedom Facilities, for compliance, servicing and facilities on recurring contracts. Freedom Distribution, for
-        trade and B2B supply of the owned brands. The brand portfolio taken to about twelve registered marks. Amazon,
-        OnBuy and Shopify from launch to established channels. Neither company is registered yet.</p></div>
+        trade supply of the owned brands. Neither is registered yet.</p><button class="more" type="button" data-pop="p-build" aria-label="More on what is being built"></button><div class="pop" id="p-build" hidden><b>Also in this horizon</b><p>The brand portfolio taken to about twelve registered marks. Amazon, OnBuy and Shopify from launch to established channels. Both proposed companies would run on the shared infrastructure below.</p></div></div>
       <div class="hz"><div class="k"><span class="status option">Long-term options</span></div>
         <h3>Optionality, not plans</h3>
-        <p>Property, freight, aerial services and forecourt retail are strategic options the group model keeps open.
-        None is registered, none has a date promised, and none is counted anywhere on this page.</p></div>
+        <p>Property, freight, aerial services and forecourt retail. None is registered, none has a date, and none is
+        counted anywhere on this page.</p></div>
     </div>
 
     <div class="os rv" aria-label="The operating system">
@@ -1413,8 +1428,8 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="panel" id="panel" aria-live="polite">
         <h3 id="pName">Freedom Group</h3><hr>
         <div class="tagline" id="pTag">Group strategy and brand architecture.</div>
-        <p id="pBody">The operating model that the trading company runs on today, and the shape the next companies would
-        take. Not a registered company. Select a planet.</p>
+        <p id="pBody">The operating model the trading company runs on, and the shape the next companies would take. Not a
+        registered company. Select a planet.</p>
         <a class="go" id="pGo" href="https://www.freedomgroup.uk" target="_blank" rel="noopener" style="display:none">Explore ↗</a>
       </div>
     </div>
@@ -1461,14 +1476,13 @@ details.story summary:hover .st{color:var(--pink)}
     <div class="rv">
       <div class="ch-tag">07 — The Record</div>
       <h2>Everything a stranger can check.</h2>
-      <p class="stand">Company facts, dated commercial figures, intellectual property, recognition and people, each with an
-      evidence reference, a status and a source. Collected so nobody has to take a claim on trust.</p>
+      <p class="stand">Company facts, dated figures, intellectual property, recognition and people, each with an evidence
+      reference, a status and a source.</p>
     </div>
     <div class="cols">
       <aside class="side rv">
-        <p>The full, printable version lives under <b style="color:var(--ink)">Verified Record</b> in the header. It carries
-        every evidence ID used on this page, states which sources are public and which are supplied on request, and shows
-        the date each entry was last checked.</p>
+        <p>The full, printable version lives under <b style="color:var(--ink)">Verified Record</b> in the header, with every
+        evidence ID, which sources are public or on request, and the date each entry was last checked.</p>
         <p><a href="#record" data-view-record style="color:var(--pink)">Open the verified record →</a></p>
         <div class="dc"><img src="assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1,<br>with Level 2 Employer accreditation in progress</small></div>
       </aside>
@@ -1494,13 +1508,12 @@ details.story summary:hover .st{color:var(--pink)}
       <p class="stand">Three places the footprint is real, and what is done about each. No figure is published until it
       has been measured.</p>
       <div class="pill">
-        <div><h4>Packaging</h4><p>Moved from plastic to cardboard across the ecommerce operation: cartons, inserts and void
-          fill that recycle at the kerbside. Cylinders travel in board, not foam or film.</p></div>
-        <div><h4>End of life</h4><p>Extinguishers taken out of service, and any hazardous contents, go to a regulated waste
-          transfer facility for recovery and disposal under the duty of care, with the transfer documentation kept.</p></div>
-        <div><h4>Supply chain</h4><p>Products are made in China and shipped by sea in full containers, then held once in Bury
-          and dispatched nationally. That route is where most of the footprint sits, and it is the first thing the
-          baseline measures.</p></div>
+        <div><h4>Packaging</h4><p>Plastic replaced by cardboard across the ecommerce operation: cartons, inserts and void fill
+          that recycle at the kerbside. Cylinders travel in board, not foam or film.</p></div>
+        <div><h4>End of life</h4><p>Retired extinguishers, and any hazardous contents, go to a regulated waste transfer
+          facility under the duty of care, with the transfer documentation kept.</p></div>
+        <div><h4>Supply chain</h4><p>Made in China, shipped by sea in full containers, held once in Bury and dispatched
+          nationally. That route is where most of the footprint sits, and the first thing the baseline measures.</p></div>
       </div>
       <p class="src"><span class="status target">Target</span> A carbon baseline for freight, fleet, energy and packaging is
         being set in 2026 and will be reported here with its method once a full period has been measured. Evidence YF-EN-01 to 04.</p>
@@ -1515,11 +1528,10 @@ details.story summary:hover .st{color:var(--pink)}
   <div class="wrap rv">
     <div class="ch-tag" style="justify-content:center">08 — Still Building</div>
     <h2>The line does not stop here.</h2>
-    <p class="stand">The next stage is not a forecast. It is the same method applied again: find the constraint, design the
-    response, prove it in the market, and turn it into something other people can run. The trading company has the
-    brands, the sourcing, the warehouse, the systems and the people. What is being built now is the second and third
-    channel at full scale, the trade side of the business, and the next owned brands. Everything beyond that is an
-    option the model keeps open, and it will be described as an option until the register says otherwise.</p>
+    <p class="stand">The next stage is the same method applied again: find the constraint, design the response, prove it
+    in the market, and turn it into something other people can run. Being built now: the second and third channel at
+    full scale, the trade side of the business, and the next owned brands. Everything beyond that stays an option until
+    the register says otherwise.</p>
     <div class="acts">
       <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
       <a class="act" href="mailto:tom.letcher@freedom-fire.co.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
@@ -1541,16 +1553,18 @@ details.story summary:hover .st{color:var(--pink)}
 
 </div><!-- /explore -->
 
+<div class="popover" id="popover" role="dialog" aria-modal="false" aria-live="polite"><button class="x" id="popX" type="button" aria-label="Close">Close</button><div id="popBody"></div></div>
+
 <div id="record">
   <div class="rec-head"><div class="wrap">
     <img class="fg-rec" src="assets/group-logo-sm.png" width="420" height="424"
          alt="The Freedom Group" decoding="async">
     <div class="ch-tag">Verified Record · last updated 5 September 2026</div>
     <h2>The evidence, without the cinema.</h2>
-    <p>A clean, printable summary for assessors, journalists, lenders and due diligence. Every entry carries an evidence
-    reference, a status and a source. <b>Verified</b> means a public or independent source or a signed formal record.
-    <b>Management data</b> means a named internal system or platform export, dated. <b>Target</b> means an ambition with
-    its assumptions stated. Public sources are linked; private sources are described and supplied on request.</p>
+    <p>A printable summary for assessors, lenders and due diligence. Every entry carries an evidence reference, a status
+    and a source. <b>Verified</b>: a public or independent source or a signed record. <b>Management data</b>: a named
+    internal system or platform export, dated. <b>Target</b>: an ambition with its assumptions stated. Public sources are
+    linked; private sources are supplied on request.</p>
   </div></div>
 
   <section class="rec-sec">
@@ -1784,7 +1798,7 @@ details.story summary:hover .st{color:var(--pink)}
   </section>
 </div>
 
-<footer>
+<footer id="foot">
   <div class="wrap">
     <div class="ft-top">
       <a class="totop" href="#top" id="totop" data-mag aria-label="Back to the start of the page">
@@ -1795,24 +1809,50 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="ft-brand">
         <img class="fg-foot" src="assets/group-orbit-600.png" width="600" height="607"
              alt="The Freedom Group" loading="lazy" decoding="async">
-        <p>Tom Letcher · founder<br>Freedom Fire &amp; Safety Ltd, company no. 13589467<br>Bury, Greater Manchester</p>
+        <p class="ft-strap">Founder. Operator. Builder.</p>
+        <p>Tom Letcher · founder and managing director<br>Freedom Fire &amp; Safety Ltd<br>Bury, Greater Manchester</p>
+      </div>
+      <nav aria-label="Chapters">
+        <h4>Chapters</h4>
+        <ol>
+          <li><i>01</i><a href="#c01">The Spark</a></li>
+          <li><i>02</i><a href="#c02">Sale to System</a></li>
+          <li><i>03</i><a href="#c03">Proof, Not Promise</a></li>
+          <li><i>04</i><a href="#c04">How I Build</a></li>
+          <li><i>05</i><a href="#c05">Built With People</a></li>
+          <li><i>06</i><a href="#c06">The Platform Ahead</a></li>
+          <li><i>07</i><a href="#c07">The Record</a></li>
+          <li><i>08</i><a href="#c08">Still Building</a></li>
+        </ol>
+      </nav>
+      <div>
+        <h4>The record</h4>
+        <p><a href="#record" data-view-record>Verified record</a><br>
+          <a href="https://find-and-update.company-information.service.gov.uk/company/13589467">Companies House, 13589467</a><br>
+          <a href="mailto:tom.letcher@freedom-fire.co.uk?subject=Evidence%20request">Evidence on request</a><br>
+          <a href="https://thewayin.freedom-fire.co.uk/">The Way In</a></p>
       </div>
       <div>
         <h4>Contact</h4>
         <p><a href="mailto:tom.letcher@freedom-fire.co.uk">tom.letcher@freedom-fire.co.uk</a><br>
           <a href="tel:+443337722723">0333 772 2723</a><br>
-          <a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p>
+          <a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a><br>
+          <a href="https://www.freedomgroup.uk">freedomgroup.uk</a></p>
       </div>
       <div>
         <h4>Registered office</h4>
-        <p>Unit 19, Pilsworth Industrial Estate<br>Bury, Greater Manchester<br>BL9 8RE</p>
+        <p>Freedom Fire &amp; Safety Ltd<br>Unit 19, Pilsworth Industrial Estate<br>Bury, Greater Manchester, BL9 8RE<br>
+          Registered in England and Wales, company 13589467</p>
       </div>
-      <div>
-        <h4>Elsewhere</h4>
-        <p><a href="https://www.freedomgroup.uk">Freedom Group</a><br>
-          <a href="https://thewayin.freedom-fire.co.uk/">The Way In</a><br>
-          <a href="https://find-and-update.company-information.service.gov.uk/company/13589467">Companies House record</a></p>
-      </div>
+    </div>
+    <div class="ft-notes">
+      <div><h5>About the figures</h5><p>Figures marked management data are gross marketplace exports and are not statutory
+        turnover. Targets are ambitions with their assumptions stated. Nothing is counted here until it is on the register
+        or in a platform export.</p></div>
+      <div><h5>About this site</h5><p>Written and built in Bury by the company's own web team, in support of the King's Awards
+        for Enterprise 2027 application. It sets no cookies and runs no tracking.</p></div>
+      <div><h5>Accessibility</h5><p>Every chapter has a reduced-motion version and a plain-text record. Films are captioned
+        with transcripts. If anything is hard to use, email and it will be fixed.</p></div>
     </div>
     <div class="ft-legal"><span>© 2026 Freedom Fire &amp; Safety Ltd · record last updated 5 September 2026</span><span>The line is still drawing.</span></div>
   </div>

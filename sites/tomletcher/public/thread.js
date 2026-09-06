@@ -522,7 +522,8 @@
   }
 
   /* ══ PINNED SCENE — 2021 ══════════════════════════════════ */
-  var scene = $("#ones"), phrases = $$("#phs .ph");
+  var scene = $("#ones"), phrases = $$("#phs .ph"), sceneYr = $("#sceneYr"),
+      railDots = $$("#rail3 i"), railSegs = $$("#rail3 s");
   var sceneTop = 0, sceneRange = 1;
   function measureScene() {
     if (!scene) return;
@@ -534,8 +535,43 @@
     if (!scene || reduce || window.innerWidth <= 820) return;
     var p = clamp((y - sceneTop) / sceneRange, 0, 1);
     var idx = Math.min(phrases.length - 1, Math.floor(p * phrases.length));
+    var local = p * phrases.length - idx;
     phrases.forEach(function (ph, i) { ph.classList.toggle("on", i === idx); });
+    /* the year line and the three-point rail follow the phase: start, now, next */
+    if (sceneYr && phrases[idx] && sceneYr.textContent !== phrases[idx].getAttribute("data-yr"))
+      sceneYr.textContent = phrases[idx].getAttribute("data-yr");
+    railDots.forEach(function (d, i) { d.classList.toggle("on", i === idx); d.classList.toggle("done", i < idx); });
+    railSegs.forEach(function (sg, i) { sg.style.setProperty("--f", i < idx ? 1 : i === idx ? clamp(local * 1.15, 0, 1).toFixed(3) : 0); });
   }
+
+  /* ══ "+" REVEALS — one floating panel beside the pressed circle ══ */
+  (function () {
+    var pop = $("#popover"), body = $("#popBody"), x = $("#popX"), cur = null;
+    if (!pop || !body) return;
+    function close() { if (!cur) return; cur.classList.remove("is-open"); cur.setAttribute("aria-expanded", "false"); cur = null; pop.classList.remove("on"); }
+    function place(btn) {
+      var r = btn.getBoundingClientRect(), W = window.innerWidth, H = window.innerHeight, pw = pop.offsetWidth, ph = pop.offsetHeight;
+      var left = clamp(r.left - 8, 16, W - pw - 16), above = r.bottom + 12 + ph > H - 16 && r.top - 12 - ph > 16;
+      pop.style.left = left + "px"; pop.style.top = (above ? r.top - 12 - ph : r.bottom + 12) + "px";
+      pop.style.setProperty("--ax", clamp(r.left + r.width / 2 - left - 6, 14, pw - 26) + "px");
+      pop.classList.toggle("above", above);
+    }
+    $$("button.more[data-pop]").forEach(function (btn) {
+      var content = document.getElementById(btn.getAttribute("data-pop")); if (!content) return;
+      btn.setAttribute("aria-expanded", "false");
+      btn.addEventListener("click", function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        if (cur === btn) { close(); return; }
+        close(); cur = btn; btn.classList.add("is-open"); btn.setAttribute("aria-expanded", "true");
+        body.innerHTML = content.innerHTML; pop.classList.add("on"); place(btn);
+      });
+    });
+    if (x) x.addEventListener("click", close);
+    document.addEventListener("click", function (ev) { if (cur && !pop.contains(ev.target)) close(); });
+    window.addEventListener("keydown", function (ev) { if (ev.key === "Escape") close(); });
+    window.addEventListener("resize", close);
+    (function follow() { if (cur) { var r = cur.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) close(); else place(cur); } requestAnimationFrame(follow); })();
+  })();
 
   /* ══ HERO CHOREOGRAPHY ════════════════════════════════════ */
   var hero = $(".hero");
@@ -547,7 +583,7 @@
   var chrome = $("#chrome"), spine = $$(".spine a");
   var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
-  var TITLES = { top:["00","Tom Letcher"], ones:["00","The Spark"], c01:["01","The Spark"],
+  var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], c01:["01","The Spark"],
     c02:["02","Sale to System"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
     c05:["05","Built With People"], c06:["06","The Platform Ahead"], slab:["—","Seven Years"],
     c07:["07","The Record"], c08:["08","Still Building"] };
