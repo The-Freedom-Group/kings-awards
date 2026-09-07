@@ -897,3 +897,27 @@
     });
   }
 })();
+
+
+/* ── phones: fold and unfold. The buttons and headings only act below 820px ── */
+(function () {
+  var mq = window.matchMedia && window.matchMedia("(max-width: 820px)");
+  function phone() { return mq && mq.matches; }
+  document.addEventListener("click", function (ev) {
+    if (!phone()) return;
+    var t = ev.target;
+    var b = t.closest && t.closest(".fold-t");
+    if (b) { var host = b.getAttribute("data-fold") === "env" ? b.closest(".env") : b.closest(".cols"); if (host) { var on = host.classList.toggle("open"); b.textContent = on ? "Less" : (b.getAttribute("data-fold") === "env" ? "All three" : "Read more"); } return; }
+    var st = t.closest && t.closest(".stage h3"); if (st) { st.parentElement.classList.toggle("open"); return; }
+    var mk = t.closest && t.closest(".metric .k"); if (mk) { mk.closest(".metric").classList.toggle("open"); return; }
+    var hz = t.closest && t.closest(".hz h3"); if (hz) { hz.closest(".hz").classList.toggle("open"); return; }
+    var nm = t.closest && t.closest(".grp-list .nm"); if (nm) { nm.closest("li").classList.toggle("open"); return; }
+  });
+  /* on a phone the first stage and the first story start open, the rest closed */
+  function init() {
+    if (!phone()) return;
+    var first = document.querySelector(".stage"); if (first) first.classList.add("open");
+    document.querySelectorAll("details.story[open]").forEach(function (d, i) { if (i > 0) d.removeAttribute("open"); });
+  }
+  init();
+})();

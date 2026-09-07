@@ -698,6 +698,32 @@ body.card-open{overflow:hidden}
   .menu a{padding:8px 0}
   .btn{min-height:48px}
 }
+
+/* ── phones: the same information, folded. Nothing here applies above 820px ── */
+@media(max-width:820px){
+  .ch{padding:clamp(52px,11vw,80px) 0}
+  .intro{padding:clamp(56px,11vw,90px) 0 clamp(48px,9vw,70px)}
+  .ch-head{margin-bottom:22px}
+  .intro h2{font-size:max(2rem,7.6vw)}
+  .stand{font-size:16px}
+  ol.spine li{padding:14px 0}
+  ol.spine li:not(.open) .what .fx{display:none}
+  ol.spine .what b{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+  ol.spine li:not(.open) .what b::after{content:"+";color:var(--red);font-family:var(--mono);font-size:14px}
+  ol.spine li.open .what b::after{content:"–";color:var(--red);font-family:var(--mono);font-size:14px}
+  .actcard{padding:18px 18px 20px}
+  .actcard:not(.open) dl,.actcard:not(.open) details{display:none}
+  .actcard .k{cursor:pointer;margin-bottom:0}.actcard.open .k{margin-bottom:16px}
+  .actcard .k::after{content:"+";margin-left:auto;font-family:var(--serif);color:var(--red);font-size:26px;font-variation-settings:normal;text-transform:none;letter-spacing:0}
+  .actcard.open .k::after{content:"–"}
+  .proof{padding:18px 16px 18px}
+  .case{padding:18px}
+  .nx{padding:18px 16px 18px}
+  .cases,.proofs,.nextgrid{gap:10px}
+  .photos{margin-top:34px}
+  .plates{gap:12px}.plate{padding:22px 20px}
+  .cardq{padding:22px 20px}
+}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -953,19 +979,19 @@ body.card-open{overflow:hidden}
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><path d="M14 20h92l-14 40 14 40H14z" fill="#C9C9C4" stroke="#111" stroke-width="6" stroke-linejoin="round"/><circle cx="34" cy="60" r="7" fill="#111"/><path d="M52 48h36M52 60h36M52 72h24" stroke="#111" stroke-width="6" stroke-linecap="round"/></svg></div>
     </div>
     <ol class="spine rv">
-      <li><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b> Tom Letcher sells one refurbished extinguisher from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span><span class="tag">Founder</span></li>
-      <li><span class="when">June 2020</span><span class="what"><b>The first students on the bench.</b> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span><span class="tag">People</span></li>
-      <li><span class="when">Aug 2021</span><span class="what"><b>The company.</b> Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install extinguishers on commercial sites alongside the online range.</span><span class="tag">Company</span></li>
-      <li><span class="when">2021</span><span class="what"><b>The first placements.</b> Learners from Newbridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span><span class="tag">Placements</span></li>
-      <li><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b> Unit 10, about 500 square feet: the first premises the company could call its own, and a base for the team.</span><span class="tag">Premises</span></li>
-      <li><span class="when">2023</span><span class="what"><b>The year of building.</b> Thousands of products researched, photographed and written up by hand before the store opened. The founder's own savings fund the stock.</span><span class="tag">Work</span></li>
-      <li><span class="when">May 2024</span><span class="what"><b>The store, then the award.</b> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards, and the trip to Belfast tells the story of the young people given a way in.</span><span class="tag">Recognition</span></li>
-      <li><span class="when">Nov 2024</span><span class="what"><b>Unit 19.</b> An empty industrial shell turned into the headquarters over six months, with offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span><span class="tag">Premises</span></li>
-      <li><span class="when">Dec 2024</span><span class="what"><b>The Christmas Eve container.</b> The team unloads the first container of Firestorm extinguishers, the company's own brand, ordered on money the business did not yet have.</span><span class="tag">People</span></li>
-      <li><span class="when">Sept 2025</span><span class="what"><b>T Level placements begin.</b> The first T Level industry placements start with the Growth Company. Bill, Harrison and Gabriel join, each with a named person to learn from.</span><span class="tag">T Levels</span></li>
-      <li><span class="when">2025 – 2026</span><span class="what"><b>Students build the storefronts.</b> The website and the online storefronts are designed and built by placement students. A further T Level placement in IT follows.</span><span class="tag">T Levels</span></li>
-      <li><span class="when">June 2026</span><span class="what"><b>Three of three.</b> All three of the first cohort are offered long-term roles. A T Level student presents the Freedom Group project at the new headquarters.</span><span class="tag">T Levels</span></li>
-      <li><span class="when">Sept 2026</span><span class="what"><b>The second cohort.</b> Mentor hours logged, follow-up at three, six and twelve months, and the next T Level students in preparation.</span><span class="tag">Next</span></li>
+      <li><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b><span class="fx"> Tom Letcher sells one refurbished extinguisher from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></span><span class="tag">Founder</span></li>
+      <li><span class="when">June 2020</span><span class="what"><b>The first students on the bench.</b><span class="fx"> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></span><span class="tag">People</span></li>
+      <li><span class="when">Aug 2021</span><span class="what"><b>The company.</b><span class="fx"> Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install extinguishers on commercial sites alongside the online range.</span></span><span class="tag">Company</span></li>
+      <li><span class="when">2021</span><span class="what"><b>The first placements.</b><span class="fx"> Learners from Newbridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></span><span class="tag">Placements</span></li>
+      <li><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b><span class="fx"> Unit 10, about 500 square feet: the first premises the company could call its own, and a base for the team.</span></span><span class="tag">Premises</span></li>
+      <li><span class="when">2023</span><span class="what"><b>The year of building.</b><span class="fx"> Thousands of products researched, photographed and written up by hand before the store opened. The founder's own savings fund the stock.</span></span><span class="tag">Work</span></li>
+      <li><span class="when">May 2024</span><span class="what"><b>The store, then the award.</b><span class="fx"> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards, and the trip to Belfast tells the story of the young people given a way in.</span></span><span class="tag">Recognition</span></li>
+      <li><span class="when">Nov 2024</span><span class="what"><b>Unit 19.</b><span class="fx"> An empty industrial shell turned into the headquarters over six months, with offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></span><span class="tag">Premises</span></li>
+      <li><span class="when">Dec 2024</span><span class="what"><b>The Christmas Eve container.</b><span class="fx"> The team unloads the first container of Firestorm extinguishers, the company's own brand, ordered on money the business did not yet have.</span></span><span class="tag">People</span></li>
+      <li><span class="when">Sept 2025</span><span class="what"><b>T Level placements begin.</b><span class="fx"> The first T Level industry placements start with the Growth Company. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></span><span class="tag">T Levels</span></li>
+      <li><span class="when">2025 – 2026</span><span class="what"><b>Students build the storefronts.</b><span class="fx"> The website and the online storefronts are designed and built by placement students. A further T Level placement in IT follows.</span></span><span class="tag">T Levels</span></li>
+      <li><span class="when">June 2026</span><span class="what"><b>Three of three.</b><span class="fx"> All three of the first cohort are offered long-term roles. A T Level student presents the Freedom Group project at the new headquarters.</span></span><span class="tag">T Levels</span></li>
+      <li><span class="when">Sept 2026</span><span class="what"><b>The second cohort.</b><span class="fx"> Mentor hours logged, follow-up at three, six and twelve months, and the next T Level students in preparation.</span></span><span class="tag">Next</span></li>
     </ol>
   </div>
 </section>

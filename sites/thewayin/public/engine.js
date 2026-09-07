@@ -407,3 +407,17 @@
   $$(".quick button").forEach(function (b) { b.addEventListener("click", function () { progStart.value = b.dataset.d; judge(); $$(".quick button").forEach(function (x) { x.classList.toggle("on", x === b); }); }); });
 
 })();
+
+
+/* ── phones: fold and unfold. Only acts below 820px ── */
+(function () {
+  var mq = window.matchMedia && window.matchMedia("(max-width: 820px)");
+  function phone() { return mq && mq.matches; }
+  document.addEventListener("click", function (ev) {
+    if (!phone()) return;
+    var t = ev.target;
+    var li = t.closest && t.closest("ol.spine li"); if (li) { li.classList.toggle("open"); return; }
+    var k = t.closest && t.closest(".actcard .k"); if (k) { k.closest(".actcard").classList.toggle("open"); return; }
+  });
+  if (phone()) { var a = document.querySelector(".actcard"); if (a) a.classList.add("open"); }
+})();

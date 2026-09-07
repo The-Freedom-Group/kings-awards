@@ -846,6 +846,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
 .film{position:relative;margin:clamp(34px,5vw,62px) 0 0;aspect-ratio:16/9;background:#000;overflow:hidden;
   border:1px solid var(--rule-d)}
 .film img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.48;filter:grayscale(.35)}
+.film.live iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 .film-in{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:24px;gap:12px;color:var(--pale)}
 .film .play{width:66px;height:66px;border-radius:50%;border:1.5px solid var(--pink);margin:0 auto 6px;position:relative;display:block}
 .film .play::after{content:"";position:absolute;left:26px;top:20px;border-left:16px solid var(--pink);
@@ -931,6 +932,35 @@ details.story summary:hover .st{color:var(--pink)}
   .ycard{scroll-snap-align:start;width:min(300px,78vw);flex:0 0 auto}
   .years::after{content:"";position:absolute;top:0;right:0;bottom:6px;width:56px;background:linear-gradient(90deg,rgba(16,16,16,0),rgba(16,16,16,.85));pointer-events:none}
   .yhead::after{content:"swipe →";float:right;color:var(--pink);letter-spacing:.2em}
+}
+
+/* ── phones: the same information, folded. Nothing here applies above 820px ── */
+.fold-t{display:none}
+@media(max-width:820px){
+  .ch{padding:clamp(52px,11vw,76px) 0}
+  .ch h2{font-size:clamp(30px,9.2vw,46px);margin-bottom:16px}
+  .ch .stand{font-size:16px}
+  .cols{gap:18px}
+  .cols .side{order:2}
+  .cols:not(.open) .side,.cols:not(.open) .body>p:nth-of-type(n+2),.cols:not(.open) .body>.pop{display:none}
+  .fold-t{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink);background:none;border:0;padding:10px 0;cursor:pointer;font-family:inherit}
+  .fold-t::after{content:"↓";transition:transform .3s}
+  .open>.fold-t::after,.cols.open .fold-t::after{transform:rotate(180deg)}
+  .stage{padding:18px 18px 20px}
+  .stage:not(.open) dl{display:none}
+  .stage h3{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0;cursor:pointer}
+  .stage h3::after{content:"+";font-family:var(--serif);color:var(--pink);font-size:28px;line-height:1;flex:0 0 auto}
+  .stage.open h3{margin-bottom:14px}.stage.open h3::after{content:"–"}
+  .stage .n{margin-bottom:6px;font-size:28px}
+  .metric{padding:20px 18px 18px}.metric .v{font-size:40px}
+  .metric:not(.open) .def{display:none}
+  .metric .k{cursor:pointer;display:flex;justify-content:space-between;gap:10px}.metric .k::after{content:"+";color:var(--pink);font-size:16px}
+  .metric.open .k::after{content:"–"}
+  .horizons .hz:not(.open) p,.horizons .hz:not(.open) .more{display:none}.hz h3{display:flex;justify-content:space-between;gap:10px;cursor:pointer}.hz h3::after{content:"+";font-family:var(--serif);color:var(--pink);font-size:26px}.hz.open h3::after{content:"–"}
+  .grp-list li:not(.open) .ds{display:none}.grp-list .nm{display:flex;justify-content:space-between;align-self:stretch;width:100%;cursor:pointer}.grp-list .nm::after{content:"+";color:var(--pink)}.grp-list li.open .nm::after{content:"–"}
+  .env:not(.open) .pill>div:nth-child(n+2){display:none}
+  .story .sb dl{font-size:14.5px}
+  .years{margin-top:26px}
 }
 </style>
 </head>
@@ -1076,17 +1106,11 @@ details.story summary:hover .st{color:var(--pink)}
         on 27 August 2021 <b>Freedom Fire &amp; Safety Ltd</b> was incorporated. <button data-cur-label="More" class="more" type="button" data-pop="p-origin" aria-label="The full origin"></button></p>
         <div class="pop" id="p-origin" hidden><b>The full origin</b><p><b>September 2019.</b> About 400 mixed extinguishers to a fire-training buyer in Bolton for £400, roughly a pound each and probably a loss once time and delivery were counted. The first proof that demand was real and came in volume.</p><p><b>January 2020.</b> A Nottingham takeaway paid online and asked for the extinguisher to be sent. Extinguishers cannot go with any courier, so the parcel had to be packed properly and a carrier found. From then on the business was not limited to people who could drive to Bury.</p><p><b>Summer 2020.</b> Trading as Freedom Fire from a rented corner of the family warehouse: students cleaning and refilling hundreds of units a day, pallets to Scotland, Wales and London, and six containers of refurbished stock for exporters into West and Central Africa. By 2021 the supply of second-hand stock could no longer keep up.</p></div>
       </div>
+    <button class="fold-t" type="button" data-fold="cols">Read more</button>
     </div>
 
-    <figure data-cur-label="Play" class="film" id="film" aria-label="The two-minute founder story">
-      <img src="assets/journey/ch1-a.webp" width="1154" height="1342" alt="Rows of refurbished red fire extinguishers lined up along a warehouse wall, the stock the business began with" decoding="async">
-      <div class="film-in">
-        <span class="play" aria-hidden="true"></span>
-        <div class="film-t">The two-minute story</div>
-        <div class="film-s">From the first extinguisher to the platform being built now. Real objects, listings, units and people.
-        Captioned, with a transcript.</div>
-        <div class="film-k">Film · scheduled September 2026</div>
-      </div>
+    <figure class="film live" id="film" aria-label="The two-minute founder story">
+      <iframe src="https://customer-q4ck225vxqtshqms.cloudflarestream.com/8b26e14c1c49ab65e85eee304ee0bc3c/iframe?preload=metadata&letterboxColor=%23000000" allow="accelerometer; gyroscope; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Tom Letcher, the two-minute story" loading="lazy"></iframe>
     </figure>
 
     <div class="years rv" aria-label="The origin, in five dated steps">
@@ -1217,6 +1241,7 @@ details.story summary:hover .st{color:var(--pink)}
           <tr><th>Late 2026</th><td>Amazon storefront, OnBuy rollout and an own Shopify store, in preparation.</td></tr>
         </table>
       </div>
+    <button class="fold-t" type="button" data-fold="cols">Read more</button>
     </div>
 
         <div class="ranks rv" id="ranks" aria-label="eBay UK seller rankings, August 2026">
@@ -1569,6 +1594,7 @@ details.story summary:hover .st{color:var(--pink)}
           <tr><th>Channels</th><td>eBay and Temu today; Amazon, OnBuy and an own store in preparation</td></tr>
         </table>
       </div>
+    <button class="fold-t" type="button" data-fold="cols">Read more</button>
     </div>
     <div class="env rv">
       <div class="ch-tag">Carbon footprint</div>
@@ -1581,6 +1607,7 @@ details.story summary:hover .st{color:var(--pink)}
         <div><h4>Supply chain</h4><p>Made in China, shipped by sea in full containers, held once in Bury and dispatched
           nationally. That route is where most of the footprint sits, and the first thing the baseline measures.</p></div>
       </div>
+      <button class="fold-t" type="button" data-fold="env">All three</button>
       
     </div>
   </div>

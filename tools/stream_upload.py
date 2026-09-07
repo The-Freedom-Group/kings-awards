@@ -88,7 +88,7 @@ def wire_story(uid, customer):
              '      <iframe src="https://customer-%s.cloudflarestream.com/%s/iframe?preload=metadata&letterboxColor=%%23000000" '
              'allow="accelerometer; gyroscope; encrypted-media; picture-in-picture; fullscreen" allowfullscreen '
              'title="Tom Letcher, the two-minute story" loading="lazy"></iframe>\n    </figure>' % (customer, uid))
-    s, n = re.subn(r'<figure class="film(?: live)?" id="film"[^>]*>.*?</figure>', lambda m: frame, s, count=1, flags=re.S)
+    s, n = re.subn(r'<figure[^>]*class="film(?: live)?"[^>]*id="film"[^>]*>.*?</figure>', lambda m: frame, s, count=1, flags=re.S)
     if n != 1: sys.exit("Could not find the film placeholder on the portfolio")
     if ".film.live iframe" not in s:
         s = s.replace(".film-in{", ".film.live iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}\n.film-in{", 1)
