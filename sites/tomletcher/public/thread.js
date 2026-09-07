@@ -859,3 +859,41 @@
     if (io) { $$(".rv, .draw, .map, .plate").forEach(function (el) { io.unobserve(el); }); }
   });
 })();
+
+
+/* ── the eBay rank cards: numbers count up as they arrive, cards tilt to the pointer ── */
+(function () {
+  var box = document.getElementById("ranks"); if (!box) return;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-GB"); };
+  function count(el, to, dur, dec) {
+    if (reduce) { el.textContent = dec ? to : fmt(to); return; }
+    var t0 = null;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur), ease = 1 - Math.pow(1 - k, 3), v = to * ease;
+      el.textContent = dec ? v.toFixed(dec) : fmt(v);
+      if (k < 1) requestAnimationFrame(step); else el.textContent = dec ? to : fmt(to);
+    }
+    requestAnimationFrame(step);
+  }
+  var done = false;
+  function go() {
+    if (done) return; done = true; box.classList.add("go");
+    box.querySelectorAll("[data-count]").forEach(function (el, i) { setTimeout(function () { count(el, +el.getAttribute("data-count"), 1600); }, 200 + i * 120); });
+    box.querySelectorAll("[data-pct]").forEach(function (el, i) { var v = el.getAttribute("data-pct"); setTimeout(function () { count(el, +v, 1600, (v.split(".")[1] || "").length); }, 300 + i * 120); });
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es, io) { es.forEach(function (en) { if (en.isIntersecting) { go(); io.disconnect(); } }); }, { threshold: 0.25 }).observe(box);
+  } else go();
+  /* tilt: fine pointers only */
+  if (window.matchMedia && window.matchMedia("(pointer:fine)").matches && !reduce) {
+    box.querySelectorAll("[data-tilt]").forEach(function (card) {
+      card.addEventListener("mousemove", function (ev) {
+        var r = card.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width - 0.5, y = (ev.clientY - r.top) / r.height - 0.5;
+        card.style.transform = "rotateX(" + (-y * 6).toFixed(2) + "deg) rotateY(" + (x * 8).toFixed(2) + "deg) translateY(-4px)";
+      });
+      card.addEventListener("mouseleave", function () { card.style.transform = ""; });
+    });
+  }
+})();
