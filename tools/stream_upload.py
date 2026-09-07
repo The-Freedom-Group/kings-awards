@@ -100,7 +100,7 @@ def wire(key, uid, customer):
     if key == "tomstory": return wire_story(uid, customer)
     p = os.path.join(ROOT, "staff", "index.html")
     s = open(p, encoding="utf-8").read()
-    pat = r'(<button class="tile[^"]*" type="button" data-cur data-k="%s"[^>]*?)( data-stream="[^"]*")?( aria-haspopup)' % re.escape(key)
+    pat = r'(<button[^>]*class="tile[^"]*"[^>]*data-k="%s"[^>]*?)( data-stream="[^"]*")?( aria-haspopup)' % re.escape(key)
     s, n = re.subn(pat, lambda m: m.group(1) + ' data-stream="%s"' % uid + m.group(3), s, count=1)
     if n != 1: sys.exit("Could not find the tile for " + key)
     if 'data-stream-customer=' in s:

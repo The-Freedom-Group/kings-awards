@@ -17,10 +17,11 @@
       "consent": "approved",
       "consent_date": "2026-09-04",
       "voice": true,
-      "film": "recorded 2026-09-05, 4K HDR master held; hosting pending",
+      "film": "on Cloudflare Stream",
       "photo": "assets/people/bill.jpg",
       "film_recorded": "2026-09-05",
-      "captions": "to follow"
+      "captions": "to follow",
+      "stream_id": "128da59c1060c5c5209e3e91e9133dd0"
     },
     {
       "id": "P02",
