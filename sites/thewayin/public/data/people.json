@@ -89,7 +89,8 @@
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-07",
       "photo": "assets/people/dylan.jpg",
-      "film": "recorded 2026-09-07, master held; hosting pending"
+      "film": "on Cloudflare Stream",
+      "stream_id": "9ba0da5d180f5c06d1f8fa2a5a7ac293"
     },
     {
       "id": "P07",
