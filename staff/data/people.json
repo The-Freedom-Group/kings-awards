@@ -5,7 +5,8 @@
     "role": "Founder, programme sponsor and mentor",
     "counted_as_participant": false,
     "photo": "assets/people/tom.jpg",
-    "film": "recorded 2026-09-06, two-minute film and full master held; hosting pending"
+    "film": "on Cloudflare Stream",
+    "stream_id": "f369f28cd9d896ce6dc109502fc8cde6"
   },
   "people": [
     {
@@ -33,8 +34,9 @@
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
       "photo": "assets/people/harrison.jpg",
-      "film": "recorded 2026-09-06, master held; hosting pending",
-      "film_recorded": "2026-09-06"
+      "film": "on Cloudflare Stream",
+      "film_recorded": "2026-09-06",
+      "stream_id": "e9d60336893ee30f4fc84b83d27efa7e"
     },
     {
       "id": "P03",
@@ -74,8 +76,9 @@
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
       "photo": "assets/people/elliot.jpg",
-      "film": "recorded 2026-09-06, master held; hosting pending",
-      "film_recorded": "2026-09-06"
+      "film": "on Cloudflare Stream",
+      "film_recorded": "2026-09-06",
+      "stream_id": "49c91925b42d9bf22dcee1fbcda42f6d"
     },
     {
       "id": "P06",

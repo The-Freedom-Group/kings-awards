@@ -923,6 +923,15 @@ details.story summary:hover .st{color:var(--pink)}
   .status{font-size:10px}
   .node .st{font-size:10px}.node .lbl{font-size:11px}.yrlbl{font-size:10px}
 }
+
+/* ── phone polish from the section-by-section audit ── */
+@media(max-width:900px){.rno1{font-size:10.5px}.rpct b{font-size:9.5px}}
+@media(max-width:1099px){
+  .years{position:relative;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .ycard{scroll-snap-align:start;width:min(300px,78vw);flex:0 0 auto}
+  .years::after{content:"";position:absolute;top:0;right:0;bottom:6px;width:56px;background:linear-gradient(90deg,rgba(16,16,16,0),rgba(16,16,16,.85));pointer-events:none}
+  .yhead::after{content:"swipe →";float:right;color:var(--pink);letter-spacing:.2em}
+}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
