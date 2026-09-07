@@ -962,6 +962,24 @@ details.story summary:hover .st{color:var(--pink)}
   .story .sb dl{font-size:14.5px}
   .years{margin-top:26px}
 }
+
+/* ── notes, 7 Sept: hero line, bar, badges, footer ── */
+.hero-sub .fob{font-size:clamp(20px,2.6vw,36px);letter-spacing:.14em;font-weight:600;color:var(--ink)}
+@media(min-width:821px){.hero-sub{max-width:none}.hero-sub .fob{white-space:nowrap}}
+.bar div{font-size:11px}
+.badges{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.bd{border:1px solid var(--rule);padding:14px 14px 12px;display:grid;gap:8px;align-content:start;background:rgba(0,0,0,.02)}
+.bd img{width:auto;height:52px;object-fit:contain;justify-self:start}
+.bd small{font-size:10.5px;letter-spacing:.06em;line-height:1.45;color:var(--ink-3)}
+.bd.txt b{font-family:var(--disp);text-transform:uppercase;font-size:18px;line-height:1;color:var(--ink);font-weight:400;padding-top:4px}
+.bd.txt small{color:var(--pink);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px}
+.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(24px,4vw,56px);padding-top:clamp(28px,3.6vw,44px)}
+.ft-grid h4{margin:0 0 10px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink)}
+.ft-grid p{margin:0;font-size:13.5px;line-height:1.7;color:var(--pale-2)}
+.ft-grid a{color:var(--pale)}.ft-grid a:hover{color:var(--pink)}
+.ft-brand img{height:56px;width:auto;margin-bottom:16px;display:block}
+@media(max-width:820px){.ft-grid{grid-template-columns:1fr 1fr;gap:26px}.badges{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.ft-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -978,7 +996,6 @@ details.story summary:hover .st{color:var(--pink)}
   <div class="k">Chapter</div>
   <div class="n" id="cardN">00</div>
   <div class="t" id="cardT">Tom Letcher</div>
-  <div class="d">Freedom Fire &amp; Safety Ltd</div>
 </aside>
 
 <div class="enter" id="enter" aria-hidden="true">
@@ -1024,11 +1041,6 @@ details.story summary:hover .st{color:var(--pink)}
 <div id="explore">
 
 <section class="hero" id="top">
-  <div class="hl-start" id="hlStart"><span>2019 — One extinguisher</span></div>
-  <div class="hl-node" id="hn0" aria-hidden="true"><b></b><span>Products</span></div>
-  <div class="hl-node" id="hn1" aria-hidden="true"><b></b><span>Channels</span></div>
-  <div class="hl-node" id="hn2" aria-hidden="true"><b></b><span>Systems</span></div>
-  <div class="hl-node" id="hn3" aria-hidden="true"><b></b><span>People</span></div>
 
   <div class="wrap">
     <div class="hero-stage">
@@ -1041,10 +1053,10 @@ details.story summary:hover .st{color:var(--pink)}
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p>Founder. Operator. Builder.<br>From one second-hand fire extinguisher to a nationwide, multi-channel safety business.</p></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
-        <a class="follow alt" href="mailto:tom.letcher@freedom-fire.co.uk" data-mag>Contact me <i>→</i></a>
+        <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
       </div>
     </div>
   </div>
@@ -1052,12 +1064,12 @@ details.story summary:hover .st{color:var(--pink)}
 
 <div class="bar" aria-label="Four verified snapshot figures">
   <div class="wrap">
-    <div>Trading since 2019 · incorporated 2021</div><div>£1m+ combined sales · 2025</div>
-    <div>No. 1 eBay UK extinguisher seller · 2026</div><div>Runner-up · eBay UK Business Awards 2024</div>
+    <div>King's Awards for Enterprise · nominated 2026</div><div>Shortlisted · Manchester Young Talent Awards</div>
+    <div>500,000+ products sold · No. 1 extinguisher seller on eBay and Temu</div><div>Runner-up · eBay UK Business Awards 2024</div>
   </div>
 </div>
 
-<div class="mq" aria-hidden="true"><div class="mq-t" data-mq="1" data-base="FROM ONE EXTINGUISHER <i>—</i> TO A NATIONWIDE, MULTI-CHANNEL BUSINESS <i>—</i> BURY TO UK-WIDE <i>—</i> "></div></div>
+<div class="mq" aria-hidden="true"><div class="mq-t" data-mq="1" data-base="FROM ONE EXTINGUISHER <i>—</i> TO A MULTI-CHANNEL GROUP <i>—</i> £100M PROJECTION <i>—</i> "></div></div>
 
 <section class="scene" id="ones" aria-label="Start, now and next">
   <div class="stick">
@@ -1070,14 +1082,14 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="ph" data-yr="Currently · Bury · September 2026"><div>
         <em>Currently</em>
         <h3>Number one on eBay UK.</h3>
-        <p>£1m+ of combined sales in the second full year, three registered brands, one warehouse and a team that runs the day.</p></div></div>
+        <p>£1m+ of combined sales in the second full year, three registered brands, one warehouse, a team that runs the day, and a group plan projected at £100m of ecommerce.</p></div></div>
       <div class="ph" data-yr="The future · 2027 and beyond"><div>
         <em>The future</em>
         <h3>A platform, not a shop.</h3>
-        <p>Amazon, OnBuy and an own store at full scale, the trade side of the business, and the next owned brands. Everything else stays an option.</p></div></div>
+        <p>Temu, Amazon, OnBuy and an own store at full scale, the trade side of the business, and the next owned brands. Everything else stays an option.</p></div></div>
     </div>
     <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
-    <div class="cnt">Bury, Greater Manchester · trading since <b>March 2019</b> · incorporated 2021</div>
+    <div class="cnt">Trading since <b>March 2019</b><br>Incorporated 2021</div>
   </div>
 </section>
 
@@ -1190,8 +1202,7 @@ details.story summary:hover .st{color:var(--pink)}
     <div class="rv">
       <div class="ch-tag">03 — Proof, Not Promise</div>
       <h2>Six numbers. Each one says what it counts.</h2>
-      <p class="stand">Six numbers. Each states what it counts and over what period. Marketplace figures are gross
-      sales from the platforms' own exports.</p>
+      <p class="stand">Each covers a stated period. Marketplace figures are gross sales from the platforms' own exports.</p>
     </div>
 
     <div class="metrics rv" id="proof">
@@ -1425,11 +1436,9 @@ details.story summary:hover .st{color:var(--pink)}
         tracker exist so a new starter can do useful work in their first week, and nothing depends on one person
         remembering.</p>
         <div class="quo">
-          <q>I thought the placement would be a basic storefront. A few product pages, prices on, done. Instead I was given
-          creative freedom. Told what the business needed, then trusted to work out how it should look and work. It turned
-          into a proper, highly designed website. Not many places would hand that much responsibility to someone on a
-          placement, and when I got things wrong, they showed me why and let me fix it.</q>
-          <div class="by">Bill, web developer · joined on a T Level placement, September 2025</div>
+          <q>Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my
+          son back’ thanks to you Tom.</q>
+          <div class="by">Molly, Josh's mother · from a handwritten card sent shortly after Josh started, reproduced with permission</div>
         </div>
       </div>
     </div>
@@ -1451,8 +1460,7 @@ details.story summary:hover .st{color:var(--pink)}
           <button type="button" id="vList" aria-pressed="false">List</button>
         </div>
       </div>
-      <p class="stand">One operating system, three horizons: what trades today, what is being built next, and what stays
-      an option.</p>
+      <p class="stand">One operating system underneath. Three horizons on top of it.</p>
     </div>
 
     <div class="horizons rv">
@@ -1579,9 +1587,13 @@ details.story summary:hover .st{color:var(--pink)}
     </div>
     <div class="cols">
       <aside class="side rv">
-        <p>Trading since March 2019, incorporated in August 2021, and run from one warehouse on the Pilsworth estate in
-        Bury, with servicing on the road nationwide.</p>
-        <div class="dc"><img src="assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1,<br>with Level 2 Employer accreditation in progress</small></div>
+        <p>Recognition and accreditation.</p>
+        <div class="badges">
+          <div class="bd"><img src="assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1 · Level 2 Employer in progress</small></div>
+          <div class="bd"><img src="assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>T Level Ambassador Network · employer ambassador</small></div>
+          <div class="bd txt"><b>Manchester Young Talent Awards</b><small>Shortlisted · Founder</small></div>
+          <div class="bd txt"><b>The King's Awards for Enterprise</b><small>Nominated · 2026</small></div>
+        </div>
       </aside>
       <div class="body rv">
         <table class="tbl">
@@ -1620,15 +1632,13 @@ details.story summary:hover .st{color:var(--pink)}
   <div class="wrap rv">
     <div class="ch-tag" style="justify-content:center">08 — Still Building</div>
     <h2>The line does not stop here.</h2>
-    <p class="stand">The next stage is the same method applied again: find the constraint, design the response, prove it
-    in the market, and turn it into something other people can run. Being built now: the second and third channel at
-    full scale, the trade side of the business, and the next owned brands. Everything beyond that stays an option.</p>
+    <p class="stand">The same method, applied again. Being built now: Temu, Amazon, OnBuy and an own store at full scale,
+    the trade side of the business, and the next owned brands. Everything beyond that stays an option.</p>
     <div class="acts">
       <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
-      <a class="act" href="mailto:tom.letcher@freedom-fire.co.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
-      <a class="act" href="mailto:tom.letcher@freedom-fire.co.uk" data-mag>Contact me</a>
+      <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
+      <a class="act" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me</a>
     </div>
-    <p class="dedic">For Mum, and for Nana.</p>
   </div>
 </section>
 
@@ -1636,8 +1646,6 @@ details.story summary:hover .st{color:var(--pink)}
   <svg id="threadSvg" preserveAspectRatio="none">
     <path class="track" id="tTrack"></path>
     <path class="live" id="tLive"></path>
-    <path class="spur" id="sp0"></path><path class="spur" id="sp1"></path>
-    <path class="spur" id="sp2"></path><path class="spur" id="sp3"></path>
   </svg>
   <i class="head" id="tHead"></i>
 </div>
@@ -1653,13 +1661,14 @@ details.story summary:hover .st{color:var(--pink)}
         <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
       </a>
     </div>
-    <div class="ft-line">
-      <span>Tom Letcher · Freedom Fire &amp; Safety Ltd</span>
-      <span><a href="mailto:tom.letcher@freedom-fire.co.uk">tom.letcher@freedom-fire.co.uk</a> · <a href="tel:+443337722723">0333 772 2723</a></span>
-      <span>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE</span>
+    <div class="ft-grid">
+      <div class="ft-brand"><img src="assets/ff_logo.png" alt="Freedom Fire &amp; Safety" width="480" height="150" loading="lazy" decoding="async">
+        <p>Tom Letcher, founder.<br>Fire safety, sold online and serviced on site, from one warehouse in Bury.</p></div>
+      <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a><br>Unit 19, Pilsworth Industrial Estate<br>Bury, BL9 8RE</p></div>
+      <div><h4>The story</h4><p><a href="#c01">The spark</a><br><a href="#c03">Proof</a><br><a href="#c04">How I build</a><br><a href="#c06">The platform ahead</a><br><a href="#c08">Still building</a></p></div>
+      <div><h4>Elsewhere</h4><p><a href="https://thewayin.freedom-fire.co.uk/">The Way In</a><br><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p></div>
     </div>
-    <div class="ft-legal"><span>© 2026 Freedom Fire &amp; Safety Ltd</span>
-      <span><a href="https://thewayin.freedom-fire.co.uk/">The Way In</a> · <a href="https://www.freedomgroup.uk">Freedom Group</a></span></div>
+    <div class="ft-legal"><span>© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</span><span>Bury, Greater Manchester</span></div>
   </div>
 </footer>
 

@@ -113,6 +113,7 @@
        header and the foot of the hero arrive. Scrolling early hurries it; "Skip animation" ends it. */
     var gate = $("#gate");
     gsap.set("#slats", { yPercent: -102 });   /* the hero's own shutter already stands open behind the gate */
+    gsap.set("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 });   /* first a black screen; the shutter arrives after the line */
     gsap.set(".hero .opened .line span", { y: "110%", rotation: 3 });
     gsap.set(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline(); window.__intro = intro;
@@ -122,9 +123,10 @@
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
     var flSplit = new SplitText("#fl", { type: "chars" });
     intro.fromTo("#gLogo", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 1.1, ease: "power3.out" }, 0.25)
-      .fromTo("#gTitle", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: .9, ease: "power3.out" }, 0.75)
-      .fromTo("#gStrap", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .9 }, 1.2)
-      .add("gate", 2.6)
+      .fromTo("#gStrap", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .9 }, 1.1)
+      .to("#gStencil", { autoAlpha: 0, y: -14, duration: .6, ease: "power2.in" }, 3.1)
+      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 3.4)
+      .add("gate", 4.6)
       .call(function () { gate.classList.add("opening"); }, null, "gate")
       .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
       .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")
@@ -303,6 +305,7 @@
     $("#pfResp").textContent = d.resp || ""; $("#pfNext").textContent = d.next || "";
     $$("#pfFields .opt").forEach(function (el) { el.style.display = el.querySelector("b").textContent ? "" : "none"; });
     $("#pfQ").textContent = "Film with " + d.name + ": to be recorded";
+    var ov = $("#pfOv"); if (ov) ov.textContent = d.name + " · " + d.role;
     $("#pfVid").style.setProperty("--a", getComputedStyle(t).getPropertyValue("--a"));
     var v = $("#pfVideo"), vid = $("#pfVid"), img = $("#pfImg"), note = $("#pfVnote");
     /* a film on Cloudflare Stream arrives as the Stream player; the master is never scaled by us */
