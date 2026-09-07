@@ -45,9 +45,10 @@
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-05",
       "photo": "assets/people/gabriel.jpg",
-      "film": "recorded 2026-09-05, 4K HDR master held; hosting pending",
+      "film": "on Cloudflare Stream",
       "film_recorded": "2026-09-05",
-      "captions": "to follow"
+      "captions": "to follow",
+      "stream_id": "650e5dedcdc531fd649a2f1ed76ce641"
     },
     {
       "id": "P04",
@@ -59,8 +60,9 @@
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
       "photo": "assets/people/jojo.jpg",
-      "film": "recorded 2026-09-06, master held; hosting pending",
-      "film_recorded": "2026-09-06"
+      "film": "on Cloudflare Stream",
+      "film_recorded": "2026-09-06",
+      "stream_id": "db6de5e75a5fd2afea23d30b848b35e9"
     },
     {
       "id": "P05",
@@ -78,8 +80,12 @@
       "id": "P06",
       "name": "Dylan",
       "role": "Warehouse operative",
-      "route": "Jobcentre Plus referral",
-      "consent": "pending"
+      "route": "Recruited locally, no CV filter",
+      "consent": "approved",
+      "consent_scope": "name, image and film",
+      "consent_date": "2026-09-07",
+      "photo": "assets/people/dylan.jpg",
+      "film": "recorded 2026-09-07, master held; hosting pending"
     },
     {
       "id": "P07",
@@ -87,10 +93,11 @@
       "role": "IT technician",
       "route": "T Level industry placement",
       "consent": "approved",
-      "film": "recorded 2026-09-04, master held; no portrait yet; hosting pending",
+      "film": "on Cloudflare Stream",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
-      "photo": "assets/people/billy.jpg"
+      "photo": "assets/people/billy.jpg",
+      "stream_id": "42e97963e73142f3e18098d7cadc5c99"
     },
     {
       "id": "P08",
@@ -101,8 +108,9 @@
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
       "photo": "assets/people/josh.jpg",
-      "film": "recorded 2026-09-06, master held; hosting pending",
-      "film_recorded": "2026-09-06"
+      "film": "on Cloudflare Stream",
+      "film_recorded": "2026-09-06",
+      "stream_id": "44e0f0e1e551fbbd2ba679ca7e11f5dc"
     }
   ],
   "withdrawal_contact": "info@freedom-fire.co.uk"

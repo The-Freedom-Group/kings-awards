@@ -464,18 +464,25 @@
   }
 
   /* ══ CURSOR ═══════════════════════════════════════════════ */
-  var cur = $("#cur"), curDot = $("#curDot"), curRing = $("#curRing");
-  var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, curSeen = false;
+  var cur = $("#cur"), curDot = $("#curDot"), curRing = $("#curRing"), curLbl = $("#curLbl");
+  var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, curSeen = false, lastMx = mx, lastMy = my, cvx = 0, cvy = 0, idleTimer = null;
   if (fine && !reduce && cur) {
     document.documentElement.classList.add("cur-on");
     window.addEventListener("mousemove", function (e) {
-      mx = e.clientX; my = e.clientY; curSeen = true;
+      mx = e.clientX; my = e.clientY;
+      if (!curSeen) { curSeen = true; rx = mx; ry = my; lastMx = mx; lastMy = my; cur.classList.add("seen"); }
+      cur.classList.remove("idle"); clearTimeout(idleTimer); idleTimer = setTimeout(function () { cur.classList.add("idle"); }, 3500);
       var t = e.target;
+      var labelled = t.closest && t.closest("[data-cur-label]");
       var hot = t.closest && t.closest("a,button,summary,[data-mag],.node");
-      cur.classList.toggle("big", !!hot);
+      cur.classList.toggle("label", !!labelled);
+      cur.classList.toggle("big", !!hot && !labelled);
+      if (labelled && curLbl) curLbl.textContent = labelled.getAttribute("data-cur-label");
     }, { passive: true });
-    document.addEventListener("mouseleave", function () { cur.style.opacity = "0"; });
-    document.addEventListener("mouseenter", function () { cur.style.opacity = "1"; });
+    window.addEventListener("mousedown", function () { cur.classList.add("down"); });
+    window.addEventListener("mouseup", function () { cur.classList.remove("down"); });
+    document.addEventListener("mouseleave", function () { cur.classList.remove("seen"); });
+    document.addEventListener("mouseenter", function () { if (curSeen) cur.classList.add("seen"); });
   }
 
   /* ── magnetic elements ────────────────────────────────────── */
@@ -592,8 +599,12 @@
     /* cursor */
     if (fine && !reduce && curSeen) {
       curDot.style.transform = "translate(" + mx + "px," + my + "px)";
-      rx = lerp(rx, mx, 0.16); ry = lerp(ry, my, 0.16);
-      curRing.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
+      rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
+      /* the ring leans into fast movement and settles round when the hand stops */
+      cvx = lerp(cvx, mx - lastMx, 0.2); cvy = lerp(cvy, my - lastMy, 0.2); lastMx = mx; lastMy = my;
+      var sp = Math.min(Math.hypot(cvx, cvy), 40), k = cur.classList.contains("down") ? 0.82 : 1;
+      var stretch = 1 + sp * 0.012, ang = sp > 1 ? Math.atan2(cvy, cvx) * 180 / Math.PI : 0;
+      curRing.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px) rotate(" + ang.toFixed(1) + "deg) scale(" + (stretch * k).toFixed(3) + "," + ((2 - stretch) * k).toFixed(3) + ") rotate(" + (-ang).toFixed(1) + "deg)";
     }
 
     /* marquees — velocity-reactive */

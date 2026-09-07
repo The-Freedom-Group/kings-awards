@@ -21,7 +21,7 @@
   var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined" && typeof window.ScrollSmoother !== "undefined" && typeof window.SplitText !== "undefined";
   var html = document.documentElement;
 
-  if (!hasGsap) { html.classList.add("no-gsap"); var h0 = $("#top"); if (h0) h0.classList.add("open"); var pl0 = $("#preloader"); if (pl0) pl0.style.display = "none"; }
+  if (!hasGsap) { html.classList.add("no-gsap"); var h0 = $("#top"); if (h0) h0.classList.add("open"); }
   else {
     html.classList.add("has-gsap");
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
@@ -51,19 +51,31 @@
   /* ── the cursor ───────────────────────────────────────────── */
   var dot = $("#curDot"), ring = $("#curRing");
   if (dot && ring && fine && hasGsap) {
-    var px = -100, py = -100, rx = -100, ry = -100, shown = false;
-    window.addEventListener("mousemove", function (e) { px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; } }, { passive: true });
+    var px = -100, py = -100, rx = -100, ry = -100, shown = false, lpx = -100, lpy = -100, cvx = 0, cvy = 0, idleT = null, curLbl = $("#curLbl");
+    window.addEventListener("mousemove", function (e) {
+      px = e.clientX; py = e.clientY; if (!shown) { shown = true; rx = px; ry = py; lpx = px; lpy = py; }
+      document.body.classList.remove("cur-idle"); clearTimeout(idleT); idleT = setTimeout(function () { document.body.classList.add("cur-idle"); }, 3500);
+    }, { passive: true });
     document.addEventListener("mouseover", function (e) {
-      var t = e.target.closest && e.target.closest("[data-cur], .tile, .founder, .sq, .totop, .pclose, .pnav button, .menu a, .menu .x, .more summary");
-      document.body.classList.toggle("cur-big", !!t);
+      var lab = e.target.closest && e.target.closest("[data-cur-label]");
+      var t = e.target.closest && e.target.closest("[data-cur], .tile, .founder, .sq, .totop, .pclose, .pnav button, .menu a, .menu .x, .more summary, a, button");
+      document.body.classList.toggle("cur-label", !!lab);
+      document.body.classList.toggle("cur-big", !!t && !lab);
+      if (lab && curLbl) curLbl.textContent = lab.getAttribute("data-cur-label");
       document.body.classList.toggle("cur-off", !!(e.target.closest && e.target.closest("input, textarea, select")));
     });
+    window.addEventListener("mousedown", function () { document.body.classList.add("cur-down"); });
+    window.addEventListener("mouseup", function () { document.body.classList.remove("cur-down"); });
     document.addEventListener("mouseleave", function () { document.body.classList.add("cur-off"); });
     document.addEventListener("mouseenter", function () { document.body.classList.remove("cur-off"); });
     (function loop() {
       dot.style.transform = "translate(" + px + "px," + py + "px)";
-      rx += (px - rx) * 0.16; ry += (py - ry) * 0.16;
-      ring.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px)";
+      rx += (px - rx) * 0.18; ry += (py - ry) * 0.18;
+      /* the ring leans into fast movement, squeezes on a press, and settles round when still */
+      cvx += (px - lpx - cvx) * 0.2; cvy += (py - lpy - cvy) * 0.2; lpx = px; lpy = py;
+      var sp = Math.min(Math.hypot(cvx, cvy), 40), k = document.body.classList.contains("cur-down") ? 0.82 : 1;
+      var stretch = 1 + sp * 0.012, ang = sp > 1 ? Math.atan2(cvy, cvx) * 180 / Math.PI : 0;
+      ring.style.transform = "translate(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px) rotate(" + ang.toFixed(1) + "deg) scale(" + (stretch * k).toFixed(3) + "," + ((2 - stretch) * k).toFixed(3) + ") rotate(" + (-ang).toFixed(1) + "deg)";
       requestAnimationFrame(loop);
     })();
   }
@@ -74,7 +86,7 @@
 
   /* ── the shutter opens as you scroll; without motion it stands open ── */
   var heroSec = $("#top");
-  if (!animate && heroSec) heroSec.classList.add("open");
+  if (!animate && heroSec) { heroSec.classList.add("open"); var g0 = $("#gate"); if (g0) g0.remove(); }
 
   /* ── reveal (IO, works with or without the library) ──────── */
   var watched = $$(".rv, .flip");
@@ -95,41 +107,42 @@
 
   /* ── everything animated ──────────────────────────────────── */
   if (animate) {
-    /* the entrance */
-    gsap.set(".hero .closed .line span", { y: "110%", rotation: 3 });
-    gsap.set(".hero .closed .k, .hero .closed .strap", { autoAlpha: 0, y: 14 });
-    var intro = gsap.timeline();
-    /* failsafe: nobody waits behind the preloader for more than two seconds; and
-       "Skip animation" jumps the whole entrance to its finished state */
-    setTimeout(function () { if (intro.progress() < 0.45) intro.progress(1); }, 2600);
+    /* the entrance: the gate itself is the first thing seen. The company mark sits on the
+       closed shutter, the housing lamp turns green, and the gate rolls up on its own with a
+       lit edge and a wash of daylight; "Everyone deserves a way in." rises behind it, then the
+       header and the foot of the hero arrive. Scrolling early hurries it; "Skip animation" ends it. */
+    var gate = $("#gate");
+    gsap.set("#slats", { yPercent: -102 });   /* the hero's own shutter already stands open behind the gate */
+    gsap.set(".hero .opened .line span", { y: "110%", rotation: 3 });
+    gsap.set(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 0, y: 14 });
+    var intro = gsap.timeline(); window.__intro = intro;
+    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 12000);
     var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
-    /* the preloader is gone inside two seconds; the hero then arrives on top of readable content */
-    intro.fromTo("#plLogo", { y: "120%" }, { y: "0%", duration: .8, ease: "power4.out" }, 0.15)
-      .fromTo("#plTag", { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .5 }, 0.7)
-      .fromTo("#plBar", { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: "power2.inOut" }, 0.2)
-      .to("#plLogo", { y: "-130%", duration: .5, ease: "power4.in" }, 1.35)
-      .to("#plTag", { autoAlpha: 0, duration: .25 }, 1.35)
-      .fromTo("#preloader", { autoAlpha: 1, y: "0vh" }, { autoAlpha: 0, y: "-100vh", duration: .5, ease: "expo.inOut" }, 1.55)
-      .to(".hero .closed .line span", { y: "0%", rotation: 0, duration: 1.8, ease: "power4.out", stagger: .12 }, 1.65)
-      .to(".hero .closed .k, .hero .closed .strap", { autoAlpha: 1, y: 0, duration: 1, stagger: .12 }, 2.05)
-      .fromTo("#chrome", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, 2.3)
-      .fromTo("#fm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, 2.6)
-      .fromTo("#fr a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, 2.45);
+    var hurry = function () { if (intro.progress() < 1) intro.timeScale(2.5); };
+    ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
     var flSplit = new SplitText("#fl", { type: "chars" });
-    intro.fromTo(flSplit.chars, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", duration: .7, stagger: .05 }, 2.45);
-
-    /* the shutter: the hero pins for a screen's worth of scroll while the slats roll up
-       into the housing, daylight washes in, and the headline changes from "points out"
-       to "a way in"; then the page continues */
-    gsap.timeline({ scrollTrigger: { trigger: ".hero", start: "top top", end: "+=110%", pin: true, scrub: .6, anticipatePin: 1,
-        onUpdate: function (st) { heroSec.classList.toggle("open", st.progress > .55); } } })
-      .to("#slats", { yPercent: -102, ease: "none", duration: .7 }, 0)
-      .to("#stencil", { yPercent: -400, autoAlpha: 0, ease: "none", duration: .45 }, 0)
-      .fromTo("#daylight", { opacity: 0 }, { opacity: .32, duration: .12, ease: "none" }, .42)
-      .to("#daylight", { opacity: 0, duration: .22, ease: "none" }, .54)
-      .to("#hClosed", { autoAlpha: 0, y: -30, duration: .18 }, .32)
-      .fromTo("#hOpened", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .25 }, .56)
-      .to("#fm", { autoAlpha: 0, duration: .1 }, .5);
+    intro.fromTo("#gLogo", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 1.1, ease: "power3.out" }, 0.25)
+      .fromTo("#gTitle", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: .9, ease: "power3.out" }, 0.75)
+      .fromTo("#gStrap", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .9 }, 1.2)
+      .add("gate", 2.6)
+      .call(function () { gate.classList.add("opening"); }, null, "gate")
+      .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
+      .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")
+      .to("#gStencil", { yPercent: -260, autoAlpha: 0, duration: 1.5, ease: "power2.in" }, "gate+=0.35")
+      .to("#gate", { backgroundColor: "rgba(17,17,17,0)", duration: .6 }, "gate+=0.9")
+      .fromTo("#gDay", { opacity: 0 }, { opacity: .3, duration: .7, ease: "power2.out" }, "gate+=1.25")
+      .to("#gDay", { opacity: 0, duration: 1.1, ease: "power2.out" }, "gate+=1.95")
+      .to("#gateEdge", { opacity: 0, duration: .5 }, "gate+=2.55")
+      .call(function () { heroSec.classList.add("open"); }, null, "gate+=1.6")
+      .fromTo("#hOpened", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, "gate+=1.6")
+      .to(".hero .opened .line span", { y: "0%", rotation: 0, duration: 1.6, ease: "power4.out", stagger: .12 }, "gate+=1.75")
+      .to(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 1, y: 0, duration: .9, stagger: .12 }, "gate+=2.3")
+      .to("#gate .housing", { yPercent: -100, duration: .7, ease: "power2.in" }, "gate+=2.45")
+      .fromTo("#chrome", { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 1 }, "gate+=2.5")
+      .to("#gate", { autoAlpha: 0, duration: .5, onComplete: function () { gate.classList.add("done"); } }, "gate+=2.75")
+      .fromTo("#fm", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 }, "gate+=2.9")
+      .fromTo("#fr a", { autoAlpha: 0, x: "-1em" }, { autoAlpha: 1, x: "0em", duration: .9, stagger: { each: .15, from: "end" } }, "gate+=2.8")
+      .fromTo(flSplit.chars, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", duration: .7, stagger: .05 }, "gate+=2.8");
 
     /* separators with text: 25% → 100% */
     $$(".sep.with-text").forEach(function (el) {
@@ -199,7 +212,7 @@
     next: ["08", "What comes next"] };
   /* the rail: a thin track from the foot of the hero to the end of the story, a red line
      that eases towards how far you have read, a lamp at its head, and a tick per chapter */
-  var routeTrack = $("#routeTrack"), routeHead = $("#routeHead"), ticks = [], litP = 0;
+  var routeTrack = $("#routeTrack"), routeHead = $("#routeHead"), routeLbl = $("#routeLbl"), routeLblN = $("#routeLblN"), routeLblT = $("#routeLblT"), ticks = [], litP = 0, lastLit = 0, stillFrames = 99;
   function buildTicks() {
     ticks.forEach(function (t) { t.remove(); }); ticks = [];
     if (!route) return;
@@ -210,16 +223,29 @@
   }
   function drawRoute(y) {
     if (!route || !lit || !story) return;
-    var H = story.offsetHeight, top = hero ? hero.offsetHeight : 0, span = Math.max(1, H - 30 - top);
-    var target = clamp((y + window.innerHeight * 0.58 - top) / span, 0, 1);
+    var pageEl = $("#smooth-content") || document.body, vh = window.innerHeight;
+    var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, span = Math.max(1, H - 24 - top);
+    /* the line reads ahead of the viewport, and arrives at the foot exactly when the page does */
+    var target = clamp((y + vh * 0.58 - top) / Math.max(1, H - vh * 0.42 - top), 0, 1);
     litP = reduce ? target : litP + (target - litP) * 0.16;
     if (Math.abs(target - litP) < 0.0004) litP = target;
     var reach = top + litP * span;
     lit.style.top = top + "px"; lit.style.height = span + "px"; lit.style.transform = "scaleY(" + litP.toFixed(4) + ")";
     if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = span + "px"; }
-    if (routeHead) routeHead.style.top = reach.toFixed(1) + "px";
+    if (routeHead) routeHead.style.transform = "translate3d(0," + reach.toFixed(1) + "px,0)";
+    /* the label beside the lamp names the chapter while you move, then goes quiet */
+    var v = Math.abs(litP - lastLit) * span; lastLit = litP; stillFrames = v < 0.25 ? stillFrames + 1 : 0;
+    route.classList.toggle("moving", stillFrames < 70);
+    var here = null;
     for (var i = 0; i < ticks.length; i++) {
       var st = ticks[i].sec.offsetTop; ticks[i].style.top = st + "px"; ticks[i].classList.toggle("on", reach >= st - 2);
+      if (reach >= st - 2) here = i;
+    }
+    for (var j = 0; j < ticks.length; j++) ticks[j].classList.toggle("here", j === here);
+    if (routeLbl) {
+      routeLbl.style.transform = "translate3d(0," + reach.toFixed(1) + "px,0) translateY(-50%)";
+      var meta = here !== null ? (TITLES[ticks[here].sec.id] || ["00", "The way in"]) : ["00", "The way in"];
+      if (routeLblN.textContent !== meta[0]) { routeLblN.textContent = meta[0]; routeLblT.textContent = meta[1]; }
     }
     route.classList.toggle("landed", litP >= 0.999);
   }
@@ -292,10 +318,11 @@
     } else if (v) { v.pause(); if (d.video) { if (v.getAttribute("src") !== d.video) v.src = d.video; v.poster = d.photo || ""; v.hidden = false; vid.classList.add("has-video"); } else { v.removeAttribute("src"); v.hidden = true; vid.classList.remove("has-video"); } }
     if (note) note.hidden = !(d.video || d.stream);
     if (img) { if (d.photo) { img.src = d.photo; img.hidden = false; } else { img.hidden = true; } }
-    var was = !prof.hidden; prof.hidden = false; document.body.classList.add("prof-open"); if (smoother) smoother.paused(true); if (!was) pclose.focus();
+    var doc = $("#pfDoc"); if (doc) { if (d.hascard && approved) { doc.textContent = d.doclabel || "See the card"; doc.hidden = false; } else { doc.hidden = true; } }
+    var was = !prof.hidden; prof.hidden = false; document.body.classList.add("prof-open"); if (smoother) smoother.paused(true); if (hasGsap && ScrollTrigger.normalizeScroll()) ScrollTrigger.normalizeScroll().disable(); if (!was) pclose.focus();
     var inn = $(".prof-in"); if (inn) { inn.scrollTop = 0; inn.style.animation = "none"; void inn.offsetWidth; inn.style.animation = ""; }
   }
-  function closeProf() { if (!prof || prof.hidden) return; var v0 = $("#pfVideo"); if (v0) v0.pause(); var fr0 = $("#pfVid iframe"); if (fr0) fr0.remove(); prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (lastEl && lastEl.focus) lastEl.focus(); }
+  function closeProf() { if (!prof || prof.hidden) return; var v0 = $("#pfVideo"); if (v0) v0.pause(); var fr0 = $("#pfVid iframe"); if (fr0) fr0.remove(); prof.hidden = true; document.body.classList.remove("prof-open"); if (smoother) smoother.paused(false); if (hasGsap && ScrollTrigger.normalizeScroll()) ScrollTrigger.normalizeScroll().enable(); if (lastEl && lastEl.focus) lastEl.focus(); }
   tiles.forEach(function (t) { t.addEventListener("click", function () { openProf(t); }); });
   if (pclose) pclose.addEventListener("click", closeProf);
   var pPrev = $("#pPrev"), pNext = $("#pNext");
@@ -313,6 +340,20 @@
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } }
     });
   }
+
+  /* ── the card from Josh's mum: a box on the page, never a file ── */
+  (function () {
+    var box = $("#cardbox"), x = $("#cardX"); if (!box) return;
+    var lastFocus = null;
+    function open() { lastFocus = document.activeElement; box.hidden = false; document.body.classList.add("card-open"); if (smoother) smoother.paused(true); if (hasGsap && ScrollTrigger.normalizeScroll()) ScrollTrigger.normalizeScroll().disable(); if (x) x.focus(); }
+    function close() { if (box.hidden) return; box.hidden = true; document.body.classList.remove("card-open"); if (smoother && !document.body.classList.contains("prof-open")) { smoother.paused(false); if (hasGsap && ScrollTrigger.normalizeScroll()) ScrollTrigger.normalizeScroll().enable(); } if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+    document.addEventListener("click", function (ev) {
+      var b = ev.target.closest && ev.target.closest("[data-card]"); if (b && !b.hidden) { ev.preventDefault(); open(); return; }
+      if (!box.hidden && ev.target === box) close();
+    });
+    if (x) x.addEventListener("click", close);
+    window.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !box.hidden) { close(); ev.stopImmediatePropagation(); } }, true);
+  })();
 
   /* ── "+" popovers: one floating panel beside the pressed button, kept on screen ── */
   (function () {

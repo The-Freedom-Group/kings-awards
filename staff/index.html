@@ -40,7 +40,7 @@
   --wrap:1400px; --gut:clamp(20px,4.4vw,64px); --strip:28px;
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;background:var(--black);overscroll-behavior-y:none}
 html.no-gsap,html.no-js{scroll-behavior:smooth}
 body{margin:0;background:var(--black);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;height:auto;display:block}
@@ -78,6 +78,13 @@ html.no-js .preloader,html.no-gsap .preloader{display:none}
   .cur-dot{position:fixed;left:0;top:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--red);z-index:1200;pointer-events:none;transition:opacity .2s}
   .cur-ring{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;border:2px solid #fff;mix-blend-mode:difference;z-index:1190;pointer-events:none;display:grid;place-content:center;transition:width .35s cubic-bezier(.2,.8,.2,1),height .35s cubic-bezier(.2,.8,.2,1),margin .35s cubic-bezier(.2,.8,.2,1),background .3s,border-color .3s,opacity .2s}
   .cur-ring svg{width:24px;height:24px;opacity:0;transform:scale(.6);transition:opacity .25s,transform .35s cubic-bezier(.2,.8,.2,1)}
+  .cur-ring b{position:absolute;inset:0;display:grid;place-content:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#fff;font-weight:500;opacity:0;transform:scale(.7);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1);white-space:nowrap}
+  body.cur-label .cur-ring{width:84px;height:84px;margin:-42px 0 0 -42px;background:var(--red);border-color:var(--red);mix-blend-mode:normal}
+  body.cur-label .cur-ring b{opacity:1;transform:none}
+  body.cur-label .cur-ring svg{opacity:0}
+  body.cur-label .cur-dot{opacity:0}
+  body.cur-idle .cur-dot,body.cur-idle .cur-ring{opacity:0;transition:opacity 1.2s}
+  .cur-dot{transition:width .2s,height .2s,margin .2s,border-radius .2s,opacity .2s}
   body.cur-big .cur-ring{width:96px;height:96px;margin:-48px 0 0 -48px;background:var(--red);border-color:var(--red);mix-blend-mode:normal}
   body.cur-big .cur-ring svg{opacity:1;transform:none}
   body.cur-big .cur-dot{opacity:0}
@@ -118,22 +125,36 @@ html.js.has-gsap .chrome{opacity:0}
 .hero .ph img{filter:grayscale(.6) brightness(.45) contrast(1.05)}
 .hero.open .ph img{filter:grayscale(.15) brightness(.74) contrast(1.05);transform:scale(1)}
 /* the roller shutter: steel slats that roll up into the housing at the top */
-.shutter{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
-.shutter .slats{position:absolute;inset:0;
+.shutter{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;--hd:72px}
+/* the gate: the same shutter, but the first thing on screen, above everything, viewport-sized */
+.gate{position:fixed;inset:0;z-index:950;overflow:hidden;pointer-events:none;--hd:0px;background:var(--black)}
+html.no-gsap .gate,html.no-js .gate,.gate.done{display:none}
+#gate .stencil{position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;padding:0 var(--gut);display:grid;justify-items:center;gap:clamp(14px,2vh,22px);z-index:1}
+#gate .glogo{width:clamp(200px,28vw,420px);height:auto;filter:drop-shadow(0 6px 30px rgba(0,0,0,.6))}
+#gate b{font-family:var(--disp);font-variation-settings:"wdth" 122,"wght" 900;text-transform:uppercase;font-size:clamp(28px,5vw,64px);letter-spacing:.06em;line-height:1;color:#fff}
+#gate small{display:block;margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(17px,2.2vw,28px);letter-spacing:0;text-transform:none;color:var(--pale-2)}
+.gate .daylight{position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none}
+.gate.opening .housing::before{background:#5fe36a;box-shadow:0 0 12px 3px rgba(95,227,106,.7)}
+:is(.shutter,.gate) .slats{position:absolute;inset:0;
   background:repeating-linear-gradient(180deg,#55534f 0 5px,#3e3d3a 5px 26px,#26251f 26px 31px,#6a6864 31px 33px);
   box-shadow:inset 0 0 160px rgba(0,0,0,.6);transform:translateY(0);will-change:transform}
-.shutter .slats::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.45),transparent 10%,transparent 90%,rgba(0,0,0,.45))}
-.shutter .slats::after{content:"";position:absolute;left:0;right:0;top:calc(72px + clamp(40px,5vh,58px) + 14px);height:clamp(34px,4.6vh,46px);background:var(--red);opacity:.92;
+:is(.shutter,.gate) .slats::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.45),transparent 10%,transparent 90%,rgba(0,0,0,.45))}
+:is(.shutter,.gate) .slats::after{content:"";position:absolute;left:0;right:0;top:calc(var(--hd) + clamp(40px,5vh,58px) + 14px);height:clamp(34px,4.6vh,46px);background:var(--red);opacity:.92;
   box-shadow:0 2px 0 rgba(0,0,0,.35),0 -2px 0 rgba(0,0,0,.35)}
-.shutter .stencil{position:absolute;left:0;right:0;top:calc(72px + clamp(40px,5vh,58px) + 14px + clamp(17px,2.3vh,23px));transform:translateY(-50%);z-index:1;text-align:left;padding-left:calc(var(--strip) + var(--gut));
+:is(.shutter,.gate) .stencil{position:absolute;left:0;right:0;top:calc(var(--hd) + clamp(40px,5vh,58px) + 14px + clamp(17px,2.3vh,23px));transform:translateY(-50%);z-index:1;text-align:left;padding-left:calc(var(--strip) + var(--gut));
   font-family:var(--disp);font-variation-settings:"wdth" 122,"wght" 900;text-transform:uppercase;color:#fff;
   font-size:clamp(11px,1.1vw,15px);letter-spacing:.3em;line-height:1;pointer-events:none}
-.shutter .stencil small{display:inline;font-family:var(--mono);font-size:clamp(9px,.8vw,11px);letter-spacing:.24em;margin-left:18px;opacity:.85}
-.shutter .housing{position:absolute;left:0;right:0;top:72px;height:clamp(40px,5vh,58px);z-index:3;
+:is(.shutter,.gate) .stencil small{display:inline;font-family:var(--mono);font-size:clamp(9px,.8vw,11px);letter-spacing:.24em;margin-left:18px;opacity:.85}
+:is(.shutter,.gate) .housing{position:absolute;left:0;right:0;top:var(--hd);height:clamp(40px,5vh,58px);z-index:3;
   background:linear-gradient(#34332f,#1c1b18);border-bottom:5px solid #0d0d0c;box-shadow:0 14px 40px rgba(0,0,0,.65)}
-.shutter .housing::after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:6px;background:#0b0b0a;opacity:.7}
-.shutter .rail{position:absolute;top:0;bottom:0;width:clamp(14px,1.6vw,26px);background:linear-gradient(90deg,#2b2a27,#4a4945,#2b2a27);z-index:2;box-shadow:0 0 18px rgba(0,0,0,.6)}
-.shutter .rail.l{left:0}.shutter .rail.r{right:0}
+:is(.shutter,.gate) .housing::after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:6px;background:#0b0b0a;opacity:.7}
+:is(.shutter,.gate) .slats .edge{position:absolute;left:0;right:0;bottom:-3px;height:3px;background:#fff;opacity:0;
+  box-shadow:0 0 30px 10px rgba(255,255,255,.35),0 0 90px 34px rgba(225,6,0,.28)}
+:is(.shutter,.gate) .housing::before{content:"";position:absolute;right:calc(var(--gut) + var(--strip));top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;
+  background:#3a3a3a;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);z-index:4;transition:background .3s,box-shadow .3s}
+.hero.open .housing::before{background:#5fe36a;box-shadow:0 0 12px 3px rgba(95,227,106,.7)}
+:is(.shutter,.gate) .rail{position:absolute;top:0;bottom:0;width:clamp(14px,1.6vw,26px);background:linear-gradient(90deg,#2b2a27,#4a4945,#2b2a27);z-index:2;box-shadow:0 0 18px rgba(0,0,0,.6)}
+:is(.shutter,.gate) .rail.l{left:0}.shutter .rail.r{right:0}
 .hero.open .shutter .slats{transform:translateY(-102%)}
 .hero.open .shutter .stencil{transform:translateY(-100vh);opacity:0}
 .daylight{position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none}
@@ -162,10 +183,10 @@ html.js.has-gsap .cpanim{opacity:0}
 .hero .hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pale-2);white-space:nowrap;pointer-events:none;transition:opacity .3s}
 .hero.open .hint{opacity:0}
 .hero .head{display:grid}.hero .head>div{grid-area:1/1}
-.hero .closed{opacity:1}.hero .opened{opacity:0;pointer-events:none}
+.hero .closed{display:none}.hero .opened{opacity:0;pointer-events:none}
 .hero.open .opened{opacity:1;pointer-events:auto}.hero.open .closed{opacity:0;pointer-events:none}
 html.no-gsap .hero .shutter,html.no-gsap .hero .fm{display:none}
-.hero.open .fm{opacity:0;transition:opacity .4s}
+html.js.has-gsap .hero .opened .k,html.js.has-gsap .hero .opened .strap,html.js.has-gsap .hero .opened .cta{opacity:0}
 .hero .head{align-self:end;position:relative;z-index:4;max-width:1180px}
 .hero .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey-2);margin-bottom:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .hero h1{font-size:clamp(44px,min(7.4vw,9.4vh),124px);line-height:.86;color:#fff;letter-spacing:-.02em}
@@ -214,19 +235,27 @@ html.js.has-gsap .hero .fm{opacity:0}
 
 /* ══ THE ROUTE STRIP ═══════════════════════════════════════════ */
 #story{position:relative}
+#smooth-content{position:relative}
 .route{position:absolute;left:0;top:0;bottom:0;width:var(--strip);z-index:9;pointer-events:none}
-.route .track{position:absolute;left:50%;width:2px;margin-left:-1px;background:rgba(138,138,133,.38);border-radius:1px}
-.route .lit{position:absolute;left:50%;width:2px;margin-left:-1px;background:linear-gradient(180deg,rgba(225,6,0,.55),var(--red));
-  transform-origin:top;transform:scaleY(0);will-change:transform;border-radius:1px;box-shadow:0 0 10px rgba(225,6,0,.55)}
-.route .head{position:absolute;left:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;will-change:top;
-  box-shadow:0 0 0 4px rgba(225,6,0,.35),0 0 18px 4px rgba(225,6,0,.75);animation:lampPulse 1.8s ease-in-out infinite}
-.route .tick{position:absolute;left:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--grey-2);
-  transition:background .45s,transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}
-.route .tick.on{background:var(--red);transform:scale(1.3);box-shadow:0 0 0 3px rgba(225,6,0,.22),0 0 10px rgba(225,6,0,.7)}
-@keyframes lampPulse{0%,100%{box-shadow:0 0 0 4px rgba(225,6,0,.3),0 0 16px 4px rgba(225,6,0,.6)}50%{box-shadow:0 0 0 7px rgba(225,6,0,.4),0 0 30px 10px rgba(225,6,0,.9)}}
-.route .end{position:absolute;left:100%;margin-left:14px;bottom:26px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:var(--red);padding:7px 11px;border-radius:3px;white-space:nowrap;opacity:0;transition:opacity .6s}
-.route.landed .end{opacity:1}
-@media(max-width:820px){.route{width:10px}.route .end{display:none}.route .head{width:8px;height:8px;margin:-4px 0 0 -4px}.route .tick{width:6px;height:6px;margin:-3px 0 0 -3px}}
+.route .track{position:absolute;left:50%;width:4px;margin-left:-2px;border-radius:2px;background:rgba(128,128,124,.22);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.18),inset 0 1px 2px rgba(0,0,0,.35)}
+.route .lit{position:absolute;left:50%;width:4px;margin-left:-2px;border-radius:2px;background:linear-gradient(180deg,#ff5a3c,var(--red));
+  transform-origin:top;transform:scaleY(0);will-change:transform;box-shadow:0 0 12px rgba(225,6,0,.5)}
+.route .head{position:absolute;left:50%;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;
+  border:3px solid var(--red);box-shadow:0 0 0 3px rgba(255,255,255,.12),0 0 18px 4px rgba(225,6,0,.55);will-change:transform;
+  transition:width .25s,height .25s,margin .25s}
+.route.moving .head{width:20px;height:20px;margin:-10px 0 0 -10px}
+.route .tick{position:absolute;left:50%;width:14px;height:2px;margin:-1px 0 0 -7px;border-radius:1px;background:rgba(128,128,124,.55);transition:background .4s,width .4s,margin .4s,box-shadow .4s}
+.route .tick.on{background:var(--red)}
+.route .tick.here{background:#fff;width:20px;margin-left:-10px;box-shadow:0 0 10px rgba(225,6,0,.8)}
+.route .lbl{position:absolute;left:calc(100% + 10px);top:0;transform:translateY(-50%);display:flex;align-items:center;gap:9px;padding:6px 10px 6px 8px;border-radius:3px;
+  background:var(--black);color:#fff;border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 24px rgba(0,0,0,.35);white-space:nowrap;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;opacity:0;transition:opacity .35s,transform .35s;will-change:transform,opacity}
+.route .lbl b{font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;font-size:13px;letter-spacing:.04em;color:var(--red);line-height:1}
+.route.moving .lbl{opacity:1}
+.route.landed .head{background:var(--red);border-color:#fff}
+@media(max-width:1199px){.route .lbl{display:none}}
+@media(max-width:820px){.route{width:10px}.route .head,.route.moving .head{width:10px;height:10px;margin:-5px 0 0 -5px;border-width:2px}.route .tick{width:8px;margin-left:-4px}.route .tick.here{width:10px;margin-left:-5px}.route .track,.route .lit{width:3px;margin-left:-1.5px}}
 
 /* ══ THE WIPE: black to paper ══════════════════════════════════ */
 .colour-divider{height:1px}
@@ -369,10 +398,10 @@ html.js.has-gsap .hero .fm{opacity:0}
 .tiles + .tk{margin-top:clamp(26px,4vw,48px)}
 
 /* profile sheet */
-.prof{position:fixed;inset:0;z-index:250;background:rgba(17,17,17,.6);backdrop-filter:blur(8px);display:flex;justify-content:flex-end}
+.prof{position:fixed;inset:0;z-index:250;background:rgba(17,17,17,.8);display:flex;justify-content:flex-end}
 .prof[hidden]{display:none}
-.prof-in{width:min(600px,100%);height:100%;overflow:auto;background:var(--white);color:var(--ink);border-left:6px solid var(--red);padding:clamp(24px,3vw,44px);position:relative;transform:translateX(24px);opacity:0;animation:sheetIn .4s cubic-bezier(.2,.8,.25,1) forwards}
-@keyframes sheetIn{to{transform:none;opacity:1}}
+.prof-in{width:min(600px,100%);height:100%;overflow:auto;will-change:transform,opacity;contain:paint;background:var(--white);color:var(--ink);border-left:6px solid var(--red);padding:clamp(24px,3vw,44px);position:relative;transform:none;opacity:1;animation:sheetIn .4s cubic-bezier(.2,.8,.25,1) forwards}
+@keyframes sheetIn{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
 .pclose{position:absolute;top:18px;right:18px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;background:var(--black);border:0;border-radius:3px;color:#fff;padding:11px 16px;cursor:pointer}
 .pclose:hover{background:var(--red)}
 .proute{margin:36px 0 16px;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
@@ -505,7 +534,7 @@ footer .ff{height:64px;width:auto;margin-bottom:20px}
   .rv,.flip>*{opacity:1;transform:none;transition:none}.ch h2 .wipe{clip-path:none;transition:none}
   .shutter .slats,.shutter .stencil,.daylight,.cp,.hero .ph img,.route .lit,.sq,.tile .pres i::after,.floor::before{transition:none;animation:none}
   .hero.open .daylight{animation:none}.route .lit::after{animation:none}.hero .fm svg{animation:none}
-  .preloader{display:none}html.js.has-gsap .chrome,html.js.has-gsap .cpanim,html.js.has-gsap .hero .fm{opacity:1}.cpwrap{transition:none}.hero h1 .line span{transform:none!important}}
+  .preloader{display:none}html.js.has-gsap .chrome,html.js.has-gsap .cpanim,html.js.has-gsap .hero .fm,html.js.has-gsap .hero .opened .k,html.js.has-gsap .hero .opened .strap,html.js.has-gsap .hero .opened .cta{opacity:1}.cpwrap{transition:none}.hero h1 .line span{transform:none!important}}
 @media print{.chrome,.prog,.route,.daylight,.shutter,.totop,.bigman,.preloader,.cur-dot,.cur-ring,.cube-fixed,.hero .foot{display:none}.hero{height:auto;min-height:0;background:#fff;color:#000}.hero .ph{position:relative;height:50vh}.hero .in{position:relative;padding:20px 0}.hero h1{color:#000}
   .ch,.ch.dark,.ch.on-red,.entrance,.intro,body,footer{background:#fff;color:#000}}
 
@@ -547,6 +576,15 @@ footer .ff{height:64px;width:auto;margin-bottom:20px}
 .photos figcaption,.photo figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-3);margin-top:10px}
 .ch.light .photo figcaption,.ch:not(.dark) .photos figcaption{color:var(--ink-3)}
 .photo{margin-top:clamp(26px,4vw,48px)}
+.cardq{margin:clamp(26px,4vw,48px) 0 0;background:var(--white);color:var(--ink);border:2px solid var(--black);border-left:8px solid var(--red);border-radius:4px;
+  padding:clamp(22px,3vw,40px) clamp(22px,3.4vw,44px);display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(18px,3vw,40px);align-items:center}
+.cardq blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,36px);line-height:1.25;color:var(--ink)}
+.cardq figcaption{font-size:14px;line-height:1.55;color:var(--ink-2)}
+.cardq figcaption b{color:var(--ink)}
+.cardq figcaption a,.cardq figcaption .cardopen{background:none;border:0;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:500}
+.cardq figcaption a i,.cardq figcaption .cardopen i{font-style:normal;transition:transform .25s}
+.cardq figcaption a:hover i,.cardq figcaption .cardopen:hover i{transform:translateX(4px)}
+@media(max-width:900px){.cardq{grid-template-columns:1fr}}
 .photo img{width:100%;aspect-ratio:21/9;object-fit:cover;object-position:50% 45%;display:block;border:2px solid var(--rule-d);border-radius:4px}
 @media(max-width:900px){.photos{grid-template-columns:1fr 1fr}.partners.two{grid-template-columns:1fr}}
 @media(max-width:600px){.photos{grid-template-columns:1fr}.photo img{aspect-ratio:4/3}}
@@ -585,6 +623,10 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 .rec-tbl .sign{font-size:9.5px;padding:3px 7px;margin-right:6px}
 .pfields{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:18px 0;border-top:3px solid var(--black);padding-top:14px}
 .pfields b{display:block;font-size:14px;font-weight:600;line-height:1.35}
+.pdoc{display:inline-flex;align-items:center;gap:10px;margin:18px 0 0;padding:12px 16px;border:2px solid var(--black);border-radius:3px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--black);font-weight:500;transition:background .2s,color .2s}
+.pdoc:hover{background:var(--red);border-color:var(--red);color:#fff}
+.pdoc::before{content:"";width:10px;height:12px;border:2px solid currentColor;border-radius:1px}
+.pdoc[hidden]{display:none}
 .ppend{margin:18px 0 0;font-size:13.5px;color:var(--ink-3);border:1px dashed var(--grey-2);padding:12px 14px;line-height:1.55}
 .prof.pending .pfields .opt,.prof.pending .pwords,.prof.pending .vid{display:none}
 .prof:not(.pending) .ppend{display:none}
@@ -603,6 +645,24 @@ ol.spine .ent{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-t
 html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink-2)}
 .on-red .more summary{border-color:#fff;color:#fff}
 .proof .more,.partner .more,.plate .more,.actcard .more{margin:14px 0 0;display:block}
+.cardbox{position:fixed;inset:0;z-index:960;background:rgba(17,17,17,.85);display:grid;place-items:center;padding:clamp(12px,3vw,40px);overflow:auto}
+.cardbox[hidden]{display:none}
+.cardbox-in{position:relative;width:min(1100px,100%);max-height:100%;overflow:auto;background:var(--white);color:var(--ink);border:3px solid var(--black);border-radius:4px;box-shadow:12px 12px 0 var(--red);padding:clamp(20px,3vw,40px)}
+.cbx{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;background:var(--black);border:0;color:#fff;font-size:0;cursor:pointer}
+.cbx::before,.cbx::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:2px;background:#fff;transform:translate(-50%,-50%) rotate(45deg)}
+.cbx::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.cbhead{padding-right:60px;margin-bottom:clamp(16px,2.4vw,28px)}
+.cbhead .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+.cbhead h3{font-size:clamp(28px,3.4vw,46px);margin:10px 0 8px}
+.cbhead p{margin:0;font-size:15px;color:var(--ink-2);max-width:60ch}
+.cbpages{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,24px)}
+.cbpages figure{margin:0}
+.cbpages img{width:100%;height:auto;display:block;border:2px solid var(--black);border-radius:4px;background:var(--grey-3);-webkit-user-drag:none;user-select:none}
+.cbpages figcaption{margin-top:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.cardbox blockquote{margin:clamp(16px,2.4vw,28px) 0 0;padding:18px 22px;border-left:6px solid var(--red);background:var(--paper);font-family:var(--serif);font-style:italic;font-size:clamp(18px,2vw,26px);line-height:1.3}
+.cardbox blockquote cite{display:block;margin-top:10px;font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+@media(max-width:700px){.cbpages{grid-template-columns:1fr}}
+body.card-open{overflow:hidden}
 .popover{position:fixed;z-index:950;width:min(380px,calc(100vw - 32px));background:var(--white);color:var(--ink);border:2px solid var(--black);border-radius:4px;padding:16px 40px 16px 18px;
   font-family:var(--sans);font-size:14px;line-height:1.55;font-weight:400;letter-spacing:0;text-transform:none;text-align:left;box-shadow:0 24px 60px rgba(0,0,0,.4);
   opacity:0;transform:translateY(6px);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none}
@@ -614,21 +674,33 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
 .popover::before{content:"";position:absolute;left:var(--ax,20px);top:-8px;width:12px;height:12px;background:var(--white);border-left:2px solid var(--black);border-top:2px solid var(--black);transform:rotate(45deg)}
 .popover.above::before{top:auto;bottom:-8px;transform:rotate(225deg)}
 @media(prefers-reduced-motion:reduce){.popover,.more summary{transition:none}}
+
+/* ── touch: larger targets and legible labels on phones and tablets ── */
+@media(pointer:coarse){
+  .burger{width:48px}
+  .more summary{width:34px;height:34px}
+  .more summary::before,.more summary::after{width:14px}
+  .popover .x{width:36px;height:36px;top:8px;right:8px}
+  footer a{display:inline-block;padding:5px 0}
+}
+@media(max-width:820px){
+  .hero .fr{display:none}
+  .tile .no,.tile .cap span,.plate .badge small,.case dt,.stencil small{font-size:10.5px}
+  .plates{grid-template-columns:1fr}.plate{min-width:0}
+}
+@media(max-width:480px){.plate h3{font-size:26px;overflow-wrap:anywhere}}
+@media(max-width:600px){.menu{place-content:center start;padding:0 28px;gap:10px}.menu a{justify-content:flex-start;text-align:left;font-size:clamp(26px,7.2vw,48px)}.menu a small{flex:0 0 28px}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
-<body>
+<body data-stream-customer="q4ck225vxqtshqms">
 
 <a class="skip" href="#why">Skip to the story</a>
 <a class="skip" href="#why" id="skipAnim" style="left:calc(var(--gut) + 176px)">Skip animation</a>
 
 
-<div class="preloader" id="preloader" aria-hidden="true">
-  <div class="lw"><img id="plLogo" src="../assets/ff_logo.png" alt=""><span class="tag" id="plTag">The Way In</span></div>
-  <div class="bar" id="plBar"></div>
-</div>
 <div class="cur-dot" id="curDot" aria-hidden="true"></div>
-<div class="cur-ring" id="curRing" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="square"><path d="M6 18L18 6M8 6h10v10"/></svg></div>
+<div class="cur-ring" id="curRing" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="square"><path d="M6 18L18 6M8 6h10v10"/></svg><b id="curLbl"></b></div>
 
 <div class="prog" id="prog" aria-hidden="true"></div>
 <header class="chrome" id="chrome">
@@ -646,6 +718,13 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
 <div class="menu" id="menu" aria-hidden="true"><button class="x" id="menuX" type="button" aria-label="Close">×</button>
   <a href="#why"><small>01</small>Why it exists</a><a href="#programme"><small>02</small>The route in</a><a href="#people"><small>03</small>The people</a><a href="#impact"><small>04</small>The impact</a><a href="#partners"><small>05</small>The partners</a><a href="#timeline"><small>06</small>The timeline</a><a href="#learn"><small>07</small>How we learn</a><a href="#next"><small>08</small>What comes next</a></div>
 
+<div class="gate" id="gate" aria-hidden="true">
+  <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
+  <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><b id="gTitle">The Way In</b><small id="gStrap">Not everyone arrives by the same route.</small></div>
+  <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
+  <div class="daylight" id="gDay"></div>
+</div>
+
 <div id="smooth-wrapper">
 <div id="smooth-content">
 <main>
@@ -653,7 +732,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
 
 <!-- ══ THE HERO: the shutter opens as you scroll ══ -->
 <section class="hero" id="top" aria-label="The way in">
-  <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="stencil" id="stencil">The Way In<small>T Level industry placements</small></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
+  <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
   <div class="daylight" id="daylight" aria-hidden="true"></div>
   <div class="in" id="heroIn">
     <div class="head" id="heroHead">
@@ -675,7 +754,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
   </div>
   <div class="foot" id="heroFoot">
     <div class="fl" id="fl">The Way In</div>
-    <div class="fm" id="fm" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">Scroll to open the door ·</textPath></text></svg></div>
+    <div class="fm" id="fm" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">Scroll · the way in ·</textPath></text></svg></div>
     <div class="fr" id="fr"><a href="#programme"><span>The route in</span></a><a href="#partners"><span>T Level Ambassadors</span></a><a href="#timeline"><span>Timeline</span></a></div>
   </div>
 </section>
@@ -691,7 +770,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
     <div class="sep with-text">Part 01 / Why it exists</div>
     <h2 class="fi">We're Freedom Fire, a fire safety business in Bury. Hiring by CV kept <em class="s">missing people who could do the work.</em></h2>
     <p class="fu-1">Since September 2025 the way in is the T Level industry placement: a real role in the warehouse, on the vans, on the web team or in IT, a named person to learn from, and a long-term job where the work justifies it. Fire safety is the business; this is how it is crewed.
-      <details class="more"><summary aria-label="More on why">+</summary><div class="pop"><b>Why CV-first hiring misses people</b>A polished history says little about whether someone can learn a warehouse, a service van or a storefront, and nothing about what they will do with a real chance. The programme recruits for that.</div></details></p>
+      <details class="more"><summary data-cur-label="More" aria-label="More on why">+</summary><div class="pop"><b>Why CV-first hiring misses people</b>A polished history says little about whether someone can learn a warehouse, a service van or a storefront, and nothing about what they will do with a real chance. The programme recruits for that.</div></details></p>
     <a class="btn" href="#programme" data-cur>The route in <i>→</i></a>
   </div>
 </section>
@@ -726,12 +805,12 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
           <dl><dt>Since</dt><dd>September 2025, with the Growth Company.</dd>
           <dt>Volume</dt><dd>Four students hosted; three in the first cohort.</dd>
           <dt>Outcome</dt><dd>Three of three offered long-term roles, June 2026.</dd></dl>
-          <details class="more"><summary aria-label="How it runs">+</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, arranged with the student's college and the Growth Company. Owner: Tom Letcher, founder and programme sponsor.</div></details></div>
+          <details class="more"><summary data-cur-label="More" aria-label="How it runs">+</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, arranged with the student's college and the Growth Company. Owner: Tom Letcher, founder and programme sponsor.</div></details></div>
         <div class="actcard"><div class="k"><span class="num">b</span>Mentoring and workplace training</div>
           <dl><dt>Since</dt><dd>Every placement, from the first day.</dd>
           <dt>Volume</dt><dd>One named mentor per student; adjustments offered before the start.</dd>
           <dt>Outcome</dt><dd>Something each student owns by the end of the placement.</dd></dl>
-          <details class="more r"><summary aria-label="How it runs">+</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, with a live brief the student owns. Owner: Tom Letcher. Mentor hours are logged from September 2026.</div></details></div>
+          <details class="more r"><summary data-cur-label="More" aria-label="How it runs">+</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, with a live brief the student owns. Owner: Tom Letcher. Mentor hours are logged from September 2026.</div></details></div>
             </div>
     </div>
     <div class="photos rv" aria-label="The work">
@@ -751,7 +830,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
         <div class="ch-tag"><span class="num">03</span>The people</div>
         <h2 class="wd">The team. <em class="s">Their own words, or none.</em></h2>
         <p class="stand">First name, role and route in. A full profile appears only with the person's approval.
-          <details class="more"><summary aria-label="Consent">+</summary><div class="pop"><b>Consent</b>Each person chose whether to appear, with what name and what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to info@freedom-fire.co.uk. Nothing about health, background or personal history is published unless the person writes it.</div></details></p>
+          <details class="more"><summary data-cur-label="More" aria-label="Consent">+</summary><div class="pop"><b>Consent</b>Each person chose whether to appear, with what name and what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to info@freedom-fire.co.uk. Nothing about health, background or personal history is published unless the person writes it.</div></details></p>
       </div>
       <div class="pict" aria-hidden="true"><svg viewBox="0 0 120 120"><rect width="120" height="120" rx="8" fill="#E10600"/><g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="square"><path d="M18 18l22 22M102 18L80 40M18 102l22-22M102 102L80 80"/></g><g fill="#fff"><circle cx="52" cy="52" r="6"/><circle cx="68" cy="52" r="6"/><circle cx="52" cy="68" r="6"/><circle cx="68" cy="68" r="6"/></g></svg></div>
     </div>
@@ -759,37 +838,41 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
       <span><i style="--b:#E10600"></i>Founder</span><span><i style="--b:#111"></i>T Level placement</span><span><i style="--b:#C9C9C4"></i>College placement</span><span><i style="--b:#fff"></i>Alongside study</span><span><i style="--b:#8A8A85"></i>Local hire</span>
     </div>
     <div class="tiles" id="register">
-      <button class="tile has-por" type="button" data-cur data-k="tom" data-name="Tom" data-role="Founder &amp; managing director" data-route="Founder" data-since="March 2019" data-support="Family warehouse space to start in, and a manufacturer who backed a young company" data-skills="Ecommerce, direct sourcing, brand building, fire safety servicing" data-resp="The whole company: strategy, suppliers, partners and the programme itself" data-next="The second T Level cohort, and Freedom Global" data-b="#E10600" data-consent="approved" data-photo="../assets/people/tom.jpg" aria-haspopup="dialog" style="--b:#E10600;--a:rgba(225,6,0,.45)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="tom" data-name="Tom" data-role="Founder &amp; managing director" data-route="Founder" data-since="March 2019" data-support="Family warehouse space to start in, and a manufacturer who backed a young company" data-skills="Ecommerce, direct sourcing, brand building, fire safety servicing" data-resp="The whole company: strategy, suppliers, partners and the programme itself" data-next="The second T Level cohort, and Freedom Global" data-b="#E10600" data-consent="approved" data-photo="../assets/people/tom.jpg" aria-haspopup="dialog" style="--b:#E10600;--a:rgba(225,6,0,.45)">
         <img class="por" src="../assets/people/tom-sm.jpg" srcset="../assets/people/tom-sm.jpg 525w, ../assets/people/tom.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">T</span>
         <span class="no"><i>001</i>Founder</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Tom</b><span>Founder &amp; managing director</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="bill" data-name="Bill" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-support="A real brief and the room to make design decisions, with feedback when they went wrong" data-skills="Front-end development, storefront design, launching a live site" data-resp="The company's website and its storefront design" data-next="Offered a long-term role, June 2026" data-b="#111" data-consent="approved" data-photo="../assets/people/bill.jpg" aria-haspopup="dialog" style="--b:#111;--a:rgba(138,138,133,.35)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="bill" data-name="Bill" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-support="A real brief and the room to make design decisions, with feedback when they went wrong" data-skills="Front-end development, storefront design, launching a live site" data-resp="The company's website and its storefront design" data-next="Offered a long-term role, June 2026; now part-time around a degree at the University of Salford" data-b="#111" data-consent="approved" data-photo="../assets/people/bill.jpg" aria-haspopup="dialog" style="--b:#111;--a:rgba(138,138,133,.35)">
         <img class="por" src="../assets/people/bill-sm.jpg" srcset="../assets/people/bill-sm.jpg 525w, ../assets/people/bill.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
         <span class="no"><i>002</i>T Level placement</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Bill</b><span>Web developer</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="gabriel" data-name="Gabriel" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-support="A named mentor on the web team and a live storefront brief from the first week" data-skills="Storefront builds, product listings, front-end development" data-resp="The online storefronts" data-next="Offered a long-term role, June 2026" data-b="#111" data-consent="approved" data-photo="../assets/people/gabriel.jpg" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.28)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="gabriel" data-name="Gabriel" data-role="Web developer" data-route="T Level industry placement" data-since="September 2025" data-support="A named mentor on the web team and a live storefront brief from the first week" data-skills="Storefront builds, product listings, front-end development" data-resp="The online storefronts" data-next="Offered a long-term role, June 2026" data-b="#111" data-consent="approved" data-photo="../assets/people/gabriel.jpg" data-stream="650e5dedcdc531fd649a2f1ed76ce641" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.28)">
         <img class="por" src="../assets/people/gabriel-sm.jpg" srcset="../assets/people/gabriel-sm.jpg 525w, ../assets/people/gabriel.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">G</span>
         <span class="no"><i>003</i>T Level placement</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Gabriel</b><span>Web developer</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Student, working alongside study" data-since="Alongside study; full-time from September 2026" data-support="Hours shaped around a course, then a full-time role when it finished" data-skills="Listings, order handling, marketplace customer service" data-resp="Day-to-day running of the storefronts" data-next="Full-time from September 2026" data-b="#fff" data-consent="approved" data-photo="../assets/people/elliot.jpg" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Alongside study" data-since="Full-time from September 2026" data-support="Hours built around his course until it finished" data-skills="Listings, order handling, image creation" data-resp="Product images and listings across the storefronts" data-next="Growing the image work as new channels open" data-b="#fff" data-consent="approved" data-photo="../assets/people/elliot.jpg" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
         <img class="por" src="../assets/people/elliot-sm.jpg" srcset="../assets/people/elliot-sm.jpg 525w, ../assets/people/elliot.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">E</span>
         <span class="no"><i>004</i>Alongside study</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Elliot</b><span>Ecommerce assistant</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="josh" data-name="Josh" data-role="Ecommerce assistant" data-route="Recruited locally, no CV filter" data-since="Local hire" data-support="No degree or experience filter; trained on the job from day one" data-skills="Listings, order processing, customer messages" data-resp="Storefront orders and customer replies" data-next="Growing with the storefronts as new channels open" data-b="#8A8A85" data-consent="approved" data-photo="../assets/people/josh.jpg" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(225,6,0,.38)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="josh" data-name="Josh" data-role="Ecommerce assistant" data-route="Student at the University of Salford, working alongside study" data-since="Part-time around university" data-support="Hours built around his degree, trained on the job from day one" data-skills="Listings, order processing, customer messages" data-resp="Storefront orders and customer replies" data-next="Growing with the storefronts as new channels open" data-b="#fff" data-consent="approved" data-photo="../assets/people/josh.jpg" data-stream="44e0f0e1e551fbbd2ba679ca7e11f5dc" data-hascard="1" data-doclabel="See the card from Josh's mum" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
         <img class="por" src="../assets/people/josh-sm.jpg" srcset="../assets/people/josh-sm.jpg 525w, ../assets/people/josh.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
-        <span class="no"><i>005</i>Local hire</span><span class="pres"><i></i>Present</span>
+        <span class="no"><i>005</i>Alongside study</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Josh</b><span>Ecommerce assistant</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="One of the earliest placements, 2021" data-support="A placement shaped around additional needs, with a named person to learn from" data-skills="Goods in, picking, packing, dispatch" data-resp="The daily dispatch run" data-next="In a long-term, full-time role" data-b="#C9C9C4" data-consent="approved" data-photo="../assets/people/jojo.jpg" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="One of the earliest placements, 2021" data-support="A placement shaped around additional needs, with a named person to learn from" data-skills="Goods in, picking, packing, dispatch" data-resp="The daily dispatch run" data-next="Already full-time; mentoring the next placement students" data-b="#C9C9C4" data-consent="approved" data-photo="../assets/people/jojo.jpg" data-stream="db6de5e75a5fd2afea23d30b848b35e9" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
         <img class="por" src="../assets/people/jojo-sm.jpg" srcset="../assets/people/jojo-sm.jpg 525w, ../assets/people/jojo.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
         <span class="no"><i>006</i>College placement</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Jojo</b><span>Warehouse operative</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="harrison" data-name="Harrison" data-role="Warehouse operative" data-route="T Level industry placement" data-since="September 2025" data-support="A named mentor in the warehouse and real orders from the first week" data-skills="Picking, packing, stock control, building checks" data-resp="Goods out on his shift" data-next="Offered a long-term role, June 2026; moving to full-time employment" data-b="#111" data-consent="approved" data-photo="../assets/people/harrison.jpg" aria-haspopup="dialog" style="--b:#111;--a:rgba(225,6,0,.3)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="harrison" data-name="Harrison" data-role="Warehouse operative" data-route="T Level industry placement" data-since="September 2025" data-support="A named mentor in the warehouse and real orders from the first week" data-skills="Picking, packing, stock control, building checks" data-resp="Goods out on his shift" data-next="Offered a long-term role, June 2026; moving to full-time employment" data-b="#111" data-consent="approved" data-photo="../assets/people/harrison.jpg" aria-haspopup="dialog" style="--b:#111;--a:rgba(225,6,0,.3)">
         <img class="por" src="../assets/people/harrison-sm.jpg" srcset="../assets/people/harrison-sm.jpg 525w, ../assets/people/harrison.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">H</span>
         <span class="no"><i>007</i>T Level placement</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Harrison</b><span>Warehouse operative</span></span></button>
-      <button class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="T Level industry placement" data-since="T Level placement" data-support="Access to the company's systems, with someone to check work with" data-skills="IT support, networks, devices" data-resp="The company's IT" data-next="Continuing with the IT function" data-b="#111" data-consent="approved" data-photo="../assets/people/billy.jpg" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.25)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="dylan" data-name="Dylan" data-role="Warehouse operative" data-route="Recruited locally, no CV filter" data-since="Local hire" data-support="Started full-time as a subcontractor on the warehouse floor, trained on the job" data-skills="Picking, packing, dispatch, stock control" data-resp="Loading and dispatch" data-next="Moving into full-time employment" data-b="#8A8A85" data-consent="approved" data-photo="../assets/people/dylan.jpg" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(225,6,0,.5)">
+        <img class="por" src="../assets/people/dylan-sm.jpg" srcset="../assets/people/dylan-sm.jpg 525w, ../assets/people/dylan.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">D</span>
+        <span class="no"><i>008</i>Local hire</span><span class="pres"><i></i>Present</span>
+        <span class="cap"><b>Dylan</b><span>Warehouse operative</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="T Level industry placement" data-since="T Level placement" data-support="Access to the company's systems, with someone to check work with" data-skills="IT support, networks, devices" data-resp="The company's IT" data-next="Continuing with the IT function" data-b="#111" data-consent="approved" data-photo="../assets/people/billy.jpg" data-stream="42e97963e73142f3e18098d7cadc5c99" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.25)">
         <img class="por" src="../assets/people/billy-sm.jpg" srcset="../assets/people/billy-sm.jpg 525w, ../assets/people/billy.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
-        <span class="no"><i>008</i>T Level placement</span><span class="pres"><i></i>Present</span>
+        <span class="no"><i>009</i>T Level placement</span><span class="pres"><i></i>Present</span>
         <span class="cap"><b>Billy</b><span>IT technician</span></span></button>
     </div>
   </div>
@@ -817,6 +900,11 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
       <div class="proof"><div class="no">04</div><h3>The wider community</h3>
         <p>A standing place in the T Level Ambassador Network. Every student lives locally to Bury, and a trade wage now comes into households that did not have one.</p></div>
         </div>
+    <figure class="cardq rv">
+      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’ thanks to you Tom.”</blockquote>
+      <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
+        <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
+    </figure>
     <figure class="photo rv"><img src="../assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>The team in a container at Unit 19, 2026</figcaption></figure>
   </div>
 </section>
@@ -927,13 +1015,13 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
   </div>
 </section>
 
-<div class="route" id="route" aria-hidden="true"><i class="track" id="routeTrack"></i><div class="lit" id="routeLit"></div><i class="head" id="routeHead"></i><span class="end">You are here · the way in</span></div>
 </div><!-- /story -->
 </main>
+<div class="route" id="route" aria-hidden="true"><i class="track" id="routeTrack"></i><div class="lit" id="routeLit"></div><i class="head" id="routeHead"></i><span class="lbl" id="routeLbl"><b id="routeLblN">01</b><span id="routeLblT">Why it exists</span></span></div>
 
 <footer id="footer">
   <div class="wrap">
-    <div class="ft-top footer-item"><a class="totop" href="#top" aria-label="Back to the top" data-cur><span class="sq2"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="square"><path d="M15 26V6M6 15l9-9 9 9"/></svg></span><span class="lbl">Back to the top</span></a></div>
+    <div class="ft-top footer-item"><a class="totop" href="#top" aria-label="Back to the top" data-cur data-cur-label="Top"><span class="sq2"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="square"><path d="M15 26V6M6 15l9-9 9 9"/></svg></span><span class="lbl">Back to the top</span></a></div>
     <div class="ft-grid">
       <div class="footer-item"><img class="ff" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><p>Freedom Fire &amp; Safety Ltd, company no. 13589467<br>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p></div>
       <div class="footer-item"><h4>Contact</h4><p><a href="tel:+443337722723">0333 772 2723</a><br><a href="mailto:info@freedom-fire.co.uk">info@freedom-fire.co.uk</a><br><a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p></div>
@@ -946,6 +1034,19 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
 
 </div><!-- /smooth-content -->
 </div><!-- /smooth-wrapper -->
+
+<div class="cardbox" id="cardbox" role="dialog" aria-modal="true" aria-label="The card from Josh's mum" hidden>
+  <div class="cardbox-in">
+    <button class="cbx" id="cardX" type="button" aria-label="Close">Close</button>
+    <div class="cbhead"><span class="k">Unsolicited feedback · reproduced with permission</span><h3>A card from Josh's mum</h3>
+      <p>Handwritten by Molly shortly after Josh started with the company. Nothing in it has been changed.</p></div>
+    <div class="cbpages">
+      <figure><img src="../assets/docs/josh-card-front.webp" width="1152" height="1536" alt="The front of a thank-you card with hand-drawn flowers" loading="lazy" decoding="async"><figcaption>The front</figcaption></figure>
+      <figure><img src="../assets/docs/josh-card-inside.webp" width="1152" height="1536" alt="The inside of the card, handwritten by Molly, thanking Tom for the opportunity given to her son" loading="lazy" decoding="async"><figcaption>The inside</figcaption></figure>
+    </div>
+    <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’ thanks to you Tom.”<cite>Molly, Josh's mother</cite></blockquote>
+  </div>
+</div>
 
 <div class="popover" id="popover" role="dialog" aria-modal="false" aria-live="polite"><button class="x" id="popX" type="button" aria-label="Close">Close</button><div id="popBody"></div></div>
 
@@ -966,6 +1067,7 @@ html.no-js .more .pop,html.no-gsap .more .pop{display:block;margin-top:10px;font
     </div>
     <div class="vid" id="pfVid"><video id="pfVideo" controls preload="none" playsinline hidden></video><span class="play" aria-hidden="true"></span><span class="vq" id="pfQ"></span><span class="vt">30 to 60 seconds · captions and transcript · the person approves the final edit</span></div>
     <p class="vnote" id="pfVnote" hidden>Filmed with their approval. Captions and a transcript follow.</p>
+    <button class="pdoc" id="pfDoc" type="button" hidden data-cur data-card data-cur-label="See"></button>
     <p class="ppend" id="pfPending">Published with a first name, a role and the route in. The rest follows once the person has approved every word of it.</p>
     <div class="pnav"><button type="button" id="pPrev">← Previous</button><button type="button" id="pNext">Next →</button></div>
   </div>

@@ -39,7 +39,7 @@
   --wrap:1380px; --gut:clamp(20px,4.4vw,64px);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--carbon);overscroll-behavior-y:none}
 html.cur-on,html.cur-on body,html.cur-on a,html.cur-on button,html.cur-on summary{cursor:none}
 body{margin:0;background:var(--porcelain);color:var(--ink);
   font-family:var(--sans);font-size:17px;line-height:1.62;
@@ -58,15 +58,21 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:400;text-transform:upperca
 .skip:focus-visible{top:14px;outline-offset:0}
 
 /* ── custom cursor ──────────────────────────────────────────── */
-.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;display:none}
+.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;display:none;opacity:0;transition:opacity .3s}
 html.cur-on .cur{display:block}
-.cur .dot{position:fixed;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;
-  background:var(--pink)}
-.cur .ring{position:fixed;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;
-  border:1.5px solid rgba(255,45,141,.65);transition:width .28s,height .28s,margin .28s,
-  border-color .28s,background .28s}
-.cur.big .ring{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:var(--pink);
-  background:rgba(255,45,141,.08)}
+.cur.seen{opacity:1}
+.cur.idle{opacity:0;transition:opacity 1.2s}
+.cur .dot{position:fixed;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:3px;background:var(--pink);
+  will-change:transform;transition:width .2s,height .2s,margin .2s,border-radius .2s,opacity .2s}
+.cur .ring{position:fixed;left:0;top:0;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;
+  border:1.5px solid rgba(255,45,141,.7);will-change:transform;display:grid;place-content:center;
+  transition:width .3s cubic-bezier(.2,.8,.2,1),height .3s cubic-bezier(.2,.8,.2,1),margin .3s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s}
+.cur .ring i{font-style:normal;font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink);opacity:0;transform:scale(.7);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1);white-space:nowrap}
+.cur.big .ring{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:var(--pink);background:rgba(255,45,141,.08)}
+.cur.label .ring{width:76px;height:76px;margin:-38px 0 0 -38px;border-color:var(--pink);background:rgba(16,16,16,.55);backdrop-filter:blur(4px)}
+.cur.label .ring i{opacity:1;transform:none}
+.cur.label .dot{opacity:0}
+.cur.down .ring{transform-origin:center;border-color:var(--pink);background:rgba(255,45,141,.18)}
 
 /* ── entrance ───────────────────────────────────────────────── */
 .enter{position:fixed;inset:0;z-index:250;background:var(--porcelain);
@@ -233,12 +239,12 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .knot.hit{opacity:1;transform:scale(1.3);background:var(--pink)}
 
 /* ── the landing: a wave, sparks, every knot lit in turn, a halo ── */
-.thread .wave{position:absolute;width:960px;height:960px;margin:-480px 0 0 -480px;border-radius:50%;transform:scale(.025);
+.thread .wave{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;transform:scale(1);
   border:2px solid var(--pink);opacity:0;pointer-events:none;
   animation:wave 1.6s cubic-bezier(.2,.7,.2,1) forwards}
 .thread .wave.w2{animation-delay:.2s;border-width:1px}
 .thread .wave.w3{animation-delay:.4s;border-width:1px;border-style:dashed}
-@keyframes wave{0%{opacity:.95;transform:scale(.025)}100%{opacity:0;transform:scale(1)}}
+@keyframes wave{0%{opacity:.95;transform:scale(1)}100%{opacity:0;transform:scale(40)}}
 .thread .spark{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
   background:var(--pink);box-shadow:0 0 8px 2px rgba(255,45,141,.55);pointer-events:none;
   animation:spark 1.5s cubic-bezier(.15,.8,.3,1) forwards}
@@ -855,6 +861,21 @@ details.story summary:hover .st{color:var(--pink)}
 @media(min-width:900px){#proof.metrics{grid-template-columns:repeat(3,1fr)}}
 .metric .v.txt{font-size:clamp(30px,3.6vw,46px);line-height:1;padding-top:.15em;margin-bottom:16px}
 @media print{.film,.hero-acts,.more,.popover{display:none}.rec-tbl{font-size:11px}}
+
+/* ── touch: larger targets and legible labels on phones and tablets ── */
+@media(pointer:coarse){
+  .more{width:34px;height:34px}
+  .more::before,.more::after{width:14px}
+  .popover .x{width:36px;height:36px;top:8px;right:8px}
+  .follow{min-height:44px;padding:8px 0}
+  .mono-mark{min-width:44px;min-height:44px;display:inline-flex;align-items:center}
+  .vt button{padding:10px 6px}
+  .ft-line a,.ft-legal a,.side a,.src a{display:inline-block;padding:6px 0}
+}
+@media(max-width:900px){
+  .status{font-size:10px}
+  .node .st{font-size:10px}.node .lbl{font-size:11px}.yrlbl{font-size:10px}
+}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -863,7 +884,7 @@ details.story summary:hover .st{color:var(--pink)}
 <a class="skip" href="#c01" id="skipAnim" style="left:calc(var(--gut) + 176px)">Skip animation</a>
 
 
-<div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"></i></div>
+<div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"><i id="curLbl"></i></i></div>
 <div class="wipe" id="wipe" aria-hidden="true"></div>
 <div class="prog" id="prog" aria-hidden="true"></div>
 
@@ -996,12 +1017,12 @@ details.story summary:hover .st{color:var(--pink)}
         called scrap turned out to be a market.</p>
         <p>A Bolton training buyer took 400 units for £400. A Nottingham takeaway paid online and asked for
         delivery. By 2021 a corner of the family warehouse was turning out <b>800 to 1,000 units a week</b>, and
-        on 27 August 2021 <b>Freedom Fire &amp; Safety Ltd</b> was incorporated. <button class="more" type="button" data-pop="p-origin" aria-label="The full origin"></button></p>
+        on 27 August 2021 <b>Freedom Fire &amp; Safety Ltd</b> was incorporated. <button data-cur-label="More" class="more" type="button" data-pop="p-origin" aria-label="The full origin"></button></p>
         <div class="pop" id="p-origin" hidden><b>The full origin</b><p><b>September 2019.</b> About 400 mixed extinguishers to a fire-training buyer in Bolton for £400, roughly a pound each and probably a loss once time and delivery were counted. The first proof that demand was real and came in volume.</p><p><b>January 2020.</b> A Nottingham takeaway paid online and asked for the extinguisher to be sent. Extinguishers cannot go with any courier, so the parcel had to be packed properly and a carrier found. From then on the business was not limited to people who could drive to Bury.</p><p><b>Summer 2020.</b> Trading as Freedom Fire from a rented corner of the family warehouse: students cleaning and refilling hundreds of units a day, pallets to Scotland, Wales and London, and six containers of refurbished stock for exporters into West and Central Africa. By 2021 the supply of second-hand stock could no longer keep up.</p></div>
       </div>
     </div>
 
-    <figure class="film" id="film" aria-label="The two-minute founder story">
+    <figure data-cur-label="Play" class="film" id="film" aria-label="The two-minute founder story">
       <img src="../assets/journey/ch1-a.webp" width="1154" height="1342" alt="Rows of refurbished red fire extinguishers lined up along a warehouse wall, the stock the business began with" decoding="async">
       <div class="film-in">
         <span class="play" aria-hidden="true"></span>
@@ -1274,7 +1295,7 @@ details.story summary:hover .st{color:var(--pink)}
     <div class="cols">
       <aside class="side rv">
         <p>Placements have been hosted since 2021. Formal T Level industry placements began in September 2025; by June
-        2026 all three students had been offered long-term roles. <button class="more" type="button" data-pop="p-place" aria-label="More on placements"></button></p>
+        2026 all three students had been offered long-term roles. <button data-cur-label="More" class="more" type="button" data-pop="p-place" aria-label="More on placements"></button></p>
         <div class="pop" id="p-place" hidden><b>Placements</b><p>The first learners came from Newbridge College, including young people with additional needs. One of the earliest placements progressed into long-term, full-time employment. The T Level placements run with support from the Growth Company.</p></div>
         <p>How people come into the company is told on <a href="../staff/index.html" style="color:var(--pink)">The Way In</a>.</p>
       </aside>
@@ -1326,7 +1347,7 @@ details.story summary:hover .st{color:var(--pink)}
       <div class="hz"><div class="k"><span class="status target">Building · 24 to 36 months</span></div>
         <h3>Proposed operating companies</h3>
         <p>Freedom Facilities, for compliance, servicing and facilities on recurring contracts. Freedom Distribution, for
-        trade supply of the owned brands. Both still to come.</p><button class="more" type="button" data-pop="p-build" aria-label="More on what is being built"></button><div class="pop" id="p-build" hidden><b>Also in this horizon</b><p>The brand portfolio taken to about twelve registered marks. Amazon, OnBuy and Shopify from preparation to established channels. Both proposed companies would run on the shared infrastructure below.</p></div></div>
+        trade supply of the owned brands. Both still to come.</p><button data-cur-label="More" class="more" type="button" data-pop="p-build" aria-label="More on what is being built"></button><div class="pop" id="p-build" hidden><b>Also in this horizon</b><p>The brand portfolio taken to about twelve registered marks. Amazon, OnBuy and Shopify from preparation to established channels. Both proposed companies would run on the shared infrastructure below.</p></div></div>
       <div class="hz"><div class="k"><span class="status option">Long-term options</span></div>
         <h3>Optionality, not plans</h3>
         <p>Property, freight, aerial services and forecourt retail. Options the model keeps open; none has a date.</p></div>
@@ -1362,28 +1383,28 @@ details.story summary:hover .st{color:var(--pink)}
         <span class="yrlbl" data-ring="A" data-ang="128">Now</span>
         <span class="yrlbl" data-ring="B" data-ang="95">24 – 36 months</span>
         <span class="yrlbl" data-ring="C" data-ang="232">Options</span>
-        <button class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0" aria-pressed="true">
+        <button data-cur-label="Select" class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0" aria-pressed="true">
           <span class="orb"></span><span class="lbl">Freedom Group</span>
           <span class="st">Strategy</span></button>
-        <button class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
+        <button data-cur-label="Select" class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
           <span class="orb"></span><span class="lbl">Freedom Fire &amp; Safety Ltd</span>
           <span class="st">Trading</span></button>
-        <button class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200">
+        <button data-cur-label="Select" class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200">
           <span class="orb"></span><span class="lbl">Freedom Facilities</span>
           <span class="st">Proposed</span></button>
-        <button class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="35">
+        <button data-cur-label="Select" class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="35">
           <span class="orb"></span><span class="lbl">Freedom Distribution</span>
           <span class="st">Proposed</span></button>
-        <button class="node" data-k="form" data-s="future" data-ring="C" data-ang="250">
+        <button data-cur-label="Select" class="node" data-k="form" data-s="future" data-ring="C" data-ang="250">
           <span class="orb"></span><span class="lbl">Property</span>
           <span class="st">Option</span></button>
-        <button class="node" data-k="freight" data-s="future" data-ring="C" data-ang="20">
+        <button data-cur-label="Select" class="node" data-k="freight" data-s="future" data-ring="C" data-ang="20">
           <span class="orb"></span><span class="lbl">Freight</span>
           <span class="st">Option</span></button>
-        <button class="node" data-k="fly" data-s="future" data-ring="C" data-ang="300">
+        <button data-cur-label="Select" class="node" data-k="fly" data-s="future" data-ring="C" data-ang="300">
           <span class="orb"></span><span class="lbl">Aerial services</span>
           <span class="st">Option</span></button>
-        <button class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="150">
+        <button data-cur-label="Select" class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="150">
           <span class="orb"></span><span class="lbl">Forecourts</span>
           <span class="st">Option</span></button>
       </div>
@@ -1510,7 +1531,7 @@ details.story summary:hover .st{color:var(--pink)}
 <footer id="foot">
   <div class="wrap">
     <div class="ft-top">
-      <a class="totop" href="#top" id="totop" data-mag aria-label="Back to the start of the page">
+      <a class="totop" href="#top" id="totop" data-cur-label="Top" data-mag aria-label="Back to the start of the page">
         <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
       </a>
     </div>
