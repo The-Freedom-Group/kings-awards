@@ -42,9 +42,9 @@ DEPARTMENTS = [
      "note": "External, contracted: Ecommerce Intelligence (Amazon agency) · Regan Prestwood (graphic design)"},
     {"name": "Operations and fulfilment",
      "people": [("Jojo Williams", "Warehouse Operative · via Newbridge College", "FT", True),
-                ("Harrison Duckworth", "Warehouse Operative · T Level student", "FT", True),
-                ("Dylan Griffiths", "Warehouse Operative", "FT", True)],
-     "lead": "Harrison and Dylan: full-time as subcontractors for the past six months, now moving into full-time employment within the business",
+                ("Harrison Duckworth", "Warehouse Operative · T Level student", "PT", True),
+                ("Dylan Griffiths", "Warehouse Operative", "PT", True)],
+     "lead": "Harrison and Dylan: part-time, moving into full-time employment within the business from August 2026",
      "note": ""},
     {"name": "Sales and customer service",
      "people": [],
@@ -126,7 +126,7 @@ bg = box(slide, 0, 0, 11.69, 8.27, fill=WHITE)
 # header
 slide.shapes.add_picture(os.path.join(ASSETS, "ff_logo_black.png"), Inches(0.45), Inches(0.36), height=Inches(0.5))
 t = box(slide, 2.35, 0.3, 6.6, 0.42); text(t, [[("Freedom Fire & Safety Ltd — Organisational Structure", 17, True, BLACK)]], anchor=MSO_ANCHOR.MIDDLE)
-t = box(slide, 2.35, 0.7, 6.6, 0.26); text(t, [[("Company 13589467 · Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE · Trading as Freedom Global · A self-contained operating business with its own leadership, team and departments", 7.5, False, INK2)]], anchor=MSO_ANCHOR.MIDDLE)
+t = box(slide, 2.35, 0.7, 6.6, 0.26); text(t, [[("Company 13589467 · Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE · A self-contained operating business with its own leadership, team and departments", 7.5, False, INK2)]], anchor=MSO_ANCHOR.MIDDLE)
 t = box(slide, 9.0, 0.33, 2.24, 0.6); text(t, [[("DATED", 6, True, RED)], [("September 2026", 9, True, BLACK)], [("King's Awards for Enterprise 2027", 6.5, False, INK2)]], align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
 line(slide, 0.45, 1.05, 11.24, 1.05, colour=BLACK, lw=1.5)
 
@@ -207,7 +207,7 @@ box(slide, lx + 0.08, ly + 0.01, 0.05, 0.16, fill=RED)
 t = box(slide, lx + 0.14, ly - 0.02, 3.6, 0.24)
 text(t, [[("Red edge: came into the company through The Way In (college placement, T Level industry placement or Jobcentre Plus referral)", 6, False, INK2)]], anchor=MSO_ANCHOR.MIDDLE)
 t = box(slide, L, 7.7, 7.6, 0.4)
-text(t, [[("Prepared 6 September 2026 from the company staff register. Employment basis shown as at September 2026, including moves into direct employment now in progress.", 5.8, False, GREY)]])
+text(t, [[("Prepared 7 September 2026 from the company staff register. Employment basis shown as at September 2026, including moves into direct employment now in progress.", 5.8, False, GREY)]])
 
 # ── right: the developing group structure ────────────────────────────────
 GX, GY, GW, GH = 8.3, 1.16, 2.94, 6.06
