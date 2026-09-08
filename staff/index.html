@@ -756,6 +756,37 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
 .verse p{margin:0 0 clamp(18px,2.4vw,28px);font-family:var(--serif);font-style:italic;font-size:clamp(19px,2.2vw,28px);line-height:1.4;color:rgba(255,255,255,.9)}
 .verse p.last{font-family:var(--disp);font-style:normal;font-variation-settings:"wdth" 120,"wght" 900;text-transform:uppercase;font-size:clamp(30px,4vw,56px);color:var(--red);letter-spacing:.02em;margin-top:clamp(24px,3vw,40px)}
 .ft-legal .nums{color:var(--pale-3)}
+
+/* ── 8 Sept: entrance, hero, partners, photos, timeline, close, footer ── */
+#gate .glogo{width:clamp(150px,17vw,250px)}
+#gate .stencil.two{z-index:2}
+#gate .line2{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0;font-size:clamp(30px,5vw,70px);line-height:1.05;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.7)}
+.hero .cta .tlink.down i{display:inline-block;animation:nudgeDown 2.2s ease-in-out infinite}
+@keyframes nudgeDown{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.plate .badge img.pl{width:auto;height:100px;max-width:100%;margin:0 0 4px}
+.plate .badge img.jcp{border-radius:14px;height:72px}
+.photos img{filter:none}
+ol.spine.journey .pic{aspect-ratio:auto;height:auto;max-height:210px;object-fit:contain;background:#0d0d0d;cursor:zoom-in;transition:transform .25s}
+ol.spine.journey .pic:hover{transform:scale(1.03)}
+ol.spine.journey .pic.logo{border-radius:14px;padding:0}
+@media(max-width:900px){ol.spine.journey .pic{aspect-ratio:auto;max-height:260px;width:auto;max-width:100%}}
+.picbox{position:fixed;inset:0;z-index:960;background:rgba(10,10,10,.92);display:grid;place-items:center;padding:clamp(12px,3vw,40px)}
+.picbox[hidden]{display:none}
+.picbox figure{margin:0;max-width:min(1100px,100%);max-height:100%;display:grid;gap:12px;justify-items:center}
+.picbox img{max-width:100%;max-height:82vh;width:auto;height:auto;border:3px solid var(--black);border-radius:6px;box-shadow:12px 12px 0 var(--red);background:#111}
+.picbox figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-2);text-align:center}
+.picbox .cbx{position:fixed;top:18px;right:18px}
+.verse{max-width:none;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,20px)}
+.vs{position:relative;background:rgba(255,255,255,.05);border:2px solid var(--rule-d);border-radius:4px;padding:22px 22px 24px 22px;display:grid;gap:8px;align-content:start;transition:border-color .3s,background .3s}
+.vs:hover{border-color:var(--red);background:rgba(225,6,0,.1)}
+.vs .vn{display:inline-grid;place-content:center;width:34px;height:34px;background:var(--red);color:#fff;font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;font-size:14px;border-radius:3px}
+.vs b{font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;text-transform:uppercase;font-size:17px;color:#fff;letter-spacing:.02em;margin-top:4px}
+.vs p{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(17px,1.5vw,21px);line-height:1.4;color:rgba(255,255,255,.88)}
+.vs.last{background:var(--red);border-color:var(--red);display:grid;place-content:center;text-align:center}
+.vs.last p.last{font-family:var(--disp);font-style:normal;font-variation-settings:"wdth" 120,"wght" 900;text-transform:uppercase;font-size:clamp(24px,2.4vw,34px);color:#fff;letter-spacing:.02em;margin:0;line-height:1.05}
+@media(max-width:900px){.verse{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.verse{grid-template-columns:1fr}}
+footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--pale-3);line-height:1.7}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -786,7 +817,8 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
 
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
-  <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><small id="gStrap">Not everyone arrives by the same route.</small></div>
+  <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><small id="gStrap">Not everyone arrives by the same route...</small></div>
+  <div class="stencil two" id="gStencil2"><b class="line2">Everyone deserves a way in.</b></div>
   <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
   <div class="daylight" id="gDay"></div>
 </div>
@@ -808,12 +840,11 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
         <p class="strap">Exit signs point out. This one points in.</p>
       </div>
       <div class="opened" id="hOpened">
-        <div class="k"><span class="wayin">The Way In</span><span>The programme, the people, the partners</span></div>
-        <h1 aria-label="Everyone deserves a way in."><div class="line"><span>Everyone</span></div><div class="line"><span>deserves</span></div><div class="line"><span>a way <em class="s">in.</em></span></div></h1>
+        <div class="k"><span class="wayin">Freedom Fire &amp; Safety</span><span>The programme, the people, the partners</span></div>
+        <h1 aria-label="The Way In."><div class="line"><span>The</span></div><div class="line"><span>Way <em class="s">In.</em></span></div></h1>
         <p class="strap">Real work. Practical support. A route into lasting employment.</p>
         <div class="cta">
-          <a class="tlink" href="#people" data-cur>Meet the people <i>→</i></a>
-          <a class="tlink" href="#impact" data-cur>The impact <i>→</i></a>
+          <a class="tlink down" href="#why" data-cur>Read more <i>↓</i></a>
         </div>
       </div>
     </div>
@@ -873,9 +904,9 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
             </div>
     </div>
     <div class="photos rv" aria-label="The work">
-      <figure><img src="../assets/journey/ch3-a.webp" width="1153" height="1341" alt="Boxed extinguishers packed on a pallet in the warehouse, ready for dispatch" loading="lazy" decoding="async"><figcaption>Goods out, Unit 19</figcaption></figure>
-      <figure><img src="../assets/journey/ch11-a.webp" width="1078" height="1254" alt="Three of the team beside the Freedom Fire and Safety sign at the headquarters" loading="lazy" decoding="async"><figcaption>The team, HQ</figcaption></figure>
+      <figure><img src="../assets/journey/team-container.webp" width="1400" height="1867" style="object-position:50% 42%" alt="Three of the warehouse team in front of a container being unloaded at Unit 19, pallets of Firestorm stock beside them" loading="lazy" decoding="async"><figcaption>Container day, Unit 19</figcaption></figure>
       <figure><img src="../assets/journey/ch10-a.webp" width="1078" height="1254" alt="Unit 19 at night with the Freedom Fire and Safety sign lit" loading="lazy" decoding="async"><figcaption>Unit 19, Pilsworth</figcaption></figure>
+      <figure><img src="../assets/journey/team-races.webp" width="1600" height="1200" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><figcaption>The team at the races, 2026</figcaption></figure>
     </div>
   </div>
 </section>
@@ -886,7 +917,7 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
     <div class="ch-head rv">
       <div>
         <div class="ch-tag"><span class="num">03</span>The people</div>
-        <h2 class="wd">The team.<br><em class="s">Their own words, or none.</em></h2>
+        <h2 class="wd">The team.<br><em class="s">Who they are, and how they came in.</em></h2>
         <p class="stand">First name, role and route in. A full profile appears only with the person's approval.
           <details class="more"><summary data-cur-label="More" aria-label="Consent">Read more</summary><div class="pop"><b>Consent</b>Each person chose whether to appear, with what name and what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to info@freedom-fire.co.uk. Nothing about health, background or personal history is published unless the person writes it.</div></details></p>
       </div>
@@ -972,10 +1003,10 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
       <div class="plate"><div class="badge"><img src="../assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
         <h3>Disability Confident</h3>
         <p>Committed, Level 1, with Level 2 Employer accreditation in progress. Adjustments are offered before a placement starts, not after a problem.</p></div>
-      <div class="plate"><span class="k">Placement provider</span>
-        <h3>Newbridge College</h3>
-        <p>The first college placements came from Newbridge in 2021, including young people with additional needs. One of the earliest, Jojo, is now full-time.</p></div>
-      <div class="plate"><span class="k">Coming soon · October 2026</span>
+      <div class="plate"><div class="badge"><img class="pl" src="../assets/new-bridge-college.png" width="640" height="282" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
+        <h3>New Bridge College</h3>
+        <p>The first college placements came from New Bridge in 2021, including young people with additional needs. One of the earliest, Jojo, is now full-time.</p></div>
+      <div class="plate"><div class="badge"><img class="pl jcp" src="../assets/jobcentre-plus.png" width="640" height="320" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Referrals and the Job Guarantee scheme</small></div><span class="k">Coming soon · October 2026</span>
         <h3>Bury Job Centre and the Job Guarantee scheme</h3>
         <p>Two roles being filled through the local Job Centre under the job guarantee for 18 to 21 year olds. The newest way in.</p></div>
     </div>
@@ -1007,8 +1038,8 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
       <li class="haspic"><img class="pic" src="../assets/journey/ch3-a.webp" alt="Boxed extinguishers packed on a pallet for dispatch" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the storefronts.</b><span class="fx"> The website and the online storefronts are designed and built by placement students. A further T Level placement in IT follows.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch13-team.webp" alt="The whole team inside a container at Unit 19" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b><span class="fx"> All three of the first cohort are offered long-term roles. A T Level student presents the Freedom Group project at the new headquarters.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch21a.webp" alt="Number one of 1,193 sellers in the eBay fire extinguisher category" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, it is nominated for the King's Awards for Enterprise, and launches on Amazon and Shopify are in preparation.</span></span></li>
-      <li><span class="when">Sept 2026</span><span class="what"><b>The second cohort.</b><span class="fx"> Mentor hours logged, follow-up at three, six and twelve months, and the next T Level students in preparation.</span></span></li>
-      <li><span class="when">Oct 2026</span><span class="what"><b>The Job Guarantee scheme.</b><span class="fx"> Two roles filled through the local Job Centre under the job guarantee for 18 to 21 year olds. The newest way in.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/team-races.webp" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>The second cohort.</b><span class="fx"> Mentor hours logged, follow-up at three, six and twelve months, and the next T Level students in preparation.</span></span></li>
+      <li class="haspic"><img class="pic logo" src="../assets/jobcentre-plus.png" alt="Jobcentre Plus" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The Job Guarantee scheme.</b><span class="fx"> Two roles filled through the local Job Centre under the job guarantee for 18 to 21 year olds. The newest way in.</span></span></li>
     </ol>
   </div>
 </section>
@@ -1052,12 +1083,12 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
       </div>
     </div>
     <div class="verse rv" aria-label="What comes next">
-      <p>September comes round and the shutter goes up again.<br>New names on the rota, a mentor for each, a brief that is theirs from the first week.</p>
-      <p>The hours we give are written down now,<br>so the care behind a placement can be seen, not just said.</p>
-      <p>At three months, six and twelve, we still ask how it is going,<br>whether they stayed with us or moved on.</p>
-      <p>In October, two more come in through the Job Centre,<br>on a guarantee that a young person deserves a chance.</p>
-      <p>The adjustments we make before anyone starts<br>become the standard, not the exception.</p>
-      <p class="last">Everyone deserves a way in.</p>
+      <div class="vs"><span class="vn">01</span><b>September</b><p>The shutter goes up again. New names on the rota, a mentor for each, a brief that is theirs from the first week.</p></div>
+      <div class="vs"><span class="vn">02</span><b>Mentoring, written down</b><p>The hours we give are logged now, so the care behind a placement can be seen, not just said.</p></div>
+      <div class="vs"><span class="vn">03</span><b>Three, six and twelve months</b><p>We still ask how it is going, whether they stayed with us or moved on.</p></div>
+      <div class="vs"><span class="vn">04</span><b>October</b><p>Two more come in through the Job Centre, on a guarantee that a young person deserves a chance.</p></div>
+      <div class="vs"><span class="vn">05</span><b>Adjustments first</b><p>What we change before anyone starts becomes the standard, not the exception.</p></div>
+      <div class="vs last"><p class="last">Everyone deserves a way in.</p></div>
     </div>
     <div class="nextcta rv">
       <p class="lead"><b>Students and colleges:</b> ask about a placement. <b>Employers:</b> talk to us about hosting T Levels. One owner, one number: Tom Letcher.</p>
@@ -1074,12 +1105,11 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
   <div class="wrap">
     <div class="ft-top footer-item"><a class="totop" href="#top" aria-label="Back to the top" data-cur data-cur-label="Top"><span class="sq2"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="square"><path d="M15 26V6M6 15l9-9 9 9"/></svg></span><span class="lbl">Back to the top</span></a></div>
     <div class="ft-grid">
-      <div class="footer-item"><img class="ff" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><p>Freedom Fire &amp; Safety Ltd<br>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p></div>
+      <div class="footer-item"><img class="ff" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><p>Freedom Fire &amp; Safety Ltd<br>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p><p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd<br>Company no. 13589467 · VAT no. GB 402 853 810</p></div>
       <div class="footer-item"><h4>Contact</h4><p><a href="tel:+443337722723">0333 772 2723</a><br><a href="mailto:info@freedom-fire.co.uk">info@freedom-fire.co.uk</a><br><a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p></div>
       <div class="footer-item"><h4>The programme</h4><p><a href="#programme">The route in</a><br><a href="#people">The people</a><br><a href="#partners">The partners</a></p></div>
       <div class="footer-item"><h4>Elsewhere</h4><p><a href="../personal/index.html">Tom Letcher — the founder</a><br><a href="https://www.freedomgroup.uk">Freedom Group</a></p></div>
     </div>
-    <div class="ft-legal footer-item"><span>© 2026 Freedom Fire &amp; Safety Ltd</span><span class="nums">Company no. 13589467 · VAT no. GB 402 853 810</span></div>
   </div>
 </footer>
 
@@ -1098,6 +1128,8 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
     <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’ thanks to you Tom.”<cite>Molly, Josh's mother</cite></blockquote>
   </div>
 </div>
+
+<div class="picbox" id="picbox" role="dialog" aria-modal="true" aria-label="Photo" hidden><button class="cbx" id="picX" type="button" aria-label="Close">Close</button><figure><img id="picImg" src="" alt=""><figcaption id="picCap"></figcaption></figure></div>
 
 <div class="popover" id="popover" role="dialog" aria-modal="false" aria-live="polite"><button class="x" id="popX" type="button" aria-label="Close">Close</button><div id="popBody"></div></div>
 

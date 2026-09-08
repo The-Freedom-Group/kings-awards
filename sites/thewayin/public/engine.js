@@ -33,6 +33,7 @@
   /* ── smooth scrolling ─────────────────────────────────────── */
   var smoother = null;
   if (animate) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0.4, normalizeScroll: true, ignoreMobileResize: true, effects: true });
+  window.__smoother = smoother;
   function scrollY() { return smoother ? smoother.scrollTop() : (window.pageYOffset || html.scrollTop); }
   function scrollTo(target) {
     var el = typeof target === "string" ? $(target) : target; if (!el) return;
@@ -113,11 +114,11 @@
        header and the foot of the hero arrive. Scrolling early hurries it; "Skip animation" ends it. */
     var gate = $("#gate");
     gsap.set("#slats", { yPercent: -102 });   /* the hero's own shutter already stands open behind the gate */
-    gsap.set("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 });   /* first a black screen; the shutter arrives after the line */
+    gsap.set("#gSlats, #gate .rail, #gate .housing, #gStencil2", { autoAlpha: 0 });   /* first a black screen; the shutter arrives after the line */
     gsap.set(".hero .opened .line span", { y: "110%", rotation: 3 });
     gsap.set(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline(); window.__intro = intro;
-    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 12000);
+    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 15000);
     var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
     var hurry = function () { if (intro.progress() < 1) intro.timeScale(2.5); };
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
@@ -126,11 +127,12 @@
       .fromTo("#gStrap", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .9 }, 1.1)
       .to("#gStencil", { autoAlpha: 0, y: -14, duration: .6, ease: "power2.in" }, 3.1)
       .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 3.4)
-      .add("gate", 4.6)
+      .fromTo("#gStencil2", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: .9, ease: "power3.out" }, 4.4)
+      .add("gate", 6.4)
       .call(function () { gate.classList.add("opening"); }, null, "gate")
       .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
       .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")
-      .to("#gStencil", { yPercent: -260, autoAlpha: 0, duration: 1.5, ease: "power2.in" }, "gate+=0.35")
+      .to("#gStencil2", { yPercent: -260, autoAlpha: 0, duration: 1.5, ease: "power2.in" }, "gate+=0.35")
       .to("#gate", { backgroundColor: "rgba(17,17,17,0)", duration: .6 }, "gate+=0.9")
       .fromTo("#gDay", { opacity: 0 }, { opacity: .3, duration: .7, ease: "power2.out" }, "gate+=1.25")
       .to("#gDay", { opacity: 0, duration: 1.1, ease: "power2.out" }, "gate+=1.95")
@@ -423,4 +425,19 @@
     var k = t.closest && t.closest(".actcard .k"); if (k) { k.closest(".actcard").classList.toggle("open"); return; }
   });
   if (phone()) { var a = document.querySelector(".actcard"); if (a) a.classList.add("open"); }
+})();
+
+
+/* ── timeline photos open large ── */
+(function () {
+  var box = document.getElementById("picbox"), img = document.getElementById("picImg"), cap = document.getElementById("picCap"), x = document.getElementById("picX");
+  if (!box) return;
+  var last = null;
+  function open(p) { img.src = p.currentSrc || p.src; img.alt = p.alt; cap.textContent = p.alt; box.hidden = false; document.body.classList.add("card-open"); last = p; if (window.__smoother) window.__smoother.paused(true); x.focus(); }
+  function close() { box.hidden = true; document.body.classList.remove("card-open"); if (window.__smoother) window.__smoother.paused(false); if (last && last.focus) last.focus(); }
+  document.addEventListener("click", function (ev) { var p = ev.target.closest && ev.target.closest("ol.spine .pic"); if (p) { ev.preventDefault(); open(p); } });
+  x.addEventListener("click", close);
+  box.addEventListener("click", function (ev) { if (ev.target === box) close(); });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !box.hidden) close(); });
+  document.querySelectorAll("ol.spine .pic").forEach(function (p) { p.setAttribute("tabindex", "0"); p.setAttribute("role", "button"); p.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(p); } }); });
 })();
