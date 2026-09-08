@@ -308,6 +308,7 @@
     $$("#pfFields .opt").forEach(function (el) { el.style.display = el.querySelector("b").textContent ? "" : "none"; });
     $("#pfQ").textContent = "Film with " + d.name + ": to be recorded";
     var ov = $("#pfOv"); if (ov) ov.textContent = d.name + " · " + d.role;
+    $("#pfVid").classList.toggle("wide", !!d.wide);
     $("#pfVid").style.setProperty("--a", getComputedStyle(t).getPropertyValue("--a"));
     var v = $("#pfVideo"), vid = $("#pfVid"), img = $("#pfImg"), note = $("#pfVnote");
     /* a film on Cloudflare Stream arrives as the Stream player; the master is never scaled by us */
