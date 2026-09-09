@@ -1,0 +1,39 @@
+{
+  "_note": "Only approved public fields. First names as already published on The Way In; no health, background or personal history here.",
+  "founder": {
+    "name": "Tom Letcher",
+    "role": "Founder and director, Freedom Fire & Safety Ltd",
+    "since": "2021-08-27",
+    "consent": "owner"
+  },
+  "quotes": [
+    {
+      "name": "Bill",
+      "role": "Web developer, joined on a T Level placement in September 2025",
+      "consent": "given 2026-09-04",
+      "text": "I thought the placement would be a basic storefront. A few product pages, prices on, done. Instead I was given creative freedom. Told what the business needed, then trusted to work out how it should look and work. It turned into a proper, highly designed website. I'm grateful for that. Not many places would hand that much responsibility to someone on a placement, and when I got things wrong, they showed me why and let me fix it. Real work, real trust, and people kind enough to expect me to get good at it."
+    }
+  ],
+  "roles_created": [
+    {
+      "role": "Web developer",
+      "route": "T Level placement, 2025",
+      "count": 2
+    },
+    {
+      "role": "Warehouse operative",
+      "route": "T Level and college placements, Job Centre",
+      "count": 3
+    },
+    {
+      "role": "IT technician",
+      "route": "T Level placement",
+      "count": 1
+    },
+    {
+      "role": "Ecommerce assistant",
+      "route": "Job Centre; student alongside study",
+      "count": 2
+    }
+  ]
+}

@@ -1,0 +1,1805 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tom Letcher — Founder. Operator. Builder.</title>
+<meta name="description" content="Tom Letcher, founder of Freedom Fire &amp; Safety Ltd. From one second-hand fire extinguisher to a nationwide, multi-channel safety business: the story, the method, and the platform being built next.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F4F1EB">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Tom Letcher — Founder. Operator. Builder.">
+<meta property="og:description" content="From one second-hand fire extinguisher to a nationwide, multi-channel safety business.">
+<meta property="og:image" content="https://tomletcher.co.uk/assets/tom-mono.jpg">
+<meta property="og:url" content="https://tomletcher.co.uk/">
+<link rel="canonical" href="https://tomletcher.co.uk/">
+<link rel="apple-touch-icon" href="assets/icon-180.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-tl-32.png?v=2">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-tl-64.png?v=2">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,Times New Roman,serif' font-style='italic' font-size='34' fill='%23F4F1EB'%3ETL%3C/text%3E%3Cpath d='M14 54h36' stroke='%23FF2D8D' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   TOM LETCHER — THE FREEDOM LINE
+   One pink line is drawn from the first extinguisher to what comes next.
+   It enters the hero, threads every chapter, is scrubbed through a
+   pinned scene, and leaves the final chapter unfinished.
+   Porcelain / carbon / pink, pink held to roughly 5% of the surface.
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --porcelain:#F4F1EB; --porcelain-2:#EAE6DE; --carbon:#101010;
+  --pink:#FF2D8D; --pink-2:#ff74b8; --pink-3:#c60f6e; --pink-dim:rgba(255,45,141,.3);
+  --ink:#101010; --ink-2:#4A4A46; --ink-3:#86847E; --rule:#DAD5CB;
+  --pale:#F4F1EB; --pale-2:#A8A6A1; --pale-3:#6A6864; --rule-d:rgba(255,255,255,.13);
+  --disp:"Anton",Impact,"Arial Narrow Bold",sans-serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --wrap:1380px; --gut:clamp(20px,4.4vw,64px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--carbon);overscroll-behavior-y:none}
+html.cur-on,html.cur-on body,html.cur-on a,html.cur-on button,html.cur-on summary{cursor:none}
+body{margin:0;background:var(--porcelain);color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{margin:0;font-family:var(--disp);font-weight:400;text-transform:uppercase;
+  line-height:.86;letter-spacing:.004em}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--gut)}
+::selection{background:var(--pink);color:#fff}
+
+/* ── skip link ──────────────────────────────────────────────── */
+.skip{position:fixed;left:var(--gut);top:-70px;z-index:400;background:var(--carbon);color:var(--porcelain);
+  padding:11px 16px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+  transition:top .2s}
+.skip:focus-visible{top:14px;outline-offset:0}
+
+/* ── custom cursor ──────────────────────────────────────────── */
+.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;display:none;opacity:0;transition:opacity .3s}
+html.cur-on .cur{display:block}
+.cur.seen{opacity:1}
+.cur.idle{opacity:0;transition:opacity 1.2s}
+.cur .dot{position:fixed;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:3px;background:var(--pink);
+  will-change:transform;transition:width .2s,height .2s,margin .2s,border-radius .2s,opacity .2s}
+.cur .ring{position:fixed;left:0;top:0;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;
+  border:1.5px solid rgba(255,45,141,.7);will-change:transform;display:grid;place-content:center;
+  transition:width .3s cubic-bezier(.2,.8,.2,1),height .3s cubic-bezier(.2,.8,.2,1),margin .3s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s}
+.cur .ring i{font-style:normal;font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink);opacity:0;transform:scale(.7);transition:opacity .2s,transform .3s cubic-bezier(.2,.8,.2,1);white-space:nowrap}
+.cur.big .ring{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:var(--pink);background:rgba(255,45,141,.08)}
+.cur.label .ring{width:76px;height:76px;margin:-38px 0 0 -38px;border-color:var(--pink);background:rgba(16,16,16,.55);backdrop-filter:blur(4px)}
+.cur.label .ring i{opacity:1;transform:none}
+.cur.label .dot{opacity:0}
+.cur.down .ring{transform-origin:center;border-color:var(--pink);background:rgba(255,45,141,.18)}
+
+/* ── entrance ───────────────────────────────────────────────── */
+.enter{position:fixed;inset:0;z-index:250;background:var(--porcelain);
+  display:grid;place-content:center;gap:26px;justify-items:center;
+  transition:opacity .8s ease .25s,visibility .8s ease .25s}
+body.ready .enter{opacity:0;visibility:hidden}
+.enter .m{font-family:var(--serif);font-size:40px;line-height:1;opacity:0;animation:eIn .7s .1s forwards}
+.enter svg{width:min(320px,54vw);height:2px;overflow:visible}
+.enter path{stroke:var(--pink);stroke-width:1.6;fill:none;vector-effect:non-scaling-stroke;
+  stroke-dasharray:320;stroke-dashoffset:320;animation:eDraw 1.1s .35s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes eIn{to{opacity:1}}
+@keyframes eDraw{to{stroke-dashoffset:0}}
+
+/* ── view wipe ──────────────────────────────────────────────── */
+.wipe{position:fixed;inset:0;z-index:220;background:var(--pink);transform:scaleY(0);
+  transform-origin:bottom;pointer-events:none}
+
+/* ── scroll progress hairline ───────────────────────────────── */
+.prog{position:fixed;left:0;top:0;height:2px;width:100%;z-index:72;
+  transform:scaleX(0);transform-origin:left;background:var(--pink);
+  box-shadow:0 0 12px rgba(255,45,141,.6)}
+
+/* ── persistent corner card ─────────────────────────────────── */
+.card{position:fixed;left:clamp(14px,2vw,30px);bottom:clamp(14px,2vw,30px);z-index:64;
+  width:186px;padding:15px 16px 16px;border:1px solid var(--rule);background:rgba(244,241,235,.72);
+  backdrop-filter:blur(12px) saturate(150%);transition:opacity .4s,transform .4s,
+  background .35s,border-color .35s}
+body.dark-chrome .card{background:rgba(16,16,16,.68);border-color:var(--rule-d)}
+.card .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:500}
+body.dark-chrome .card .k{color:var(--pale-3)}
+.card .n{font-family:var(--disp);font-size:44px;line-height:.9;margin:8px 0 2px;color:var(--pink)}
+.card .t{font-family:var(--disp);text-transform:uppercase;font-size:17px;line-height:1;
+  color:var(--ink)}
+body.dark-chrome .card .t{color:var(--pale)}
+.card .d{margin-top:11px;padding-top:9px;border-top:1px solid var(--rule);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+body.dark-chrome .card .d{border-top-color:var(--rule-d);color:var(--pale-3)}
+.card.away{opacity:0;transform:translateY(14px);pointer-events:none}
+@media(max-width:1699px){.card{display:none}}
+body[data-view="record"] .card{display:none}
+
+/* ── accent sweep ───────────────────────────────────────────── */
+.hl{background:linear-gradient(var(--pink),var(--pink)) no-repeat left center/0% 100%;
+  padding:0 .14em;margin:0 -.06em;transition:background-size .95s cubic-bezier(.25,.7,.25,1) .25s,
+  color .5s ease .5s}
+.in .hl{background-size:100% 100%;color:#fff}
+
+/* ── chrome ─────────────────────────────────────────────────── */
+.chrome{position:fixed;inset:0 0 auto 0;z-index:70;border-bottom:1px solid transparent;
+  transition:background .35s,border-color .35s}
+.chrome.stuck{background:rgba(244,241,235,.9);backdrop-filter:blur(14px) saturate(160%);
+  border-bottom-color:var(--rule)}
+body.dark-chrome .chrome.stuck{background:rgba(16,16,16,.88);border-bottom-color:var(--rule-d)}
+.chrome .wrap{display:flex;align-items:center;gap:clamp(12px,3vw,44px);height:78px}
+.mono-mark{font-family:var(--serif);font-size:27px;line-height:1;flex:0 0 auto}
+.chrome nav{margin-left:auto;display:flex;gap:clamp(18px,2.6vw,40px)}
+.chrome nav a{font-size:11.5px;letter-spacing:.19em;text-transform:uppercase;font-weight:500;
+  color:var(--ink-2);transition:color .2s}
+.chrome nav a:hover,.chrome nav a:focus-visible{color:var(--pink)}
+body.dark-chrome .chrome nav a{color:var(--pale-2)}
+body.dark-chrome .mono-mark{color:var(--pale)}
+.now{display:none;align-items:baseline;gap:10px;font-size:10.5px;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:500;color:var(--ink-3);opacity:0;
+  transition:opacity .35s;white-space:nowrap}
+.now b{font-family:var(--disp);font-weight:400;font-size:19px;line-height:1;letter-spacing:0;
+  color:var(--pink)}
+.now.on{opacity:1}
+body.dark-chrome .now{color:var(--pale-3)}
+body[data-view="record"] .now{display:none}
+@media(min-width:1000px) and (max-width:1699px){.now{display:flex}}
+@media(max-width:1000px){.chrome nav{display:none}}
+.mode{display:flex;align-items:center;border:1px solid var(--rule);border-radius:100px;padding:3px;
+  flex:0 0 auto;background:rgba(255,255,255,.4)}
+body.dark-chrome .mode{border-color:var(--rule-d);background:rgba(255,255,255,.05)}
+.mode button{font:inherit;font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+  font-weight:500;border:0;background:transparent;color:var(--ink-3);padding:7px 14px;
+  border-radius:100px;cursor:pointer;transition:background .25s,color .25s;white-space:nowrap}
+body.dark-chrome .mode button{color:var(--pale-3)}
+.mode button[aria-pressed="true"]{background:var(--carbon);color:var(--porcelain)}
+body.dark-chrome .mode button[aria-pressed="true"]{background:var(--porcelain);color:var(--carbon)}
+@media(max-width:560px){.mode button{padding:7px 9px;font-size:9.5px;letter-spacing:.08em}}
+.burger{width:40px;height:40px;border-radius:50%;border:1px solid var(--rule);background:transparent;
+  display:grid;place-content:center;gap:4px;cursor:pointer;flex:0 0 auto;padding:0}
+body.dark-chrome .burger{border-color:var(--rule-d)}
+.burger i{display:block;width:15px;height:1.5px;background:var(--ink)}
+body.dark-chrome .burger i{background:var(--pale)}
+.sheet{position:fixed;inset:0;z-index:230;background:var(--carbon);color:var(--pale);
+  display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;
+  transition:opacity .35s,visibility .35s}
+.sheet.on{opacity:1;visibility:visible}
+.sheet ol{list-style:none;margin:0;padding:0;text-align:center}
+.sheet li{margin:clamp(5px,1.3vh,13px) 0;opacity:0;transform:translateY(26px);
+  transition:opacity .5s cubic-bezier(.2,.8,.25,1),transform .5s cubic-bezier(.2,.8,.25,1)}
+.sheet.on li{opacity:1;transform:none}
+.sheet.on li:nth-child(1){transition-delay:.06s}.sheet.on li:nth-child(2){transition-delay:.11s}
+.sheet.on li:nth-child(3){transition-delay:.16s}.sheet.on li:nth-child(4){transition-delay:.21s}
+.sheet.on li:nth-child(5){transition-delay:.26s}.sheet.on li:nth-child(6){transition-delay:.31s}
+.sheet.on li:nth-child(7){transition-delay:.36s}.sheet.on li:nth-child(8){transition-delay:.41s}
+.sheet a{font-family:var(--disp);text-transform:uppercase;font-size:clamp(26px,5.6vw,54px);
+  line-height:1;color:var(--pale);transition:color .2s,letter-spacing .3s}
+.sheet a:hover{color:var(--pink);letter-spacing:.02em}
+.sheet a span{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--pale-3);
+  display:block;margin-bottom:4px;font-weight:500}
+.sheet .close{position:absolute;top:24px;right:var(--gut);background:none;border:0;color:var(--pale);
+  font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+
+/* ── chapter spine ──────────────────────────────────────────── */
+.spine{position:fixed;left:clamp(13px,2vw,34px);top:50%;transform:translateY(-50%);z-index:60;
+  display:flex;flex-direction:column;gap:13px;align-items:flex-start}
+.spine a{position:relative;font-size:11px;letter-spacing:.14em;font-weight:500;color:var(--ink-3);
+  padding-left:20px;transition:color .25s}
+body.dark-chrome .spine a{color:var(--pale-3)}
+.spine a::before{content:"";position:absolute;left:3px;top:50%;width:5px;height:5px;margin-top:-2.5px;
+  border-radius:50%;background:var(--rule);transition:background .25s,transform .25s}
+body.dark-chrome .spine a::before{background:#333}
+.spine a.on{color:var(--pink)}
+.spine a.on::before{background:var(--pink);transform:scale(1.6);box-shadow:0 0 0 4px rgba(255,45,141,.16)}
+.spine.away{opacity:0;pointer-events:none}
+.spine{transition:opacity .35s}
+@media(max-width:1180px){.spine{display:none}}
+
+/* ── view switching ─────────────────────────────────────────── */
+#record{display:none}
+body[data-view="record"] #explore{display:none}
+body[data-view="record"] #record{display:block}
+body[data-view="record"] .spine{display:none}
+
+/* ══ THE THREAD ═════════════════════════════════════════════ */
+#explore{position:relative}
+.thread{position:absolute;inset:0;z-index:3;pointer-events:none}   /* above the bands and the portrait, behind the words */
+.thread svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.thread .track{fill:none;stroke:rgba(255,45,141,.13);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.thread .spur{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
+  stroke-linecap:round;stroke-dasharray:var(--l,300);stroke-dashoffset:var(--l,300);
+  transition:stroke-dashoffset 1s cubic-bezier(.25,.6,.25,1)}
+body.ready .thread #sp0{stroke-dashoffset:0;transition-delay:1.0s}
+body.ready .thread #sp1{stroke-dashoffset:0;transition-delay:1.15s}
+body.ready .thread #sp2{stroke-dashoffset:0;transition-delay:1.3s}
+body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
+.thread .live{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
+  stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
+.thread .head::before,.thread .head::after{content:"";position:absolute;inset:0;
+  border-radius:50%;border:1.5px solid var(--pink);opacity:0}
+.thread.landed .head::before{animation:beacon 2.6s ease-out infinite}
+.thread.landed .head::after{animation:beacon 2.6s ease-out 1.3s infinite}
+@keyframes beacon{0%{opacity:.8;transform:scale(1)}70%,100%{opacity:0;transform:scale(4.4)}}
+.thread .endnote{position:absolute;font-family:var(--serif);font-style:italic;
+  font-size:16px;color:var(--pink);white-space:nowrap;pointer-events:none;z-index:6;
+  opacity:0;transform:translate(-8px,-50%);transition:opacity .9s ease .35s,
+  transform .9s ease .35s}
+.thread.landed .endnote{opacity:1;transform:translate(0,-50%)}
+.thread .head{position:absolute;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6);
+  opacity:0;transition:opacity .4s;left:-99px;top:-99px}
+/* the tip keeps its size; what pulses is the light around it and the rings it sends out */
+.thread.on .head{opacity:1;animation:headPulse 1.8s ease-in-out infinite}
+@keyframes headPulse{0%,100%{box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 18px 4px rgba(255,45,141,.5)}
+  50%{box-shadow:0 0 0 7px rgba(255,45,141,.28),0 0 44px 14px rgba(255,45,141,.95)}}
+.thread.on .head::before{animation:beacon 1.8s ease-out infinite}
+.thread.on .head::after{animation:beacon 1.8s ease-out .9s infinite}
+.thread .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  border:1.5px solid var(--pink);background:var(--porcelain);opacity:.32;
+  transition:opacity .45s,background .45s,transform .45s}
+.thread .knot.dk{background:var(--carbon)}
+.thread .knot.hit{opacity:1;transform:scale(1.3);background:var(--pink)}
+
+/* ── the landing: a wave, sparks, every knot lit in turn, a halo ── */
+.thread .wave{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;transform:scale(1);
+  border:2px solid var(--pink);opacity:0;pointer-events:none;
+  animation:wave 1.6s cubic-bezier(.2,.7,.2,1) forwards}
+.thread .wave.w2{animation-delay:.2s;border-width:1px}
+.thread .wave.w3{animation-delay:.4s;border-width:1px;border-style:dashed}
+@keyframes wave{0%{opacity:.95;transform:scale(1)}100%{opacity:0;transform:scale(40)}}
+.thread .spark{position:absolute;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
+  background:var(--pink);box-shadow:0 0 8px 2px rgba(255,45,141,.55);pointer-events:none;
+  animation:spark 1.5s cubic-bezier(.15,.8,.3,1) forwards}
+@keyframes spark{0%{transform:translate(0,0) scale(1.2);opacity:1}
+  100%{transform:translate(var(--dx),calc(var(--dy) + 60px)) scale(.1);opacity:0}}
+.thread.burst .knot{animation:knotFlash .9s ease-out both;animation-delay:calc(var(--i,0) * .08s)}
+@keyframes knotFlash{0%{box-shadow:0 0 0 0 rgba(255,45,141,.8);transform:scale(1.3)}
+  45%{transform:scale(3)}100%{box-shadow:0 0 0 22px rgba(255,45,141,0);transform:scale(1.3)}}
+.thread.landed .head{opacity:0;animation:none}
+.thread.landed .halo{opacity:0!important;animation:none}
+@keyframes headGlow{0%,100%{box-shadow:0 0 0 5px rgba(255,45,141,.16),0 0 22px 5px rgba(255,45,141,.6)}
+  50%{box-shadow:0 0 0 9px rgba(255,45,141,.22),0 0 40px 12px rgba(255,45,141,.85)}}
+.thread .halo{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;
+  border-radius:50%;border:1.5px dashed var(--pink);opacity:0;transition:opacity .6s ease .5s}
+.thread .halo::after{content:"";position:absolute;left:50%;top:-3px;width:5px;height:5px;margin-left:-2.5px;
+  border-radius:50%;background:var(--pink)}
+.thread.landed .halo{opacity:.85;animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:820px){.thread{display:none}}
+
+/* ── moving background: orbits with travelling dots, a drifting grid ── */
+.orbits{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orbits svg{width:100%;height:100%;display:block}
+.orbits path{fill:none;stroke:none}
+.orbits circle{fill:var(--pink);opacity:.6}
+.orbits circle.dim{fill:currentColor;opacity:.35}
+.drift{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.24;color:var(--ink);
+  background-image:radial-gradient(circle,currentColor 1px,transparent 1.7px);background-size:38px 38px;
+  animation:drift 26s linear infinite}
+.dark .drift,.scene .drift,.slab .drift,.mq .drift,footer .drift{color:var(--pale);opacity:.22}
+.mq-t{position:relative;z-index:4}
+footer .wrap{position:relative;z-index:4}
+@keyframes drift{to{background-position:76px 38px}}
+
+/* ── 00 · arrival ───────────────────────────────────────────── */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding-top:78px;overflow:hidden;background:var(--porcelain)}
+.hero .wrap{position:relative;width:100%}
+.hero-stage{position:relative;display:grid;align-items:center;min-height:min(72vh,700px)}
+.hero-type{position:relative;z-index:4;pointer-events:none}
+.hero-type h1{font-size:clamp(64px,15.4vw,232px);line-height:.8}
+.hero-type h1 span{display:block}
+.hero-shot{position:absolute;right:calc(var(--gut) * -.35);bottom:-8%;
+  width:clamp(300px,46vw,700px);z-index:2;will-change:transform;
+  overflow:visible}
+/* the photograph itself stays solid, with the original soft edge; a blurred, larger
+   copy sits behind it and bleeds out into the page - the fade happens outside the image */
+.hero-shot img{width:100%;opacity:0;transition:opacity 1s ease}
+.hero-shot img.on{opacity:1}
+/* three layers, each dissolving into the next: the sharp photograph, a lightly blurred
+   copy a little larger, and a heavily blurred copy larger still. Every mask is a long,
+   even ramp, so there is no seam where one layer ends and the next begins. */
+.hero-shot img#shot{position:relative;z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+    linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 34%,rgba(0,0,0,.72) 62%,rgba(0,0,0,.3) 84%,transparent 100%),
+    linear-gradient(to right,transparent 0,rgba(0,0,0,.35) 8%,rgba(0,0,0,.8) 20%,#000 32%,#000 68%,rgba(0,0,0,.8) 80%,rgba(0,0,0,.35) 92%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-composite:intersect}
+.hero-shot img.halo{position:absolute;left:-12%;top:-8%;width:124%;z-index:2;opacity:.55;
+  filter:blur(14px) saturate(.9);transform:translateZ(0);pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 34%,rgba(0,0,0,.5) 64%,transparent 96%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 34%,rgba(0,0,0,.5) 64%,transparent 96%)}
+.hero-shot img.halo2{position:absolute;left:-40%;top:-30%;width:180%;z-index:1;opacity:.42;
+  filter:blur(60px) saturate(.85);transform:translateZ(0);pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%)}
+@media(max-width:820px){
+  .hero-shot{position:relative;right:auto;bottom:auto;width:88%;margin:10px -6% -8% auto}
+  .hero-type h1{font-size:clamp(54px,17vw,120px)}}
+.hero-sub{position:relative;z-index:4;margin-top:clamp(18px,3vw,34px);max-width:64ch}
+.hero-sub p{margin:0;font-size:clamp(13px,1.35vw,15.5px);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:500;line-height:1.75}
+.follow{position:relative;z-index:4;margin-top:clamp(24px,4vw,52px);display:inline-flex;
+  align-items:center;gap:10px;font-size:11.5px;letter-spacing:.19em;text-transform:uppercase;
+  font-weight:500;will-change:transform}
+.follow i{display:inline-block;animation:nudge 2.2s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.hl-start{position:absolute;left:var(--gut);z-index:6;transform:translateY(55%);
+  opacity:0;transition:opacity .7s ease .9s}
+body.ready .hl-start{opacity:1}
+.hl-start span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);white-space:nowrap}
+.hl-node{position:absolute;display:flex;align-items:center;gap:12px;transform:translateY(-50%);
+  z-index:6;opacity:0;transition:opacity .6s ease}
+body.ready .hl-node{opacity:1}
+.hl-node#hn0{transition-delay:1.25s}.hl-node#hn1{transition-delay:1.4s}
+.hl-node#hn2{transition-delay:1.55s}.hl-node#hn3{transition-delay:1.7s}
+.hl-node b{width:13px;height:13px;border-radius:50%;border:1.8px solid var(--pink);flex:0 0 auto;
+  background:var(--porcelain)}
+.hl-node span{font-size:12.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
+  white-space:nowrap}
+@media(max-width:820px){.hl-start,.hl-node{display:none}}
+
+/* ── poster words ───────────────────────────────────────────── */
+.pw{position:absolute;top:50%;left:0;z-index:0;pointer-events:none;user-select:none;
+  font-family:var(--disp);text-transform:uppercase;white-space:nowrap;line-height:1;
+  font-size:clamp(140px,27vw,430px);letter-spacing:.015em;
+  transform:translate3d(0,-50%,0);will-change:transform;
+  color:transparent;-webkit-text-stroke:1.2px currentColor;opacity:.085}
+@supports not (-webkit-text-stroke:1px black){.pw{color:currentColor;opacity:.04}}
+
+/* ── script accents ─────────────────────────────────────────── */
+.scr{position:absolute;z-index:0;pointer-events:none;font-family:var(--serif);
+  font-style:italic;color:var(--pink);line-height:1;text-transform:none;
+  font-size:clamp(40px,6vw,96px);transform:rotate(-7deg);
+  text-shadow:0 0 34px rgba(255,45,141,.28)}
+.ch .scr{right:0!important;top:-.2em!important;bottom:auto!important;opacity:.9}
+.ch .rv,.ch .cols,.ch .stages,.ch .metrics,.ch .stories,.ch .horizons,.ch .os,.ch .grp,.ch .grp-list{position:relative;z-index:1}
+@media(max-width:1099px){.ch .scr{display:none}}
+
+/* ── the years rail ─────────────────────────────────────────── */
+.years{margin-top:clamp(34px,5vw,58px);overflow:hidden;position:relative}
+.yhead{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:var(--pale-3);margin-bottom:16px}
+.yrail{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule-d);border:1px solid var(--rule-d)}
+@media(max-width:1099px){
+  .years{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--pink) transparent}
+  .yrail{display:flex;width:max-content;padding-bottom:6px}
+  .ycard{min-width:clamp(210px,24vw,300px)}}
+.ycard{background:var(--carbon);min-width:0;padding:24px 20px 26px;position:relative}
+.ycard .y{font-family:var(--disp);font-size:clamp(46px,6vw,74px);line-height:.9;
+  margin-bottom:12px}
+.ycard.live .y{color:var(--pink)}
+.ycard .l{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  margin-bottom:9px}
+.ycard .s{font-size:13.5px;line-height:1.55;color:var(--pale-3);font-weight:300}
+.ycard .vtag{position:static;display:inline-block;margin-top:14px;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:600;color:var(--pink);
+  border:1px solid rgba(255,45,141,.5);padding:3px 7px;border-radius:2px}
+
+.bar{background:var(--carbon);color:var(--porcelain);position:relative}
+.bar .wrap{display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:4}
+.bar div{padding:22px 10px;text-align:center;font-size:11.5px;letter-spacing:.17em;
+  text-transform:uppercase;font-weight:500;border-left:1px solid rgba(255,255,255,.14)}
+.bar div:first-child{border-left:0}
+@media(max-width:760px){.bar .wrap{grid-template-columns:1fr 1fr}
+  .bar div:nth-child(3){border-left:0}
+  .bar div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}}
+
+/* ── marquee ────────────────────────────────────────────────── */
+.mq{background:var(--carbon);color:var(--pale);overflow:hidden;position:relative;
+  padding:clamp(14px,2vw,26px) 0;border-top:1px solid var(--rule-d)}
+.mq-t{display:flex;white-space:nowrap;will-change:transform;width:max-content}
+.mq-t span{font-family:var(--disp);text-transform:uppercase;
+  font-size:clamp(30px,5.4vw,70px);line-height:1;padding-right:.55em}
+.mq-t span i{font-style:normal;color:var(--pink);padding-right:.55em}
+
+/* ── pinned scene · ONE ─────────────────────────────────────── */
+.scene{position:relative;height:340vh;background:var(--carbon);color:var(--pale)}
+.scene .stick{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;
+  place-content:center;text-align:center;z-index:4}
+.scene .yr{font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);margin-bottom:clamp(16px,3vh,30px)}
+.scene .phs{position:relative;min-height:clamp(140px,38vh,400px);
+  min-width:min(88vw,1000px)}
+.scene .ph{position:absolute;inset:0;display:grid;place-content:center;opacity:0;
+  transform:scale(.94);filter:blur(10px);
+  transition:opacity .55s ease,transform .55s ease,filter .55s ease}
+.scene .ph.on{opacity:1;transform:none;filter:none}
+.scene .ph h3{font-size:clamp(48px,10vw,150px);line-height:.88;max-width:12ch;text-align:center;margin-inline:auto}
+.scene .ph em{display:none;font-style:normal;font-size:12px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);margin-bottom:clamp(14px,2.4vh,26px)}
+.scene .ph p{margin:clamp(14px,2.6vh,26px) auto 0;max-width:44ch;font-size:clamp(15px,1.45vw,19px);line-height:1.6;
+  color:var(--pale-2);font-weight:300}
+.scene .rail3{display:flex;align-items:center;margin:clamp(22px,4vh,44px) auto 0;width:min(440px,72vw)}
+.scene .rail3 i{position:relative;width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,45,141,.45);
+  background:var(--carbon);flex:0 0 auto;transition:border-color .4s,background .4s,box-shadow .4s,transform .4s}
+.scene .rail3 i::after{content:attr(data-l);position:absolute;top:19px;left:50%;transform:translateX(-50%);font-size:10px;
+  letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:var(--pale-3);transition:color .4s;white-space:nowrap}
+.scene .rail3 i.done{border-color:var(--pink);background:var(--pink)}
+.scene .rail3 i.on{border-color:var(--pink);background:var(--pink);transform:scale(1.3);
+  box-shadow:0 0 0 6px rgba(255,45,141,.16),0 0 26px rgba(255,45,141,.65)}
+.scene .rail3 i.on::after,.scene .rail3 i.done::after{color:var(--pale)}
+.scene .rail3 s{flex:1;height:1px;background:var(--rule-d);text-decoration:none;position:relative;overflow:hidden}
+.scene .rail3 s::after{content:"";position:absolute;inset:0;background:var(--pink);transform:scaleX(var(--f,0));
+  transform-origin:0 50%;transition:transform .45s ease}
+.scene .cnt{margin-top:clamp(30px,5vh,48px);font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+.scene .cnt b{color:var(--pink);font-weight:600}
+@media(max-width:820px),(prefers-reduced-motion:reduce){
+  .scene{height:auto;padding:clamp(70px,12vw,130px) 0}
+  .scene .stick{position:static;height:auto;overflow:visible}
+  .scene .phs{min-height:0;min-width:0;display:grid;gap:clamp(18px,4vw,34px)}
+    .scene .ph{position:static;opacity:1;transform:none;filter:none}
+  .scene .ph h3{font-size:clamp(44px,11vw,110px)}
+  .scene .rail3,.scene .yr{display:none}
+  .scene .ph em{display:block}
+}
+
+/* ── chapters ───────────────────────────────────────────────── */
+.ch{padding:clamp(76px,11vw,168px) 0;position:relative;overflow:hidden}
+.ch.dark{background:var(--carbon);color:var(--pale)}
+.ch::before{content:none}
+.ch .wrap{position:relative;z-index:4}
+.ch-tag{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:var(--pink);margin-bottom:clamp(18px,2.6vw,30px)}
+.ch h2{font-size:clamp(34px,6.6vw,88px);max-width:15ch;margin-bottom:clamp(20px,3vw,36px)}
+.ch .stand{font-size:clamp(17px,2vw,21px);max-width:52ch;color:var(--ink-2);font-weight:300}
+.ch.dark .stand{color:var(--pale-2)}
+.cols{display:grid;grid-template-columns:1fr 1.32fr;gap:clamp(28px,5.5vw,88px);
+  margin-top:clamp(34px,5vw,64px)}
+@media(max-width:920px){.cols{grid-template-columns:1fr;gap:26px}}
+.side{font-size:14.5px;color:var(--ink-3);line-height:1.7}
+.ch.dark .side{color:var(--pale-3)}
+.side p{margin:0 0 15px}
+.body p{margin:0 0 22px;font-size:clamp(16px,1.75vw,18.5px);color:var(--ink-2);font-weight:300;
+  max-width:62ch}
+.ch.dark .body p{color:var(--pale-2)}
+.body p:last-child{margin-bottom:0}
+.body b{font-weight:600;color:var(--ink)}
+.ch.dark .body b{color:var(--pale)}
+
+/* archive photography */
+.plate{position:relative;margin:clamp(34px,5vw,62px) 0 0;overflow:hidden}
+.plate img{width:100%}
+.plate figcaption{margin-top:13px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-3)}
+.ch.dark .plate figcaption{color:var(--pale-3)}
+.plate.wide{margin-inline:calc(var(--gut) * -1);width:calc(100% + var(--gut) * 2)}
+.plate.wide figcaption{padding-inline:var(--gut)}
+.plate.crop{max-height:min(72vh,640px);display:flex;flex-direction:column}
+.plate.crop img{object-fit:cover;height:min(66vh,580px);will-change:transform}
+.plate.tall{background:var(--carbon)}
+.plate.tall img{width:auto;max-width:100%;height:min(80vh,780px);object-fit:contain;display:block;margin:0 auto}
+.ranks{margin-top:clamp(34px,5vw,62px)}
+.ranks-head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:18px}
+.rtag{display:inline-block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pink);margin-bottom:10px}
+.ranks-head h3{font-size:clamp(24px,3vw,40px);max-width:16ch}
+.rsum{text-align:right}
+.rsum b{display:block;font-family:var(--disp);font-size:clamp(34px,4vw,56px);line-height:.9;color:var(--pale)}
+.rsum span{display:block;font-size:12px;letter-spacing:.06em;color:var(--pale-3);max-width:22ch;margin-left:auto}
+.ranks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,18px);perspective:1400px}
+.rank{position:relative;background:var(--carbon);border:1px solid var(--rule-d);border-radius:4px;padding:clamp(22px,2.6vw,32px) clamp(20px,2.4vw,28px) clamp(22px,2.6vw,30px);
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .5s;will-change:transform}
+.rank::before{content:"";position:absolute;inset:0;border-radius:4px;background:radial-gradient(120% 80% at 100% 0%,rgba(255,45,141,.14),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
+.rank:hover{border-color:rgba(255,45,141,.55);box-shadow:0 30px 70px rgba(0,0,0,.45),0 0 0 1px rgba(255,45,141,.15)}
+.rank:hover::before{opacity:1}
+.rank.top{border-color:rgba(255,45,141,.5);box-shadow:0 0 0 1px rgba(255,45,141,.18),0 24px 60px rgba(255,45,141,.08)}
+.rhead{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.rhead .ri{width:30px;height:30px;color:var(--pink);flex:0 0 auto;transition:transform .5s cubic-bezier(.2,.8,.2,1),filter .4s}
+.rhead .ri svg{width:100%;height:100%;display:block}
+.rank:hover .ri{transform:translateY(-3px) scale(1.12);filter:drop-shadow(0 0 10px rgba(255,45,141,.7))}
+.rcat{font-family:var(--disp);text-transform:uppercase;font-size:clamp(17px,1.6vw,22px);color:var(--pale);line-height:1}
+.rno1{margin-left:auto;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--carbon);background:var(--pink);padding:5px 8px;border-radius:2px;white-space:nowrap}
+.rmain{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.rn{font-family:var(--disp);font-size:clamp(72px,7.6vw,118px);line-height:.85;color:var(--pale);letter-spacing:-.01em}
+.rn b{font-weight:400}
+.rn span{font-size:.34em;vertical-align:top;margin-left:2px;color:var(--pink)}
+.rgauge{position:relative;width:clamp(76px,7vw,104px);height:clamp(76px,7vw,104px)}
+.rgauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rgauge .g0{fill:none;stroke:rgba(255,255,255,.08);stroke-width:6}
+.rgauge .g1{fill:none;stroke:var(--pink);stroke-width:6;stroke-linecap:round;stroke-dasharray:var(--c) var(--c);stroke-dashoffset:var(--c);transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1) .3s}
+.ranks.go .rgauge .g1{stroke-dashoffset:calc(var(--c) * 0.02)}
+.rpct{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1;white-space:nowrap}
+.rpct span,.rpct i{display:inline}
+.rpct b{display:block;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pale-3);font-weight:500;margin-bottom:3px}
+.rpct span{font-family:var(--disp);font-size:clamp(15px,1.5vw,20px);color:var(--pale)}
+.rpct i{font-style:normal;font-family:var(--disp);font-size:clamp(11px,1vw,13px);color:var(--pink)}
+.rk{margin-top:14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+.rk b{color:var(--pale);font-weight:600}
+.rank p{margin:12px 0 0;font-size:14px;line-height:1.55;color:var(--pale-2);font-weight:300;min-height:2.6em}
+.rank .rb{margin-top:18px;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.rank .rb i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--pink-3),var(--pink));transform:scaleX(0);transform-origin:left;border-radius:2px;transition:transform 1.4s cubic-bezier(.2,.8,.2,1) .5s}
+.ranks.go .rank .rb i{transform:scaleX(var(--w,1))}
+.ranks .rank{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.ranks.go .rank{opacity:1;transform:none}
+.ranks.go .rank:nth-child(2){transition-delay:.12s}.ranks.go .rank:nth-child(3){transition-delay:.24s}
+.ranks .src{margin-top:16px}
+@media(max-width:1000px){.ranks-grid{grid-template-columns:1fr}.rank p{min-height:0}}
+@media(max-width:700px){.ranks-head{grid-template-columns:1fr}.rsum{text-align:left}.rsum span{margin-left:0}}
+@media(prefers-reduced-motion:reduce){.ranks .rank{opacity:1;transform:none}.ranks .rgauge .g1{stroke-dashoffset:calc(var(--c) * 0.02)}.ranks .rank .rb i{transform:scaleX(var(--w,1))}}
+.plate.trio .trio-in{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#000;height:min(80vh,780px)}
+.plate.trio img{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+@media(max-width:700px){.plate.trio .trio-in{grid-template-columns:1fr;height:auto}.plate.trio img{height:auto}}
+
+/* serif quotation */
+.quo{margin:clamp(38px,6vw,72px) 0;padding-left:clamp(18px,2.6vw,32px);border-left:2px solid var(--pink)}
+.quo q{quotes:none;display:block;font-family:var(--serif);font-style:italic;
+  font-size:clamp(24px,4vw,44px);line-height:1.2}
+.quo .by{margin-top:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-3)}
+.ch.dark .quo .by{color:var(--pale-3)}
+
+/* ── metrics + evidence ─────────────────────────────────────── */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:1px;
+  background:var(--rule-d);border:1px solid var(--rule-d);margin-top:clamp(34px,5vw,58px)}
+.ch:not(.dark) .metrics{background:var(--rule);border-color:var(--rule)}
+.metric{background:var(--carbon);padding:28px 24px 24px;transform-origin:50% 100%;
+  position:relative;transition:background .35s}
+.metric::after{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--pink);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.25,.7,.25,1)}
+.metric:hover::after{transform:scaleX(1)}
+.ch:not(.dark) .metric{background:var(--porcelain)}
+.metric .v{font-family:var(--disp);font-size:clamp(40px,5.4vw,68px);line-height:.9;margin-bottom:12px}
+.metric .k{font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:500;
+  color:var(--pale-3);margin-bottom:14px}
+.ch:not(.dark) .metric .k{color:var(--ink-3)}
+.metric .def{font-size:14px;line-height:1.55;color:var(--pale-2);margin:0 0 14px;font-weight:300}
+.ch:not(.dark) .metric .def{color:var(--ink-2)}
+.metric .per{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale-3);
+  margin-bottom:14px;font-weight:500}
+.ch:not(.dark) .metric .per{color:var(--ink-3)}
+/* ── "+" reveals: the detail sits behind a small pink circle, opened beside it ── */
+.more{display:inline-block;vertical-align:middle;margin-left:8px;position:relative;width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--pink);color:var(--pink);background:transparent;cursor:pointer;padding:0;font-size:0;line-height:0;
+  transition:background .2s,color .2s,transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.more::before,.more::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;background:currentColor;
+  transform:translate(-50%,-50%);border-radius:1px}
+.more::after{transform:translate(-50%,-50%) rotate(90deg)}
+.more:hover{transform:scale(1.12);box-shadow:0 0 0 6px rgba(255,45,141,.14)}
+.more.is-open{background:var(--pink);color:#fff;transform:rotate(45deg)}
+.more.blk,.stage .more,.metric .more,.hz .more{display:block;margin:14px 0 0}
+.pop{display:none}
+.popover{position:fixed;z-index:950;width:min(400px,calc(100vw - 32px));background:var(--carbon);color:var(--pale-2);
+  border:1px solid var(--pink);padding:18px 46px 18px 20px;font-family:var(--sans);font-size:14.5px;line-height:1.6;font-weight:300;
+  letter-spacing:0;text-transform:none;text-align:left;box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 6px rgba(255,45,141,.08);
+  opacity:0;transform:translateY(6px);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.popover.on{opacity:1;transform:none;pointer-events:auto}
+.popover b{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pink);margin-bottom:8px}
+.popover p{margin:0 0 10px}.popover p:last-child{margin:0}
+.popover dl{margin:0;display:grid;grid-template-columns:78px 1fr;gap:8px 14px}
+.popover dt{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-3);font-weight:500;padding-top:3px}
+.popover dd{margin:0}
+.popover .status{border-color:rgba(255,255,255,.25);color:var(--pale-2);margin-right:6px}
+.popover .x{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--pink);
+  background:var(--pink);cursor:pointer;font-size:0;padding:0}
+.popover .x::before,.popover .x::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;background:#fff;
+  transform:translate(-50%,-50%) rotate(45deg)}
+.popover .x::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.popover::before{content:"";position:absolute;left:var(--ax,20px);top:-7px;width:12px;height:12px;background:var(--carbon);
+  border-left:1px solid var(--pink);border-top:1px solid var(--pink);transform:rotate(45deg)}
+.popover.above::before{top:auto;bottom:-7px;transform:rotate(225deg)}
+details.ev{border-top:1px solid var(--rule-d);padding-top:12px}
+.ch:not(.dark) details.ev{border-top-color:var(--rule)}
+details.ev summary{cursor:pointer;list-style:none;font-size:10.5px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:500;color:var(--pink);display:flex;align-items:center;gap:7px}
+details.ev summary::-webkit-details-marker{display:none}
+details.ev summary::after{content:"+";font-size:14px;line-height:1}
+details.ev[open] summary::after{content:"–"}
+details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3);font-weight:300}
+.ch:not(.dark) details.ev p{color:var(--ink-3)}
+
+/* ── the Freedom Group logo ─────────────────────────────────── */
+.fg-rec{width:clamp(84px,8vw,112px);height:auto;margin-bottom:20px}
+
+/* ── 04 · the group ─────────────────────────────────────────── */
+.grp-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.vt{display:flex;gap:12px;align-items:center;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:500}
+.vt button{font:inherit;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  background:none;border:0;color:var(--pale-3);cursor:pointer;padding:2px 0;
+  border-bottom:1.5px solid transparent}
+.vt button[aria-pressed="true"]{color:var(--pink);border-bottom-color:var(--pink)}
+.vt s{color:var(--pale-3);text-decoration:none}
+.grp{display:grid;grid-template-columns:1fr 340px;gap:clamp(24px,3.6vw,52px);
+  margin-top:clamp(24px,3.4vw,44px);align-items:center}
+@media(max-width:1080px){.grp{grid-template-columns:1fr}}
+.map{position:relative;aspect-ratio:1.32/1;min-height:400px}
+.map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.map svg ellipse{fill:none;vector-effect:non-scaling-stroke}
+.map .tape{stroke:url(#mgp);stroke-width:2.4}
+.map .tapeGlow{stroke:url(#mgp);stroke-width:7;opacity:.26;filter:blur(3px);
+  animation:tapepulse 6s ease-in-out infinite}
+@keyframes tapepulse{50%{opacity:.42}}
+.map .ringB{stroke:rgba(255,61,154,.45);stroke-width:1.2}
+.map .ringC{stroke:rgba(255,255,255,.14);stroke-width:1;stroke-dasharray:1.5 3}
+.node{position:absolute;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%);display:flex;flex-direction:column;
+  align-items:center;gap:8px;cursor:pointer;background:none;border:0;padding:6px;
+  color:var(--pale);font-family:var(--disp);text-transform:uppercase;line-height:1.05;
+  text-align:center}
+.node .orb{position:relative;border-radius:50%;width:var(--os);height:var(--os);flex:0 0 auto;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255,255,255,.95), rgba(255,255,255,0) 30%),
+    radial-gradient(circle at 36% 32%, var(--p1), var(--p2) 58%, var(--p3) 100%);
+  box-shadow:inset -8px -10px 16px rgba(0,0,0,.5), inset 3px 4px 8px rgba(255,255,255,.22),
+    0 12px 28px rgba(0,0,0,.55);
+  transition:transform .35s cubic-bezier(.2,.8,.25,1),box-shadow .35s}
+.node .orb::after{content:"";position:absolute;left:23%;top:17%;width:16%;height:11%;
+  border-radius:50%;background:rgba(255,255,255,.85);filter:blur(1px);
+  transform:rotate(-24deg)}
+.node .lbl{font-size:clamp(10px,1.05vw,14px)}
+.node .st{font-family:var(--sans);font-size:8.5px;letter-spacing:.16em;font-weight:500;
+  color:var(--pink);text-transform:uppercase}
+.node.core{--os:clamp(74px,9vw,104px);--p1:#ff9dcb;--p2:#ff3d9a;--p3:#8f0b55}
+/* the Freedom Group planet carries the world's coastlines in white, turning slowly */
+.node.core .orb{overflow:hidden}
+.node.core .orb::before{content:"";position:absolute;inset:0;border-radius:50%;
+  background:url("assets/world-white.webp") repeat-x 0 50%/200% 100%;opacity:.95;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 52%,rgba(0,0,0,.35) 66%,transparent 74%);
+  mask-image:radial-gradient(circle at 50% 50%,#000 52%,rgba(0,0,0,.35) 66%,transparent 74%);
+  animation:globe 80s linear infinite}
+@keyframes globe{to{background-position-x:200%}}
+.node.core .lbl{font-size:clamp(12px,1.35vw,17px)}
+/* the planets take the group model's own colours: blue for Global, green for Facilities,
+   orange for Distribution, gold for Form and Freight, violet for Fly and Fuel */
+.node[data-s="operating"]{--os:clamp(52px,6.6vw,70px)}
+.node[data-s="planned"]{--os:clamp(44px,5.6vw,58px)}
+.node[data-s="future"]{--os:clamp(34px,4.4vw,46px)}
+.node[data-k="global"]{--p1:#a6dcff;--p2:#1e8fff;--p3:#0a3a8c}
+.node[data-k="fac"]{--p1:#c2ffe4;--p2:#2ed491;--p3:#0b5a3c}
+.node[data-k="dist"]{--p1:#ffd0ad;--p2:#ff6a3d;--p3:#8a2a10}
+.node[data-k="form"],.node[data-k="freight"]{--p1:#fff2b8;--p2:#f0c24a;--p3:#8a6612}
+.node[data-k="fly"]{--p1:#e0ccff;--p2:#8b5cf6;--p3:#3b1d8a}
+.node[data-k="fuel"]{--p1:#c9b8ff;--p2:#6a48d8;--p3:#2a1466}
+.node[data-k="form"] .orb::before{content:"";position:absolute;left:-34%;top:36%;width:168%;height:26%;
+  border-radius:50%;border:2px solid rgba(240,194,74,.85);transform:rotate(-16deg);pointer-events:none}
+.node[data-s="future"] .lbl{color:var(--pale-2);font-size:clamp(9.5px,1vw,13px)}
+.node[data-s="future"] .st{color:var(--pale-3)}
+.node[data-s="planned"] .st{color:#5fe3a8}
+.node[data-k="global"] .st{color:#7cc1ff}
+.yrlbl{position:absolute;transform:translate(-50%,-50%);font-family:var(--sans);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--pale-3);border:1px solid rgba(255,255,255,.16);padding:3px 8px;border-radius:100px;
+  background:rgba(16,16,16,.85);white-space:nowrap;pointer-events:none}
+.node:hover .orb{transform:scale(1.1)}
+.node.sel .orb{box-shadow:inset -8px -10px 16px rgba(0,0,0,.5),
+  inset 3px 4px 8px rgba(255,255,255,.22),
+  0 0 0 2px #fff, 0 0 0 4.5px var(--pink), 0 0 40px 8px rgba(255,45,141,.5)}
+.panel{border:1px solid rgba(255,45,141,.45);background:#0b0b0b;padding:30px 26px 28px}
+.panel h3{font-size:clamp(21px,2.1vw,27px);margin-bottom:14px}
+.panel hr{border:0;border-top:1.5px solid var(--pink);width:46px;margin:0 0 18px}
+.panel .tagline{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+  margin-bottom:14px}
+.panel p{margin:0 0 20px;font-size:15.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
+.panel .go{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--pink)}
+.grp-list{margin-top:clamp(30px,4vw,52px);border-top:1px solid var(--rule-d)}
+.grp-list h4{margin:34px 0 0;font-family:var(--sans);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+.grp-list ul{list-style:none;margin:14px 0 0;padding:0}
+.grp-list li{display:flex;gap:18px;align-items:baseline;padding:17px 0;
+  border-bottom:1px solid var(--rule-d);transition:padding-left .4s cubic-bezier(.25,.7,.25,1)}
+.grp-list li:hover{padding-left:14px}
+.grp-list li:hover .nm{color:var(--pink)}
+.grp-list .nm{transition:color .3s}
+.grp-list .nm{font-family:var(--disp);text-transform:uppercase;font-size:21px;flex:0 0 auto;
+  min-width:min(46%,290px)}
+.grp-list .ds{font-size:15px;color:var(--pale-2);font-weight:300}
+@media(max-width:700px){.grp-list li{flex-direction:column;gap:6px}.grp-list .nm{min-width:0}}
+body:not([data-grp="list"]) .grp-list{display:none}
+body[data-grp="list"] .grp{display:none}
+@media(max-width:760px){.grp{display:none!important}.grp-list{display:block!important}.vt{display:none}}
+
+/* ── full-bleed statement ───────────────────────────────────── */
+.slab{position:relative;min-height:100svh;display:grid;place-content:center;text-align:center;
+  background:var(--carbon);color:var(--pale);overflow:hidden;padding:0 var(--gut)}
+.slab .in-w{position:relative;z-index:4}
+.slab .k{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--pink);
+  margin-bottom:clamp(20px,4.5vh,44px);font-weight:500}
+.slab h2{font-size:clamp(48px,12.4vw,206px);line-height:.9;max-width:none}
+.slab .f{margin-top:clamp(22px,4.5vh,44px);font-size:clamp(13px,1.4vw,16px);letter-spacing:.15em;
+  text-transform:uppercase;color:var(--pale-3);font-weight:500}
+
+/* ── 07 ─────────────────────────────────────────────────────── */
+.next{text-align:center}
+.next h2{max-width:none;margin-inline:auto}
+.next .stand{margin-inline:auto}
+
+/* ── placeholders ───────────────────────────────────────────── */
+.tk{display:block;margin:24px 0;padding:19px 21px;border:1px dashed var(--pink-dim);
+  background:rgba(255,45,141,.05);font-size:15px;line-height:1.6;color:var(--ink-2);font-weight:300}
+.ch.dark .tk{color:var(--pale-2)}
+.tk b{display:block;font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--pink);
+  margin-bottom:8px;font-weight:600}
+.tk i{font-style:normal;font-weight:500;color:var(--ink)}
+.ch.dark .tk i{color:var(--pale)}
+.tk-in{background:rgba(255,45,141,.1);border-bottom:1px dashed var(--pink-dim);padding:1px 6px}
+
+/* ── verified record ────────────────────────────────────────── */
+#record{background:var(--porcelain);padding-top:78px}
+.rec-head{padding:clamp(48px,7vw,92px) 0 clamp(28px,4vw,44px);border-bottom:1px solid var(--rule)}
+.rec-head h2{font-size:clamp(36px,6.4vw,80px);max-width:18ch}
+.rec-head p{margin:22px 0 0;max-width:56ch;color:var(--ink-2);font-size:clamp(16px,1.8vw,19px);
+  font-weight:300}
+.rec-sec{padding:clamp(40px,6vw,72px) 0;border-bottom:1px solid var(--rule)}
+.rec-sec h3{font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--pink);margin-bottom:22px}
+.tbl{width:100%;border-collapse:collapse;font-size:15.5px}
+.tbl th,.tbl td{text-align:left;padding:14px 18px 14px 0;border-bottom:1px solid var(--rule);
+  vertical-align:top}
+.tbl th{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:500;width:36%}
+.tbl tr:last-child th,.tbl tr:last-child td{border-bottom:0}
+.pill{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:26px 0}
+@media(max-width:820px){.pill{grid-template-columns:1fr}}
+.pill div{background:var(--porcelain);padding:24px 22px}
+.pill h4{margin:0 0 9px;font-family:var(--disp);text-transform:uppercase;font-size:22px;font-weight:400}
+.pill p{margin:0;font-size:15px;color:var(--ink-2);font-weight:300;line-height:1.6}
+.src{margin-top:18px;font-size:13.5px;color:var(--ink-3)}
+.src a{color:var(--pink);border-bottom:1px solid var(--rule)}
+
+footer{background:var(--carbon);color:var(--pale-2);padding:0 0 48px;font-size:14px;line-height:1.6;
+  position:relative}
+.ft-top{display:flex;justify-content:center;padding:clamp(24px,3.5vw,44px) 0 clamp(30px,4vw,52px);
+  border-bottom:1px solid var(--rule-d)}
+.totop{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;
+  color:var(--pale);padding:10px}
+.totop .ring{position:relative;width:72px;height:72px;border-radius:50%;border:1.5px dashed rgba(255,45,141,.7);
+  display:block;transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.totop .ring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--pink);
+  box-shadow:0 0 0 0 rgba(255,45,141,.35);transition:box-shadow .5s,transform .5s}
+.totop .arr{position:absolute;top:10px;left:50%;width:72px;height:72px;margin-left:-36px;display:grid;place-content:center;
+  font-family:var(--disp);font-size:30px;line-height:1;color:var(--carbon);transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.totop .lbl{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pale-3);transition:color .3s}
+body.landed .totop .ring{border-color:var(--pink);animation:spin 12s linear infinite;
+  box-shadow:0 0 0 6px rgba(255,45,141,.14),0 0 36px 8px rgba(255,45,141,.45)}
+body.landed .totop .ring::after{animation:landPulse 2.4s ease-in-out infinite}
+@keyframes landPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,45,141,.45)}50%{box-shadow:0 0 0 18px rgba(255,45,141,0)}}
+body.landed .totop .lbl{color:var(--pink)}
+.totop:hover .ring{transform:rotate(180deg)}
+.totop:hover .ring::after{box-shadow:0 0 0 14px rgba(255,45,141,0);transform:scale(1.08)}
+.totop:hover .arr{transform:translateY(-6px)}
+.totop:hover .lbl{color:var(--pink)}
+.ft-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 28px;padding-top:clamp(24px,3vw,36px);
+  font-size:13.5px;color:var(--pale-2)}
+.ft-legal{margin-top:clamp(30px,4vw,48px);padding-top:20px;border-top:1px solid var(--rule-d);display:flex;
+  justify-content:space-between;gap:12px 28px;flex-wrap:wrap;font-size:12px;letter-spacing:.06em;color:var(--pale-3)}
+.ft-legal a{color:var(--pale-2)}
+
+/* ── motion ─────────────────────────────────────────────────── */
+.rv{opacity:0;transform:translateY(34px) scale(.982);filter:blur(7px);
+  transition:opacity .82s cubic-bezier(.22,.72,.24,1),transform .82s cubic-bezier(.22,.72,.24,1),
+             filter .82s cubic-bezier(.22,.72,.24,1)}
+.rv.in{opacity:1;transform:none;filter:blur(0)}
+.wa{display:inline-block;overflow:hidden;vertical-align:bottom;padding:.14em .04em .08em;margin:-.14em -.04em -.08em}
+.wa i{display:inline-block;font-style:normal;transform:translateY(135%) rotate(2.4deg);
+  transition:transform .9s cubic-bezier(.2,.78,.22,1);transition-delay:var(--d,0s)}
+.in .wa i,.hero-type.in .wa i{transform:none}
+.metrics.in .metric{animation:slab .85s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
+@keyframes slab{from{opacity:0;transform:translateY(26px) scaleY(.9)}to{opacity:1;transform:none}}
+.map .node{opacity:0;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) scale(.35);
+  transition:opacity .6s ease,transform .95s cubic-bezier(.2,.92,.24,1),
+             border-color .3s,box-shadow .3s;transition-delay:var(--d,0s)}
+.map.in .node{opacity:1;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) scale(1)}
+.map.in.go .node{transition:opacity .6s ease,border-color .3s,box-shadow .3s;transition-delay:0s}
+.map svg{opacity:0;transition:opacity 1.1s ease .35s}
+.map.in svg{opacity:1}
+.map.in .node[data-s="operating"] .orb{animation:breath 4.5s ease-in-out infinite;
+  animation-delay:calc(var(--d,0s) + 1s)}
+@keyframes breath{0%,100%{filter:brightness(1)}50%{filter:brightness(1.22)}}
+.map.in .node.sel .orb{animation:none}
+.grp-list.in li{animation:row .7s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
+@keyframes row{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+.plate img{clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.25,.7,.25,1)}
+.plate.in img{clip-path:inset(0 0 0 0)}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  transition:stroke-dashoffset 2.1s cubic-bezier(.25,.6,.25,1)}
+.draw.in{stroke-dashoffset:0}
+body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;opacity:.05;
+  mix-blend-mode:multiply;background-repeat:repeat;background-size:170px 170px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;filter:none;transition:none}
+  .wa i{transform:none;transition:none}
+  .draw{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+  .map .node{opacity:1;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) scale(1);transition:none}
+  .thread.landed .head::before,.thread.landed .head::after{animation:none}
+  .thread .endnote{transition:none}
+  .map svg{opacity:1}.tapeGlow{animation:none}
+  .map.in .node[data-s="operating"] .orb{animation:none}
+  .map.in .node[data-s="operating"]{animation:none}
+  .metrics.in .metric,.grp-list.in li{animation:none}
+  .hl{background-size:100% 100%;transition:none}
+  .sheet li{opacity:1;transform:none;transition:none}
+  .prog,.card{transition:none}
+  .topo g{animation:none}
+  .drift,.thread.landed .head,.thread.landed .halo,.thread.burst .knot,.node.core .orb::before,body.landed .totop .ring,body.landed .totop .ring::after{animation:none}
+  .thread .wave,.thread .spark{display:none}
+  .pw{opacity:.05}
+  .scr{transform:rotate(-7deg)}
+  .thread .spur{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+  .plate img{clip-path:none;transition:none}
+  .follow i{animation:none}
+  .enter,.cur,.wipe{display:none!important}
+  body::after{display:none}
+  html{scroll-behavior:auto}
+}
+@media print{
+  .chrome,.spine,.sheet,.hl-start,.hl-node,.follow,.thread,.enter,.cur,.wipe,.mq,.scene,
+  .prog,.card,.slab{display:none}
+  body,#record{background:#fff}
+  
+  .rv{opacity:1;transform:none}
+}
+
+/* ── plan components: same tokens, same rhythm ──────────────── */
+.hero-acts{position:relative;z-index:4;display:flex;gap:clamp(14px,3vw,40px);flex-wrap:wrap;align-items:center}
+.hero-acts .follow{margin-top:clamp(24px,4vw,52px)}
+.follow.alt{color:var(--pink)}
+.follow.alt i{animation:none}
+.status{display:inline-block;font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding:3px 7px;
+  border:1px solid var(--pink);border-radius:2px;color:var(--pink);margin-right:8px;vertical-align:middle;line-height:1.4}
+.status.management{border-color:var(--rule);color:var(--ink-3)}
+.ch.dark .status.management{border-color:var(--rule-d);color:var(--pale-3)}
+.status.target{border-style:dashed;border-color:var(--ink-3);color:var(--ink-2)}
+.ch.dark .status.target{border-color:var(--pale-3);color:var(--pale-2)}
+.status.option{border-style:dotted;border-color:var(--pale-3);color:var(--pale-3)}
+.metric .v .sm{font-size:.42em;vertical-align:top;line-height:1.6}
+.film{position:relative;margin:clamp(34px,5vw,62px) 0 0;aspect-ratio:16/9;background:#000;overflow:hidden;
+  border:1px solid var(--rule-d)}
+.film img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.48;filter:grayscale(.35)}
+.film.live iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.film-in{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:24px;gap:12px;color:var(--pale)}
+.film .play{width:66px;height:66px;border-radius:50%;border:1.5px solid var(--pink);margin:0 auto 6px;position:relative;display:block}
+.film .play::after{content:"";position:absolute;left:26px;top:20px;border-left:16px solid var(--pink);
+  border-top:12px solid transparent;border-bottom:12px solid transparent}
+.film-t{font-family:var(--disp);text-transform:uppercase;font-size:clamp(28px,4.4vw,58px);line-height:.9}
+.film-s{max-width:50ch;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300;margin:0 auto}
+.film-k{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink);font-weight:500}
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin-top:clamp(34px,5vw,58px)}
+.stage{background:var(--porcelain);padding:26px 24px 28px}
+.stage .n{font-family:var(--disp);font-size:36px;line-height:1;color:var(--pink);margin-bottom:10px}
+.stage h3{font-size:24px;margin-bottom:16px}
+.stage dl{margin:0;display:grid;grid-template-columns:82px 1fr;gap:8px 14px;font-size:14px;line-height:1.55}
+.stage dt{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding-top:3px}
+.stage dd{margin:0;color:var(--ink-2);font-weight:300}
+.stories{margin-top:clamp(34px,5vw,58px);border-top:1px solid var(--rule)}
+details.story{border-bottom:1px solid var(--rule)}
+details.story summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:22px;padding:22px 0}
+details.story summary::-webkit-details-marker{display:none}
+details.story summary::after{content:"+";margin-left:auto;font-family:var(--serif);font-size:30px;line-height:1;color:var(--pink)}
+details.story[open] summary::after{content:"–"}
+.story .sn{font-family:var(--disp);font-size:clamp(28px,3.4vw,44px);color:var(--pink);line-height:1;flex:0 0 auto}
+.story .st{font-family:var(--disp);text-transform:uppercase;font-size:clamp(22px,3vw,40px);line-height:1;transition:color .25s}
+details.story summary:hover .st{color:var(--pink)}
+.story .sb{padding:0 0 30px}
+.story .lead{margin:0 0 14px;font-size:15px;color:var(--ink-3)}
+.story dl{margin:0;display:grid;grid-template-columns:150px 1fr;gap:12px 22px;font-size:15.5px;line-height:1.6}
+.story dt{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500;padding-top:4px}
+.story dd{margin:0;color:var(--ink-2);font-weight:300;max-width:72ch}
+.story dd b{color:var(--ink);font-weight:600}
+.story dd a{color:var(--pink);text-decoration:none;border-bottom:1px solid var(--rule)}
+.rec-tbl tr.hit td{background:rgba(255,45,141,.12);transition:background .6s}
+@media(max-width:700px){.story dl,.stage dl{grid-template-columns:1fr;gap:4px 0}.story dd,.stage dd{margin-bottom:10px}}
+.horizons{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule-d);border:1px solid var(--rule-d);
+  margin-top:clamp(30px,4vw,52px)}
+@media(max-width:920px){.horizons{grid-template-columns:1fr}}
+.hz{background:var(--carbon);padding:26px 24px 28px}
+.hz .k{margin-bottom:14px}
+.hz h3{font-size:24px;margin-bottom:12px}
+.hz p{margin:0;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
+.os{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule-d);
+  border:1px solid var(--rule-d);margin-top:clamp(20px,3vw,36px)}
+.os div{background:#0b0b0b;padding:18px 16px}
+.os h4{margin:0 0 6px;font-family:var(--disp);text-transform:uppercase;font-size:17px;font-weight:400}
+.os p{margin:0;font-size:12.5px;color:var(--pale-3);line-height:1.5}
+.acts{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:clamp(26px,4vw,44px)}
+.act{border:1px solid var(--pink);padding:14px 22px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;color:var(--pale);transition:background .25s,color .25s}
+.act:hover{background:var(--pink);color:#fff}
+.dedic{margin:clamp(30px,5vw,60px) 0 0;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--pale-3)}
+.rec-tbl{width:100%;border-collapse:collapse;font-size:14px}
+.rec-tbl th,.rec-tbl td{text-align:left;vertical-align:top;padding:12px 14px 12px 0;border-bottom:1px solid var(--rule)}
+.rec-tbl thead th{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.rec-tbl td.v{font-family:var(--disp);font-size:22px;white-space:nowrap;line-height:1}
+.rec-tbl td.id{font-size:11px;letter-spacing:.08em;color:var(--ink-3);white-space:nowrap}
+.rec-tbl td.d{color:var(--ink-2);font-weight:300;line-height:1.55}
+.rec-wrap{overflow-x:auto}
+.env{margin-top:clamp(44px,6vw,80px);padding-top:clamp(30px,4vw,48px);border-top:1px solid var(--rule)}
+.env .pill{margin:26px 0 18px}
+@media(min-width:900px){#proof.metrics{grid-template-columns:repeat(3,1fr)}}
+.metric .v.txt{font-size:clamp(30px,3.6vw,46px);line-height:1;padding-top:.15em;margin-bottom:16px}
+@media print{.film,.hero-acts,.more,.popover{display:none}.rec-tbl{font-size:11px}}
+
+/* ── touch: larger targets and legible labels on phones and tablets ── */
+@media(pointer:coarse){
+  .more{width:34px;height:34px}
+  .more::before,.more::after{width:14px}
+  .popover .x{width:36px;height:36px;top:8px;right:8px}
+  .follow{min-height:44px;padding:8px 0}
+  .mono-mark{min-width:44px;min-height:44px;display:inline-flex;align-items:center}
+  .vt button{padding:10px 6px}
+  .ft-line a,.ft-legal a,.side a,.src a{display:inline-block;padding:6px 0}
+}
+@media(max-width:900px){
+  .status{font-size:10px}
+  .node .st{font-size:10px}.node .lbl{font-size:11px}.yrlbl{font-size:10px}
+}
+
+/* ── phone polish from the section-by-section audit ── */
+@media(max-width:900px){.rno1{font-size:10.5px}.rpct b{font-size:9.5px}}
+@media(max-width:1099px){
+  .years{position:relative;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .ycard{scroll-snap-align:start;width:min(300px,78vw);flex:0 0 auto}
+  .years::after{content:"";position:absolute;top:0;right:0;bottom:6px;width:56px;background:linear-gradient(90deg,rgba(16,16,16,0),rgba(16,16,16,.85));pointer-events:none}
+  .yhead::after{content:"swipe →";float:right;color:var(--pink);letter-spacing:.2em}
+}
+
+/* ── phones: the same information, folded. Nothing here applies above 820px ── */
+.fold-t{display:none}
+@media(max-width:820px){
+  .ch{padding:clamp(52px,11vw,76px) 0}
+  .ch h2{font-size:clamp(30px,9.2vw,46px);margin-bottom:16px}
+  .ch .stand{font-size:16px}
+  .cols{gap:18px}
+  .cols .side{order:2}
+  .cols:not(.open) .side,.cols:not(.open) .body>p:nth-of-type(n+2),.cols:not(.open) .body>.pop{display:none}
+  .fold-t{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink);background:none;border:0;padding:10px 0;cursor:pointer;font-family:inherit}
+  .fold-t::after{content:"↓";transition:transform .3s}
+  .open>.fold-t::after,.cols.open .fold-t::after{transform:rotate(180deg)}
+  .stage{padding:18px 18px 20px}
+  .stage:not(.open) dl{display:none}
+  .stage h3{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0;cursor:pointer}
+  .stage h3::after{content:"+";font-family:var(--serif);color:var(--pink);font-size:28px;line-height:1;flex:0 0 auto}
+  .stage.open h3{margin-bottom:14px}.stage.open h3::after{content:"–"}
+  .stage .n{margin-bottom:6px;font-size:28px}
+  .metric{padding:20px 18px 18px}.metric .v{font-size:40px}
+  .metric:not(.open) .def{display:none}
+  .metric .k{cursor:pointer;display:flex;justify-content:space-between;gap:10px}.metric .k::after{content:"+";color:var(--pink);font-size:16px}
+  .metric.open .k::after{content:"–"}
+  .horizons .hz:not(.open) p,.horizons .hz:not(.open) .more{display:none}.hz h3{display:flex;justify-content:space-between;gap:10px;cursor:pointer}.hz h3::after{content:"+";font-family:var(--serif);color:var(--pink);font-size:26px}.hz.open h3::after{content:"–"}
+  .grp-list li:not(.open) .ds{display:none}.grp-list .nm{display:flex;justify-content:space-between;align-self:stretch;width:100%;cursor:pointer}.grp-list .nm::after{content:"+";color:var(--pink)}.grp-list li.open .nm::after{content:"–"}
+  .env:not(.open) .pill>div:nth-child(n+2){display:none}
+  .story .sb dl{font-size:14.5px}
+  .years{margin-top:26px}
+}
+
+/* ── notes, 7 Sept: hero line, bar, badges, footer ── */
+.hero-sub .fob{font-size:clamp(20px,2.6vw,36px);letter-spacing:.14em;font-weight:600;color:var(--ink)}
+@media(min-width:821px){.hero-sub{max-width:none}.hero-sub .fob{white-space:nowrap}}
+.badges{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.bd{border:1px solid var(--rule);padding:14px 14px 12px;display:grid;gap:8px;align-content:start;background:rgba(0,0,0,.02)}
+.bd img{width:auto;height:76px;max-width:100%;object-fit:contain;justify-self:start}
+.bd{grid-template-rows:100px auto}.bd img{align-self:center}.bd img.myta{height:60px}.bd img.kae{height:98px}.bd img.dc{height:84px}
+.bd small{font-size:10.5px;letter-spacing:.06em;line-height:1.45;color:var(--ink-3)}
+.bd.txt b{font-family:var(--disp);text-transform:uppercase;font-size:18px;line-height:1;color:var(--ink);font-weight:400;padding-top:4px}
+.bd.txt small{color:var(--pink);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px}
+.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(24px,4vw,56px);padding-top:clamp(28px,3.6vw,44px)}
+.ft-grid h4{margin:0 0 10px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink)}
+.ft-grid p{margin:0;font-size:13.5px;line-height:1.7;color:var(--pale-2)}
+.ft-grid a{color:var(--pale)}.ft-grid a:hover{color:var(--pink)}
+.ft-brand img{height:84px;width:auto;margin-bottom:16px;display:block}
+@media(max-width:820px){.ft-grid{grid-template-columns:1fr 1fr;gap:26px}.badges{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.ft-grid{grid-template-columns:1fr}}
+
+.hero-sub .fob-sub{margin-top:10px;font-size:clamp(11.5px,1.05vw,13.5px);letter-spacing:.14em;color:var(--ink-3);font-weight:500;max-width:52ch}
+.ft-brand .ft-legal-in{margin-top:18px;font-size:11.5px;letter-spacing:.08em;color:var(--pale-3)}
+footer{padding-bottom:clamp(36px,5vw,64px)}
+
+/* ── notes, 9 Sept: bar, marquee, chapter one, timeline, metrics, charts, rocket, projects, end note, footer ── */
+@media(min-width:821px){.hero-sub .fob-sub{white-space:nowrap;max-width:none}}
+.bar>.wrap>div{display:flex;align-items:center;gap:16px;padding:18px 20px;text-align:left;text-transform:none;letter-spacing:0;font-weight:400;font-size:12px;min-height:96px}
+.bar img{width:auto;height:56px;flex:0 0 auto;object-fit:contain}
+.bar .b1 img{height:64px}.bar .b2 img{height:40px;background:#fff;padding:5px 7px;border-radius:3px}
+.bar .bw{display:grid;gap:4px;line-height:1.1}
+.bar small{font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+.bar .bw>b{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:clamp(15px,1.25vw,19px);color:var(--porcelain);line-height:1}
+.bar em{font-style:normal;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--pale-2);line-height:1.4}
+.bar .b1 small,.bar .b1 em{color:#f0c24a}
+.bar .b2 small,.bar .b2 em{color:#b39bff}
+.bar .b3 .bw>b.big{font-size:clamp(30px,2.6vw,42px);color:var(--pink);line-height:.9}
+.bar .b3 small{color:var(--pale-2)}
+.bar .b3 small.dt{color:var(--pink)}
+.bar .b4 small,.bar .b4 em{color:#86B817}
+.lg-ebay{font-family:var(--sans);font-weight:700;font-style:normal;letter-spacing:-.05em;display:inline-block;line-height:1;text-transform:none;font-size:1.35em;vertical-align:-.08em}
+.bar .lg-ebay b,.lg-ebay b{font-family:inherit;font-weight:700;font-size:inherit;text-transform:none;line-height:1}
+.lg-ebay b:nth-child(1){color:#E53238}.lg-ebay b:nth-child(2){color:#0064D2}.lg-ebay b:nth-child(3){color:#F5AF02}.lg-ebay b:nth-child(4){color:#86B817}
+.lg-ebay.xl{font-size:44px;flex:0 0 auto;letter-spacing:-.06em}
+.lg-temu{font-family:var(--sans);font-weight:800;color:#FB7701;font-style:normal;letter-spacing:.04em;text-transform:uppercase;font-size:1.2em}
+@media(max-width:760px){.bar>.wrap>div{padding:16px 14px;gap:12px;min-height:0}.bar .b1 img{height:48px}.lg-ebay.xl{font-size:32px}}
+.mq{cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.mq.drag{cursor:grabbing}
+.cols.eq{grid-template-columns:1fr 1fr}
+.ch-tag.sm{font-size:10px;margin-bottom:12px}
+.cols.eq .body p{max-width:none}
+/* the timeline */
+.tl{margin-top:clamp(34px,5vw,58px)}
+.tl-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule-d)}
+.tl-list li{display:grid;grid-template-columns:124px 170px 1fr;gap:clamp(16px,2.4vw,34px);align-items:center;padding:18px 0;border-bottom:1px solid var(--rule-d)}
+.tl-list li img,.tl-list li .nopic-box{width:124px;height:84px;object-fit:cover;border-radius:3px;background:#1a1a1a;clip-path:none}
+.tl-list li img.logo{object-fit:contain;background:var(--porcelain);padding:6px}
+.tl-list li img.logo.dk{background:#000;padding:0;object-fit:cover}
+.tl-list li .nopic-box{display:grid;place-content:center;font-family:var(--disp);font-style:normal;font-size:30px;color:var(--pink);border:1px dashed rgba(255,45,141,.5);background:transparent}
+.tl-list .when{font-family:var(--disp);text-transform:uppercase;font-size:clamp(20px,2vw,28px);line-height:1;color:var(--pink)}
+.tl-list .what{font-size:15px;line-height:1.6;color:var(--pale-2);font-weight:300;max-width:72ch}
+.tl-list .what b{display:block;color:var(--pale);font-weight:600;font-size:16px;margin-bottom:3px}
+@media(max-width:700px){.tl-list li{grid-template-columns:88px 1fr;gap:12px 14px;padding:14px 0}.tl-list li img,.tl-list li .nopic-box{width:88px;height:62px}.tl-list .what{grid-column:1/-1;font-size:14px}}
+/* metrics, coloured */
+.metric{--acc:var(--pink);background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 18%,var(--carbon)),var(--carbon) 72%)}
+.metric::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--acc)}
+.metric::after{background:var(--acc)}
+.metric .v{color:var(--acc)}
+.metric .k{color:color-mix(in srgb,var(--acc) 75%,#fff)}
+.metric .v .sm{color:inherit}
+/* the Way In */
+.wayin{display:block;margin-top:clamp(30px,4.5vw,56px);border:1px solid var(--pink);padding:clamp(24px,3.4vw,42px);position:relative;z-index:1;
+  background:linear-gradient(135deg,rgba(255,45,141,.18),rgba(255,45,141,.03) 60%);transition:background .3s,transform .35s cubic-bezier(.2,.8,.25,1),box-shadow .35s}
+.wayin:hover{background:rgba(255,45,141,.22);transform:translateY(-3px);box-shadow:0 24px 60px rgba(255,45,141,.15)}
+.wayin .k{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--pink);font-weight:600;margin-bottom:14px}
+.wayin .t{display:block;font-family:var(--disp);text-transform:uppercase;font-size:clamp(44px,6.4vw,96px);line-height:.88;color:var(--pale);margin-bottom:16px}
+.wayin .s{display:block;font-size:clamp(15px,1.4vw,17.5px);line-height:1.6;color:var(--pale-2);font-weight:300;max-width:60ch}
+.wayin .s i{font-style:normal;color:var(--pink)}
+/* charts */
+.vt-row{display:flex;justify-content:space-between;align-items:center;margin-top:clamp(30px,4vw,52px);padding-top:18px;border-top:1px solid var(--rule-d)}
+.vt-k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+@media(max-width:760px){.vt-row{display:none}}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,28px);margin-top:clamp(30px,4vw,52px)}
+@media(max-width:920px){.charts{grid-template-columns:1fr}}
+.chart{margin:0;background:#0b0b0b;border:1px solid var(--rule-d);padding:clamp(18px,2.2vw,28px)}
+.chart figcaption{margin:0 0 14px}
+.chart figcaption h3{font-size:clamp(22px,2.4vw,32px)}
+.chart svg{width:100%;height:auto;display:block;overflow:visible;font-family:var(--sans)}
+.chart .gl{stroke:rgba(255,255,255,.08);stroke-width:1}
+.chart .ax{stroke:rgba(255,255,255,.22);stroke-width:1}
+.chart .al{fill:var(--pale-3);font-size:11px;text-anchor:end}
+.chart .xl{fill:var(--pale-2);font-size:12px;text-anchor:middle}
+.chart .vl{fill:var(--pale);font-size:12px;font-weight:500;text-anchor:middle}
+.chart .vl.end{text-anchor:end}
+.chart .bar{fill:var(--pink);transition:fill .2s}
+.chart .bar-g:hover .bar{fill:var(--pink-2)}
+.chart .hit{fill:transparent}
+.chart .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .ln.act{stroke:var(--pink)}
+.chart .ln.tgt{stroke:var(--pale-2);stroke-dasharray:5 6}
+.chart .da{fill:var(--pink);stroke:#0b0b0b;stroke-width:2}
+.chart .dt{fill:var(--pale-2);stroke:#0b0b0b;stroke-width:2}
+.chart .dot-g:hover circle{r:6}
+.chart .src{margin-top:14px;font-size:12.5px;color:var(--pale-3)}
+.chart .lgd{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--pale-2)}
+.chart .lgd span{display:inline-flex;align-items:center;gap:8px}
+.chart .lgd i{display:inline-block;width:22px;height:0;border-top:2px solid var(--pink)}
+.chart .lgd i.lt{border-top:2px dashed var(--pale-2)}
+.chart .lgd.wrap8{gap:10px 16px;font-size:11.5px}
+.chart .lgd i.sw{width:12px;height:12px;border:0;border-radius:2px;background:var(--c)}
+.chart .lgd i.sw.hat{background:repeating-linear-gradient(45deg,var(--c) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1px var(--c)}
+.chart .seg-g rect{transition:opacity .2s}.chart .seg-g:hover rect{opacity:.8}
+.ctip{position:fixed;z-index:940;pointer-events:none;background:var(--carbon);color:var(--pale);border:1px solid var(--pink);padding:7px 10px;font-size:12px;letter-spacing:.02em;white-space:nowrap;
+  transform:translate(-50%,calc(-100% - 12px));opacity:0;transition:opacity .15s}
+.ctip.on{opacity:1}
+/* the rocket */
+.rocket{position:absolute;left:0;top:0;width:clamp(120px,12.5vw,190px);pointer-events:none;z-index:2;
+  transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) rotate(var(--r,0deg));
+  filter:drop-shadow(0 10px 22px rgba(0,0,0,.55));opacity:0;transition:opacity .8s ease .6s}
+.map.in .rocket{opacity:1}
+.rocket svg{width:100%;height:auto;display:block;overflow:visible}
+.rocket .rk-art{animation:rkBob 2.6s ease-in-out infinite}
+.rocket .rk-hull{stroke:rgba(10,12,24,.42);stroke-width:.9}
+.rocket .rk-shade{fill:rgba(10,12,24,.15)}
+.rocket .rk-canopy{fill:#38a9ff;stroke:rgba(255,255,255,.55);stroke-width:.5}
+.rocket .rk-fin{fill:var(--pink);stroke:rgba(10,12,24,.3);stroke-width:.6}
+.rocket .rk-panelline{stroke:rgba(10,12,24,.18);stroke-width:.8;fill:none}
+.rocket .rk-nozzle{fill:#232635}
+.rocket .rk-nozGlow{fill:#fff;opacity:.9;filter:blur(1.6px);animation:rkGlow .5s ease-in-out infinite alternate}
+.rocket .rk-plume{opacity:.92;transform-box:fill-box;transform-origin:right center;animation:rkFlick .46s ease-in-out infinite alternate}
+.rocket .rk-plume2{fill:#fff;opacity:.85;transform-box:fill-box;transform-origin:right center;animation:rkFlick .3s ease-in-out infinite alternate-reverse}
+.rocket .rk-trailline{fill:none;stroke-width:1.6;stroke-linecap:round;opacity:.8}
+.rocket .rk-strobe{fill:#fff;animation:rkStrobe 1.6s steps(2,start) infinite}
+@keyframes rkBob{0%,100%{transform:translateY(-.5px)}50%{transform:translateY(.5px)}}
+@keyframes rkFlick{from{transform:scaleX(1)}to{transform:scaleX(.7)}}
+@keyframes rkGlow{from{opacity:.5}to{opacity:1}}
+@keyframes rkStrobe{50%{opacity:.12}}
+/* projects */
+.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule-d);border:1px solid var(--rule-d);margin-top:clamp(30px,4vw,52px);text-align:left}
+@media(max-width:920px){.projects{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.projects{grid-template-columns:1fr}}
+.proj{background:var(--carbon);padding:26px 24px 28px;position:relative;transition:background .3s}
+.proj:hover{background:#161616}
+.proj .pn{font-family:var(--disp);font-size:30px;line-height:1;color:var(--pink);display:block;margin-bottom:12px}
+.proj h3{font-size:22px;margin-bottom:12px}
+.proj p{margin:0;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
+/* the end note */
+.endnote{padding-top:0;padding-bottom:clamp(56px,8vw,110px);background:var(--carbon)}
+.endnote .wrap{text-align:center}
+.endnote .ch-tag{justify-content:center}
+.endnote .quo{margin:0 auto;max-width:60ch;border-left:0;padding-left:0;text-align:center}
+.endnote .quo q{font-size:clamp(21px,2.6vw,32px);line-height:1.3;margin-bottom:.7em}
+.endnote .quo q:last-of-type{margin-bottom:0}
+/* footer */
+.ft-brand img{height:150px}
+.ft-brand .ft-addr{font-size:12.5px;letter-spacing:.06em;color:var(--pale-2);margin-top:4px}
+.ft-brand .ft-legal-in{white-space:nowrap}
+.ft-grid p a{text-transform:capitalize;letter-spacing:.04em;font-size:13.5px;font-weight:500;display:inline-block;padding:2px 0}
+.ft-grid p a[href^="mailto"]{text-transform:none;letter-spacing:.02em;font-size:13.5px}
+@media(max-width:480px){.ft-brand .ft-legal-in{white-space:normal}}
+</style>
+</head>
+<body data-view="explore" data-grp="map">
+
+<a class="skip" href="#c01">Skip to the story</a>
+<a class="skip" href="#c01" id="skipAnim" style="left:calc(var(--gut) + 176px)">Skip animation</a>
+
+
+<div class="cur" id="cur" aria-hidden="true"><i class="dot" id="curDot"></i><i class="ring" id="curRing"><i id="curLbl"></i></i></div>
+<div class="wipe" id="wipe" aria-hidden="true"></div>
+<div class="prog" id="prog" aria-hidden="true"></div>
+
+<aside class="card" id="card" aria-hidden="true">
+  <div class="k">Chapter</div>
+  <div class="n" id="cardN">00</div>
+  <div class="t" id="cardT">Tom Letcher</div>
+</aside>
+
+<div class="enter" id="enter" aria-hidden="true">
+  <div class="m">TL</div>
+  <svg viewBox="0 0 320 2" preserveAspectRatio="none"><path d="M0 1 H320"/></svg>
+</div>
+
+<header class="chrome" id="chrome">
+  <div class="wrap">
+    <a class="mono-mark" href="#top" data-mag aria-label="Tom Letcher — top">TL</a>
+    <span class="now" id="now" aria-hidden="true"><b id="nowN">00</b><span id="nowT">Tom Letcher</span></span>
+    <nav>
+      <a href="#c01">Story</a><a href="#c03">Proof</a>
+      <a href="#c04">Method</a><a href="#c06">Future</a><a href="#c08">Next</a>
+    </nav>
+    <button class="burger" id="burger" data-mag aria-label="Open chapter menu" aria-expanded="false">
+      <i></i><i></i></button>
+  </div>
+</header>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Chapters">
+  <button class="close" id="sheetClose">Close</button>
+  <ol>
+    <li><a href="#top"><span>00</span>Tom Letcher</a></li>
+    <li><a href="#c01"><span>01</span>The Spark</a></li>
+    <li><a href="#c02"><span>02</span>Step by Step</a></li>
+    <li><a href="#c03"><span>03</span>Proof, Not Promise</a></li>
+    <li><a href="#c04"><span>04</span>How I Build</a></li>
+    <li><a href="#c05"><span>05</span>Built With People</a></li>
+    <li><a href="#c06"><span>06</span>The Next Ten Years</a></li>
+    <li><a href="#c07"><span>07</span>The Company</a></li>
+    <li><a href="#c08"><span>08</span>Still Building</a></li>
+  </ol>
+</div>
+
+<aside class="spine" id="spine">
+  <a href="#c01" data-t="c01">01</a><a href="#c02" data-t="c02">02</a>
+  <a href="#c03" data-t="c03">03</a><a href="#c04" data-t="c04">04</a>
+  <a href="#c05" data-t="c05">05</a><a href="#c06" data-t="c06">06</a>
+  <a href="#c07" data-t="c07">07</a><a href="#c08" data-t="c08">08</a>
+</aside>
+
+<div id="explore">
+
+<section class="hero" id="top">
+
+  <div class="wrap">
+    <div class="hero-stage">
+      <div class="hero-shot" id="shotWrap">
+        <img class="halo2 on" src="assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
+        <img class="halo on" src="assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
+        <img id="shot" src="assets/tom-mono.jpg"
+             srcset="assets/tom-mono-sm.jpg 440w, assets/tom-mono.jpg 682w"
+             sizes="(max-width:820px) 88vw, 46vw"
+             width="682" height="897" alt="Tom Letcher" decoding="async">
+      </div>
+      <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Founder of Freedom Fire &amp; Safety Ltd &amp; the Freedom Group forming around it.</p></div>
+      <div class="hero-acts">
+        <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
+        <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bar" aria-label="Four snapshot facts">
+  <div class="wrap">
+    <div class="b1"><img src="assets/kings-awards.png" alt="The King's Awards for Enterprise" width="640" height="640" decoding="async"><span class="bw"><small>July 2026</small><b>King's Awards for Enterprise</b><em>Young Founder nominee</em></span></div>
+    <div class="b2"><img src="assets/myta.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
+    <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+</b><small>products sold</small><em>No. 1 fire extinguisher seller on <i class="lg-ebay"><b>e</b><b>b</b><b>a</b><b>y</b></i> &amp; <i class="lg-temu">temu</i></em></span></div>
+    <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>2024</small><b>eBay for Business Awards</b><em>Social Impact · Finalist</em></span></div>
+  </div>
+</div>
+
+<div class="mq" aria-hidden="true"><div class="mq-t" data-mq="1" data-base="ONE RUSTY FIRE EXTINGUISHER <i>—</i> TO A MULTI-CHANNEL GROUP <i>—</i> £100M PROJECTION <i>—</i> "></div></div>
+
+<section class="scene" id="ones" aria-label="Start, now and next">
+  <div class="stick">
+    <div class="yr" id="sceneYr">The beginning · March 2019</div>
+    <div class="phs" id="phs">
+      <div class="ph on" data-yr="The beginning · March 2019"><div>
+        <em>The beginning</em>
+        <h3>One rusty fire extinguisher.</h3>
+        <p>Second-hand, refurbished, listed on Facebook Marketplace and collected by the buyer. No plan, no investors, no company.</p></div></div>
+      <div class="ph" data-yr="Currently · September 2026"><div>
+        <em>Currently</em>
+        <h3>Number one on eBay UK.</h3>
+        <p>500,000 products sold, a portfolio of registered brands, one warehouse, a team that runs the day, and a ten-year plan for a global multi-brand ecommerce group.</p></div></div>
+      <div class="ph" data-yr="The future · 2027 and beyond"><div>
+        <em>The future</em>
+        <h3>A platform, not a shop.</h3>
+        <p>Amazon, Temu, Shopify and OnBuy at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
+    </div>
+    <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
+    <div class="cnt">Trading since <b>March 2019</b><br>Incorporated 2021</div>
+  </div>
+</section>
+
+<!-- ══ 01 THE SPARK ══ -->
+<section class="ch dark" id="c01" data-n="01">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">01 — The Spark</div>
+      <h2>It started<br>with one rusty<br>fire extinguisher</h2>
+      <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
+      <p class="stand">Bury, March 2019. An architecture background, a second-hand fire extinguisher nobody else saw value in,
+      and a Facebook Marketplace listing.</p>
+    </div>
+    <div class="cols eq">
+      <div class="body rv">
+        <div class="ch-tag sm">The first sale</div>
+        <p>Before Freedom Fire there was one overlooked object: <b>a rusty, second-hand fire extinguisher</b>, cleaned
+        up and listed for sale. One person took a chance on it. That sale paid for the next, and what the trade
+        called scrap turned out to be a market.</p>
+      </div>
+      <div class="body rv">
+        <div class="ch-tag sm">From one sale to a company</div>
+        <p>The first customer collected in person. The second wanted four hundred. The third asked whether it
+        could be posted. Each question became the next stage. By 2021 a corner of the family warehouse was turning out
+        <b>800 to 1,000 units a week</b>, and on 27 August 2021 <b>Freedom Fire &amp; Safety Ltd</b> was incorporated. <button data-cur-label="More" class="more" type="button" data-pop="p-origin" aria-label="The full origin"></button></p>
+        <div class="pop" id="p-origin" hidden><b>The full origin</b><p><b>September 2019.</b> About 400 mixed fire extinguishers to a fire-training buyer in Bolton, roughly a pound each. The first proof that demand was real and came in volume.</p><p><b>January 2020.</b> A Nottingham takeaway paid online and asked for the fire extinguisher to be sent. Fire extinguishers cannot go with any courier, so the parcel had to be packed properly and a carrier found. From then on the business was not limited to people who could collect in person.</p><p><b>Summer 2020.</b> Trading as Freedom Fire from a rented corner of the family warehouse: students cleaning and refilling hundreds of units a day, pallets to Scotland, Wales and London, and six containers of refurbished stock for exporters into West and Central Africa. By 2021 the supply of second-hand stock could no longer keep up.</p></div>
+      </div>
+    </div>
+
+    <figure class="film live" id="film" aria-label="The two-minute founder story">
+      <iframe src="https://customer-q4ck225vxqtshqms.cloudflarestream.com/2e4413eb97ee926fb0cfc8032fca154e/iframe?preload=metadata&letterboxColor=%23000000" allow="accelerometer; gyroscope; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Tom Letcher, the two-minute story" loading="lazy"></iframe>
+    </figure>
+
+    <div class="tl rv" id="timeline" aria-label="The timeline, 2019 to 2026">
+      <div class="yhead">The timeline · 2019 to 2026</div>
+      <ol class="tl-list">
+      <li><img src="assets/journey/ch1-a.webp" alt="" loading="lazy" decoding="async"><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
+      <li><img src="assets/journey/salboy.webp" alt="" loading="lazy" decoding="async"><span class="when">2019</span><span class="what"><b>Runner-up, Salboy Blackfriars.</b>At 23, runner-up in Salboy's national Blackfriars development competition, entered with a scheme built around the surrounding community. The point where building something of his own became the plan.</span></li>
+      <li><img src="assets/journey/ch2-a.webp" alt="" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>Freedom Fire.</b>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></li>
+      <li><img src="assets/journey/ch6-a.webp" alt="" loading="lazy" decoding="async"><span class="when">August 2021</span><span class="what"><b>The company.</b>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</span></li>
+      <li><img src="assets/journey/ch7-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2021</span><span class="what"><b>The first placements.</b>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></li>
+      <li><img src="assets/journey/ch4-a.webp" alt="" loading="lazy" decoding="async"><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</span></li>
+      <li><img src="assets/journey/ch16-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2023</span><span class="what"><b>The year of building.</b>Thousands of products researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</span></li>
+      <li><img src="assets/journey/ch9-a.webp" alt="" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay awards.</b>Four months after the eBay business store opens, Freedom Fire is named runner-up in the eBay for Business Awards for social impact, and tells the story in Belfast.</span></li>
+      <li><img class="logo dk" src="assets/journey/ch12-a.webp" alt="" loading="lazy" decoding="async"><span class="when">August 2024</span><span class="what"><b>FIRESTORM.</b>The company's own brand is born: the FIRESTORM trade mark is filed in August and registered in November.</span></li>
+      <li><img src="assets/journey/ch10-a.webp" alt="" loading="lazy" decoding="async"><span class="when">November 2024</span><span class="what"><b>Unit 19, the headquarters.</b>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></li>
+      <li><img src="assets/journey/ch13-a.webp" alt="" loading="lazy" decoding="async"><span class="when">December 2024</span><span class="what"><b>The first container.</b>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</span></li>
+      <li><img src="assets/journey/ch11-a.webp" alt="" loading="lazy" decoding="async"><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></li>
+      <li><img class="logo" src="assets/firestorm-pro.webp" alt="" loading="lazy" decoding="async"><span class="when">Autumn 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
+      <li><img src="assets/journey/ch15-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b>Two of the T Level students spend six months building the company's new website and storefronts from scratch.</span></li>
+      <li><i class="nopic-box" aria-hidden="true">2026</i><span class="when">March 2026</span><span class="what"><b>Three brands.</b>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</span></li>
+      <li><img src="assets/journey/ch3-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
+      <li><img src="assets/journey/team-races.webp" alt="" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b>All three of the first T Level cohort complete their placements and move into paid roles.</span></li>
+      <li><img src="assets/journey/ch21a.webp" alt="" loading="lazy" decoding="async"><span class="when">August 2026</span><span class="what"><b>Number one.</b>Containers arrive back to back, the company is number one for fire extinguishers on eBay and Temu, and the Amazon and Shopify launches are in preparation.</span></li>
+      <li><img class="logo" src="assets/kings-awards.png" alt="" loading="lazy" decoding="async"><span class="when">September 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>The Young Founder application goes in, supported by this portfolio and The Way In. Shortlisted the same month for the Manchester Young Talent Awards, Agent of Change.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 02 FROM SALE TO SYSTEM ══ -->
+<section class="ch" id="c02" data-n="02">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">02 — Step by Step</div>
+      <h2>Eight problems. Eight fixes.</h2>
+      <em class="scr" aria-hidden="true" style="right:4%;top:6%">build.</em>
+      <p class="stand">One problem at a time. What was in the way, what we did, and what it gave us.</p>
+    </div>
+    <div class="stages rv">
+      <div class="stage"><div class="n">01</div><h3>Refurbished stock</h3>
+        <dl><dt>Problem</dt><dd>No money, no product.</dd>
+        <dt>What we did</dt><dd>Cleaned up fire extinguishers the trade was scrapping, and sold them for training use.</dd>
+        <dt>Result</dt><dd>Up to 1,000 units a week by 2021.</dd></dl></div>
+      <div class="stage"><div class="n">02</div><h3>Selling online</h3>
+        <dl><dt>Problem</dt><dd>Facebook Marketplace only reached Bury.</dd>
+        <dt>What we did</dt><dd>Listed one CO2 fire extinguisher on eBay in December 2020.</dd>
+        <dt>Result</dt><dd>The store built on that listing is now number one on eBay UK.</dd></dl></div>
+      <div class="stage"><div class="n">03</div><h3>Becoming a company</h3>
+        <dl><dt>Problem</dt><dd>Customers wanted a real company behind the work.</dd>
+        <dt>What we did</dt><dd>Incorporated Freedom Fire &amp; Safety Ltd in August 2021.</dd>
+        <dt>Result</dt><dd>Two incomes: online sales and on-site servicing.</dd></dl></div>
+      <div class="stage"><div class="n">04</div><h3>A warehouse of our own</h3>
+        <dl><dt>Problem</dt><dd>Nowhere to hold stock, and buyers expect next-day delivery.</dd>
+        <dt>What we did</dt><dd>Moved to Unit 10 in 2022, then to the Unit 19 headquarters in 2024.</dd>
+        <dt>Result</dt><dd>Thousands of orders a month from one site.</dd></dl></div>
+      <div class="stage"><div class="n">05</div><h3>Our own brand</h3>
+        <dl><dt>Problem</dt><dd>Buying from distributors left no margin.</dd>
+        <dt>What we did</dt><dd>Went direct to a global producer and created FIRESTORM in 2024.</dd>
+        <dt>Result</dt><dd>Our own brand on every cylinder, at a price that works.</dd></dl></div>
+      <div class="stage"><div class="n">06</div><h3>More than one marketplace</h3>
+        <dl><dt>Problem</dt><dd>One marketplace is one point of failure.</dd>
+        <dt>What we did</dt><dd>Opened Temu in 2025 and Amazon in 2026. Shopify and OnBuy are next.</dd>
+        <dt>Result</dt><dd>Temu UK's first dedicated fire extinguisher seller.</dd></dl></div>
+      <div class="stage"><div class="n">07</div><h3>Servicing and trade</h3>
+        <dl><dt>Problem</dt><dd>Online sales rise and fall.</dd>
+        <dt>What we did</dt><dd>Built a nationwide servicing and installation team.</dd>
+        <dt>Result</dt><dd>Contracts with colleges, offices and property companies that renew every year.</dd></dl></div>
+      <div class="stage"><div class="n">08</div><h3>Systems</h3>
+        <dl><dt>Problem</dt><dd>Too much for one person and a spreadsheet.</dd>
+        <dt>What we did</dt><dd>An order system, one support desk and our own supply-chain tracker.</dd>
+        <dt>Result</dt><dd>The team runs the day-to-day, not the founder.</dd></dl></div>
+    </div>
+    <figure class="plate wide crop">
+      <img src="assets/journey/ch13-team.webp" width="1200" height="1024" style="object-position:50% 58%" alt="The team standing inside an open shipping container on a trailer at Unit 19" decoding="async">
+      <figcaption>Team HQ</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ══ 03 PROOF, NOT PROMISE ══ -->
+<section class="ch dark" id="c03" data-n="03">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">03 — Proof, Not Promise</div>
+      <h2>Six numbers. Each one says what it counts.</h2>
+      <p class="stand">Each covers a stated period, and each is checked against a source: the statutory accounts, the marketplaces' own reports, the trade mark register.</p>
+    </div>
+
+    <div class="metrics rv" id="proof">
+      <div class="metric" style="--acc:#FF2D8D">
+        <div class="v">£1.05m</div><div class="k">Turnover · year to August 2026</div>
+        <p class="def">£1,048,616, from £268,162 two years earlier. Statutory accounts, approved 7 September 2026.</p>
+        <div class="per">Financial years to 31 August · Freedom Fire &amp; Safety Ltd</div>
+      </div>
+      <div class="metric" style="--acc:#f0c24a">
+        <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
+        <p class="def">Ranked by sales against every seller in the Fire Extinguishers category, GB, in eBay's own listing quality report.</p>
+        <div class="per">12 months to end of July 2026 · eBay storefront</div>
+      </div>
+      <div class="metric" style="--acc:#2ed491">
+        <div class="v">500,000+</div><div class="k">Products sold</div>
+        <p class="def">Fire extinguishers first, then alarms, batteries, gloves and cleaning products, across every channel since the first listing.</p>
+        <div class="per">March 2019 – September 2026 · all channels</div>
+      </div>
+      <div class="metric" style="--acc:#1e8fff">
+        <div class="v">3</div><div class="k">Registered brands</div>
+        <p class="def">FIRESTORM, FXL and SKYLINE, all registered in the company's name. Twelve more in preparation.</p>
+        <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
+      </div>
+      <div class="metric" style="--acc:#ff6a3d">
+        <div class="v">£70k</div><div class="k">Net profit after tax · 2026</div>
+        <p class="def">£70,175, the second profitable year in a row, after the years when stock, compliance and systems were built ahead of revenue. No external equity.</p>
+        <div class="per">Financial years to 31 August · Freedom Fire &amp; Safety Ltd</div>
+      </div>
+      <div class="metric" style="--acc:#b39bff">
+        <div class="v">30+</div><div class="k">Global suppliers</div>
+        <p class="def">Direct relationships with manufacturers, each reviewed for certification, test reports, factory audits and batch traceability before approval.</p>
+        <div class="per">2024 – 2026 · direct sourcing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 04 HOW I BUILD ══ -->
+<section class="ch" id="c04" data-n="04">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">04 — How I Build</div>
+      <h2>Five decisions, and what they cost.</h2>
+      <em class="scr" aria-hidden="true" style="right:5%;top:0">decide.</em>
+      <p class="stand">The same shape every time: a constraint, a decision, what was built, the result, and what it changed.</p>
+    </div>
+    <div class="stories rv">
+
+      <details class="story" open>
+        <summary><span class="sn">01</span><span class="st">Rethinking a traditional category</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>Fire safety was sold by distributors to engineers, on account, with catalogues. Nobody was
+            selling it well to a person with a phone and a problem.</dd>
+            <dt>Decision</dt><dd>Treat the category like any other online essential: own the product, explain it plainly,
+            ship it next day, and build the tools that answer the question before the customer has to ask.</dd>
+            <dt>Implementation</dt><dd>A business store built over twelve months, direct manufacturing and the Firestorm brand in 2024,
+            and buying that replaces a phone call: clear specifications, kits and tracked delivery.</dd>
+            <dt>Result</dt><dd>Number one of 1,193 fire extinguisher sellers on eBay UK by July 2026, and a category that is now bought
+            the way any other online essential is.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">02</span><span class="st">Turning traction into influence</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>A young company had no standing with manufacturers, marketplaces or the trade.</dd>
+            <dt>Decision</dt><dd>Let the numbers speak first, then use every invitation to tell the story of how they were made.</dd>
+            <dt>Implementation</dt><dd>One of five finalists, from hundreds of entrants, for the eBay for Business Social Impact Award 2024,
+            with an invitation to Belfast to meet eBay's UK leadership.
+            Shortlisted for the Manchester Young Talent Awards' Agent of Change award in 2026. Approached by Temu UK to open its
+            fire extinguisher category. A global producer that chose a small Greater Manchester warehouse as its first UK client.
+            Nominated for the King's Awards for Enterprise.</dd>
+            <dt>Result</dt><dd>Growth over two comparable years, recognition, and a seat in the conversations that decide
+            how the category is sold.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">03</span><span class="st">Designing the operating system</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>Every new channel and brand multiplied the work. Done by hand, the founder becomes the bottleneck.</dd>
+            <dt>Decision</dt><dd>Build one set of shared infrastructure that every product, channel and person plugs into, then
+            hire and train people to run it.</dd>
+            <dt>Implementation</dt><dd>Direct sourcing with an in-house supply-chain tracker. One warehouse serving every channel. Order
+            management and a shared support desk. Listing, pricing and compliance workflows built once for eBay and reused
+            for Temu, and now being reused for Amazon, OnBuy and Shopify. Brand and IP held in the company's name.</dd>
+            <dt>Result</dt><dd>Everything built once for eBay was reused for Temu, then for Amazon, OnBuy and Shopify. Three more
+            channels were prepared in 2026 without a second warehouse or a second team.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">04</span><span class="st">Adapting under pressure</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>Temu had become a large part of the business, and containers of stock had been ordered just for
+            that platform. Then Temu's compliance system took the whole store offline overnight, more than once, while the company
+            was working with Temu's UK team on its rules. At the same time, disruption in the Red Sea pushed freight costs up and
+            made container planning harder.</dd>
+            <dt>Decision</dt><dd>No single marketplace, supplier or product would be allowed to decide the company's future.</dd>
+            <dt>Implementation</dt><dd>Compliance files were strengthened and relationships built with platform leaders and manufacturers.
+            The Amazon launch and the own website were brought forward. The range widened into alarms, batteries, gloves and
+            cleaning products. Forecasting, stock control and cash-flow planning were tightened.</dd>
+            <dt>Result</dt><dd>Disruption became the strategy: a multi-brand, multi-channel group, rather than one store on one platform.</dd>
+          </dl>
+        </div>
+      </details>
+
+      <details class="story">
+        <summary><span class="sn">05</span><span class="st">Potential, not polished CVs</span></summary>
+        <div class="sb">
+          <dl>
+            <dt>Constraint</dt><dd>A growing company needs people, and the usual route, a polished CV and a standard interview,
+            misses a lot of potential.</dd>
+            <dt>Decision</dt><dd>Hire on potential, not pedigree. Recruit through college placements, Jobcentre Plus and word of mouth,
+            and give people real responsibility early.</dd>
+            <dt>Implementation</dt><dd>Placements hosted since 2021 with New Bridge College, T Level placements with Bury College from
+            October 2025, Jobcentre Plus referrals, and Disability Confident Committed status. Adjustments are offered before the
+            interview, and every placement starts with a live brief the person owns.</dd>
+            <dt>Result</dt><dd>Roles in web development, warehouse and fulfilment, IT, ecommerce and servicing filled by people who came
+            in this way. All three T Level students in the first cohort moved into paid work in 2026. Two of them built the company's
+            website and storefronts from scratch.</dd>
+          </dl>
+        </div>
+      </details>
+    </div>
+
+    <div class="quo rv">
+      <q>Find a non-seasonal, grudge-purchase niche: a product everybody needs and nobody wants, where the competition is
+      thinner. Make the boring product sexy. Build a system around it. Repeat.</q>
+      <div class="by">Tom Letcher, founder</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 05 BUILT WITH PEOPLE ══ -->
+<section class="ch dark" id="c05" data-n="05">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">05 — Built With People</div>
+      <h2>A founder who hires is not the same as one who delegates.</h2>
+      <em class="scr" aria-hidden="true" style="right:3%;top:8%">people.</em>
+      <p class="stand">The roles that exist now, how responsibility was handed over, and what was built so other people
+      can run the work.</p>
+    </div>
+    <div class="cols">
+      <aside class="side rv">
+        <p>Placements have been hosted since 2021. Formal T Level industry placements began in October 2025; by June
+        2026 all three students had been offered long-term roles. <button data-cur-label="More" class="more" type="button" data-pop="p-place" aria-label="More on placements"></button></p>
+        <div class="pop" id="p-place" hidden><b>Placements</b><p>The first learners came from New Bridge College in 2021, including young people with additional needs. One of the earliest placements progressed into long-term, full-time employment. The T Level placements are with Bury College, supported by the Growth Company. At least eight young people have been supported so far.</p></div>
+      </aside>
+      <div class="body rv">
+        <p><b>Roles created.</b> Web development, warehouse and fulfilment, IT, ecommerce operations and servicing, most
+        filled by people who came in on a placement, through Jobcentre Plus or while still studying.</p>
+        <p><b>Responsibility delegated.</b> The website and storefronts were built from scratch by two Bury College T Level students, who now run them. Fulfilment runs from the
+        warehouse team's own order queue. The Amazon storefront, opened in 2026, is run with a specialist agency. Suppliers, carriers
+        and marketplace compliance each have a named owner.</p>
+        <p><b>Systems built for others.</b> The order system, the support desk, the listing workflows and the supply-chain
+        tracker exist so a new starter can do useful work in their first week, and nothing depends on one person
+        remembering.</p>
+      </div>
+    <button class="fold-t" type="button" data-fold="cols">Read more</button>
+    </div>
+    <a class="wayin rv" href="https://thewayin.freedom-fire.co.uk/" data-mag>
+      <span class="k">How people come into the company</span>
+      <span class="t">The Way In</span>
+      <span class="s">Placements, T Levels, Jobcentre Plus, and the people who came through them. The full programme, on its own site. <i>→</i></span>
+    </a>
+  </div>
+</section>
+
+<!-- ══ 06 THE NEXT TEN YEARS ══ -->
+<section class="ch dark" id="c06" data-n="06">
+  <div class="wrap">
+    <div class="rv">
+      <div class="grp-head">
+        <div>
+          <div class="ch-tag">06 — The Next Ten Years</div>
+          <h2>From one warehouse to a global group.</h2>
+        </div>
+      </div>
+      <p class="stand">Where the line has been, and where it is aimed: a ten-year plan for Freedom Global as a £100m multi-brand ecommerce platform and the commercial engine of the Freedom Group.</p>
+    </div>
+
+    <div class="charts rv" aria-label="Growth so far and the ten-year target">
+      <figure class="chart" id="chBars">
+        <figcaption><span class="rtag">Multi channel map · 2026 to 2031</span><h3>Eight channels. One £26m trajectory.</h3></figcaption>
+        <svg viewBox="0 0 640 300" role="img" aria-label="Stacked bar chart of projected revenue by channel, 2026 to 2031: year totals £2.48 million, £4.48 million, £7.43 million, £11.15 million, £20 million and £26 million, across eBay, Amazon, Temu, Shopify, TikTok Shop, OnBuy, on-site servicing and B2B."><defs><pattern id="h6" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#0b0b0b"/><rect width="2.4" height="6" fill="#ff4fa3"/></pattern><pattern id="h7" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#0b0b0b"/><rect width="2.4" height="6" fill="#9aa6bd"/></pattern></defs><line x1="58" x2="620" y1="252.0" y2="252.0" class="gl"/><text x="48" y="256.0" class="al">0</text><line x1="58" x2="620" y1="196.0" y2="196.0" class="gl"/><text x="48" y="200.0" class="al">£7m</text><line x1="58" x2="620" y1="140.0" y2="140.0" class="gl"/><text x="48" y="144.0" class="al">£14m</text><line x1="58" x2="620" y1="84.0" y2="84.0" class="gl"/><text x="48" y="88.0" class="al">£21m</text><line x1="58" x2="620" y1="28.0" y2="28.0" class="gl"/><text x="48" y="32.0" class="al">£28m</text><line x1="58" x2="620" y1="252" y2="252" class="ax"/><g class="seg-g" data-t="2026 · eBay · £1.5m"><rect x="77.8" y="240.0" width="54" height="10.5" fill="#38a9ff" rx="1"/></g><g class="seg-g" data-t="2026 · Amazon · £200k"><rect x="77.8" y="238.4" width="54" height="0.1" fill="#ffb020" rx="1"/></g><g class="seg-g" data-t="2026 · Temu · £550k"><rect x="77.8" y="234.0" width="54" height="2.9" fill="#ff6a3d" rx="1"/></g><g class="seg-g" data-t="2026 · Shopify · £80k"><rect x="77.8" y="233.4" width="54" height="0.0" fill="#2fe0a0" rx="1"/></g><g class="seg-g" data-t="2026 · TikTok Shop · £15k"><rect x="77.8" y="233.2" width="54" height="0.0" fill="#22d3ee" rx="1"/></g><g class="seg-g" data-t="2026 · OnBuy · £10k"><rect x="77.8" y="233.2" width="54" height="0.0" fill="#b79bff" rx="1"/></g><g class="seg-g" data-t="2026 · On Site Servicing · £100k"><rect x="77.8" y="232.4" width="54" height="0.0" fill="url(#h6)" rx="1"/></g><g class="seg-g" data-t="2026 · B2B · £25k"><rect x="77.8" y="232.2" width="54" height="0.0" fill="url(#h7)" rx="1"/></g><text x="104.8" y="224.2" class="vl">£2.48m</text><text x="104.8" y="274" class="xl">2026</text><g class="seg-g" data-t="2027 · eBay · £2m"><rect x="171.5" y="236.0" width="54" height="14.5" fill="#38a9ff" rx="1"/></g><g class="seg-g" data-t="2027 · Amazon · £600k"><rect x="171.5" y="231.2" width="54" height="3.3" fill="#ffb020" rx="1"/></g><g class="seg-g" data-t="2027 · Temu · £850k"><rect x="171.5" y="224.4" width="54" height="5.3" fill="#ff6a3d" rx="1"/></g><g class="seg-g" data-t="2027 · Shopify · £500k"><rect x="171.5" y="220.4" width="54" height="2.5" fill="#2fe0a0" rx="1"/></g><g class="seg-g" data-t="2027 · TikTok Shop · £100k"><rect x="171.5" y="219.6" width="54" height="0.0" fill="#22d3ee" rx="1"/></g><g class="seg-g" data-t="2027 · OnBuy · £100k"><rect x="171.5" y="218.8" width="54" height="0.0" fill="#b79bff" rx="1"/></g><g class="seg-g" data-t="2027 · On Site Servicing · £250k"><rect x="171.5" y="216.8" width="54" height="0.5" fill="url(#h6)" rx="1"/></g><g class="seg-g" data-t="2027 · B2B · £75k"><rect x="171.5" y="216.2" width="54" height="0.0" fill="url(#h7)" rx="1"/></g><text x="198.5" y="208.2" class="vl">£4.47m</text><text x="198.5" y="274" class="xl">2027</text><g class="seg-g" data-t="2028 · eBay · £2.5m"><rect x="265.2" y="232.0" width="54" height="18.5" fill="#38a9ff" rx="1"/></g><g class="seg-g" data-t="2028 · Amazon · £1.5m"><rect x="265.2" y="220.0" width="54" height="10.5" fill="#ffb020" rx="1"/></g><g class="seg-g" data-t="2028 · Temu · £1.1m"><rect x="265.2" y="211.2" width="54" height="7.3" fill="#ff6a3d" rx="1"/></g><g class="seg-g" data-t="2028 · Shopify · £1.2m"><rect x="265.2" y="201.6" width="54" height="8.1" fill="#2fe0a0" rx="1"/></g><g class="seg-g" data-t="2028 · TikTok Shop · £250k"><rect x="265.2" y="199.6" width="54" height="0.5" fill="#22d3ee" rx="1"/></g><g class="seg-g" data-t="2028 · OnBuy · £150k"><rect x="265.2" y="198.4" width="54" height="0.0" fill="#b79bff" rx="1"/></g><g class="seg-g" data-t="2028 · On Site Servicing · £500k"><rect x="265.2" y="194.4" width="54" height="2.5" fill="url(#h6)" rx="1"/></g><g class="seg-g" data-t="2028 · B2B · £225k"><rect x="265.2" y="192.6" width="54" height="0.3" fill="url(#h7)" rx="1"/></g><text x="292.2" y="184.6" class="vl">£7.42m</text><text x="292.2" y="274" class="xl">2028</text><g class="seg-g" data-t="2029 · eBay · £3m"><rect x="358.8" y="228.0" width="54" height="22.5" fill="#38a9ff" rx="1"/></g><g class="seg-g" data-t="2029 · Amazon · £2.8m"><rect x="358.8" y="205.6" width="54" height="20.9" fill="#ffb020" rx="1"/></g><g class="seg-g" data-t="2029 · Temu · £1.5m"><rect x="358.8" y="193.6" width="54" height="10.5" fill="#ff6a3d" rx="1"/></g><g class="seg-g" data-t="2029 · Shopify · £2m"><rect x="358.8" y="177.6" width="54" height="14.5" fill="#2fe0a0" rx="1"/></g><g class="seg-g" data-t="2029 · TikTok Shop · £400k"><rect x="358.8" y="174.4" width="54" height="1.7" fill="#22d3ee" rx="1"/></g><g class="seg-g" data-t="2029 · OnBuy · £200k"><rect x="358.8" y="172.8" width="54" height="0.1" fill="#b79bff" rx="1"/></g><g class="seg-g" data-t="2029 · On Site Servicing · £750k"><rect x="358.8" y="166.8" width="54" height="4.5" fill="url(#h6)" rx="1"/></g><g class="seg-g" data-t="2029 · B2B · £500k"><rect x="358.8" y="162.8" width="54" height="2.5" fill="url(#h7)" rx="1"/></g><text x="385.8" y="154.8" class="vl">£11.15m</text><text x="385.8" y="274" class="xl">2029</text><g class="seg-g" data-t="2030 · eBay · £4.4m"><rect x="452.5" y="216.8" width="54" height="33.7" fill="#38a9ff" rx="1"/></g><g class="seg-g" data-t="2030 · Amazon · £5.8m"><rect x="452.5" y="170.4" width="54" height="44.9" fill="#ffb020" rx="1"/></g><g class="seg-g" data-t="2030 · Temu · £2.8m"><rect x="452.5" y="148.0" width="54" height="20.9" fill="#ff6a3d" rx="1"/></g><g class="seg-g" data-t="2030 · Shopify · £3m"><rect x="452.5" y="124.0" width="54" height="22.5" fill="#2fe0a0" rx="1"/></g><g class="seg-g" data-t="2030 · TikTok Shop · £800k"><rect x="452.5" y="117.6" width="54" height="4.9" fill="#22d3ee" rx="1"/></g><g class="seg-g" data-t="2030 · OnBuy · £300k"><rect x="452.5" y="115.2" width="54" height="0.9" fill="#b79bff" rx="1"/></g><g class="seg-g" data-t="2030 · On Site Servicing · £1.1m"><rect x="452.5" y="106.4" width="54" height="7.3" fill="url(#h6)" rx="1"/></g><g class="seg-g" data-t="2030 · B2B · £1.8m"><rect x="452.5" y="92.0" width="54" height="12.9" fill="url(#h7)" rx="1"/></g><text x="479.5" y="84.0" class="vl">£20m</text><text x="479.5" y="274" class="xl">2030</text><g class="seg-g" data-t="2031 · eBay · £5m"><rect x="546.2" y="212.0" width="54" height="38.5" fill="#38a9ff" rx="1"/></g><g class="seg-g" data-t="2031 · Amazon · £7.5m"><rect x="546.2" y="152.0" width="54" height="58.5" fill="#ffb020" rx="1"/></g><g class="seg-g" data-t="2031 · Temu · £3.8m"><rect x="546.2" y="121.6" width="54" height="28.9" fill="#ff6a3d" rx="1"/></g><g class="seg-g" data-t="2031 · Shopify · £4m"><rect x="546.2" y="89.6" width="54" height="30.5" fill="#2fe0a0" rx="1"/></g><g class="seg-g" data-t="2031 · TikTok Shop · £1.4m"><rect x="546.2" y="78.4" width="54" height="9.7" fill="#22d3ee" rx="1"/></g><g class="seg-g" data-t="2031 · OnBuy · £400k"><rect x="546.2" y="75.2" width="54" height="1.7" fill="#b79bff" rx="1"/></g><g class="seg-g" data-t="2031 · On Site Servicing · £1.4m"><rect x="546.2" y="64.0" width="54" height="9.7" fill="url(#h6)" rx="1"/></g><g class="seg-g" data-t="2031 · B2B · £2.5m"><rect x="546.2" y="44.0" width="54" height="18.5" fill="url(#h7)" rx="1"/></g><text x="573.2" y="36.0" class="vl">£26m</text><text x="573.2" y="274" class="xl">2031</text></svg>
+        <div class="lgd wrap8"><span><i class="sw" style="--c:#38a9ff"></i>eBay</span><span><i class="sw" style="--c:#ffb020"></i>Amazon</span><span><i class="sw" style="--c:#ff6a3d"></i>Temu</span><span><i class="sw" style="--c:#2fe0a0"></i>Shopify</span><span><i class="sw" style="--c:#22d3ee"></i>TikTok Shop</span><span><i class="sw" style="--c:#b79bff"></i>OnBuy</span><span><i class="sw hat" style="--c:#ff4fa3"></i>On Site Servicing</span><span><i class="sw hat" style="--c:#9aa6bd"></i>B2B</span></div>
+        <p class="src">Six online marketplaces, eBay, Amazon, Temu, Shopify, TikTok Shop and OnBuy, plus two direct channels that are not storefronts, on-site servicing and B2B trade supply, shown hatched. From the Freedom Group plan at freedomgroup.uk.</p>
+      </figure>
+      <figure class="chart" id="chLine">
+        <figcaption><span class="rtag">Target · the ten-year plan</span><h3>The line to £100m.</h3></figcaption>
+        <svg viewBox="0 0 640 300" role="img" aria-label="Line chart. Actual turnover 2022 to 2026 rising to £1.05 million, then the constant-rate path needed to reach the £100 million ten-year target in 2036."><line x1="58" x2="612" y1="252.0" y2="252.0" class="gl"/><text x="48" y="256.0" class="al">0</text><line x1="58" x2="612" y1="196.0" y2="196.0" class="gl"/><text x="48" y="200.0" class="al">£25m</text><line x1="58" x2="612" y1="140.0" y2="140.0" class="gl"/><text x="48" y="144.0" class="al">£50m</text><line x1="58" x2="612" y1="84.0" y2="84.0" class="gl"/><text x="48" y="88.0" class="al">£75m</text><line x1="58" x2="612" y1="28.0" y2="28.0" class="gl"/><text x="48" y="32.0" class="al">£100m</text><line x1="58" x2="612" y1="252" y2="252" class="ax"/><polyline points="216.3,249.7 255.9,248.3 295.4,246.2 335.0,242.8 374.6,237.5 414.1,229.1 453.7,215.8 493.3,194.9 532.9,162.0 572.4,110.0 612.0,28.0" class="ln tgt"/><polyline points="58.0,251.9 97.6,251.9 137.1,251.4 176.7,250.5 216.3,249.7" class="ln act"/><g class="dot-g" data-t="2022 · Actual · £33k"><rect x="38.2" y="28" width="39.6" height="224" class="hit"/><circle cx="58.0" cy="251.9" r="3.5" class="da"/></g><g class="dot-g" data-t="2023 · Actual · £39k"><rect x="77.8" y="28" width="39.6" height="224" class="hit"/><circle cx="97.6" cy="251.9" r="3.5" class="da"/></g><g class="dot-g" data-t="2024 · Actual · £268k"><rect x="117.4" y="28" width="39.6" height="224" class="hit"/><circle cx="137.1" cy="251.4" r="3.5" class="da"/></g><g class="dot-g" data-t="2025 · Actual · £692k"><rect x="156.9" y="28" width="39.6" height="224" class="hit"/><circle cx="176.7" cy="250.5" r="3.5" class="da"/></g><g class="dot-g" data-t="2026 · Actual · £1.05m"><rect x="196.5" y="28" width="39.6" height="224" class="hit"/><circle cx="216.3" cy="249.7" r="5" class="da"/></g><g class="dot-g" data-t="2027 · Target path · £1.65m"><rect x="236.1" y="28" width="39.6" height="224" class="hit"/><circle cx="255.9" cy="248.3" r="3.5" class="dt"/></g><g class="dot-g" data-t="2028 · Target path · £2.61m"><rect x="275.6" y="28" width="39.6" height="224" class="hit"/><circle cx="295.4" cy="246.2" r="3.5" class="dt"/></g><g class="dot-g" data-t="2029 · Target path · £4.12m"><rect x="315.2" y="28" width="39.6" height="224" class="hit"/><circle cx="335.0" cy="242.8" r="3.5" class="dt"/></g><g class="dot-g" data-t="2030 · Target path · £6.49m"><rect x="354.8" y="28" width="39.6" height="224" class="hit"/><circle cx="374.6" cy="237.5" r="3.5" class="dt"/></g><g class="dot-g" data-t="2031 · Target path · £10.24m"><rect x="394.4" y="28" width="39.6" height="224" class="hit"/><circle cx="414.1" cy="229.1" r="3.5" class="dt"/></g><g class="dot-g" data-t="2032 · Target path · £16.15m"><rect x="433.9" y="28" width="39.6" height="224" class="hit"/><circle cx="453.7" cy="215.8" r="3.5" class="dt"/></g><g class="dot-g" data-t="2033 · Target path · £25.48m"><rect x="473.5" y="28" width="39.6" height="224" class="hit"/><circle cx="493.3" cy="194.9" r="3.5" class="dt"/></g><g class="dot-g" data-t="2034 · Target path · £40.19m"><rect x="513.1" y="28" width="39.6" height="224" class="hit"/><circle cx="532.9" cy="162.0" r="3.5" class="dt"/></g><g class="dot-g" data-t="2035 · Target path · £63.40m"><rect x="552.6" y="28" width="39.6" height="224" class="hit"/><circle cx="572.4" cy="110.0" r="3.5" class="dt"/></g><g class="dot-g" data-t="2036 · Target path · £100m"><rect x="592.2" y="28" width="39.6" height="224" class="hit"/><circle cx="612.0" cy="28.0" r="5" class="dt"/></g><text x="216.3" y="237.7" class="vl">£1.05m</text><text x="604.0" y="16.0" class="vl end">£100m target</text><text x="58.0" y="274" class="xl">2022</text><text x="216.3" y="274" class="xl">2026</text><text x="374.6" y="274" class="xl">2030</text><text x="612.0" y="274" class="xl">2036</text></svg>
+        <div class="lgd"><span><i class="la"></i>Actual</span><span><i class="lt"></i>Target path, at a constant rate of growth</span></div>
+        <p class="src">The dashed line is not a forecast. It is the path £100m by 2036 requires: growth of about 58% a year, earned stage by stage.</p>
+      </figure>
+    </div>
+    <div class="vt-row rv">
+      <span class="vt-k">The group</span>
+      <div class="vt" role="group" aria-label="Group view">
+        <button type="button" id="vMap" aria-pressed="true">Map</button><s>/</s>
+        <button type="button" id="vList" aria-pressed="false">List</button>
+      </div>
+    </div>
+
+    <div class="grp rv">
+      <div class="map" id="map">
+        <svg viewBox="0 0 100 76" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="mgp" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff74b8"/>
+              <stop offset=".45" stop-color="#ff3d9a"/>
+              <stop offset="1" stop-color="#c60f6e"/>
+            </linearGradient>
+          </defs>
+          <g transform="rotate(-16 50 38)">
+            <ellipse class="tapeGlow" cx="50" cy="38" rx="33" ry="13"/>
+            <ellipse class="tape" cx="50" cy="38" rx="33" ry="13"/>
+            <ellipse class="ringB" cx="50" cy="38" rx="43" ry="20.5"/>
+            <ellipse class="ringC" cx="50" cy="38" rx="51" ry="28"/>
+          </g>
+        </svg>
+        <span class="rocket" id="rocket" aria-hidden="true"><svg viewBox="-116 -18 152 36"><defs>
+          <linearGradient id="rkHull" x1="0" y1="-6" x2="0" y2="6" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e6e9f2"/><stop offset="1" stop-color="#b3bacd"/></linearGradient>
+          <linearGradient id="rkExh" x1="-62" y1="0" x2="-24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="rgba(255,61,154,0)"/><stop offset=".55" stop-color="rgba(255,61,154,.55)"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+          <linearGradient id="rkTrail" x1="-112" y1="0" x2="-26" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="rgba(255,116,184,0)"/><stop offset="1" stop-color="rgba(255,116,184,.5)"/></linearGradient>
+          </defs>
+          <g class="rk-art">
+            <path class="rk-trailline" d="M-26 0 H-112" stroke="url(#rkTrail)"/>
+            <path class="rk-plume" d="M-24 -3.2 Q-46 -5 -60 0 Q-46 5 -24 3.2 Z" fill="url(#rkExh)"/>
+            <path class="rk-plume2" d="M-24 -1.7 Q-38 -2.4 -46 0 Q-38 2.4 -24 1.7 Z"/>
+            <path class="rk-fin" d="M-9 -4.6 L-19.5 -13.5 Q-23.5 -14.6 -22.6 -11 L-16.6 -4.2 Z"/>
+            <path class="rk-fin" d="M-9 4.6 L-19.5 13.5 Q-23.5 14.6 -22.6 11 L-16.6 4.2 Z"/>
+            <path class="rk-hull" d="M31 0 Q25 -3.2 15 -4.5 L-13 -5.6 Q-21 -5.2 -23.5 -2.4 L-23.5 2.4 Q-21 5.2 -13 5.6 L15 4.5 Q25 3.2 31 0 Z" fill="url(#rkHull)"/>
+            <path class="rk-shade" d="M31 0 Q25 3.2 15 4.5 L-13 5.6 Q-21 5.2 -23.5 2.4 Z"/>
+            <path class="rk-canopy" d="M11.5 -3.2 Q17.5 -2.2 21.5 0 Q17.5 2.2 11.5 3.2 Q14.5 0 11.5 -3.2 Z"/>
+            <path class="rk-panelline" d="M2.5 -4.7 L1.5 4.7 M-6.5 -5.2 L-7 5.3"/>
+            <path class="rk-nozzle" d="M-23.5 -2.6 L-27 -1.9 L-27 1.9 L-23.5 2.6 Z"/>
+            <circle class="rk-nozGlow" cx="-25.4" cy="0" r="2.1"/>
+            <circle class="rk-strobe" cx="28.5" cy="-1.2" r="1.05"/>
+          </g></svg></span>
+        <span class="yrlbl" data-ring="A" data-ang="128">Now</span>
+        <span class="yrlbl" data-ring="B" data-ang="95">24 – 36 months</span>
+        <span class="yrlbl" data-ring="C" data-ang="232">Options</span>
+        <button data-cur-label="Select" class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0" aria-pressed="true">
+          <span class="orb"></span><span class="lbl">Freedom Group</span>
+          <span class="st">Strategy</span></button>
+        <button data-cur-label="Select" class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
+          <span class="orb"></span><span class="lbl">Freedom Fire &amp; Safety Ltd</span>
+          <span class="st">Trading</span></button>
+        <button data-cur-label="Select" class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200">
+          <span class="orb"></span><span class="lbl">Freedom Facilities</span>
+          <span class="st">Proposed</span></button>
+        <button data-cur-label="Select" class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="35">
+          <span class="orb"></span><span class="lbl">Freedom Distribution</span>
+          <span class="st">Proposed</span></button>
+        <button data-cur-label="Select" class="node" data-k="form" data-s="future" data-ring="C" data-ang="250">
+          <span class="orb"></span><span class="lbl">Property</span>
+          <span class="st">Option</span></button>
+        <button data-cur-label="Select" class="node" data-k="freight" data-s="future" data-ring="C" data-ang="20">
+          <span class="orb"></span><span class="lbl">Logistics</span>
+          <span class="st">Option</span></button>
+        <button data-cur-label="Select" class="node" data-k="fly" data-s="future" data-ring="C" data-ang="300">
+          <span class="orb"></span><span class="lbl">Drone technology</span>
+          <span class="st">Option</span></button>
+        <button data-cur-label="Select" class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="150">
+          <span class="orb"></span><span class="lbl">Energy</span>
+          <span class="st">Option</span></button>
+      </div>
+      <div class="panel" id="panel" aria-live="polite">
+        <h3 id="pName">Freedom Group</h3><hr>
+        <div class="tagline" id="pTag">Group strategy and brand architecture.</div>
+        <p id="pBody">The operating model the trading company runs on, and the shape the next companies would take.
+        Select a planet.</p>
+        <a class="go" id="pGo" href="https://www.freedomgroup.uk" target="_blank" rel="noopener" style="display:none">Explore ↗</a>
+      </div>
+    </div>
+
+    <div class="grp-list rv">
+      <h4>Trading now</h4>
+      <ul>
+        <li><span class="nm">Freedom Fire &amp; Safety Ltd</span><span class="ds">Incorporated 27 August
+          2021. Owned brands, direct sourcing, one warehouse, servicing nationwide, eBay, Temu and Amazon storefronts.
+          Trades online as Freedom Global.</span></li>
+      </ul>
+      <h4>Proposed · 24 to 36 months</h4>
+      <ul>
+        <li><span class="nm">Freedom Facilities</span><span class="ds">Compliance, servicing and facilities on recurring
+          contracts.</span></li>
+        <li><span class="nm">Freedom Distribution</span><span class="ds">Trade and B2B supply of the owned brands to
+          retailers, wholesalers and distributors.</span></li>
+      </ul>
+      <h4>Long-term options</h4>
+      <ul>
+        <li><span class="nm">Property</span><span class="ds">A commercial property platform for the group's own premises.</span></li>
+        <li><span class="nm">Logistics</span><span class="ds">A logistics arm for imports and freight control.</span></li>
+        <li><span class="nm">Drone technology</span><span class="ds">Aerial surveying and inspection.</span></li>
+        <li><span class="nm">Energy</span><span class="ds">Fuel, forecourts and energy.</span></li>
+      </ul>
+      <p class="src" style="margin-top:22px;font-size:13px;color:var(--pale-3)">The full group portfolio is set out at
+        <a href="https://www.freedomgroup.uk" style="color:var(--pink)">freedomgroup.uk</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slab dark" id="slab">
+  <div class="in-w rv">
+    <div class="k">Seven years</div>
+    <h2>From one fire extinguisher<br>to a global group.</h2>
+    <em class="scr" aria-hidden="true" style="right:-4%;bottom:8%;position:absolute">group.</em>
+    <div class="f">2019 — present</div>
+  </div>
+</section>
+
+<!-- ══ 07 THE RECORD ══ -->
+<section class="ch" id="c07" data-n="07" style="padding-top:0">
+  <div class="wrap">
+    <div class="rv">
+      <div class="ch-tag">07 — The Company</div>
+      <h2>One company, built from the ground up.</h2>
+      <p class="stand">What Freedom Fire &amp; Safety Ltd is, where it works from, and what it owns.</p>
+    </div>
+    <div class="cols">
+      <aside class="side rv">
+        <p>Recognition and accreditation.</p>
+        <div class="badges">
+          <div class="bd"><img class="dc" src="assets/disability-confident.png" width="525" height="261" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1 · Level 2 Employer in progress</small></div>
+          <div class="bd"><img src="assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>T Level Ambassador Network · employer ambassador</small></div>
+          <div class="bd"><img class="myta" src="assets/myta.png" width="640" height="236" alt="Manchester Young Talent Awards" loading="lazy" decoding="async"><small>Manchester Young Talent Awards 2026 · Agent of Change · shortlisted</small></div>
+          <div class="bd"><img class="kae" src="assets/kings-awards.png" width="640" height="640" alt="The King's Awards for Enterprise" loading="lazy" decoding="async"><small>The King's Awards for Enterprise 2026 · Young Founder · nominee</small></div>
+        </div>
+      </aside>
+      <div class="body rv">
+        <table class="tbl">
+          <tr><th>Company</th><td>Freedom Fire &amp; Safety Ltd</td></tr>
+          <tr><th>Founder</th><td>Tom Letcher</td></tr>
+          <tr><th>Began</th><td>Sole trader from March 2019; trading as Freedom Fire from June 2020; incorporated 27 August 2021</td></tr>
+          <tr><th>Based</th><td>Unit 19, Pilsworth Industrial Estate, Bury, Greater Manchester</td></tr>
+          <tr><th>What it does</th><td>A growing portfolio of branded products, fire safety first, then alarms, batteries, PPE, gloves and cleaning, sold online and to trade, with fire extinguisher servicing and installation on site</td></tr>
+          <tr><th>Brands</th><td>Firestorm, FXL and Skyline, registered in the company's name; twelve more in preparation</td></tr>
+          <tr><th>Channels</th><td>eBay, Temu and Amazon today; Shopify and OnBuy in preparation; national retailers, servicing facilities and B2B supply to follow</td></tr>
+        </table>
+      </div>
+    <button class="fold-t" type="button" data-fold="cols">Read more</button>
+    </div>
+    <div class="env rv">
+      <div class="ch-tag">Carbon footprint</div>
+      <p class="stand">Where the footprint sits, and what is done about each part.</p>
+      <div class="pill">
+        <div><h4>Longer life</h4><p>Inspection, servicing and compliant refurbishment extend service life instead of replacing fire extinguishers before they need it. The range is moving with the industry away from fluorinated foam.</p></div>
+        <div><h4>End of life</h4><p>Expired, discharged or damaged fire extinguishers go to specialist partners, CheckFire Group and
+          Jewel Fire Group, for controlled processing and metal recovery. Waste-transfer documentation gives traceability.</p></div>
+        <div><h4>Freight</h4><p>Purchasing is consolidated into full sea-freight containers, planned by forecasting: fewer fragmented
+          consignments, less emergency freight, less over-ordering and obsolete stock.</p></div>
+        <div><h4>Packaging and waste</h4><p>Recyclable cardboard and right-sized protection. Incoming cartons, pallets and protective materials
+          are reused where suitable; cardboard, plastic and scrap metal are separated in the warehouse. Digital records replace routine printing.</p></div>
+        <div><h4>Buying decisions</h4><p>Durability, packaging volume, freight efficiency, return rates and end-of-life requirements are weighed
+          alongside safety and compliance whenever suppliers and products are reviewed.</p></div>
+        <div><h4>Next</h4><p>A formal carbon and energy baseline, recorded collection volumes and the weight of fire extinguishers recovered,
+          measured packaging use, reduction targets, and a customer take-back route.</p></div>
+      </div>
+      <button class="fold-t" type="button" data-fold="env">All six</button>
+      
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ══ 08 STILL BUILDING ══ -->
+<section class="ch dark next" id="c08" data-n="08">
+  <div class="wrap rv">
+    <div class="ch-tag" style="justify-content:center">08 — Still Building</div>
+    <h2>The line does not stop here.</h2>
+    <p class="stand">The projects on the bench now. The same method, applied again.</p>
+    <div class="projects">
+      <div class="proj"><span class="pn">01</span><h3>Freedom Brain</h3><p>An AI-enabled operations hub: staff schedules, priorities, stock,
+        supplier records, compliance documents and performance data in one place, prompting actions and flagging risks.</p></div>
+      <div class="proj"><span class="pn">02</span><h3>The fire extinguisher calculator</h3><p>An online tool that turns the technical rules on fire
+        cover into a plain recommendation for a home or premises, built from the question customers kept asking.</p></div>
+      <div class="proj"><span class="pn">03</span><h3>Freedom Freight</h3><p>The in-house supply-chain tracker that follows every consignment from
+        factory to warehouse, and the seed of a logistics arm.</p></div>
+      <div class="proj"><span class="pn">04</span><h3>The own store, Amazon and OnBuy</h3><p>A Shopify store built in-house by the team, the Amazon
+        storefront opened in 2026, and OnBuy next, so that no single marketplace decides the future.</p></div>
+      <div class="proj"><span class="pn">05</span><h3>Twelve more brands</h3><p>Firestorm, FXL and Skyline first. The next marks cover alarms, batteries,
+        PPE, gloves and cleaning products, each built on the same sourcing, warehouse and systems.</p></div>
+      <div class="proj"><span class="pn">06</span><h3>Trade, retail and servicing</h3><p>Supply to national retailers and B2B customers, national
+        servicing facilities, and the proposed Freedom Distribution and Freedom Facilities companies to carry them.</p></div>
+    </div>
+    <div class="acts">
+      <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
+      <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
+      <a class="act" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ END NOTE · RESILIENCE ══ -->
+<section class="ch dark endnote" id="resilience" aria-label="End note: resilience">
+  <div class="wrap rv">
+    <div class="ch-tag">End note — Resilience</div>
+    <div class="quo">
+      <q>The hardest resilience was personal. At 15, I lost my mum. By 30, I had buried both my best friends, my
+      sister-in-law and, recently, my nana, who raised me. Each loss affected the person still expected to lead.</q>
+      <q>I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
+      part of you wants to stay there, then adapting and continuing, because your team believes in the future you
+      promised to build.</q>
+      <div class="by">Tom Letcher · in his own words</div>
+    </div>
+  </div>
+</section>
+
+<div class="thread" id="thread" aria-hidden="true">
+  <svg id="threadSvg" preserveAspectRatio="none">
+    <path class="track" id="tTrack"></path>
+    <path class="live" id="tLive"></path>
+  </svg>
+  <i class="head" id="tHead"></i>
+</div>
+
+</div><!-- /explore -->
+
+<div class="popover" id="popover" role="dialog" aria-modal="false" aria-live="polite"><button class="x" id="popX" type="button" aria-label="Close">Close</button><div id="popBody"></div></div>
+
+<footer id="foot">
+  <div class="wrap">
+    <div class="ft-top">
+      <a class="totop" href="#top" id="totop" data-cur-label="Top" data-mag aria-label="Back to the start of the page">
+        <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
+      </a>
+    </div>
+    <div class="ft-grid">
+      <div class="ft-brand"><img src="assets/group-logo-light.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
+        <p class="ft-addr">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p>
+        <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p></div>
+      <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
+      <div><h4>The story</h4><p><a href="#c01">The Spark</a><br><a href="#c03">Proof</a><br><a href="#c04">How I Build</a><br><a href="#c06">The Next Ten Years</a><br><a href="#c08">Still Building</a></p></div>
+      <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p></div>
+    </div>
+  </div>
+</footer>
+
+<script src="thread.js"></script>
+</body>
+</html>
