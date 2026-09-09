@@ -1041,6 +1041,9 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 .wayin .s{display:block;font-size:clamp(15px,1.4vw,17.5px);line-height:1.6;color:var(--pale-2);font-weight:300;max-width:60ch}
 .wayin .s i{font-style:normal;color:var(--pink)}
 /* charts */
+.vt-row{display:flex;justify-content:space-between;align-items:center;margin-top:clamp(30px,4vw,52px);padding-top:18px;border-top:1px solid var(--rule-d)}
+.vt-k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--pale-3)}
+@media(max-width:760px){.vt-row{display:none}}
 .charts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,28px);margin-top:clamp(30px,4vw,52px)}
 @media(max-width:920px){.charts{grid-template-columns:1fr}}
 .chart{margin:0;background:#0b0b0b;border:1px solid var(--rule-d);padding:clamp(18px,2.2vw,28px)}
@@ -1522,10 +1525,6 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
           <div class="ch-tag">06 — The Next Ten Years</div>
           <h2>From one warehouse to a global group.</h2>
         </div>
-        <div class="vt" role="group" aria-label="Group view">
-          <button type="button" id="vMap" aria-pressed="true">Map</button><s>/</s>
-          <button type="button" id="vList" aria-pressed="false">List</button>
-        </div>
       </div>
       <p class="stand">Where the line has been, and where it is aimed: a ten-year plan for Freedom Global as a £100m multi-brand ecommerce platform and the commercial engine of the Freedom Group.</p>
     </div>
@@ -1542,6 +1541,13 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
         <div class="lgd"><span><i class="la"></i>Actual</span><span><i class="lt"></i>Target path, at a constant rate of growth</span></div>
         <p class="src">The dashed line is not a forecast. It is the path £100m by 2036 requires: growth of about 58% a year, earned stage by stage.</p>
       </figure>
+    </div>
+    <div class="vt-row rv">
+      <span class="vt-k">The group</span>
+      <div class="vt" role="group" aria-label="Group view">
+        <button type="button" id="vMap" aria-pressed="true">Map</button><s>/</s>
+        <button type="button" id="vList" aria-pressed="false">List</button>
+      </div>
     </div>
 
     <div class="grp rv">
