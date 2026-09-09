@@ -129,7 +129,7 @@
 
   /* ── poster words, one per chapter ────────────────────────── */
   var PW = { c01: "SPARK", c02: "SYSTEM", c03: "PROOF", c04: "METHOD",
-             c05: "PEOPLE", c06: "PLATFORM", c07: "RECORD", c08: "NEXT" };
+             c05: "PEOPLE", c06: "FUTURE", c07: "RECORD", c08: "NEXT" };
   var pws = [];
   Object.keys(PW).forEach(function (id) {
     var sec = document.getElementById(id);
@@ -151,23 +151,48 @@
   stagger(".map", ".node", 0.07);
 
   /* planets sit ON the drawn rings: same ellipses, same rotation */
+  var RINGS = { A: [33, 13], B: [43, 20.5], C: [51, 28] }, PHI = -16 * Math.PI / 180, MCX = 50, MCY = 38;
+  function ringXY(ring, deg) {
+    var th = deg * Math.PI / 180;
+    var ex = RINGS[ring][0] * Math.cos(th), ey = RINGS[ring][1] * Math.sin(th);
+    return { x: MCX + ex * Math.cos(PHI) - ey * Math.sin(PHI), y: MCY + ex * Math.sin(PHI) + ey * Math.cos(PHI) };
+  }
   function placeOrbits() {
-    var RINGS = { A: [33, 13], B: [43, 20.5], C: [51, 28] };
-    var PHI = -16 * Math.PI / 180, CX = 50, CY = 38;
     $$(".map .node, .map .yrlbl").forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
-      var x = CX, y = CY;
+      var x = MCX, y = MCY;
       if (ring !== "0" && RINGS[ring]) {
-        var th = (+nd.getAttribute("data-ang") || 0) * Math.PI / 180;
-        var ex = RINGS[ring][0] * Math.cos(th), ey = RINGS[ring][1] * Math.sin(th);
-        x = CX + ex * Math.cos(PHI) - ey * Math.sin(PHI);
-        y = CY + ex * Math.sin(PHI) + ey * Math.cos(PHI);
+        if (nd.dataset.a === undefined) nd.dataset.a = nd.getAttribute("data-ang") || "0";
+        var p = ringXY(ring, +nd.dataset.a); x = p.x; y = p.y;
       }
       nd.style.left = x + "%";
       nd.style.top = (y / 76 * 100) + "%";
     });
+    var rk = $("#rocket");
+    if (rk) { var rp = ringXY("B", 300); rk.style.left = rp.x + "%"; rk.style.top = (rp.y / 76 * 100) + "%"; }
   }
   placeOrbits();
+  /* the planets drift round their rings, slowly enough to read; the rocket laps the middle ring */
+  var mapEl = $("#map"), rocket = $("#rocket"), rocketA = 300, SPEED = { A: 0.014, B: 0.009, C: 0.006 };
+  function orbitStep() {
+    if (!mapEl || !mapEl.classList.contains("in") || document.body.dataset.grp === "list") return;
+    $$(".map .node[data-ring]", mapEl).forEach(function (nd) {
+      var ring = nd.getAttribute("data-ring");
+      if (ring === "0" || !RINGS[ring]) return;
+      var a = (+nd.dataset.a || 0) + SPEED[ring]; if (a > 360) a -= 360;
+      nd.dataset.a = a;
+      var p = ringXY(ring, a);
+      nd.style.left = p.x + "%"; nd.style.top = (p.y / 76 * 100) + "%";
+    });
+    if (rocket) {
+      rocketA += 0.16; if (rocketA > 360) rocketA -= 360;
+      var r0 = ringXY("B", rocketA), r1 = ringXY("B", rocketA + 1.5);
+      var W0 = mapEl.offsetWidth || 1, H0 = mapEl.offsetHeight || 1;
+      var ang = Math.atan2((r1.y - r0.y) / 76 * H0, (r1.x - r0.x) / 100 * W0) * 180 / Math.PI;
+      rocket.style.left = r0.x + "%"; rocket.style.top = (r0.y / 76 * 100) + "%";
+      rocket.style.setProperty("--r", ang.toFixed(1) + "deg");
+    }
+  }
 
   /* ── hero branch lines ────────────────────────────────────── */
   $$(".draw").forEach(function (p) {
@@ -237,7 +262,8 @@
     { id: "c06",  side: "C", y: 0.40 },
     { id: "slab", side: "C", y: 0.50, noKnot: true },
     { id: "c07",  side: "L", y: 0.42 },
-    { id: "c08",  side: "C", y: 0.52 }
+    { id: "c08",  side: "C", y: 0.52 },
+    { id: "resilience", side: "C", y: 0.5, noKnot: true }
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [];
@@ -520,6 +546,24 @@
       m.w = first ? first.offsetWidth : 0;
     });
   }
+  /* the banner can be dragged: it follows the hand, keeps a little momentum, then resumes */
+  marquees.forEach(function (m) {
+    var box = m.el.parentElement; if (!box) return;
+    var down = false, lx = 0;
+    m.v = 0; m.drag = false;
+    box.addEventListener("pointerdown", function (e) {
+      down = true; lx = e.clientX; m.drag = true; m.v = 0; box.classList.add("drag");
+      try { box.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    box.addEventListener("pointermove", function (e) {
+      if (!down) return;
+      var dx = e.clientX - lx; lx = e.clientX; m.x += dx; m.v = dx;
+      if (m.w) { while (m.x <= -m.w) m.x += m.w; while (m.x > 0) m.x -= m.w; }
+      m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
+    });
+    function up() { down = false; m.drag = false; box.classList.remove("drag"); }
+    box.addEventListener("pointerup", up); box.addEventListener("pointercancel", up);
+  });
 
   /* ══ PINNED SCENE — 2021 ══════════════════════════════════ */
   var scene = $("#ones"), phrases = $$("#phs .ph"), sceneYr = $("#sceneYr"),
@@ -585,8 +629,8 @@
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
   var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], c01:["01","The Spark"],
     c02:["02","Sale to System"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
-    c05:["05","Built With People"], c06:["06","The Platform Ahead"], slab:["—","Seven Years"],
-    c07:["07","The Company"], c08:["08","Still Building"] };
+    c05:["05","Built With People"], c06:["06","The Next Ten Years"], slab:["—","Seven Years"],
+    c07:["07","The Company"], c08:["08","Still Building"], resilience:["—","Resilience"] };
   var lastCard = "";
   var lastY = -1, velY = 0;
 
@@ -610,10 +654,11 @@
     /* marquees — velocity-reactive */
     if (!reduce) {
       marquees.forEach(function (m) {
-        if (!m.w) return;
-        m.x -= m.dir * (0.55 + Math.min(6, Math.abs(velY) * 0.12));
-        if (m.x <= -m.w) m.x += m.w;
-        if (m.x > 0) m.x -= m.w;
+        if (!m.w || m.drag) return;
+        if (m.v) { m.x += m.v; m.v *= 0.94; if (Math.abs(m.v) < 0.05) m.v = 0; }
+        else m.x -= m.dir * (0.55 + Math.min(6, Math.abs(velY) * 0.12));
+        while (m.x <= -m.w) m.x += m.w;
+        while (m.x > 0) m.x -= m.w;
         m.el.style.transform = "translate3d(" + m.x.toFixed(1) + "px,0,0)";
       });
     }
@@ -675,6 +720,7 @@
 
       if (exploring) { drawThread(y); runScene(y); }
     }
+    orbitStep();
     requestAnimationFrame(frame);
   }
 
@@ -764,7 +810,7 @@
     group:   { n: "Freedom Group", t: "Group strategy and brand architecture.",
                b: "The operating model the trading company runs on today, and the shape the next companies would take: brands and IP held in the company's name, direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.freedomgroup.uk" },
     global:  { n: "Freedom Fire &amp; Safety Ltd", t: "Trading since 2019. Incorporated 27 August 2021.",
-               b: "The trading company. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay and Temu, with Amazon, OnBuy and Shopify in preparation; servicing and contracted site work nationwide. Trades online as Freedom Global.",
+               b: "The trading company. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay, Temu and Amazon, with Shopify and OnBuy in preparation; servicing and contracted site work nationwide. Trades online as Freedom Global.",
                u: "https://www.freedom-fire.co.uk" },
     fac:     { n: "Freedom Facilities", t: "Proposed, 24 to 36 months.",
                b: "A separate operating company for compliance, servicing and facilities on recurring contracts, taking the existing servicing work out of the trading company once it justifies its own management and accounts." },
@@ -907,7 +953,7 @@
     if (!phone()) return;
     var t = ev.target;
     var b = t.closest && t.closest(".fold-t");
-    if (b) { var host = b.getAttribute("data-fold") === "env" ? b.closest(".env") : b.closest(".cols"); if (host) { var on = host.classList.toggle("open"); b.textContent = on ? "Less" : (b.getAttribute("data-fold") === "env" ? "All three" : "Read more"); } return; }
+    if (b) { var host = b.getAttribute("data-fold") === "env" ? b.closest(".env") : b.closest(".cols"); if (host) { var on = host.classList.toggle("open"); b.textContent = on ? "Less" : (b.getAttribute("data-fold") === "env" ? "All six" : "Read more"); } return; }
     var st = t.closest && t.closest(".stage h3"); if (st) { st.parentElement.classList.toggle("open"); return; }
     var mk = t.closest && t.closest(".metric .k"); if (mk) { mk.closest(".metric").classList.toggle("open"); return; }
     var hz = t.closest && t.closest(".hz h3"); if (hz) { hz.closest(".hz").classList.toggle("open"); return; }
@@ -920,4 +966,20 @@
     document.querySelectorAll("details.story[open]").forEach(function (d, i) { if (i > 0) d.removeAttribute("open"); });
   }
   init();
+})();
+
+
+/* ── the charts: a tooltip follows the pointer over every bar and point ── */
+(function () {
+  var figs = document.querySelectorAll(".chart"); if (!figs.length) return;
+  var tip = document.createElement("div"); tip.className = "ctip"; document.body.appendChild(tip);
+  figs.forEach(function (f) {
+    f.querySelectorAll("[data-t]").forEach(function (g) {
+      function show(e) { tip.textContent = g.getAttribute("data-t"); tip.classList.add("on"); move(e); }
+      function move(e) { var p = e.touches ? e.touches[0] : e; tip.style.left = p.clientX + "px"; tip.style.top = p.clientY + "px"; }
+      function hide() { tip.classList.remove("on"); }
+      g.addEventListener("mouseenter", show); g.addEventListener("mousemove", move); g.addEventListener("mouseleave", hide);
+      g.addEventListener("touchstart", show, { passive: true }); g.addEventListener("touchend", hide);
+    });
+  });
 })();
