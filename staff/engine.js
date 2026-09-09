@@ -114,7 +114,7 @@
        header and the foot of the hero arrive. Scrolling early hurries it; "Skip animation" ends it. */
     var gate = $("#gate");
     gsap.set("#slats", { yPercent: -102 });   /* the hero's own shutter already stands open behind the gate */
-    gsap.set("#gSlats, #gate .rail, #gate .housing, #gStencil2", { autoAlpha: 0 });   /* first a black screen; the shutter arrives after the line */
+    gsap.set("#gSlats, #gate .rail, #gate .housing, #gStencil1, #gStencil2", { autoAlpha: 0 });   /* first a black screen; the shutter arrives after the line */
     gsap.set(".hero .opened .line span", { y: "110%", rotation: 3 });
     gsap.set(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline(); window.__intro = intro;
@@ -124,24 +124,34 @@
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
     var flSplit = new SplitText("#fl", { type: "chars" });
     /* the mark comes in and goes out again; the shutter arrives; the line is typed out on it */
-    var typeSplit = new SplitText("#gType", { type: "chars" }), caret = $("#gCaret");
-    gsap.set(typeSplit.chars, { autoAlpha: 0 });
+    var caret = $("#gCaret");
     /* each letter appears in turn and the caret moves to sit right after it, so it follows the typing */
-    var typing = gsap.timeline();
-    typeSplit.chars.forEach(function (c, i) {
-      typing.call(function () { gsap.set(c, { autoAlpha: 1 }); if (caret && c.after) c.after(caret); }, null, i * 0.055);
-    });
+    function typer(sel, step) {
+      var split = new SplitText(sel, { type: "chars" }), tl = gsap.timeline();
+      gsap.set(split.chars, { autoAlpha: 0 });
+      tl.call(function () { var host = $(sel); if (caret && host) host.prepend(caret); }, null, 0);
+      split.chars.forEach(function (c, i) {
+        tl.call(function () { gsap.set(c, { autoAlpha: 1 }); if (caret && c.after) c.after(caret); }, null, 0.02 + i * step);
+      });
+      return tl;
+    }
+    var typing1 = typer("#gType1", 0.045), typing2 = typer("#gType2", 0.05);
+    var caretOn = function () { if (caret) { caret.classList.add("on"); caret.classList.remove("blink"); } };
+    var caretBlink = function () { if (caret) { caret.classList.remove("on"); caret.classList.add("blink"); } };
+    var caretOff = function () { if (caret) caret.classList.remove("blink"); };
     intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" }, 0.25)
       .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .7, ease: "power2.in" }, 2.4)
-      /* the line is typed on the black screen, holds, then fades; only then does the shutter appear */
-      .set("#gStencil2", { autoAlpha: 1 }, 3.2)
-      .call(function () { if (caret) caret.classList.add("on"); }, null, 3.2)
-      .add(typing, 3.4)
-      .call(function () { if (caret) { caret.classList.remove("on"); caret.classList.add("blink"); } }, null, 5.2)
-      .call(function () { if (caret) caret.classList.remove("blink"); }, null, 5.9)
-      .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .7, ease: "power2.in" }, 5.8)
-      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 6.5)
-      .add("gate", 7.7)
+      /* line one is typed on the black screen, holds, fades; then line two the same; only then the shutter */
+      .set("#gStencil1", { autoAlpha: 1 }, 3.2).call(caretOn, null, 3.2)
+      .add(typing1, 3.4)
+      .call(caretBlink, null, 5.0).call(caretOff, null, 5.6)
+      .to("#gStencil1", { autoAlpha: 0, y: -12, duration: .6, ease: "power2.in" }, 5.6)
+      .set("#gStencil2", { autoAlpha: 1 }, 6.3).call(caretOn, null, 6.3)
+      .add(typing2, 6.5)
+      .call(caretBlink, null, 7.8).call(caretOff, null, 8.4)
+      .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .7, ease: "power2.in" }, 8.4)
+      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 9.1)
+      .add("gate", 10.2)
       .call(function () { gate.classList.add("opening"); }, null, "gate")
       .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
       .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")

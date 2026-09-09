@@ -763,8 +763,8 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
 /* ── 8 Sept: entrance, hero, partners, photos, timeline, close, footer ── */
 #gate .glogo{width:clamp(150px,17vw,250px)}
 #gate .stencil.two{z-index:2}
-#gate .line2{font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;font-style:normal;text-transform:uppercase;letter-spacing:-.005em;font-size:clamp(30px,5.6vw,84px);line-height:1;color:#fff;text-shadow:0 6px 40px rgba(0,0,0,.6)}
-#gate .line2 em{font-style:normal;color:var(--red)}
+#gate .line2{font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;font-style:normal;text-transform:uppercase;letter-spacing:-.02em;font-size:clamp(34px,min(6.2vw,8vh),104px);line-height:.92;color:#fff;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+#gate .line2 em.s{font-size:1.06em;line-height:.8}
 #gate .stencil.two{top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;padding:0 6vw;letter-spacing:0}
 .hero .cta .tlink.down i{display:inline-block;animation:nudgeDown 2.2s ease-in-out infinite}
 @keyframes nudgeDown{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
@@ -847,7 +847,8 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
   <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></div>
-  <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType">Everyone deserves <em>a way in.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
+  <div class="stencil two" id="gStencil1"><b class="line2"><span id="gType1">Not everyone arrives <em class="s">by the same route.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
+  <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType2">Everyone deserves <em class="s">a way in.</em></span></b></div>
   <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
   <div class="daylight" id="gDay"></div>
 </div>
