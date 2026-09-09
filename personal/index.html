@@ -191,6 +191,8 @@ body.dark-chrome .spine a{color:var(--pale-3)}
 body.dark-chrome .spine a::before{background:#333}
 .spine a.on{color:var(--pink)}
 .spine a.on::before{background:var(--pink);transform:scale(1.6);box-shadow:0 0 0 4px rgba(255,45,141,.16)}
+.spine.away{opacity:0;pointer-events:none}
+.spine{transition:opacity .35s}
 @media(max-width:1180px){.spine{display:none}}
 
 /* ── view switching ─────────────────────────────────────────── */
@@ -275,8 +277,8 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
   background-image:radial-gradient(circle,currentColor 1px,transparent 1.7px);background-size:38px 38px;
   animation:drift 26s linear infinite}
 .dark .drift,.scene .drift,.slab .drift,.mq .drift,footer .drift{color:var(--pale);opacity:.22}
-.mq-t{position:relative;z-index:1}
-footer .wrap{position:relative;z-index:2}
+.mq-t{position:relative;z-index:4}
+footer .wrap{position:relative;z-index:4}
 @keyframes drift{to{background-position:76px 38px}}
 
 /* ── 00 · arrival ───────────────────────────────────────────── */
@@ -375,8 +377,8 @@ body.ready .hl-node{opacity:1}
   text-transform:uppercase;font-weight:600;color:var(--pink);
   border:1px solid rgba(255,45,141,.5);padding:3px 7px;border-radius:2px}
 
-.bar{background:var(--carbon);color:var(--porcelain);position:relative;z-index:6}
-.bar .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.bar{background:var(--carbon);color:var(--porcelain);position:relative}
+.bar .wrap{display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:4}
 .bar div{padding:22px 10px;text-align:center;font-size:11.5px;letter-spacing:.17em;
   text-transform:uppercase;font-weight:500;border-left:1px solid rgba(255,255,255,.14)}
 .bar div:first-child{border-left:0}
@@ -385,7 +387,7 @@ body.ready .hl-node{opacity:1}
   .bar div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}}
 
 /* ── marquee ────────────────────────────────────────────────── */
-.mq{background:var(--carbon);color:var(--pale);overflow:hidden;position:relative;z-index:6;
+.mq{background:var(--carbon);color:var(--pale);overflow:hidden;position:relative;
   padding:clamp(14px,2vw,26px) 0;border-top:1px solid var(--rule-d)}
 .mq-t{display:flex;white-space:nowrap;will-change:transform;width:max-content}
 .mq-t span{font-family:var(--disp);text-transform:uppercase;
@@ -611,7 +613,7 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
 @keyframes tapepulse{50%{opacity:.42}}
 .map .ringB{stroke:rgba(255,61,154,.45);stroke-width:1.2}
 .map .ringC{stroke:rgba(255,255,255,.14);stroke-width:1;stroke-dasharray:1.5 3}
-.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;
+.node{position:absolute;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%);display:flex;flex-direction:column;
   align-items:center;gap:8px;cursor:pointer;background:none;border:0;padding:6px;
   color:var(--pale);font-family:var(--disp);text-transform:uppercase;line-height:1.05;
   text-align:center}
@@ -736,8 +738,8 @@ body[data-grp="list"] .grp{display:none}
 .src a{color:var(--pink);border-bottom:1px solid var(--rule)}
 
 footer{background:var(--carbon);color:var(--pale-2);padding:0 0 48px;font-size:14px;line-height:1.6;
-  position:relative;z-index:6}
-.ft-top{display:flex;justify-content:center;padding:clamp(40px,6vw,72px) 0 clamp(30px,4vw,52px);
+  position:relative}
+.ft-top{display:flex;justify-content:center;padding:clamp(24px,3.5vw,44px) 0 clamp(30px,4vw,52px);
   border-bottom:1px solid var(--rule-d)}
 .totop{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:14px;text-decoration:none;
   color:var(--pale);padding:10px}
@@ -768,17 +770,17 @@ body.landed .totop .lbl{color:var(--pink)}
   transition:opacity .82s cubic-bezier(.22,.72,.24,1),transform .82s cubic-bezier(.22,.72,.24,1),
              filter .82s cubic-bezier(.22,.72,.24,1)}
 .rv.in{opacity:1;transform:none;filter:blur(0)}
-.ch,.hero,.rec-head{perspective:1000px}
 .wa{display:inline-block;overflow:hidden;vertical-align:bottom;padding:.14em .04em .08em;margin:-.14em -.04em -.08em}
 .wa i{display:inline-block;font-style:normal;transform:translateY(135%) rotate(2.4deg);
   transition:transform .9s cubic-bezier(.2,.78,.22,1);transition-delay:var(--d,0s)}
 .in .wa i,.hero-type.in .wa i{transform:none}
 .metrics.in .metric{animation:slab .85s cubic-bezier(.2,.8,.25,1) both;animation-delay:var(--d,0s)}
 @keyframes slab{from{opacity:0;transform:translateY(26px) scaleY(.9)}to{opacity:1;transform:none}}
-.map .node{opacity:0;transform:translate(-50%,-50%) scale(.35);
+.map .node{opacity:0;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) scale(.35);
   transition:opacity .6s ease,transform .95s cubic-bezier(.2,.92,.24,1),
              border-color .3s,box-shadow .3s;transition-delay:var(--d,0s)}
-.map.in .node{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.map.in .node{opacity:1;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) scale(1)}
+.map.in.go .node{transition:opacity .6s ease,border-color .3s,box-shadow .3s;transition-delay:0s}
 .map svg{opacity:0;transition:opacity 1.1s ease .35s}
 .map.in svg{opacity:1}
 .map.in .node[data-s="operating"] .orb{animation:breath 4.5s ease-in-out infinite;
@@ -800,7 +802,7 @@ body::after{content:"";position:fixed;inset:0;z-index:210;pointer-events:none;op
   .rv{opacity:1;transform:none;filter:none;transition:none}
   .wa i{transform:none;transition:none}
   .draw{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
-  .map .node{opacity:1;transform:translate(-50%,-50%) scale(1);transition:none}
+  .map .node{opacity:1;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) scale(1);transition:none}
   .thread.landed .head::before,.thread.landed .head::after{animation:none}
   .thread .endnote{transition:none}
   .map svg{opacity:1}.tapeGlow{animation:none}
@@ -998,6 +1000,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 .bar .b2 small,.bar .b2 em{color:#b39bff}
 .bar .b3 .bw>b.big{font-size:clamp(30px,2.6vw,42px);color:var(--pink);line-height:.9}
 .bar .b3 small{color:var(--pale-2)}
+.bar .b3 small.dt{color:var(--pink)}
 .bar .b4 small,.bar .b4 em{color:#86B817}
 .lg-ebay{font-family:var(--sans);font-weight:700;font-style:normal;letter-spacing:-.05em;display:inline-block;line-height:1;text-transform:none;font-size:1.35em;vertical-align:-.08em}
 .bar .lg-ebay b,.lg-ebay b{font-family:inherit;font-weight:700;font-size:inherit;text-transform:none;line-height:1}
@@ -1016,6 +1019,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 .tl-list li{display:grid;grid-template-columns:124px 170px 1fr;gap:clamp(16px,2.4vw,34px);align-items:center;padding:18px 0;border-bottom:1px solid var(--rule-d)}
 .tl-list li img,.tl-list li .nopic-box{width:124px;height:84px;object-fit:cover;border-radius:3px;background:#1a1a1a;clip-path:none}
 .tl-list li img.logo{object-fit:contain;background:var(--porcelain);padding:6px}
+.tl-list li img.logo.dk{background:#000;padding:0;object-fit:cover}
 .tl-list li .nopic-box{display:grid;place-content:center;font-family:var(--disp);font-style:normal;font-size:30px;color:var(--pink);border:1px dashed rgba(255,45,141,.5);background:transparent}
 .tl-list .when{font-family:var(--disp);text-transform:uppercase;font-size:clamp(20px,2vw,28px);line-height:1;color:var(--pink)}
 .tl-list .what{font-size:15px;line-height:1.6;color:var(--pale-2);font-weight:300;max-width:72ch}
@@ -1067,12 +1071,20 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
   transform:translate(-50%,calc(-100% - 12px));opacity:0;transition:opacity .15s}
 .ctip.on{opacity:1}
 /* the rocket */
-.rocket{position:absolute;width:clamp(30px,3.4vw,44px);transform:translate(-50%,-50%) rotate(var(--r,0deg));pointer-events:none;z-index:2;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,.6));opacity:0;transition:opacity .8s ease .6s}
+.rocket{position:absolute;left:0;top:0;width:clamp(72px,7.6vw,112px);pointer-events:none;z-index:2;
+  transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%) rotate(var(--r,0deg));
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.65)) drop-shadow(0 0 10px rgba(255,45,141,.35));opacity:0;transition:opacity .8s ease .6s}
 .map.in .rocket{opacity:1}
 .rocket svg{width:100%;height:auto;display:block;overflow:visible}
-.rocket .fl{fill:#ff6a3d;transform-origin:0 0;animation:flame .18s ease-in-out infinite alternate}
-@keyframes flame{from{transform:scaleX(.7);fill:#ffb347}to{transform:scaleX(1.15);fill:#ff4d2d}}
+.rocket .bob{animation:rkBob 2.6s ease-in-out infinite}
+.rocket .fl{transform-origin:0 0;animation:rkFlame .16s ease-in-out infinite alternate}
+.rocket .fl2{transform-origin:0 0;animation:rkFlame .11s ease-in-out infinite alternate-reverse}
+.rocket .flg{transform-origin:0 0;filter:blur(1.5px);animation:rkFlame .2s ease-in-out infinite alternate}
+.rocket .t2,.rocket .t3{animation-duration:.7s}
+.rocket .trail{animation:rkTrail 1.1s ease-in-out infinite alternate}
+@keyframes rkBob{0%,100%{transform:translateY(-.6px)}50%{transform:translateY(.6px)}}
+@keyframes rkFlame{from{transform:scaleX(.72) scaleY(.9)}to{transform:scaleX(1.18) scaleY(1.06)}}
+@keyframes rkTrail{from{opacity:.55}to{opacity:1}}
 /* projects */
 .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule-d);border:1px solid var(--rule-d);margin-top:clamp(30px,4vw,52px);text-align:left}
 @media(max-width:920px){.projects{grid-template-columns:1fr 1fr}}
@@ -1083,7 +1095,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 .proj h3{font-size:22px;margin-bottom:12px}
 .proj p{margin:0;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
 /* the end note */
-.endnote{padding-top:0;background:#0b0b0b}
+.endnote{padding-top:0;padding-bottom:clamp(56px,8vw,110px);background:var(--carbon)}
 .endnote .quo{margin:0;max-width:60ch}
 .endnote .quo q{font-size:clamp(21px,2.6vw,32px);line-height:1.3;margin-bottom:.7em}
 .endnote .quo q:last-of-type{margin-bottom:0}
@@ -1091,8 +1103,8 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 .ft-brand img{height:150px}
 .ft-brand .ft-addr{font-size:12.5px;letter-spacing:.06em;color:var(--pale-2);margin-top:4px}
 .ft-brand .ft-legal-in{white-space:nowrap}
-.ft-grid p a{text-transform:uppercase;letter-spacing:.14em;font-size:11.5px;font-weight:500;display:inline-block;padding:2px 0}
-.ft-grid p a[href^="mailto"]{text-transform:none;letter-spacing:.02em;font-size:13px}
+.ft-grid p a{text-transform:capitalize;letter-spacing:.04em;font-size:13.5px;font-weight:500;display:inline-block;padding:2px 0}
+.ft-grid p a[href^="mailto"]{text-transform:none;letter-spacing:.02em;font-size:13.5px}
 @media(max-width:480px){.ft-brand .ft-legal-in{white-space:normal}}
 </style>
 </head>
@@ -1135,7 +1147,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
   <ol>
     <li><a href="#top"><span>00</span>Tom Letcher</a></li>
     <li><a href="#c01"><span>01</span>The Spark</a></li>
-    <li><a href="#c02"><span>02</span>From Sale to System</a></li>
+    <li><a href="#c02"><span>02</span>Step by Step</a></li>
     <li><a href="#c03"><span>03</span>Proof, Not Promise</a></li>
     <li><a href="#c04"><span>04</span>How I Build</a></li>
     <li><a href="#c05"><span>05</span>Built With People</a></li>
@@ -1180,7 +1192,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
   <div class="wrap">
     <div class="b1"><img src="../assets/kings-awards.png" alt="The King's Awards for Enterprise" width="640" height="640" decoding="async"><span class="bw"><small>July 2026</small><b>King's Awards for Enterprise</b><em>Young Founder nominee</em></span></div>
     <div class="b2"><img src="../assets/myta.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
-    <div class="b3"><span class="bw"><b class="big">500,000+</b><small>products sold</small><em>No. 1 fire extinguisher seller on <i class="lg-ebay"><b>e</b><b>b</b><b>a</b><b>y</b></i> &amp; <i class="lg-temu">temu</i></em></span></div>
+    <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+</b><small>products sold</small><em>No. 1 fire extinguisher seller on <i class="lg-ebay"><b>e</b><b>b</b><b>a</b><b>y</b></i> &amp; <i class="lg-temu">temu</i></em></span></div>
     <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>2024</small><b>eBay for Business Awards</b><em>Social Impact · Finalist</em></span></div>
   </div>
 </div>
@@ -1243,16 +1255,22 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
       <div class="yhead">The timeline · 2019 to 2026</div>
       <ol class="tl-list">
       <li><img src="../assets/journey/ch1-a.webp" alt="" loading="lazy" decoding="async"><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
-      <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">2019</span><span class="what"><b>Runner-up, Salboy Blackfriars.</b>At 23, runner-up in Salboy's national Blackfriars development competition, entered with a scheme built around the surrounding community. The point where building something of his own became the plan.</span></li>
+      <li><img src="../assets/journey/salboy.webp" alt="" loading="lazy" decoding="async"><span class="when">2019</span><span class="what"><b>Runner-up, Salboy Blackfriars.</b>At 23, runner-up in Salboy's national Blackfriars development competition, entered with a scheme built around the surrounding community. The point where building something of his own became the plan.</span></li>
       <li><img src="../assets/journey/ch2-a.webp" alt="" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>Freedom Fire.</b>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></li>
       <li><img src="../assets/journey/ch6-a.webp" alt="" loading="lazy" decoding="async"><span class="when">August 2021</span><span class="what"><b>The company.</b>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</span></li>
       <li><img src="../assets/journey/ch7-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2021</span><span class="what"><b>The first placements.</b>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></li>
       <li><img src="../assets/journey/ch4-a.webp" alt="" loading="lazy" decoding="async"><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</span></li>
-      <li><img src="../assets/journey/ch9-a.webp" alt="" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay awards.</b>The eBay business store opens. Freedom Fire is named runner-up in the eBay for Business Awards for social impact, and tells the story in Belfast.</span></li>
+      <li><img src="../assets/journey/ch16-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2023</span><span class="what"><b>The year of building.</b>Thousands of products researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</span></li>
+      <li><img src="../assets/journey/ch9-a.webp" alt="" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay awards.</b>Four months after the eBay business store opens, Freedom Fire is named runner-up in the eBay for Business Awards for social impact, and tells the story in Belfast.</span></li>
+      <li><img class="logo dk" src="../assets/journey/ch12-a.webp" alt="" loading="lazy" decoding="async"><span class="when">August 2024</span><span class="what"><b>FIRESTORM.</b>The company's own brand is born: the FIRESTORM trade mark is filed in August and registered in November.</span></li>
       <li><img src="../assets/journey/ch10-a.webp" alt="" loading="lazy" decoding="async"><span class="when">November 2024</span><span class="what"><b>Unit 19, the headquarters.</b>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></li>
-      <li><img src="../assets/journey/ch13-a.webp" alt="" loading="lazy" decoding="async"><span class="when">December 2024</span><span class="what"><b>The first container.</b>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers, the company's own brand.</span></li>
+      <li><img src="../assets/journey/ch13-a.webp" alt="" loading="lazy" decoding="async"><span class="when">December 2024</span><span class="what"><b>The first container.</b>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</span></li>
       <li><img src="../assets/journey/ch11-a.webp" alt="" loading="lazy" decoding="async"><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></li>
-      <li><img src="../assets/journey/ch3-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing: fire extinguishers first, then alarms, batteries, gloves and cleaning products.</span></li>
+      <li><img class="logo" src="../assets/firestorm-pro.webp" alt="" loading="lazy" decoding="async"><span class="when">Autumn 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
+      <li><img src="../assets/journey/ch15-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b>Two of the T Level students spend six months building the company's new website and storefronts from scratch.</span></li>
+      <li><i class="nopic-box" aria-hidden="true">2026</i><span class="when">March 2026</span><span class="what"><b>Three brands.</b>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</span></li>
+      <li><img src="../assets/journey/ch3-a.webp" alt="" loading="lazy" decoding="async"><span class="when">2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
+      <li><img src="../assets/journey/team-races.webp" alt="" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b>All three of the first T Level cohort complete their placements and move into paid roles.</span></li>
       <li><img src="../assets/journey/ch21a.webp" alt="" loading="lazy" decoding="async"><span class="when">August 2026</span><span class="what"><b>Number one.</b>Containers arrive back to back, the company is number one for fire extinguishers on eBay and Temu, and the Amazon and Shopify launches are in preparation.</span></li>
       <li><img class="logo" src="../assets/kings-awards.png" alt="" loading="lazy" decoding="async"><span class="when">September 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>The Young Founder application goes in, supported by this portfolio and The Way In. Shortlisted the same month for the Manchester Young Talent Awards, Agent of Change.</span></li>
       </ol>
@@ -1264,45 +1282,45 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 <section class="ch" id="c02" data-n="02">
   <div class="wrap">
     <div class="rv">
-      <div class="ch-tag">02 — From Sale to System</div>
-      <h2>Every constraint became a build.</h2>
+      <div class="ch-tag">02 — Step by Step</div>
+      <h2>Eight problems. Eight fixes.</h2>
       <em class="scr" aria-hidden="true" style="right:4%;top:6%">build.</em>
-      <p class="stand">Eight stages, in order. Each starts with a problem the market set, shows what was built in answer,
-      and ends with the result that now runs on its own.</p>
+      <p class="stand">The business grew by solving one problem at a time. Each step below names the problem, what was done
+      about it, and what it delivered.</p>
     </div>
     <div class="stages rv">
-      <div class="stage"><div class="n">01</div><h3>Second-life stock</h3>
-        <dl><dt>Problem</dt><dd>No capital and no product. The trade scrapped serviceable fire extinguishers by the pallet.</dd>
-        <dt>Build</dt><dd>A refurbishing bench, staffed by students, selling honestly for training and non-operational use. 2019 to 2021.</dd>
+      <div class="stage"><div class="n">01</div><h3>Refurbished stock</h3>
+        <dl><dt>Problem</dt><dd>No money and no product. The trade was scrapping perfectly good fire extinguishers by the pallet.</dd>
+        <dt>What we did</dt><dd>Set up a refurbishing bench, staffed by students, and sold the units honestly for training and non-live use, from 2019 to 2021.</dd>
         <dt>Result</dt><dd>800 to 1,000 units a week by 2021, sold to training providers, exporters and the public.</dd></dl></div>
-      <div class="stage"><div class="n">02</div><h3>Ecommerce proof</h3>
-        <dl><dt>Problem</dt><dd>Facebook Marketplace could not reach a national customer, and could not scale.</dd>
-        <dt>Build</dt><dd>One eBay listing from a personal account in December 2020: a second-hand 2 kg CO2 fire extinguisher. No store, no branding, no advertising.</dd>
-        <dt>Result</dt><dd>That listing is still live, and the store built on it is now first of 1,193 fire extinguisher sellers on eBay UK.</dd></dl></div>
-      <div class="stage"><div class="n">03</div><h3>Incorporation</h3>
-        <dl><dt>Problem</dt><dd>Sales had outgrown a sole trader, and servicing customers needed a company behind the certificate.</dd>
-        <dt>Build</dt><dd>Freedom Fire &amp; Safety Ltd, 27 August 2021, running two engines: ecommerce and contracted servicing.</dd>
-        <dt>Result</dt><dd>A company behind every certificate, and a second engine running alongside the online range.</dd></dl></div>
-      <div class="stage"><div class="n">04</div><h3>Warehouse and fulfilment</h3>
-        <dl><dt>Problem</dt><dd>A borrowed corner cannot hold a catalogue, and marketplace buyers expect next-day delivery.</dd>
-        <dt>Build</dt><dd>Two moves: from rented space to a small warehouse, Unit 10, in April 2022, then to the Unit 19 headquarters in November 2024 to expand. A next-day carrier account for every order.</dd>
-        <dt>Result</dt><dd>Thousands of orders a month fulfilled from one warehouse.</dd></dl></div>
-      <div class="stage"><div class="n">05</div><h3>Direct manufacturing</h3>
-        <dl><dt>Problem</dt><dd>Distributor stock could not compete online after fees, packaging and delivery, and suppliers would not extend credit.</dd>
-        <dt>Build</dt><dd>A direct relationship with a global producer agreed in April 2024, a first order funded by borrowing, the FIRESTORM mark filed in August 2024, and the first container on Christmas Eve 2024.</dd>
-        <dt>Result</dt><dd>An owned brand on every cylinder since, and unit costs that changed the model.</dd></dl></div>
-      <div class="stage"><div class="n">06</div><h3>Multiple channels</h3>
-        <dl><dt>Problem</dt><dd>One marketplace is one point of failure.</dd>
-        <dt>Build</dt><dd>The same catalogue, compliance and fulfilment rebuilt on each channel in turn: eBay business store in January 2024, Temu in 2025, Amazon in 2026, with OnBuy and an own Shopify store to follow.</dd>
-        <dt>Result</dt><dd>Temu UK's first dedicated fire extinguisher seller, top of its category with fewer than ten live products.</dd></dl></div>
-      <div class="stage"><div class="n">07</div><h3>Service and B2B</h3>
-        <dl><dt>Problem</dt><dd>Marketplace revenue is lumpy; compliance work is recurring.</dd>
-        <dt>Build</dt><dd>Servicing, installation and contracted site work for commercial premises, nationwide from one base.</dd>
-        <dt>Result</dt><dd>Recurring servicing contracts for colleges, offices and property portfolios nationwide.</dd></dl></div>
-      <div class="stage"><div class="n">08</div><h3>Systems and automation</h3>
-        <dl><dt>Problem</dt><dd>Thousands of SKUs and orders cannot be run from a spreadsheet by one person.</dd>
-        <dt>Build</dt><dd>Order management, a support desk across channels, listing and pricing workflows, and an in-house supply-chain tracker that follows every consignment from factory to warehouse.</dd>
-        <dt>Result</dt><dd>A team, not a founder, runs the day. That is the platform the next chapters stand on.</dd></dl></div>
+      <div class="stage"><div class="n">02</div><h3>Selling online</h3>
+        <dl><dt>Problem</dt><dd>Facebook Marketplace only reached local buyers and could not grow.</dd>
+        <dt>What we did</dt><dd>Listed one second-hand CO2 fire extinguisher on eBay from a personal account in December 2020. No store, no branding, no advertising.</dd>
+        <dt>Result</dt><dd>That listing is still live. The store built on it is now the number one fire extinguisher seller on eBay UK.</dd></dl></div>
+      <div class="stage"><div class="n">03</div><h3>Becoming a company</h3>
+        <dl><dt>Problem</dt><dd>Sales had outgrown a sole trader, and servicing customers wanted a registered company on the paperwork.</dd>
+        <dt>What we did</dt><dd>Incorporated Freedom Fire &amp; Safety Ltd on 27 August 2021, selling online and servicing sites under contract.</dd>
+        <dt>Result</dt><dd>Two sources of income from one company: online sales and on-site servicing.</dd></dl></div>
+      <div class="stage"><div class="n">04</div><h3>A warehouse of our own</h3>
+        <dl><dt>Problem</dt><dd>A borrowed corner could not hold a full range, and online buyers expect next-day delivery.</dd>
+        <dt>What we did</dt><dd>Moved twice: from rented space to a small warehouse, Unit 10, in April 2022, then to the Unit 19 headquarters in November 2024 to expand. Set up a next-day carrier account for every order.</dd>
+        <dt>Result</dt><dd>Thousands of orders a month sent from one warehouse.</dd></dl></div>
+      <div class="stage"><div class="n">05</div><h3>Our own brand</h3>
+        <dl><dt>Problem</dt><dd>Buying from distributors left no margin after marketplace fees, packaging and delivery, and suppliers would not give credit.</dd>
+        <dt>What we did</dt><dd>Agreed a direct relationship with a global producer in April 2024, borrowed to pay for the first order, registered the FIRESTORM trade mark, and landed the first container on Christmas Eve 2024.</dd>
+        <dt>Result</dt><dd>Our own brand on every cylinder since, at a cost that made the numbers work.</dd></dl></div>
+      <div class="stage"><div class="n">06</div><h3>More than one marketplace</h3>
+        <dl><dt>Problem</dt><dd>Relying on one marketplace means one rule change can stop the business overnight.</dd>
+        <dt>What we did</dt><dd>Set up the same range, paperwork and delivery on each new channel in turn: the eBay store in January 2024, Temu in 2025, Amazon in 2026, with OnBuy and our own Shopify store next.</dd>
+        <dt>Result</dt><dd>Temu UK's first dedicated fire extinguisher seller, top of its category with fewer than ten products listed.</dd></dl></div>
+      <div class="stage"><div class="n">07</div><h3>Servicing and trade</h3>
+        <dl><dt>Problem</dt><dd>Online sales go up and down. Servicing contracts come back every year.</dd>
+        <dt>What we did</dt><dd>Built a servicing, installation and site-work team for commercial premises, covering the country from one base.</dd>
+        <dt>Result</dt><dd>Yearly servicing contracts with colleges, offices and property companies nationwide.</dd></dl></div>
+      <div class="stage"><div class="n">08</div><h3>Systems</h3>
+        <dl><dt>Problem</dt><dd>Thousands of products and orders cannot be run from a spreadsheet by one person.</dd>
+        <dt>What we did</dt><dd>Put in an order system, one support desk for every channel, listing and pricing tools, and our own supply-chain tracker that follows each container from factory to warehouse.</dd>
+        <dt>Result</dt><dd>The team runs the day-to-day, not the founder.</dd></dl></div>
     </div>
     <figure class="plate wide crop">
       <img src="../assets/journey/ch13-team.webp" width="1200" height="1024" style="object-position:50% 58%" alt="The team standing inside an open shipping container on a trailer at Unit 19" decoding="async">
@@ -1376,8 +1394,8 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
             ship it next day, and build the tools that answer the question before the customer has to ask.</dd>
             <dt>Implementation</dt><dd>A business store built over twelve months, direct manufacturing and the Firestorm brand in 2024,
             and buying that replaces a phone call: clear specifications, kits and tracked delivery.</dd>
-            <dt>Result</dt><dd>Number one of 1,193 fire extinguisher sellers on eBay UK by July 2026. Temu UK's first dedicated
-            fire extinguisher seller. Three registered brands, with twelve more coming.</dd>
+            <dt>Result</dt><dd>Number one of 1,193 fire extinguisher sellers on eBay UK by July 2026, and a category that is now bought
+            the way any other online essential is.</dd>
           </dl>
         </div>
       </details>
@@ -1388,8 +1406,8 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
           <dl>
             <dt>Constraint</dt><dd>A young company had no standing with manufacturers, marketplaces or the trade.</dd>
             <dt>Decision</dt><dd>Let the numbers speak first, then use every invitation to tell the story of how they were made.</dd>
-            <dt>Implementation</dt><dd>Number one for fire extinguishers on eBay UK by July 2026. One of five finalists, from hundreds of
-            entrants, for the eBay for Business Social Impact Award 2024, with an invitation to Belfast to meet eBay's UK leadership.
+            <dt>Implementation</dt><dd>One of five finalists, from hundreds of entrants, for the eBay for Business Social Impact Award 2024,
+            with an invitation to Belfast to meet eBay's UK leadership.
             Shortlisted for the Manchester Young Talent Awards' Agent of Change award in 2026. Approached by Temu UK to open its
             fire extinguisher category. A global producer that chose a small Greater Manchester warehouse as its first UK client.
             Nominated for the King's Awards for Enterprise.</dd>
@@ -1408,10 +1426,9 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
             hire and train people to run it.</dd>
             <dt>Implementation</dt><dd>Direct sourcing with an in-house supply-chain tracker. One warehouse serving every channel. Order
             management and a shared support desk. Listing, pricing and compliance workflows built once for eBay and reused
-            for Temu, and now being reused for Amazon, OnBuy and Shopify. Brand and IP held in the company's name. People brought in through
-            placements and trained on the systems.</dd>
-            <dt>Result</dt><dd>The same category rebuilt on a second marketplace made the company Temu UK's first dedicated fire extinguisher seller, top of its category with fewer than ten products. Three more channels were prepared in 2026
-            without a second warehouse.</dd>
+            for Temu, and now being reused for Amazon, OnBuy and Shopify. Brand and IP held in the company's name.</dd>
+            <dt>Result</dt><dd>Everything built once for eBay was reused for Temu, then for Amazon, OnBuy and Shopify. Three more
+            channels were prepared in 2026 without a second warehouse or a second team.</dd>
           </dl>
         </div>
       </details>
@@ -1544,7 +1561,26 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
             <ellipse class="ringC" cx="50" cy="38" rx="51" ry="28"/>
           </g>
         </svg>
-        <span class="rocket" id="rocket" aria-hidden="true"><svg viewBox="-30 -14 92 28"><path class="fl" d="M-2 0 L-28 -7 L-16 0 L-28 7 Z"/><path d="M0 0 C6 -11 24 -13 44 -12 C50 -12 56 -8 60 0 C56 8 50 12 44 12 C24 13 6 11 0 0 Z" fill="#F4F1EB"/><path d="M14 -9 L6 -20 L22 -14 Z M14 9 L6 20 L22 14 Z" fill="#FF2D8D"/><circle cx="40" cy="0" r="4.6" fill="#1e8fff" stroke="#101010" stroke-width="1.4"/><path d="M0 0 C6 -11 24 -13 44 -12" fill="none" stroke="rgba(0,0,0,.15)" stroke-width="1"/></svg></span>
+        <span class="rocket" id="rocket" aria-hidden="true"><svg viewBox="-70 -24 158 48"><defs>
+          <linearGradient id="rkBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#ece9e2"/><stop offset="1" stop-color="#a9a59c"/></linearGradient>
+          <linearGradient id="rkPink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8cc6"/><stop offset=".5" stop-color="#ff2d8d"/><stop offset="1" stop-color="#a80c5c"/></linearGradient>
+          <radialGradient id="rkWin" cx=".38" cy=".34" r=".72"><stop offset="0" stop-color="#e6f6ff"/><stop offset=".45" stop-color="#3aa0ff"/><stop offset="1" stop-color="#062a6e"/></radialGradient>
+          <linearGradient id="rkFlame" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fff6c4"/><stop offset=".35" stop-color="#ffb347"/><stop offset=".7" stop-color="#ff5a2d"/><stop offset="1" stop-color="#ff2d8d" stop-opacity="0"/></linearGradient>
+          <linearGradient id="rkTrail" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ff2d8d" stop-opacity=".7"/><stop offset="1" stop-color="#ff2d8d" stop-opacity="0"/></linearGradient>
+          </defs>
+          <g class="bob">
+            <path class="trail" d="M-6 0 H-68" stroke="url(#rkTrail)" stroke-width="3.2" stroke-linecap="round"/><path class="trail t2" d="M-10 -4 H-40" stroke="url(#rkTrail)" stroke-width="1.2" stroke-linecap="round"/><path class="trail t3" d="M-10 4 H-46" stroke="url(#rkTrail)" stroke-width="1.2" stroke-linecap="round"/>
+            <path class="flg" d="M0 0 L-48 -11 L-26 0 L-48 11 Z" fill="url(#rkFlame)" opacity=".45"/><path class="fl" d="M-1 0 L-40 -8.5 L-20 0 L-40 8.5 Z" fill="url(#rkFlame)"/>
+            <path class="fl2" d="M-1 0 L-22 -3.6 L-12 0 L-22 3.6 Z" fill="#fff8d6"/>
+            <path d="M12 -8.5 L3 -20 L23 -13.5 L26 -8.5 Z" fill="url(#rkPink)" stroke="#101010" stroke-width=".9" stroke-linejoin="round"/>
+            <path d="M12 8.5 L3 20 L23 13.5 L26 8.5 Z" fill="url(#rkPink)" stroke="#101010" stroke-width=".9" stroke-linejoin="round"/>
+            <path d="M2 0 C6 -12.5 26 -14.5 48 -13.5 C58 -13 68 -7 74 0 C68 7 58 13 48 13.5 C26 14.5 6 12.5 2 0 Z" fill="url(#rkBody)" stroke="#101010" stroke-width="1" stroke-linejoin="round"/>
+            <path d="M56 -12.6 C63 -11.2 70 -6 74 0 C70 6 63 11.2 56 12.6 Z" fill="url(#rkPink)"/>
+            <path d="M28 -13.6 L34 -13.9 L34 13.9 L28 13.6 Z" fill="#ff2d8d" opacity=".92"/>
+            <path d="M8 -6.5 C20 -10.5 38 -11.6 54 -10.4" stroke="rgba(255,255,255,.85)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+            <circle cx="43" cy="0" r="6" fill="url(#rkWin)" stroke="#f4f1eb" stroke-width="1.7"/>
+            <ellipse cx="41.2" cy="-2.2" rx="1.9" ry="1.1" fill="#fff" opacity=".85"/>
+          </g></svg></span>
         <span class="yrlbl" data-ring="A" data-ang="128">Now</span>
         <span class="yrlbl" data-ring="B" data-ang="95">24 – 36 months</span>
         <span class="yrlbl" data-ring="C" data-ang="232">Options</span>
@@ -1651,7 +1687,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
     </div>
     <div class="env rv">
       <div class="ch-tag">Carbon footprint</div>
-      <p class="stand">Where the footprint sits, and what is done about each part. As set out in the company's King's Awards application, section E2.</p>
+      <p class="stand">Where the footprint sits, and what is done about each part.</p>
       <div class="pill">
         <div><h4>Longer life</h4><p>Inspection, servicing and compliant refurbishment extend service life instead of replacing fire extinguishers before they need it. The range is moving with the industry away from fluorinated foam.</p></div>
         <div><h4>End of life</h4><p>Expired, discharged or damaged fire extinguishers go to specialist partners, CheckFire Group and
@@ -1711,7 +1747,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
       <q>I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
       promised to build.</q>
-      <div class="by">Tom Letcher · from the King's Awards for Enterprise application, section C1.6, Resilience and strategic adaptability</div>
+      <div class="by">Tom Letcher · in his own words</div>
     </div>
   </div>
 </section>

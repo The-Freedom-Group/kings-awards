@@ -128,7 +128,7 @@
   });
 
   /* ── poster words, one per chapter ────────────────────────── */
-  var PW = { c01: "SPARK", c02: "SYSTEM", c03: "PROOF", c04: "METHOD",
+  var PW = { c01: "SPARK", c02: "STEPS", c03: "PROOF", c04: "METHOD",
              c05: "PEOPLE", c06: "FUTURE", c07: "RECORD", c08: "NEXT" };
   var pws = [];
   Object.keys(PW).forEach(function (id) {
@@ -152,46 +152,73 @@
 
   /* planets sit ON the drawn rings: same ellipses, same rotation */
   var RINGS = { A: [33, 13], B: [43, 20.5], C: [51, 28] }, PHI = -16 * Math.PI / 180, MCX = 50, MCY = 38;
+  var mapEl = $("#map"), rocket = $("#rocket");
   function ringXY(ring, deg) {
     var th = deg * Math.PI / 180;
     var ex = RINGS[ring][0] * Math.cos(th), ey = RINGS[ring][1] * Math.sin(th);
     return { x: MCX + ex * Math.cos(PHI) - ey * Math.sin(PHI), y: MCY + ex * Math.sin(PHI) + ey * Math.cos(PHI) };
   }
+  /* planets and the rocket are placed with a translate, in pixels, so they move on the compositor
+     with sub-pixel precision; left/top stay at zero. The ring labels keep percentages: they never move. */
+  function mapPx(p) {
+    var W0 = mapEl ? mapEl.offsetWidth : 0, H0 = mapEl ? mapEl.offsetHeight : 0;
+    return { x: p.x / 100 * W0, y: p.y / 76 * H0 };
+  }
+  function putNode(nd, p) {
+    var q = mapPx(p);
+    nd.style.setProperty("--ox", q.x.toFixed(2) + "px");
+    nd.style.setProperty("--oy", q.y.toFixed(2) + "px");
+  }
+  var rocketA = 300;
   function placeOrbits() {
     $$(".map .node, .map .yrlbl").forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
-      var x = MCX, y = MCY;
-      if (ring !== "0" && RINGS[ring]) {
-        if (nd.dataset.a === undefined) nd.dataset.a = nd.getAttribute("data-ang") || "0";
-        var p = ringXY(ring, +nd.dataset.a); x = p.x; y = p.y;
+      if (nd.classList.contains("yrlbl")) {
+        var lp = ringXY(ring, +nd.getAttribute("data-ang") || 0);
+        nd.style.left = lp.x + "%"; nd.style.top = (lp.y / 76 * 100) + "%";
+        return;
       }
-      nd.style.left = x + "%";
-      nd.style.top = (y / 76 * 100) + "%";
+      nd.style.left = "0"; nd.style.top = "0";
+      if (ring === "0" || !RINGS[ring]) { putNode(nd, { x: MCX, y: MCY }); return; }
+      if (nd.dataset.a === undefined) nd.dataset.a = nd.getAttribute("data-ang") || "0";
+      putNode(nd, ringXY(ring, +nd.dataset.a));
     });
-    var rk = $("#rocket");
-    if (rk) { var rp = ringXY("B", 300); rk.style.left = rp.x + "%"; rk.style.top = (rp.y / 76 * 100) + "%"; }
+    if (rocket) placeRocket();
+  }
+  function placeRocket() {
+    var r0 = ringXY("B", rocketA), r1 = ringXY("B", rocketA + 1.5);
+    var q0 = mapPx(r0), q1 = mapPx(r1);
+    var ang = Math.atan2(q1.y - q0.y, q1.x - q0.x) * 180 / Math.PI;
+    rocket.style.left = "0"; rocket.style.top = "0";
+    rocket.style.setProperty("--ox", q0.x.toFixed(2) + "px");
+    rocket.style.setProperty("--oy", q0.y.toFixed(2) + "px");
+    rocket.style.setProperty("--r", ang.toFixed(2) + "deg");
   }
   placeOrbits();
-  /* the planets drift round their rings, slowly enough to read; the rocket laps the middle ring */
-  var mapEl = $("#map"), rocket = $("#rocket"), rocketA = 300, SPEED = { A: 0.014, B: 0.009, C: 0.006 };
-  function orbitStep() {
-    if (!mapEl || !mapEl.classList.contains("in") || document.body.dataset.grp === "list") return;
+  /* the planets drift round their rings, slowly enough to read; the rocket laps the middle ring.
+     Speeds are in degrees per second, so the motion is the same at any frame rate. The entrance
+     animation keeps its transform transition; once it has played, the "go" class removes the
+     transition so each frame's position applies instantly and the motion is continuous. */
+  var SPEED = { A: 0.9, B: 0.55, C: 0.35 }, ROCKET_SPEED = 9, lastT = 0, wasIn = false, goTimer = null;
+  function orbitStep(ts) {
+    if (!mapEl) return;
+    var inView = mapEl.classList.contains("in") && document.body.dataset.grp !== "list";
+    if (inView !== wasIn) {
+      wasIn = inView; clearTimeout(goTimer);
+      if (inView) goTimer = setTimeout(function () { mapEl.classList.add("go"); lastT = 0; }, 1500);
+      else mapEl.classList.remove("go");
+    }
+    if (!inView || !mapEl.classList.contains("go")) { lastT = ts; return; }
+    var dt = lastT ? Math.min(0.05, (ts - lastT) / 1000) : 0; lastT = ts;
+    if (!dt) return;
     $$(".map .node[data-ring]", mapEl).forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       if (ring === "0" || !RINGS[ring]) return;
-      var a = (+nd.dataset.a || 0) + SPEED[ring]; if (a > 360) a -= 360;
+      var a = (+nd.dataset.a || 0) + SPEED[ring] * dt; if (a > 360) a -= 360;
       nd.dataset.a = a;
-      var p = ringXY(ring, a);
-      nd.style.left = p.x + "%"; nd.style.top = (p.y / 76 * 100) + "%";
+      putNode(nd, ringXY(ring, a));
     });
-    if (rocket) {
-      rocketA += 0.16; if (rocketA > 360) rocketA -= 360;
-      var r0 = ringXY("B", rocketA), r1 = ringXY("B", rocketA + 1.5);
-      var W0 = mapEl.offsetWidth || 1, H0 = mapEl.offsetHeight || 1;
-      var ang = Math.atan2((r1.y - r0.y) / 76 * H0, (r1.x - r0.x) / 100 * W0) * 180 / Math.PI;
-      rocket.style.left = r0.x + "%"; rocket.style.top = (r0.y / 76 * 100) + "%";
-      rocket.style.setProperty("--r", ang.toFixed(1) + "deg");
-    }
+    if (rocket) { rocketA += ROCKET_SPEED * dt; if (rocketA > 360) rocketA -= 360; placeRocket(); }
   }
 
   /* ── hero branch lines ────────────────────────────────────── */
@@ -624,11 +651,11 @@
   var chapters = $$("#explore .ch, #explore .hero, #explore .scene, #explore .slab");
   var yrail = $("#yrail"), c03El = yrail ? yrail.closest(".ch") : null;
   function W() { return explore ? explore.offsetWidth : window.innerWidth; }
-  var chrome = $("#chrome"), spine = $$(".spine a");
+  var chrome = $("#chrome"), spine = $$(".spine a"), spineEl = $("#spine");
   var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
   var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], c01:["01","The Spark"],
-    c02:["02","Sale to System"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
+    c02:["02","Step by Step"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
     c05:["05","Built With People"], c06:["06","The Next Ten Years"], slab:["—","Seven Years"],
     c07:["07","The Company"], c08:["08","Still Building"], resilience:["—","Resilience"] };
   var lastCard = "";
@@ -683,6 +710,7 @@
       var exploring = document.body.dataset.view === "explore";
       var inFooter = cur2 === null && y > window.innerHeight;
       if (inFooter) dark = true;
+      if (spineEl) spineEl.classList.toggle("away", inFooter);
       document.body.classList.toggle("dark-chrome", dark && exploring);
       spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
 
@@ -720,7 +748,7 @@
 
       if (exploring) { drawThread(y); runScene(y); }
     }
-    orbitStep();
+    orbitStep(performance.now());
     requestAnimationFrame(frame);
   }
 
