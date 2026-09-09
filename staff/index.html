@@ -760,7 +760,9 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
 /* ── 8 Sept: entrance, hero, partners, photos, timeline, close, footer ── */
 #gate .glogo{width:clamp(150px,17vw,250px)}
 #gate .stencil.two{z-index:2}
-#gate .line2{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0;font-size:clamp(30px,5vw,70px);line-height:1.05;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.7)}
+#gate .line2{font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;font-style:normal;text-transform:uppercase;letter-spacing:-.005em;font-size:clamp(30px,5.6vw,84px);line-height:1;color:#fff;text-shadow:0 6px 40px rgba(0,0,0,.6)}
+#gate .line2 em{font-style:normal;color:var(--red)}
+#gate .stencil.two{top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;padding:0 6vw;letter-spacing:0}
 .hero .cta .tlink.down i{display:inline-block;animation:nudgeDown 2.2s ease-in-out infinite}
 @keyframes nudgeDown{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 .plate .badge img.pl{width:auto;height:100px;max-width:100%;margin:0 0 4px}
@@ -796,10 +798,9 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 #gate .line2 .caret.on{opacity:1}
 .mark img{height:58px}
 .hero .ph{z-index:1}
-.plate .badge{min-height:150px;align-content:end;justify-items:start}
-.plate .badge img,.plate .badge img.tl,.plate .badge img.pl{width:auto;height:104px;max-width:250px;object-fit:contain;object-position:left center;margin:0 0 6px}
-.plate .badge img.nbc{height:132px;max-width:300px}
-.plate .badge img.jcp{height:80px;border-radius:12px}
+.plate .badge{min-height:0;grid-template-rows:100px auto;align-items:end;align-content:start;justify-items:start;gap:12px}
+.plate .badge img,.plate .badge img.tl,.plate .badge img.pl,.plate .badge img.nbc,.plate .badge img.jcp{width:auto;height:100px;max-width:100%;object-fit:contain;object-position:left bottom;margin:0;border-radius:0;align-self:end}
+.plate .badge img.jcp{border-radius:10px}
 ol.spine.journey li{grid-template-columns:150px 1fr 220px}
 ol.spine.journey .pic{width:220px;height:150px;max-height:none;aspect-ratio:auto;object-fit:cover;background:#0d0d0d}
 ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
@@ -835,7 +836,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
   <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="../assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></div>
-  <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType">Everyone deserves a way in.</span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
+  <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType">Everyone deserves <em>a way in.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
   <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
   <div class="daylight" id="gDay"></div>
 </div>
@@ -847,7 +848,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 
 <!-- ══ THE HERO: the shutter opens as you scroll ══ -->
 <section class="hero" id="top" aria-label="The way in">
-  <div class="ph" aria-hidden="true"><img src="../assets/floor.jpg" srcset="../assets/floor-sm.jpg 600w, ../assets/floor.jpg 1200w" sizes="100vw" width="1200" height="1395" alt="" decoding="async"></div>
+  <div class="ph" aria-hidden="true"><img src="../assets/warehouse-outside.jpg" srcset="../assets/warehouse-outside-sm.jpg 960w, ../assets/warehouse-outside.jpg 1920w" sizes="100vw" width="1920" height="1344" alt="" decoding="async"></div>
   <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
   <div class="daylight" id="daylight" aria-hidden="true"></div>
   <div class="in" id="heroIn">
@@ -913,16 +914,16 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
           <dl><dt>Since</dt><dd>Supported college placements with New Bridge College since 2021; Jobcentre Plus referrals; T Level industry placements with Bury College since October 2025.</dd>
           <dt>Volume</dt><dd>Three T Level students in the first cohort, three more from October 2026, alongside college placements, Jobcentre referrals and two Jobs Guarantee roles.</dd>
           <dt>Outcome</dt><dd>All three T Level students progressed into paid work: summer internships, then continuing roles. Earlier college and Jobcentre starters are in long-term jobs.</dd></dl>
-          <details class="more"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, arranged with Bury College and recorded in weekly and monthly placement workbooks that Tom reviews with each student. Owner: Tom Letcher, founder and programme sponsor.</div></details></div>
+          <details class="more"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, arranged with Bury College and recorded in weekly and monthly placement workbooks that Tom reviews with each student.</div></details></div>
         <div class="actcard"><div class="k"><span class="num">b</span>Mentoring and workplace training</div>
           <dl><dt>Since</dt><dd>Every placement, from the first day.</dd>
           <dt>Volume</dt><dd>One named mentor per student; adjustments offered before the start.</dd>
           <dt>Outcome</dt><dd>Something each person owns by the end, and a paid role wherever one exists.</dd></dl>
-          <details class="more r"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, with a live brief the person owns and responsibility that grows with confidence. Tom gives around 28 hours a week to it. Owner: Tom Letcher.</div></details></div>
+          <details class="more r"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, with a live brief the person owns and responsibility that grows with confidence. Tom gives around 28 hours a week to it.</div></details></div>
             </div>
     </div>
     <div class="photos rv" aria-label="The work">
-      <figure><img src="../assets/journey/team-container.webp" width="1400" height="1867" style="object-position:50% 42%" alt="Three of the warehouse team in front of a container being unloaded at Unit 19, pallets of Firestorm stock beside them" loading="lazy" decoding="async"><figcaption>Container day, Unit 19</figcaption></figure>
+      <figure><img src="../assets/journey/ch15-a.webp" width="1078" height="1254" style="object-position:50% 40%" alt="Bill presenting the Freedom Group project at the weekly meeting, the new website on the laptop" loading="lazy" decoding="async"><figcaption>Bill presenting the Freedom Group project</figcaption></figure>
       <figure><img src="../assets/journey/ch10-a.webp" width="1078" height="1254" alt="Unit 19 at night with the Freedom Fire and Safety sign lit" loading="lazy" decoding="async"><figcaption>Unit 19, Pilsworth</figcaption></figure>
       <figure><img src="../assets/journey/team-races.webp" width="1600" height="1200" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><figcaption>The team at the races, 2026</figcaption></figure>
     </div>
@@ -1000,7 +1001,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
         <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
     </figure>
-    <figure class="photo rv"><img src="../assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>The team in a container at Unit 19, 2026</figcaption></figure>
+    <figure class="photo rv"><img src="../assets/journey/ch13-b.webp" width="1078" height="1254" style="object-position:50% 62%" alt="The team in front of the first container of Firestorm stock on Christmas Eve 2024" loading="lazy" decoding="async"><figcaption>The team unloading one of their containers at Christmas</figcaption></figure>
   </div>
 </section>
 
@@ -1015,13 +1016,13 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
       </div>
     </div>
     <div class="plates flip rv">
-      <div class="plate"><div class="badge"><img class="tl" src="../assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>Employer ambassador</small></div><span class="k">T Level Ambassador Network</span>
+      <div class="plate"><div class="badge"><img class="tl" src="../assets/tlevel-ambassador-t.png" width="238" height="113" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>Employer ambassador</small></div><span class="k">T Level Ambassador Network</span>
         <h3>T Level Ambassadors</h3>
         <p>Freedom Fire is an employer ambassador: it hosts T Level industry placements and speaks for them to other employers.</p></div>
-      <div class="plate"><div class="badge"><img src="../assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
+      <div class="plate"><div class="badge"><img src="../assets/disability-confident-committed-t.png" width="497" height="228" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
         <h3>Disability Confident</h3>
         <p>Committed, Level 1, with Level 2 Employer accreditation in progress. Adjustments are offered before a placement starts, not after a problem.</p></div>
-      <div class="plate"><div class="badge"><img class="pl nbc" src="../assets/new-bridge-college.png" width="640" height="282" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
+      <div class="plate"><div class="badge"><img class="pl nbc" src="../assets/new-bridge-college-t.png" width="479" height="182" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
         <h3>New Bridge College</h3>
         <p>Supported placements since 2021 for young people with additional needs. One of the earliest, Jojo, has been full-time since 2022. Tom has been back twice to speak, and once more with a professional boxer for a workshop on resilience and ambition.</p></div>
       <div class="plate"><div class="badge"><img class="pl jcp" src="../assets/jobcentre-plus.png" width="640" height="219" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Government employment service · the Jobs Guarantee</small></div><span class="k">A Government initiative · with the Growth Company · 2026</span>
@@ -1044,19 +1045,19 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
     </div>
     <ol class="spine journey rv">
       <li class="haspic"><img class="pic" src="../assets/journey/ch1-a.webp" alt="A row of refurbished red extinguishers" loading="lazy" decoding="async"><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b><span class="fx"> Tom Letcher sells one refurbished extinguisher from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch2-a.webp" alt="Hundreds of extinguishers waiting on the bench" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>The first students on the bench.</b><span class="fx"> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch4-a.webp" alt="The Freedom Fire team in 2020, the year the students joined the bench" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>The first students on the bench.</b><span class="fx"> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch6-a.webp" alt="An engineer in a hi-vis vest on a customer site" loading="lazy" decoding="async"><span class="when">Aug 2021</span><span class="what"><b>The company.</b><span class="fx"> Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install extinguishers on commercial sites alongside the online range.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch7-a.webp" alt="The team in front of the Freedom Fire sign at Unit 10" loading="lazy" decoding="async"><span class="when">2021</span><span class="what"><b>The first placements.</b><span class="fx"> Learners from Newbridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch4-a.webp" alt="Four of the team in company shirts at Unit 10" loading="lazy" decoding="async"><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b><span class="fx"> Unit 10, about 500 square feet: the first premises the company could call its own, and a base for the team.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch16-a.webp" alt="The best-selling items on the eBay store" loading="lazy" decoding="async"><span class="when">2023</span><span class="what"><b>The year of building.</b><span class="fx"> Thousands of products researched, photographed and written up by hand before the store opened. The founder's own savings fund the stock.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch9-a.webp" alt="The eBay sign at the awards, with the invitation in hand" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay Social Impact Award.</b><span class="fx"> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards for the category of social impact, and the trip to Belfast tells the story of the young people given a way in.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/people/jojo.jpg" alt="Jojo, who came in on a New Bridge College placement in 2021" style="object-position:50% 22%" loading="lazy" decoding="async"><span class="when">2021</span><span class="what"><b>The first placements.</b><span class="fx"> Learners from Newbridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch7-a.webp" alt="The team in front of the Freedom Fire sign at Unit 10" loading="lazy" decoding="async"><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b><span class="fx"> Unit 10, about 500 square feet: the first premises the company could call its own, and a base for the team.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch8-a.webp" alt="Stock being racked ahead of the store launch, 2023" loading="lazy" decoding="async"><span class="when">2023</span><span class="what"><b>The year of building.</b><span class="fx"> Thousands of products researched, photographed and written up by hand before the store opened. The founder's own savings fund the stock.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch9-c.webp" alt="Tom on stage at the eBay for Business Awards, 2024" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay Social Impact Award.</b><span class="fx"> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards for the category of social impact, and the trip to Belfast tells the story of the young people given a way in.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch10-a.webp" alt="Unit 19 at night with the sign lit" loading="lazy" decoding="async"><span class="when">Nov 2024</span><span class="what"><b>Unit 19.</b><span class="fx"> An empty industrial shell turned into the headquarters over six months, with offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch13-a.webp" alt="Three of the team at the open doors of a container" loading="lazy" decoding="async"><span class="when">Dec 2024</span><span class="what"><b>The team unloading one of their containers at Christmas.</b><span class="fx"> Christmas Eve 2024: the first container of Firestorm fire extinguishers, the company's own brand, ordered on money the business did not yet have.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch11-a.webp" alt="Three of the team beside the sign at the headquarters" loading="lazy" decoding="async"><span class="when">Oct 2025</span><span class="what"><b>T Level placements begin.</b><span class="fx"> The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch15-a.webp" alt="Bill at the laptop in front of the Freedom Group wall, the new website on screen" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b><span class="fx"> Two of the T Level students spend six months building the company's new website and storefronts from scratch. An agency had quoted about £40,000 for the job.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch13-b.webp" alt="The team in front of the first container of Firestorm stock, Christmas 2024" loading="lazy" decoding="async"><span class="when">Dec 2024</span><span class="what"><b>The team unloading one of their containers at Christmas.</b><span class="fx"> Christmas Eve 2024: the first container of Firestorm fire extinguishers, the company's own brand, ordered on money the business did not yet have.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/tlevel-trio.webp" alt="Bill, Harrison and Gabriel, the first T Level cohort" loading="lazy" decoding="async"><span class="when">Oct 2025</span><span class="what"><b>T Level placements begin.</b><span class="fx"> The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/web-duo.webp" alt="Bill and Gabriel, who built the website and storefronts" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b><span class="fx"> Two of the T Level students spend six months building the company's new website and storefronts from scratch. An agency had quoted about £40,000 for the job.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/team-races.webp" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b><span class="fx"> All three of the first cohort complete their placements and move into paid summer internships, then continuing roles.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch21a.webp" alt="Number one of 1,193 sellers in the eBay fire extinguisher category" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, it is nominated for the King's Awards for Enterprise, and launches on Amazon and Shopify are in preparation.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch13-team.webp" alt="The whole team inside a container at Unit 19" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>Presenting to the team.</b><span class="fx"> At the weekly meeting a different colleague presents their work and takes feedback from the room, so confidence and leadership are built by everyone, not handed down.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch15-a.webp" alt="Bill presenting the Freedom Group project at the weekly meeting" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>Presenting to the team.</b><span class="fx"> At the weekly meeting a different colleague presents their work and takes feedback from the room, so confidence and leadership are built by everyone, not handed down.</span></span></li>
       <li class="haspic"><img class="pic logo" src="../assets/jobcentre-plus.png" alt="Jobcentre Plus" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students arrive, and two young people are recruited through the Government's Jobs Guarantee with the Growth Company. The newest ways in.</span></span></li>
     </ol>
   </div>
