@@ -789,6 +789,22 @@ ol.spine.journey .pic.logo{border-radius:14px;padding:0}
 @media(max-width:600px){.verse{grid-template-columns:1fr}}
 footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--pale-3);line-height:1.7}
 .vid.wide{aspect-ratio:16/9;max-height:none;width:100%;margin:18px 0 0;border-radius:14px}
+
+/* 9 Sept: startup logo, typed line, hero photograph, badges, timeline pictures */
+#gate .glogo{width:clamp(240px,32vw,520px)}
+#gate .line2 .caret{display:inline-block;width:.08em;height:.95em;margin-left:.08em;vertical-align:-.1em;background:#fff;opacity:0;animation:caret .8s steps(1) infinite}
+@keyframes caret{50%{opacity:0}}
+#gate .line2 .caret.on{opacity:1}
+.mark img{height:58px}
+.hero .ph{z-index:1}
+.plate .badge{min-height:150px;align-content:end;justify-items:start}
+.plate .badge img,.plate .badge img.tl,.plate .badge img.pl{width:auto;height:104px;max-width:250px;object-fit:contain;object-position:left center;margin:0 0 6px}
+.plate .badge img.nbc{height:132px;max-width:300px}
+.plate .badge img.jcp{height:80px;border-radius:12px}
+ol.spine.journey li{grid-template-columns:150px 1fr 220px}
+ol.spine.journey .pic{width:220px;height:150px;max-height:none;aspect-ratio:auto;object-fit:cover;background:#0d0d0d}
+ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
+@media(max-width:900px){ol.spine.journey li{grid-template-columns:1fr}ol.spine.journey .pic{width:100%;max-width:340px;height:auto;aspect-ratio:4/3}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -819,8 +835,8 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
-  <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="assets/ff_logo.png" alt="Freedom Fire &amp; Safety"><small id="gStrap">Not everyone arrives by the same route...</small></div>
-  <div class="stencil two" id="gStencil2"><b class="line2">Everyone deserves a way in.</b></div>
+  <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></div>
+  <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType">Everyone deserves a way in.</span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
   <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
   <div class="daylight" id="gDay"></div>
 </div>
@@ -832,6 +848,7 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 
 <!-- ══ THE HERO: the shutter opens as you scroll ══ -->
 <section class="hero" id="top" aria-label="The way in">
+  <div class="ph" aria-hidden="true"><img src="assets/floor.jpg" srcset="assets/floor-sm.jpg 600w, assets/floor.jpg 1200w" sizes="100vw" width="1200" height="1395" alt="" decoding="async"></div>
   <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
   <div class="daylight" id="daylight" aria-hidden="true"></div>
   <div class="in" id="heroIn">
@@ -891,12 +908,12 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
       </div>
     </div>
     <div class="acts rv" id="activities">
-      <div class="ph">What every placement includes: two commitments, from day one</div>
+      <div class="ph">What every placement includes, whether it starts at college, through the Jobcentre or on a T Level: two commitments, from day one</div>
       <div class="actgrid">
-        <div class="actcard"><div class="k"><span class="num">a</span>T Level industry placements</div>
-          <dl><dt>Since</dt><dd>October 2025, with Bury College.</dd>
-          <dt>Volume</dt><dd>Three students in the first cohort; three more from October 2026.</dd>
-          <dt>Outcome</dt><dd>All three progressed into paid work: summer internships, then continuing roles.</dd></dl>
+        <div class="actcard"><div class="k"><span class="num">a</span>Placements: college, Jobcentre and T Level</div>
+          <dl><dt>Since</dt><dd>Supported college placements with New Bridge College since 2021; Jobcentre Plus referrals; T Level industry placements with Bury College since October 2025.</dd>
+          <dt>Volume</dt><dd>Three T Level students in the first cohort, three more from October 2026, alongside college placements, Jobcentre referrals and two Jobs Guarantee roles.</dd>
+          <dt>Outcome</dt><dd>All three T Level students progressed into paid work: summer internships, then continuing roles. Earlier college and Jobcentre starters are in long-term jobs.</dd></dl>
           <details class="more"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, arranged with Bury College and recorded in weekly and monthly placement workbooks that Tom reviews with each student. Owner: Tom Letcher, founder and programme sponsor.</div></details></div>
         <div class="actcard"><div class="k"><span class="num">b</span>Mentoring and workplace training</div>
           <dl><dt>Since</dt><dd>Every placement, from the first day.</dd>
@@ -1005,12 +1022,12 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
       <div class="plate"><div class="badge"><img src="assets/disability-confident-committed.png" width="500" height="500" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
         <h3>Disability Confident</h3>
         <p>Committed, Level 1, with Level 2 Employer accreditation in progress. Adjustments are offered before a placement starts, not after a problem.</p></div>
-      <div class="plate"><div class="badge"><img class="pl" src="assets/new-bridge-college.png" width="640" height="282" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
+      <div class="plate"><div class="badge"><img class="pl nbc" src="assets/new-bridge-college.png" width="640" height="282" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
         <h3>New Bridge College</h3>
         <p>Supported placements since 2021 for young people with additional needs. One of the earliest, Jojo, has been full-time since 2022. Tom has been back twice to speak, and once more with a professional boxer for a workshop on resilience and ambition.</p></div>
-      <div class="plate"><div class="badge"><img class="pl jcp" src="assets/jobcentre-plus.png" width="640" height="219" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Referrals and the Jobs Guarantee</small></div><span class="k">With the Growth Company · 2026</span>
+      <div class="plate"><div class="badge"><img class="pl jcp" src="assets/jobcentre-plus.png" width="640" height="219" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Government employment service · the Jobs Guarantee</small></div><span class="k">A Government initiative · with the Growth Company · 2026</span>
         <h3>Jobcentre Plus and the Jobs Guarantee</h3>
-        <p>Josh came in through the Jobcentre. Two Jobs Guarantee roles are being recruited with the Growth Company: funded six-month jobs of up to 25 hours a week for 18 to 21 year olds who have been looking for work for 18 months or more.</p></div>
+        <p>Jobcentre Plus is the Government's employment service, and Josh came in through a Jobcentre referral. The Jobs Guarantee is a Government initiative delivered locally by the Growth Company: two funded six-month jobs of up to 25 hours a week, for 18 to 21 year olds who have been looking for work for 18 months or more, are being recruited now.</p></div>
     </div>
   </div>
 </section>
@@ -1035,12 +1052,12 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
       <li class="haspic"><img class="pic" src="assets/journey/ch16-a.webp" alt="The best-selling items on the eBay store" loading="lazy" decoding="async"><span class="when">2023</span><span class="what"><b>The year of building.</b><span class="fx"> Thousands of products researched, photographed and written up by hand before the store opened. The founder's own savings fund the stock.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch9-a.webp" alt="The eBay sign at the awards, with the invitation in hand" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay Social Impact Award.</b><span class="fx"> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards for the category of social impact, and the trip to Belfast tells the story of the young people given a way in.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch10-a.webp" alt="Unit 19 at night with the sign lit" loading="lazy" decoding="async"><span class="when">Nov 2024</span><span class="what"><b>Unit 19.</b><span class="fx"> An empty industrial shell turned into the headquarters over six months, with offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></span></li>
-      <li class="haspic"><img class="pic" src="assets/journey/ch13-a.webp" alt="Three of the team at the open doors of a container" loading="lazy" decoding="async"><span class="when">Dec 2024</span><span class="what"><b>Taking risks.</b><span class="fx"> The team unloads the first container of Firestorm extinguishers, the company's own brand, ordered on money the business did not yet have.</span></span></li>
+      <li class="haspic"><img class="pic" src="assets/journey/ch13-a.webp" alt="Three of the team at the open doors of a container" loading="lazy" decoding="async"><span class="when">Dec 2024</span><span class="what"><b>The team unloading one of their containers at Christmas.</b><span class="fx"> Christmas Eve 2024: the first container of Firestorm fire extinguishers, the company's own brand, ordered on money the business did not yet have.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch11-a.webp" alt="Three of the team beside the sign at the headquarters" loading="lazy" decoding="async"><span class="when">Oct 2025</span><span class="what"><b>T Level placements begin.</b><span class="fx"> The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></span></li>
-      <li class="haspic"><img class="pic" src="assets/journey/ch3-a.webp" alt="Boxed extinguishers packed on a pallet for dispatch" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b><span class="fx"> Two of the T Level students spend six months building the company's new website and storefronts from scratch. An agency had quoted about £40,000 for the job.</span></span></li>
-      <li class="haspic"><img class="pic" src="assets/journey/ch13-team.webp" alt="The whole team inside a container at Unit 19" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b><span class="fx"> All three of the first cohort complete their placements and move into paid summer internships, then continuing roles.</span></span></li>
+      <li class="haspic"><img class="pic" src="assets/journey/ch15-a.webp" alt="Bill at the laptop in front of the Freedom Group wall, the new website on screen" loading="lazy" decoding="async"><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b><span class="fx"> Two of the T Level students spend six months building the company's new website and storefronts from scratch. An agency had quoted about £40,000 for the job.</span></span></li>
+      <li class="haspic"><img class="pic" src="assets/journey/team-races.webp" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b><span class="fx"> All three of the first cohort complete their placements and move into paid summer internships, then continuing roles.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch21a.webp" alt="Number one of 1,193 sellers in the eBay fire extinguisher category" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, it is nominated for the King's Awards for Enterprise, and launches on Amazon and Shopify are in preparation.</span></span></li>
-      <li class="haspic"><img class="pic" src="assets/journey/ch15-a.webp" alt="A T Level student presenting the Freedom Group project at the weekly meeting" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>Presenting to the team.</b><span class="fx"> At the weekly meeting a different colleague presents their work and takes feedback from the room, so confidence and leadership are built by everyone, not handed down.</span></span></li>
+      <li class="haspic"><img class="pic" src="assets/journey/ch13-team.webp" alt="The whole team inside a container at Unit 19" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>Presenting to the team.</b><span class="fx"> At the weekly meeting a different colleague presents their work and takes feedback from the room, so confidence and leadership are built by everyone, not handed down.</span></span></li>
       <li class="haspic"><img class="pic logo" src="assets/jobcentre-plus.png" alt="Jobcentre Plus" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students arrive, and two young people are recruited through the Government's Jobs Guarantee with the Growth Company. The newest ways in.</span></span></li>
     </ol>
   </div>
@@ -1053,22 +1070,23 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
       <div>
         <div class="ch-tag"><span class="num">07</span>How we learn</div>
         <h2 class="wd">Feedback, <em class="s">then a change.</em></h2>
-        <p class="stand">Three cases. What was said, what changed, what followed.</p>
+        <p class="stand">What people told us, and what changed because of it. Feedback comes from daily one-to-ones, reviews,
+          the weekly meeting, the participant films, Bury College's T Level workbooks, and from tutors and families.</p>
       </div>
     </div>
     <div class="cases rv">
-      <div class="case"><div class="k">Placement students</div>
-        <dl><dt>Said</dt><dd>Being trusted with something real is the difference.</dd>
-        <dt>Changed</dt><dd>Every placement now starts with a live brief the person owns.</dd>
-        <dt>Followed</dt><dd>All three progressed into paid work in 2026.</dd></dl></div>
-      <div class="case"><div class="k">Adjustments</div>
-        <dl><dt>Said</dt><dd>Some needed the job shaped around them; for others the barrier was travel, not ability.</dd>
-        <dt>Changed</dt><dd>Adjustments offered before the interview, written into the start.</dd>
+      <div class="case"><div class="k">The participants</div>
+        <dl><dt>Said</dt><dd>Real responsibility makes them feel trusted, and regular guidance makes unfamiliar work less intimidating. Some found unclear tasks overwhelming, or were nervous speaking in front of others.</dd>
+        <dt>Changed</dt><dd>Clearer written job lists, projects split into achievable stages, tasks matched to strengths, and responsibility increased gradually.</dd>
+        <dt>Followed</dt><dd>At the weekly meeting a different colleague now presents their work and takes feedback from the room, so confidence is built by everyone rather than handed down by the founder.</dd></dl></div>
+      <div class="case"><div class="k">Circumstances</div>
+        <dl><dt>Said</dt><dd>Confidence, communication and routine were bigger barriers than technical ability. Some needed flexibility around education, travel or home life.</dd>
+        <dt>Changed</dt><dd>Hours adjusted around courses, equipment provided, one-to-one support increased where needed, and adjustments offered before anyone starts.</dd>
         <dt>Followed</dt><dd>People a standard interview would have missed are in long-term roles. Jojo, cycling in from Rochdale, has four years without a sick day.</dd></dl></div>
-      <div class="case"><div class="k">Measurement</div>
-        <dl><dt>Said</dt><dd>Records lived in workbooks, emails and memory, and satisfaction was never measured.</dd>
-        <dt>Changed</dt><dd>A central participant register, checked against source records monthly, and anonymous feedback at the start, midpoint and end of every placement.</dd>
-        <dt>Followed</dt><dd>The first full year is reported here when it is complete.</dd></dl></div>
+      <div class="case"><div class="k">Families and tutors</div>
+        <dl><dt>Said</dt><dd>Josh's mum wrote unprompted that “all hope was lost” after the family's losses, and then: “I can finally say ‘I got my son back’.” Tutors and families give the independent view of change.</dd>
+        <dt>Changed</dt><dd>No satisfaction ratings are claimed until they are measured. Anonymous feedback at the start, midpoint and end of every placement is being formalised, alongside a central participant register.</dd>
+        <dt>Followed</dt><dd>The first full year of measured feedback is reported here when it is complete.</dd></dl></div>
     </div>
   </div>
 </section>

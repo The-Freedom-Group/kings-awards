@@ -123,12 +123,17 @@
     var hurry = function () { if (intro.progress() < 1) intro.timeScale(2.5); };
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
     var flSplit = new SplitText("#fl", { type: "chars" });
-    intro.fromTo("#gLogo", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 1.1, ease: "power3.out" }, 0.25)
-      .fromTo("#gStrap", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .9 }, 1.1)
-      .to("#gStencil", { autoAlpha: 0, y: -14, duration: .6, ease: "power2.in" }, 3.1)
-      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 3.4)
-      .fromTo("#gStencil2", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: .9, ease: "power3.out" }, 4.4)
-      .add("gate", 6.4)
+    /* the mark comes in and goes out again; the shutter arrives; the line is typed out on it */
+    var typeSplit = new SplitText("#gType", { type: "chars" }), caret = $("#gCaret");
+    gsap.set(typeSplit.chars, { autoAlpha: 0 });
+    intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" }, 0.25)
+      .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .7, ease: "power2.in" }, 2.4)
+      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .8, ease: "power2.out" }, 3.0)
+      .set("#gStencil2", { autoAlpha: 1 }, 3.6)
+      .call(function () { if (caret) caret.classList.add("on"); }, null, 3.6)
+      .to(typeSplit.chars, { autoAlpha: 1, duration: .01, stagger: .055, ease: "none" }, 3.9)
+      .add("gate", 6.6)
+      .call(function () { if (caret) caret.classList.remove("on"); }, null, "gate")
       .call(function () { gate.classList.add("opening"); }, null, "gate")
       .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
       .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")
@@ -368,7 +373,8 @@
     function close() { if (!cur) return; cur.classList.remove("is-open"); cur.querySelector("summary").setAttribute("aria-expanded", "false"); cur = null; pop.classList.remove("on"); }
     function place(btn) {
       var r = btn.getBoundingClientRect(), W = window.innerWidth, H = window.innerHeight, pw = pop.offsetWidth, ph = pop.offsetHeight;
-      var left = clamp(r.left - 8, 16, W - pw - 16), above = r.bottom + 12 + ph > H - 16 && r.top - 12 - ph > 16;
+      /* above by preference, so the panel never covers the button or link beneath; below only when there is no room above */
+      var left = clamp(r.left - 8, 16, W - pw - 16), above = r.top - 12 - ph > 16 || r.bottom + 12 + ph > H - 16;
       var top = above ? r.top - 12 - ph : r.bottom + 12;
       pop.style.left = left + "px"; pop.style.top = top + "px";
       pop.style.setProperty("--ax", clamp(r.left + r.width / 2 - left - 6, 14, pw - 26) + "px");
