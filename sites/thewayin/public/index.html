@@ -801,10 +801,10 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 #gate .line2 .caret{position:relative;top:.04em}
 .mark img{height:58px}
 .hero .ph{z-index:1}
-/* the whole of Unit 19 shows, at full height, with a blurred copy of itself filling the sides */
-.hero .ph img.bg{filter:blur(22px) brightness(.42) saturate(.9)!important;transform:scale(1.12)!important}
-.hero .ph img.fg{position:absolute;left:50%;top:50%;height:108%;width:auto;max-width:none;transform:translate(-50%,-50%)!important;object-fit:cover;box-shadow:0 0 140px rgba(0,0,0,.7)}
-@media(max-width:820px){.hero .ph img.fg{height:auto;width:100%}}
+/* Unit 19 fills the hero edge to edge: the full width of the photograph, no extra zoom, the sign and door kept in view */
+.hero .ph{inset:0}
+.hero .ph img.bg{display:none}
+.hero .ph img.fg{object-fit:cover;object-position:50% 56%;transform:none!important}
 .plate .badge{min-height:0;grid-template-rows:100px auto;align-items:end;align-content:start;justify-items:start;gap:12px}
 .plate .badge img,.plate .badge img.tl,.plate .badge img.pl,.plate .badge img.nbc,.plate .badge img.jcp{width:auto;height:100px;max-width:100%;object-fit:contain;object-position:left bottom;margin:0;border-radius:0;align-self:end}
 .plate .badge img.jcp{border-radius:10px}
