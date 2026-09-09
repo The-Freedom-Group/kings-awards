@@ -817,6 +817,44 @@ ol.spine.journey li{grid-template-columns:150px 1fr 220px}
 ol.spine.journey .pic{width:220px;height:150px;max-height:none;aspect-ratio:auto;object-fit:cover;background:#0d0d0d}
 ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 @media(max-width:900px){ol.spine.journey li{grid-template-columns:1fr}ol.spine.journey .pic{width:100%;max-width:340px;height:auto;aspect-ratio:4/3}}
+
+/* ── late 9 Sept: startup, hero, cursor, section one, the sideways timeline ── */
+#gate .stencil.two .sub{display:block;margin-top:clamp(16px,2.4vh,26px);font-family:var(--mono);font-size:clamp(11px,1vw,14px);letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.72);opacity:0}
+:is(.shutter,.gate) .housing::before{display:none!important}
+.hero .ph img.fg{transform:scale(1.2)!important;transform-origin:100% 26%}
+.hero .foot{grid-template-columns:1fr}
+.hero .fl,.hero .fr{display:none!important}
+.hero .fm{justify-self:center}
+/* the cursor: smaller, a diamond that turns into a disc when it has something to say */
+.cur-dot{width:5px;height:5px;margin:-2.5px 0 0 -2.5px}
+.cur-ring{width:26px;height:26px;margin:-13px 0 0 -13px;border:0!important;background:transparent!important;mix-blend-mode:normal}
+.cur-ring::before{content:"";position:absolute;inset:0;border:1.5px solid #fff;border-radius:5px;transform:rotate(45deg);mix-blend-mode:difference;transition:border-radius .3s,transform .35s cubic-bezier(.2,.8,.2,1),background .3s,border-color .3s}
+body.cur-big .cur-ring{width:52px;height:52px;margin:-26px 0 0 -26px}
+body.cur-big .cur-ring::before{border-radius:9px;background:var(--red);border-color:var(--red);mix-blend-mode:normal}
+.cur-ring svg{width:18px;height:18px;position:relative;z-index:1}
+body.cur-label .cur-ring{width:64px;height:64px;margin:-32px 0 0 -32px}
+body.cur-label .cur-ring::before{border-radius:50%;transform:none;background:var(--red);border-color:var(--red);mix-blend-mode:normal}
+.cur-ring b{font-size:8.5px;z-index:1}
+/* section one: the line held together, the read more to the right */
+.nw{white-space:nowrap}
+.intro .fu-1 .more{display:block!important;text-align:right;margin:14px 0 0!important;line-height:1}
+.intro .fu-1 .more summary{display:inline-block}
+/* the timeline, sideways, its line running in from the red rail on the left */
+.tl-rail{position:relative;margin-top:clamp(28px,4vw,48px)}
+.tl-rail::before{content:"";position:absolute;left:-100vw;right:0;top:31px;height:3px;background:linear-gradient(90deg,var(--red) 0,var(--red) 55%,rgba(225,6,0,.35));z-index:0}
+.tl-rail::after{content:"";position:absolute;right:0;top:25px;width:15px;height:15px;border-radius:50%;background:var(--red);box-shadow:0 0 12px rgba(225,6,0,.8)}
+ol.spine.journey{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;padding:64px 0 22px;margin:0;border-top:0;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent;-webkit-overflow-scrolling:touch}
+ol.spine.journey::before{display:none}
+ol.spine.journey li{flex:0 0 clamp(250px,22vw,300px);display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;gap:12px;padding:0 24px 0 0;margin:0 22px 0 0;border-bottom:0;scroll-snap-align:start;position:relative;align-items:start}
+ol.spine.journey li::before{left:0;top:-39px;transform:none;width:13px;height:13px}
+ol.spine.journey li:not(.haspic) .what{grid-column:1}
+ol.spine.journey .pic{grid-column:1;grid-row:1;justify-self:stretch;width:100%;height:168px;object-fit:cover}
+ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
+ol.spine.journey .when{grid-column:1;grid-row:2;font-size:clamp(20px,1.7vw,24px)}
+ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.55}
+.tl-hint{margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--pale-3)}
+.tl-hint i{font-style:normal;color:var(--red)}
+@media(max-width:900px){ol.spine.journey li{flex-basis:min(78vw,300px);grid-template-columns:1fr}ol.spine.journey .pic{width:100%;height:150px;max-width:none;aspect-ratio:auto}ol.spine.journey li::before{top:-39px}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -836,19 +874,19 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
     <a class="mark" href="#top" aria-label="Freedom Fire &amp; Safety — top"><img src="assets/ff_logo_black.png" alt="Freedom Fire &amp; Safety"></a>
     <span class="now" id="now" aria-hidden="true"><span class="num" id="nowN">00</span><span id="nowT">The way in</span></span>
     <nav aria-label="Sections">
-      <a href="#why">Why</a><a href="#programme">The route</a><a href="#people">The people</a>
-      <a href="#impact">Impact</a><a href="#partners">Partners</a><a href="#timeline">Timeline</a>
+      <a href="#why">Why</a><a href="#programme">The route</a><a href="#timeline">Timeline</a>
+      <a href="#people">The people</a><a href="#impact">Impact</a><a href="#partners">Partners</a>
     </nav>
     <a class="cp-btn" href="#next" data-cur>Ask about a placement</a>
   </div>
 </header>
 <div class="menu" id="menu" aria-hidden="true"><button class="x" id="menuX" type="button" aria-label="Close">×</button>
-  <a href="#why"><small>01</small>Why it exists</a><a href="#programme"><small>02</small>The route in</a><a href="#people"><small>03</small>The people</a><a href="#impact"><small>04</small>The impact</a><a href="#partners"><small>05</small>The partners</a><a href="#timeline"><small>06</small>The timeline</a><a href="#learn"><small>07</small>How we learn</a><a href="#next"><small>08</small>What comes next</a></div>
+  <a href="#why"><small>01</small>Why it exists</a><a href="#programme"><small>02</small>The route in</a><a href="#timeline"><small>03</small>The timeline</a><a href="#people"><small>04</small>The people</a><a href="#impact"><small>05</small>The impact</a><a href="#partners"><small>06</small>The partners</a><a href="#learn"><small>07</small>How we learn</a><a href="#next"><small>08</small>What comes next</a></div>
 
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
   <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></div>
-  <div class="stencil two" id="gStencil1"><b class="line2"><span id="gType1">Not everyone arrives <em class="s">by the same route.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
+  <div class="stencil two" id="gStencil1"><b class="line2"><span id="gType1">Not everyone arrives <em class="s">by the same route.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b><small class="sub" id="gSub">Exit signs point out. This one points in.</small></div>
   <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType2">Everyone deserves <em class="s">a way in.</em></span></b></div>
   <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
   <div class="daylight" id="gDay"></div>
@@ -882,9 +920,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
     </div>
   </div>
   <div class="foot" id="heroFoot">
-    <div class="fl" id="fl">The Way In</div>
     <div class="fm" id="fm" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs><text><textPath href="#circ">Scroll · the way in ·</textPath></text></svg></div>
-    <div class="fr" id="fr"><a href="#programme"><span>The route in</span></a><a href="#partners"><span>The partners</span></a><a href="#timeline"><span>Timeline</span></a></div>
   </div>
 </section>
 
@@ -894,8 +930,8 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 <section class="intro" id="why" data-n="01">
   <div class="wrap">
     <h2 class="fi">We're Freedom Fire, a fire safety business in Bury. Hiring by CV <em class="s">kept missing people who could do the work.</em></h2>
-    <p class="fu-1">The way in has never been one route. The first workers were students on the bench in 2020. Supported placements with New Bridge College followed in 2021, then Jobcentre referrals and direct, inclusive recruitment, and since October 2025 the T Level industry placements with Bury College. Every route ends in the same place: a real role in the warehouse, on the web team, in ecommerce or in IT, a named person to learn from, and a long-term job where the work justifies it.
-      <details class="more"><summary data-cur-label="More" aria-label="More on why">Read more</summary><div class="pop"><b>Why CV-first hiring misses people</b>A polished history says little about whether someone can learn a warehouse, a service van or a storefront, and nothing about what they will do with a real chance. We assess attitude, reliability, interests and potential instead. Tom has navigated ADHD, family loss and an unconventional career himself; circumstances should never define potential.</div></details></p>
+    <p class="fu-1">The way in has never been one route. The first workers were students on the bench in 2020. Supported placements with New Bridge College followed in 2021, then Jobcentre referrals and direct, inclusive recruitment, and <span class="nw">since October 2025 the T Level</span> industry placements with Bury College. Every route ends in the same place: a real role in the warehouse, on the web team, in ecommerce or in IT, a named person to learn from, and a long-term job where the work justifies it.
+      <details class="more"><summary data-cur-label="More" aria-label="More on why">Read more</summary><div class="pop"><b>Why CV-first hiring misses people</b>A polished history says little about whether someone can learn a warehouse, a service van or a storefront, and nothing about what they will do with a real chance. We assess attitude, reliability, interests and potential instead.</div></details></p>
     <a class="tlink" href="#programme" data-cur>The route in <i>→</i></a>
   </div>
 </section>
@@ -912,7 +948,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
     </div>
     <div class="plan rv">
       <div class="floor" id="floor">
-        <div class="st"><div class="no">Stage 1</div><h3>T Level, college, Jobcentre</h3><p>A T Level placement with Bury College, a supported placement with New Bridge College, a Jobcentre Plus referral, or the Government's Jobs Guarantee, delivered locally by the Growth Company.</p></div>
+        <div class="st"><div class="no">Stage 1</div><h3>Four ways in</h3><p>A T Level placement with Bury College, a supported placement with New Bridge College, a Jobcentre Plus referral, or the Government's Jobs Guarantee, delivered locally by the Growth Company.</p></div>
         <div class="st"><div class="no">Stage 2</div><h3>Supported start</h3><p>A named person to learn from. Adjustments written in.</p></div>
         <div class="st"><div class="no">Stage 3</div><h3>Workplace skills</h3><p>Warehouse, web and ecommerce, IT.</p></div>
         <div class="st"><div class="no">Stage 4</div><h3>Responsibility</h3><p>Something the person owns.</p></div>
@@ -923,140 +959,40 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
     <div class="acts rv" id="activities">
       <div class="ph">What every placement includes, whether it starts at college, through the Jobcentre or on a T Level: two commitments, from day one</div>
       <div class="actgrid">
-        <div class="actcard"><div class="k"><span class="num">a</span>Placements: college, Jobcentre and T Level</div>
+        <div class="actcard"><div class="k"><span class="num">a</span>College placement and work experience</div>
           <dl><dt>Since</dt><dd>Supported college placements with New Bridge College since 2021; Jobcentre Plus referrals; T Level industry placements with Bury College since October 2025.</dd>
           <dt>Volume</dt><dd>Three T Level students in the first cohort, three more from October 2026, alongside college placements, Jobcentre referrals and two Jobs Guarantee roles.</dd>
           <dt>Outcome</dt><dd>All three T Level students progressed into paid work: summer internships, then continuing roles. Earlier college and Jobcentre starters are in long-term jobs.</dd></dl>
-          <details class="more"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, arranged with Bury College and recorded in weekly and monthly placement workbooks that Tom reviews with each student.</div></details></div>
+</div>
         <div class="actcard"><div class="k"><span class="num">b</span>Mentoring and workplace training</div>
           <dl><dt>Since</dt><dd>Every placement, from the first day.</dd>
           <dt>Volume</dt><dd>One named mentor per student; adjustments offered before the start.</dd>
-          <dt>Outcome</dt><dd>Something each person owns by the end, and a paid role wherever one exists.</dd></dl>
-          <details class="more r"><summary data-cur-label="More" aria-label="How it runs">Read more</summary><div class="pop"><b>How it runs</b>On the job alongside experienced staff, with a live brief the person owns and responsibility that grows with confidence. Tom gives around 28 hours a week to it.</div></details></div>
+          <dt>Outcome</dt><dd>Something each person owns by the end, and a paid role wherever one exists.</dd>
+          <dt>How</dt><dd>On the job alongside experienced staff, with a live brief the person owns from the first week and responsibility that grows with confidence.</dd>
+          <dt>Adjustments</dt><dd>Offered before the interview and written into the start: hours around a course, equipment, travel, one-to-one support where it is needed.</dd>
+          <dt>Time</dt><dd>Around 28 hours a week of the founder's time, and a named mentor for every placement.</dd></dl></div>
             </div>
     </div>
     <div class="photos rv" aria-label="The work">
-      <figure><img src="assets/journey/team-container.webp" width="1400" height="1867" style="object-position:50% 42%" alt="Three of the warehouse team in front of a container being unloaded at Unit 19, pallets of Firestorm stock beside them" loading="lazy" decoding="async"><figcaption>Container day, Unit 19</figcaption></figure>
+      <figure><img src="assets/journey/team-container.webp" width="1400" height="1867" style="object-position:50% 42%" alt="Three of the warehouse team in front of a container being unloaded at Unit 19, pallets of Firestorm stock beside them" loading="lazy" decoding="async"><figcaption>The team celebrating the new range from China</figcaption></figure>
       <figure><img src="assets/journey/ch15-a.webp" width="1078" height="1254" style="object-position:50% 40%" alt="Bill presenting the Freedom Group project at the weekly meeting, the new website on the laptop" loading="lazy" decoding="async"><figcaption>Bill presenting the Freedom Group project</figcaption></figure>
       <figure><img src="assets/journey/team-races.webp" width="1600" height="1200" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><figcaption>The team at the races, 2026</figcaption></figure>
     </div>
   </div>
 </section>
 
-<!-- ══ 03 THE PEOPLE ══ -->
-<section class="ch light" id="people" data-n="03">
+<!-- ══ 03 THE TIMELINE ══ -->
+<section class="ch dark" id="timeline" data-n="03">
   <div class="wrap">
     <div class="ch-head rv">
       <div>
-        <div class="ch-tag"><span class="num">03</span>The people</div>
-        <h2 class="wd">The team.<br><em class="s">Who they are, and how they came in.</em></h2>
-        <p class="stand">First name, role and route in. A full profile appears only with the person's approval.
-          <details class="more"><summary data-cur-label="More" aria-label="Consent">Read more</summary><div class="pop"><b>Consent</b>Each person chose whether to appear, with what name and what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to info@freedom-fire.co.uk. Nothing about health, background or personal history is published unless the person writes it.</div></details></p>
-      </div>
-    </div>
-    <div class="legend rv" aria-label="Route bands">
-      <span><i style="--b:#E10600"></i>Founder</span><span><i style="--b:#111"></i>T Level placement</span><span><i style="--b:#C9C9C4"></i>College placement</span><span><i style="--b:#fff"></i>Jobcentre or direct recruitment</span><span><i style="--b:#8A8A85"></i>Volunteer</span>
-    </div>
-    <div class="tiles" id="register">
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="tom" data-name="Tom" data-role="Founder &amp; managing director" data-route="Founder" data-since="March 2019" data-support="Family warehouse space to start in, and a manufacturer who backed a young company" data-skills="Ecommerce, direct sourcing, brand building, fire safety servicing" data-resp="The whole company: strategy, suppliers, partners and the programme itself" data-next="The second T Level cohort, and Freedom Global" data-b="#E10600" data-consent="approved" data-photo="assets/people/tom.jpg" data-stream="443a12d351a0fd0d7272a13c82b98833" aria-haspopup="dialog" style="--b:#E10600;--a:rgba(225,6,0,.45)">
-        <img class="por" src="assets/people/tom-sm.jpg" srcset="assets/people/tom-sm.jpg 525w, assets/people/tom.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">T</span>
-        <span class="cap"><b>Tom</b><span>Founder &amp; managing director</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="bill" data-name="Bill" data-role="Web developer" data-route="T Level industry placement" data-since="October 2025, at 17" data-support="A real brief and the room to make design decisions, with feedback when they went wrong" data-skills="Front-end development, storefront design, launching a live site" data-resp="The company's website and its storefront design" data-next="Paid summer internship, then continuing part-time work around a degree at the University of Salford" data-b="#111" data-consent="approved" data-photo="assets/people/bill.jpg" data-stream="650dffb1a624a01d81be73d6a3c873d3" aria-haspopup="dialog" style="--b:#111;--a:rgba(138,138,133,.35)">
-        <img class="por" src="assets/people/bill-sm.jpg" srcset="assets/people/bill-sm.jpg 525w, assets/people/bill.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
-        <span class="cap"><b>Bill</b><span>Web developer</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="gabriel" data-name="Gabriel" data-role="Web developer" data-route="T Level industry placement" data-since="October 2025" data-support="A named mentor on the web team and a live storefront brief from the first week" data-skills="Storefront builds, product listings, data entry, front-end development" data-resp="The online storefronts" data-next="Paid summer internship, then a long-term contract" data-b="#111" data-consent="approved" data-photo="assets/people/gabriel.jpg" data-stream="175aad7dbebdc9d3693d4d952c08e4c6" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.28)">
-        <img class="por" src="assets/people/gabriel-sm.jpg" srcset="assets/people/gabriel-sm.jpg 525w, assets/people/gabriel.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">G</span>
-        <span class="cap"><b>Gabriel</b><span>Web developer</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="harrison" data-name="Harrison" data-role="Warehouse operative" data-route="T Level industry placement" data-since="First T Level cohort" data-support="A named mentor in the warehouse and real orders from the first week" data-skills="Picking, packing, stock control, building checks" data-resp="Goods out on his shift" data-next="Paid work from 2026; moving into full-time employment" data-b="#111" data-consent="approved" data-photo="assets/people/harrison.jpg" data-stream="dac8994822150ac8d73eec942de3984f" aria-haspopup="dialog" style="--b:#111;--a:rgba(225,6,0,.3)">
-        <img class="por" src="assets/people/harrison-sm.jpg" srcset="assets/people/harrison-sm.jpg 525w, assets/people/harrison.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">H</span>
-        <span class="cap"><b>Harrison</b><span>Warehouse operative</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="2021; full-time paid work since 2022" data-support="A placement shaped around additional needs, with a named person to learn from. Cycles in from Rochdale, a three-to-four-hour round trip, with no sickness absence in four years" data-skills="Goods in, picking, packing, dispatch" data-resp="The daily dispatch run" data-next="Four years in; an example and a mentor for the next placement students" data-b="#C9C9C4" data-consent="approved" data-photo="assets/people/jojo.jpg" data-stream="8083fa4205480457455b23c771acea87" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
-        <img class="por" src="assets/people/jojo-sm.jpg" srcset="assets/people/jojo-sm.jpg 525w, assets/people/jojo.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
-        <span class="cap"><b>Jojo</b><span>Warehouse operative</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="College placement, then a paid role" data-since="Paid role from 2025; four to five days a week" data-support="Hours built around his course until it finished" data-skills="Platform channels, compliance, imagery" data-resp="Product images and listings across the storefronts" data-next="Growing the image work as new channels open" data-b="#C9C9C4" data-consent="approved" data-photo="assets/people/elliot.jpg" data-stream="4d13acdf85d9654ef1af01b4b54b434a" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(138,138,133,.35)">
-        <img class="por" src="assets/people/elliot-sm.jpg" srcset="assets/people/elliot-sm.jpg 525w, assets/people/elliot.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">E</span>
-        <span class="cap"><b>Elliot</b><span>Ecommerce assistant</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="josh" data-name="Josh" data-role="Ecommerce assistant" data-route="Jobcentre referral" data-since="2025, part-time around university" data-support="Paid work, mentoring and responsibility, with hours built around an architecture degree at the University of Salford" data-skills="Listings, order processing, customer messages, admin" data-resp="Storefront orders and customer replies" data-next="Growing with the storefronts as new channels open" data-b="#fff" data-consent="approved" data-photo="assets/people/josh.jpg" data-hascard="1" data-doclabel="See the card from Josh's mum" data-stream="f767b8d2dd9cde79e72653d7fbae5ce7" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
-        <img class="por" src="assets/people/josh-sm.jpg" srcset="assets/people/josh-sm.jpg 525w, assets/people/josh.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
-        <span class="cap"><b>Josh</b><span>Ecommerce assistant</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="dylan" data-name="Dylan" data-role="Warehouse operative" data-route="Direct, inclusive recruitment" data-since="April 2025" data-support="Started part-time on the warehouse floor and trained on the job; now full-time" data-skills="Picking, packing, dispatch, stock control" data-resp="Loading and dispatch" data-next="Growing the warehouse operation" data-b="#fff" data-consent="approved" data-photo="assets/people/dylan.jpg" data-stream="8fc4a2b19dcb8442b5f42648e6197474" aria-haspopup="dialog" style="--b:#fff;--a:rgba(225,6,0,.5)">
-        <img class="por" src="assets/people/dylan-sm.jpg" srcset="assets/people/dylan-sm.jpg 525w, assets/people/dylan.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">D</span>
-        <span class="cap"><b>Dylan</b><span>Warehouse operative</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="Volunteer" data-since="2019" data-support="Access to the company's systems, with someone to check work with" data-skills="IT support, networks, devices" data-resp="The company's IT" data-next="Helping with rehabilitation facilities, and being a role model" data-b="#8A8A85" data-consent="approved" data-photo="assets/people/billy.jpg" data-stream="3a270ac4b7f1b68971db3ee4f468559e" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(201,201,196,.25)">
-        <img class="por" src="assets/people/billy-sm.jpg" srcset="assets/people/billy-sm.jpg 525w, assets/people/billy.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
-        <span class="cap"><b>Billy</b><span>IT technician</span></span></button>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 04 THE IMPACT ══ -->
-<section class="ch dark" id="impact" data-n="04">
-  <div class="wrap">
-    <div class="ch-head rv">
-      <div>
-        <div class="ch-tag"><span class="num">04</span>The impact</div>
-        <h2 class="wd">Four groups. <em class="s">What changed.</em></h2>
-        <p class="stand">What changed for the students, the business, the staff and the town.</p>
-      </div>
-    </div>
-    <div class="proofs rv" aria-label="The four groups">
-      <div class="proof"><div class="no">01</div><h3>The people supported</h3>
-        <p><b>Nine</b> people supported in 2026, seven of them from disadvantaged backgrounds. <b>Seven</b> in paid work. <b>All three</b> Bury College T Level students progressed into paid roles.</p></div>
-      <div class="proof"><div class="no">02</div><h3>The organisation</h3>
-        <p>Roles filled across warehouse, IT, web and ecommerce. The website, quoted at about <b>£40,000</b> by an agency, was built over six months by two T Level students who arrived on placements.</p></div>
-      <div class="proof"><div class="no">03</div><h3>The employees</h3>
-        <p>Experienced staff mentor every starter. At the weekly meeting a different colleague presents their work and takes feedback from the team. Placement students now mentor the next intake.</p></div>
-      <div class="proof"><div class="no">04</div><h3>The wider community</h3>
-        <p>Two talks and a workshop at New Bridge College, recruitment fairs, and a voice in how the Jobs Guarantee is run. Families see confidence return: one mother wrote that she had got her son back.</p></div>
-        </div>
-    <figure class="cardq rv">
-      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’ thanks to you Tom.”</blockquote>
-      <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
-        <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
-    </figure>
-    <figure class="photo rv"><img src="assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>The team in one of their containers at Unit 19</figcaption></figure>
-  </div>
-</section>
-
-<!-- ══ 05 THE PARTNERS ══ -->
-<section class="ch" id="partners" data-n="05">
-  <div class="wrap">
-    <div class="ch-head rv">
-      <div>
-        <div class="ch-tag"><span class="num">05</span>The partners</div>
-        <h2 class="wd">The network <em class="s">behind the route.</em></h2>
-        <p class="stand">Names only, until each has confirmed what appears here.</p>
-      </div>
-    </div>
-    <div class="plates flip rv">
-      <div class="plate"><div class="badge"><img class="tl" src="assets/tlevel-ambassador-t.png" width="238" height="113" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>Employer ambassador</small></div><span class="k">T Level Ambassador Network</span>
-        <h3>T Level Ambassadors</h3>
-        <p>Freedom Fire is an employer ambassador: it hosts T Level industry placements and speaks for them to other employers.</p></div>
-      <div class="plate"><div class="badge"><img src="assets/disability-confident-committed-t.png" width="497" height="228" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
-        <h3>Disability Confident</h3>
-        <p>Committed, Level 1, with Level 2 Employer accreditation in progress. Adjustments are offered before a placement starts, not after a problem.</p></div>
-      <div class="plate"><div class="badge"><img class="pl nbc" src="assets/new-bridge-college-t.png" width="479" height="182" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
-        <h3>New Bridge College</h3>
-        <p>Supported placements since 2021 for young people with additional needs. One of the earliest, Jojo, has been full-time since 2022. Tom has been back twice to speak, and once more with a professional boxer for a workshop on resilience and ambition.</p></div>
-      <div class="plate"><div class="badge"><img class="pl jcp" src="assets/jobcentre-plus.png" width="640" height="219" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Government employment service · the Jobs Guarantee</small></div><span class="k">A Government initiative · with the Growth Company · 2026</span>
-        <h3>Jobcentre Plus and the Jobs Guarantee</h3>
-        <p>Jobcentre Plus is the Government's employment service, and Josh came in through a Jobcentre referral. The Jobs Guarantee is a Government initiative delivered locally by the Growth Company: two funded six-month jobs of up to 25 hours a week, for 18 to 21 year olds who have been looking for work for 18 months or more, are being recruited now.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 06 THE TIMELINE ══ -->
-<section class="ch dark" id="timeline" data-n="06">
-  <div class="wrap">
-    <div class="ch-head rv">
-      <div>
-        <div class="ch-tag"><span class="num">06</span>The timeline</div>
+        <div class="ch-tag"><span class="num">03</span>The timeline</div>
         <h2 class="wd">Seven years, <em class="s">told through the people.</em></h2>
         <p class="stand">The company's story from the Freedom Group timeline, kept to the parts about the people who built it:
         who joined, where they worked, and what they were trusted with.</p>
       </div>
     </div>
-    <ol class="spine journey rv">
+    <div class="tl-rail rv"><ol class="spine journey">
       <li class="haspic"><img class="pic" src="assets/journey/ch1-a.webp" alt="A row of refurbished red extinguishers" loading="lazy" decoding="async"><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b><span class="fx"> Tom Letcher sells one refurbished extinguisher from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch4-a.webp" alt="The Freedom Fire team in 2020, the year the students joined the bench" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>The first students on the bench.</b><span class="fx"> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch6-a.webp" alt="An engineer in a hi-vis vest on a customer site" loading="lazy" decoding="async"><span class="when">Aug 2021</span><span class="what"><b>The company.</b><span class="fx"> Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install extinguishers on commercial sites alongside the online range.</span></span></li>
@@ -1072,7 +1008,110 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
       <li class="haspic"><img class="pic" src="assets/journey/ch21a.webp" alt="Number one of 1,193 sellers in the eBay fire extinguisher category" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, it is nominated for the King's Awards for Enterprise, and launches on Amazon and Shopify are in preparation.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch15-a.webp" alt="Bill presenting the Freedom Group project at the weekly meeting" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>Presenting to the team.</b><span class="fx"> At the weekly meeting a different colleague presents their work and takes feedback from the room, so confidence and leadership are built by everyone, not handed down.</span></span></li>
       <li class="haspic"><img class="pic logo" src="assets/jobcentre-plus.png" alt="Jobcentre Plus" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students arrive, and two young people are recruited through the Government's Jobs Guarantee with the Growth Company. The newest ways in.</span></span></li>
-    </ol>
+    </ol></div>
+    <div class="tl-hint" aria-hidden="true">Scroll sideways <i>→</i></div>
+  </div>
+</section>
+
+<!-- ══ 04 THE PEOPLE ══ -->
+<section class="ch light" id="people" data-n="04">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div>
+        <div class="ch-tag"><span class="num">04</span>The people</div>
+        <h2 class="wd">The team.<br><em class="s">Who they are, and how they came in.</em></h2>
+        <p class="stand">First name, role and route in. A full profile appears only with the person's approval.
+          <details class="more"><summary data-cur-label="More" aria-label="Consent">Read more</summary><div class="pop"><b>Consent</b>Each person chose whether to appear, with what name and what detail. Refusal carries no consequence at work. A profile can be withdrawn at any time by writing to info@freedom-fire.co.uk. Nothing about health, background or personal history is published unless the person writes it.</div></details></p>
+      </div>
+    </div>
+    <div class="legend rv" aria-label="Route bands">
+      <span><i style="--b:#E10600"></i>Founder</span><span><i style="--b:#111"></i>T Level placement</span><span><i style="--b:#C9C9C4"></i>College placement</span><span><i style="--b:#fff"></i>Jobcentre or direct recruitment</span><span><i style="--b:#8A8A85"></i>Volunteer</span>
+    </div>
+    <div class="tiles" id="register">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="tom" data-name="Tom" data-role="Founder &amp; managing director" data-route="Founder" data-since="March 2019" data-support="Family warehouse space to start in, and a manufacturer who backed a young company" data-skills="Business strategy, ecommerce and marketplaces, direct sourcing and supply chain, brand building, negotiation, finance and cash-flow planning, leadership and mentoring" data-resp="The whole company: strategy, suppliers, partners and the programme itself" data-next="The second T Level cohort, and Freedom Global" data-b="#E10600" data-consent="approved" data-photo="assets/people/tom.jpg" data-stream="443a12d351a0fd0d7272a13c82b98833" aria-haspopup="dialog" style="--b:#E10600;--a:rgba(225,6,0,.45)">
+        <img class="por" src="assets/people/tom-sm.jpg" srcset="assets/people/tom-sm.jpg 525w, assets/people/tom.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">T</span>
+        <span class="cap"><b>Tom</b><span>Founder &amp; managing director</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="bill" data-name="Bill" data-role="Web developer" data-route="T Level industry placement" data-since="October 2025" data-support="A real brief and the room to make design decisions, with feedback when they went wrong" data-skills="Front-end development, storefront design, launching a live site" data-resp="The company's website and its storefront design" data-next="Paid summer internship, then continuing part-time work around a degree at the University of Salford" data-b="#111" data-consent="approved" data-photo="assets/people/bill.jpg" data-stream="650dffb1a624a01d81be73d6a3c873d3" aria-haspopup="dialog" style="--b:#111;--a:rgba(138,138,133,.35)">
+        <img class="por" src="assets/people/bill-sm.jpg" srcset="assets/people/bill-sm.jpg 525w, assets/people/bill.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
+        <span class="cap"><b>Bill</b><span>Web developer</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="gabriel" data-name="Gabriel" data-role="Web developer" data-route="T Level industry placement" data-since="October 2025" data-support="A named mentor on the web team and a live storefront brief from the first week" data-skills="Storefront builds, product listings, data entry, front-end development" data-resp="The online storefronts" data-next="Paid summer internship, then a long-term contract" data-b="#111" data-consent="approved" data-photo="assets/people/gabriel.jpg" data-stream="175aad7dbebdc9d3693d4d952c08e4c6" aria-haspopup="dialog" style="--b:#111;--a:rgba(201,201,196,.28)">
+        <img class="por" src="assets/people/gabriel-sm.jpg" srcset="assets/people/gabriel-sm.jpg 525w, assets/people/gabriel.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">G</span>
+        <span class="cap"><b>Gabriel</b><span>Web developer</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="harrison" data-name="Harrison" data-role="Warehouse operative" data-route="T Level industry placement" data-since="First T Level cohort" data-support="A named mentor in the warehouse and real orders from the first week" data-skills="Picking, packing, stock control, building checks" data-resp="Picking and packing orders" data-next="Paid work from 2026; moving into full-time employment" data-b="#111" data-consent="approved" data-photo="assets/people/harrison.jpg" data-stream="dac8994822150ac8d73eec942de3984f" aria-haspopup="dialog" style="--b:#111;--a:rgba(225,6,0,.3)">
+        <img class="por" src="assets/people/harrison-sm.jpg" srcset="assets/people/harrison-sm.jpg 525w, assets/people/harrison.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">H</span>
+        <span class="cap"><b>Harrison</b><span>Warehouse operative</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="2021; full-time paid work since 2022" data-support="A placement shaped around additional needs, with a named person to learn from. Cycles in every day, with no sickness absence in five years" data-skills="Goods in, picking, packing, dispatch" data-resp="Packing and dispatch" data-next="Five years in; an example and a mentor for the next placement students" data-b="#C9C9C4" data-consent="approved" data-photo="assets/people/jojo.jpg" data-stream="8083fa4205480457455b23c771acea87" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
+        <img class="por" src="assets/people/jojo-sm.jpg" srcset="assets/people/jojo-sm.jpg 525w, assets/people/jojo.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
+        <span class="cap"><b>Jojo</b><span>Warehouse operative</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="josh" data-name="Josh" data-role="Ecommerce assistant" data-route="Direct, inclusive recruitment" data-since="2025, part-time around university" data-support="Mentoring and responsibility, with hours built around an architecture degree at the University of Salford" data-skills="Listings, order processing, customer messages, admin" data-resp="Storefront orders and customer replies" data-next="Growing with the storefronts as new channels open" data-b="#fff" data-consent="approved" data-photo="assets/people/josh.jpg" data-hascard="1" data-doclabel="See the card from Josh's mum" data-stream="f767b8d2dd9cde79e72653d7fbae5ce7" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
+        <img class="por" src="assets/people/josh-sm.jpg" srcset="assets/people/josh-sm.jpg 525w, assets/people/josh.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
+        <span class="cap"><b>Josh</b><span>Ecommerce assistant</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="dylan" data-name="Dylan" data-role="Warehouse operative" data-route="Direct, inclusive recruitment" data-since="April 2025" data-support="Started part-time on the warehouse floor and trained on the job; now full-time" data-skills="Container unloading, stock control, racking, forklift and pallet work" data-resp="Containers, stock control and the racking" data-next="Growing the warehouse operation" data-b="#fff" data-consent="approved" data-photo="assets/people/dylan.jpg" data-stream="8fc4a2b19dcb8442b5f42648e6197474" aria-haspopup="dialog" style="--b:#fff;--a:rgba(225,6,0,.5)">
+        <img class="por" src="assets/people/dylan-sm.jpg" srcset="assets/people/dylan-sm.jpg 525w, assets/people/dylan.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">D</span>
+        <span class="cap"><b>Dylan</b><span>Warehouse operative</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Direct, inclusive recruitment" data-since="Paid role from 2025; four to five days a week" data-support="Hours built around his course until it finished" data-skills="Platform channels, imagery, efficiency" data-resp="Product images, listings and compliance across the storefronts" data-next="Growing the image work as new channels open" data-b="#fff" data-consent="approved" data-photo="assets/people/elliot.jpg" data-stream="4d13acdf85d9654ef1af01b4b54b434a" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
+        <img class="por" src="assets/people/elliot-sm.jpg" srcset="assets/people/elliot-sm.jpg 525w, assets/people/elliot.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">E</span>
+        <span class="cap"><b>Elliot</b><span>Ecommerce assistant</span></span></button>
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="Volunteer" data-since="2019" data-support="Access to the company's systems, with someone to check work with" data-skills="IT support, networks, devices" data-resp="The company's IT" data-next="Helping with rehabilitation facilities, and being a role model" data-b="#8A8A85" data-consent="approved" data-photo="assets/people/billy.jpg" data-stream="3a270ac4b7f1b68971db3ee4f468559e" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(201,201,196,.25)">
+        <img class="por" src="assets/people/billy-sm.jpg" srcset="assets/people/billy-sm.jpg 525w, assets/people/billy.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
+        <span class="cap"><b>Billy</b><span>IT technician</span></span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 05 THE IMPACT ══ -->
+<section class="ch dark" id="impact" data-n="05">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div>
+        <div class="ch-tag"><span class="num">05</span>The impact</div>
+        <h2 class="wd">Four groups. <em class="s">What changed.</em></h2>
+        <p class="stand">What changed for the students, the business, the staff and the town.</p>
+      </div>
+    </div>
+    <div class="proofs rv" aria-label="The four groups">
+      <div class="proof"><div class="no">01</div><h3>The people supported</h3>
+        <p><b>Nine</b> people supported in 2026, seven of them from disadvantaged backgrounds. <b>Seven</b> in paid work. <b>All three</b> Bury College T Level students progressed into paid roles.</p></div>
+      <div class="proof"><div class="no">02</div><h3>The organisation</h3>
+        <p>Roles filled across warehouse, IT, web and ecommerce. The website, quoted at about <b>£40,000</b> by an agency, was built over six months by two T Level students who arrived on placements.</p></div>
+      <div class="proof"><div class="no">03</div><h3>The employees</h3>
+        <p>Experienced staff mentor every starter. At the weekly meeting a different colleague presents their work and takes feedback from the team. Placement students now mentor the next intake.</p></div>
+      <div class="proof"><div class="no">04</div><h3>The wider community</h3>
+        <p>Two talks and a workshop at New Bridge College, recruitment fairs, and a voice in how the Jobs Guarantee is run. Families see confidence return: one mother wrote that she had got her son back.</p></div>
+        </div>
+    <figure class="cardq rv">
+      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say<br>‘I got my son back’ thanks to you Tom.”</blockquote>
+      <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
+        <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
+    </figure>
+    <figure class="photo rv"><img src="assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>The team in one of their containers at Unit 19</figcaption></figure>
+  </div>
+</section>
+
+<!-- ══ 06 THE PARTNERS ══ -->
+<section class="ch" id="partners" data-n="06">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div>
+        <div class="ch-tag"><span class="num">06</span>The partners</div>
+        <h2 class="wd">The network <em class="s">behind the route.</em></h2>
+        <p class="stand">Names only, until each has confirmed what appears here.</p>
+      </div>
+    </div>
+    <div class="plates flip rv">
+      <div class="plate"><div class="badge"><img class="tl" src="assets/tlevel-ambassador-t.png" width="238" height="113" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>Employer ambassador</small></div><span class="k">T Level Ambassador Network</span>
+        <h3>T Level Ambassadors</h3>
+        <p>Freedom Fire is an employer ambassador: it hosts T Level industry placements and speaks for them to other employers.</p></div>
+      <div class="plate"><div class="badge"><img src="assets/disability-confident-committed-t.png" width="497" height="228" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Committed, Level 1 · Level 2, Employer, in progress</small></div><span class="k">Department for Work and Pensions</span>
+        <h3>Disability Confident</h3>
+        <p>Committed, Level 1, with Level 2 Employer accreditation in progress. Adjustments are offered before a placement starts, not after a problem.</p></div>
+      <div class="plate"><div class="badge"><img class="pl nbc" src="assets/new-bridge-college-t.png" width="479" height="182" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
+        <h3>New Bridge College</h3>
+        <p>Supported placements since 2021 for young people with additional needs. One of the earliest, Jojo, has been full-time since 2022. Tom has been back twice to speak, and once more with a professional boxer for a workshop on resilience and ambition.</p></div>
+      <div class="plate"><div class="badge"><img class="pl jcp" src="assets/jobcentre-plus.png" width="640" height="219" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Government employment service · the Jobs Guarantee</small></div><span class="k">A Government initiative · with the Growth Company · 2026</span>
+        <h3>Jobcentre &amp; the Jobs Guarantee</h3>
+        <p>Jobcentre Plus is the Government's employment service and one of the routes in. The Jobs Guarantee is a Government initiative delivered locally by the Growth Company: two funded six-month jobs of up to 25 hours a week, for 18 to 21 year olds who have been looking for work for 18 months or more, are being recruited now.</p></div>
+    </div>
   </div>
 </section>
 
@@ -1095,7 +1134,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
       <div class="case"><div class="k">Circumstances</div>
         <dl><dt>Said</dt><dd>Confidence, communication and routine were bigger barriers than technical ability. Some needed flexibility around education, travel or home life.</dd>
         <dt>Changed</dt><dd>Hours adjusted around courses, equipment provided, one-to-one support increased where needed, and adjustments offered before anyone starts.</dd>
-        <dt>Followed</dt><dd>People a standard interview would have missed are in long-term roles. Jojo, cycling in from Rochdale, has four years without a sick day.</dd></dl></div>
+        <dt>Followed</dt><dd>People a standard interview would have missed are in long-term roles. Jojo has five years without a sick day.</dd></dl></div>
       <div class="case"><div class="k">Families and tutors</div>
         <dl><dt>Said</dt><dd>Josh's mum wrote unprompted that “all hope was lost” after the family's losses, and then: “I can finally say ‘I got my son back’.” Tutors and families give the independent view of change.</dd>
         <dt>Changed</dt><dd>No satisfaction ratings are claimed until they are measured. Anonymous feedback at the start, midpoint and end of every placement is being formalised, alongside a central participant register.</dd>

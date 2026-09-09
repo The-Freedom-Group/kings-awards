@@ -118,7 +118,7 @@
     gsap.set(".hero .opened .line span", { y: "110%", rotation: 3 });
     gsap.set(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline(); window.__intro = intro;
-    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 15000);
+    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 26000);
     var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
     var hurry = function () { if (intro.progress() < 1) intro.timeScale(2.5); };
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
@@ -135,23 +135,26 @@
       });
       return tl;
     }
-    var typing1 = typer("#gType1", 0.045), typing2 = typer("#gType2", 0.05);
+    var typing1 = typer("#gType1", 0.07), typing2 = typer("#gType2", 0.075);
     var caretOn = function () { if (caret) { caret.classList.add("on"); caret.classList.remove("blink"); } };
     var caretBlink = function () { if (caret) { caret.classList.remove("on"); caret.classList.add("blink"); } };
     var caretOff = function () { if (caret) caret.classList.remove("blink"); };
-    intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" }, 0.25)
-      .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .7, ease: "power2.in" }, 2.4)
-      /* line one is typed on the black screen, holds, fades; then line two the same; only then the shutter */
-      .set("#gStencil1", { autoAlpha: 1 }, 3.2).call(caretOn, null, 3.2)
-      .add(typing1, 3.4)
-      .call(caretBlink, null, 5.0).call(caretOff, null, 5.6)
-      .to("#gStencil1", { autoAlpha: 0, y: -12, duration: .6, ease: "power2.in" }, 5.6)
-      .set("#gStencil2", { autoAlpha: 1 }, 6.3).call(caretOn, null, 6.3)
-      .add(typing2, 6.5)
-      .call(caretBlink, null, 7.8).call(caretOff, null, 8.4)
-      .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .7, ease: "power2.in" }, 8.4)
-      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 9.1)
-      .add("gate", 10.2)
+    intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.4, ease: "power3.out" }, 0.4)
+      .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .9, ease: "power2.in" }, 3.4)
+      /* line one is typed slowly on the black screen, its second line arrives beneath it, both hold, then fade;
+         line two the same; only then does the shutter appear. Scrolling hurries all of it. */
+      .set("#gStencil1", { autoAlpha: 1 }, 4.5).call(caretOn, null, 4.5)
+      .add(typing1, 4.7)
+      .call(caretBlink, null, 7.2)
+      .fromTo("#gSub", { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .9, ease: "power2.out" }, 7.5)
+      .call(caretOff, null, 9.6)
+      .to("#gStencil1", { autoAlpha: 0, y: -12, duration: .8, ease: "power2.in" }, 9.7)
+      .set("#gStencil2", { autoAlpha: 1 }, 10.7).call(caretOn, null, 10.7)
+      .add(typing2, 10.9)
+      .call(caretBlink, null, 12.9).call(caretOff, null, 14.2)
+      .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .9, ease: "power2.in" }, 14.2)
+      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, ease: "power2.out" }, 15.2)
+      .add("gate", 16.8)
       .call(function () { gate.classList.add("opening"); }, null, "gate")
       .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
       .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")
@@ -233,8 +236,8 @@
   /* ── the route strip, the progress line, the chapter card ── */
   var hero = $("#top"), story = $("#story"), route = $("#route"), lit = $("#routeLit");
   var chapters = $$("#story .ch, #story .hero, #story .intro");
-  var TITLES = { top: ["00", "The way in"], why: ["01", "Why it exists"], programme: ["02", "The route in"], people: ["03", "The people"],
-    impact: ["04", "The impact"], partners: ["05", "The partners"], timeline: ["06", "The timeline"], learn: ["07", "How we learn"],
+  var TITLES = { top: ["00", "The way in"], why: ["01", "Why it exists"], programme: ["02", "The route in"], timeline: ["03", "The timeline"],
+    people: ["04", "The people"], impact: ["05", "The impact"], partners: ["06", "The partners"], learn: ["07", "How we learn"],
     next: ["08", "What comes next"] };
   /* the rail: a thin track from the foot of the hero to the end of the story, a red line
      that eases towards how far you have read, a lamp at its head, and a tick per chapter */
