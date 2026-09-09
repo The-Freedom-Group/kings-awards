@@ -118,7 +118,7 @@
     gsap.set(".hero .opened .line span", { y: "110%", rotation: 3 });
     gsap.set(".hero .opened .k, .hero .opened .strap, .hero .opened .cta", { autoAlpha: 0, y: 14 });
     var intro = gsap.timeline(); window.__intro = intro;
-    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 26000);
+    setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 22000);
     var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
     var hurry = function () { if (intro.progress() < 1) intro.timeScale(2.5); };
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
@@ -135,26 +135,23 @@
       });
       return tl;
     }
-    var typing1 = typer("#gType1", 0.07), typing2 = typer("#gType2", 0.075);
+    var typing1 = typer("#gType1", 0.055), typing2 = typer("#gType2", 0.06);
     var caretOn = function () { if (caret) { caret.classList.add("on"); caret.classList.remove("blink"); } };
     var caretBlink = function () { if (caret) { caret.classList.remove("on"); caret.classList.add("blink"); } };
     var caretOff = function () { if (caret) caret.classList.remove("blink"); };
-    intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.4, ease: "power3.out" }, 0.4)
-      .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .9, ease: "power2.in" }, 3.4)
-      /* line one is typed slowly on the black screen, its second line arrives beneath it, both hold, then fade;
-         line two the same; only then does the shutter appear. Scrolling hurries all of it. */
-      .set("#gStencil1", { autoAlpha: 1 }, 4.5).call(caretOn, null, 4.5)
-      .add(typing1, 4.7)
-      .call(caretBlink, null, 7.2)
-      .fromTo("#gSub", { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .9, ease: "power2.out" }, 7.5)
-      .call(caretOff, null, 9.6)
-      .to("#gStencil1", { autoAlpha: 0, y: -12, duration: .8, ease: "power2.in" }, 9.7)
-      .set("#gStencil2", { autoAlpha: 1 }, 10.7).call(caretOn, null, 10.7)
-      .add(typing2, 10.9)
-      .call(caretBlink, null, 12.9).call(caretOff, null, 14.2)
-      .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .9, ease: "power2.in" }, 14.2)
-      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, ease: "power2.out" }, 15.2)
-      .add("gate", 16.8)
+    intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.2, ease: "power3.out" }, 0.3)
+      .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .8, ease: "power2.in" }, 2.9)
+      /* line one is typed on the black screen, holds, then fades; line two the same; only then does the shutter appear */
+      .set("#gStencil1", { autoAlpha: 1 }, 3.8).call(caretOn, null, 3.8)
+      .add(typing1, 4.0)
+      .call(caretBlink, null, 5.9).call(caretOff, null, 7.0)
+      .to("#gStencil1", { autoAlpha: 0, y: -12, duration: .7, ease: "power2.in" }, 7.0)
+      .set("#gStencil2", { autoAlpha: 1 }, 7.9).call(caretOn, null, 7.9)
+      .add(typing2, 8.1)
+      .call(caretBlink, null, 9.7).call(caretOff, null, 10.8)
+      .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .8, ease: "power2.in" }, 10.8)
+      .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.0, ease: "power2.out" }, 11.7)
+      .add("gate", 13.0)
       .call(function () { gate.classList.add("opening"); }, null, "gate")
       .fromTo("#gateEdge", { opacity: 0 }, { opacity: 1, duration: .5 }, "gate+=0.15")
       .to("#gSlats", { yPercent: -102, duration: 2.6, ease: "power3.inOut" }, "gate+=0.35")

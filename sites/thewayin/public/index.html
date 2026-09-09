@@ -825,6 +825,8 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 .hero .foot{grid-template-columns:1fr}
 .hero .fl,.hero .fr{display:none!important}
 .hero .fm{justify-self:center}
+.hero .in{padding-bottom:clamp(170px,25vh,260px)}
+@media(max-width:820px){.hero .in{padding-bottom:150px}}
 /* the cursor: smaller, a diamond that turns into a disc when it has something to say */
 .cur-dot{width:5px;height:5px;margin:-2.5px 0 0 -2.5px}
 .cur-ring{width:26px;height:26px;margin:-13px 0 0 -13px;border:0!important;background:transparent!important;mix-blend-mode:normal}
@@ -886,7 +888,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
   <div class="stencil" id="gStencil"><img class="glogo" id="gLogo" src="assets/ff_logo.png" alt="Freedom Fire &amp; Safety"></div>
-  <div class="stencil two" id="gStencil1"><b class="line2"><span id="gType1">Not everyone arrives <em class="s">by the same route.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b><small class="sub" id="gSub">Exit signs point out. This one points in.</small></div>
+  <div class="stencil two" id="gStencil1"><b class="line2"><span id="gType1">Not everyone arrives <em class="s">by the same route.</em></span><i class="caret" id="gCaret" aria-hidden="true"></i></b></div>
   <div class="stencil two" id="gStencil2"><b class="line2"><span id="gType2">Everyone deserves <em class="s">a way in.</em></span></b></div>
   <div class="rail l"></div><div class="rail r"></div><div class="housing"></div>
   <div class="daylight" id="gDay"></div>
