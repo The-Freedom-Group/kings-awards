@@ -1011,3 +1011,17 @@
     });
   });
 })();
+
+
+/* ── Before Freedom: the biography reader ── */
+(function () {
+  var bio = document.getElementById("bio"), open = document.getElementById("bioOpen"), close = document.getElementById("bioClose"), toTl = document.getElementById("bioToTimeline");
+  if (!bio || !open) return;
+  var last = null;
+  function show() { last = document.activeElement; bio.classList.add("on"); bio.setAttribute("aria-hidden", "false"); document.body.classList.add("bio-open"); bio.scrollTop = 0; setTimeout(function () { close.focus(); }, 60); }
+  function hide() { bio.classList.remove("on"); bio.setAttribute("aria-hidden", "true"); document.body.classList.remove("bio-open"); if (last && last.focus) last.focus(); }
+  open.addEventListener("click", show);
+  close.addEventListener("click", hide);
+  if (toTl) toTl.addEventListener("click", function () { hide(); });
+  window.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && bio.classList.contains("on")) { hide(); ev.stopImmediatePropagation(); } }, true);
+})();
