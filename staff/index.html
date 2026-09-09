@@ -803,7 +803,9 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 /* Unit 19 fills the hero edge to edge: the full width of the photograph, no extra zoom, the sign and door kept in view */
 .hero .ph{inset:0}
 .hero .ph img.bg{display:none}
-.hero .ph img.fg{object-fit:cover;object-position:50% 56%;transform:none!important}
+.hero .ph img.fg{object-fit:cover;object-position:50% 30%;transform:none!important;filter:grayscale(.25) brightness(.62) contrast(1.05)}
+.hero.open .ph img.fg{filter:grayscale(0) brightness(.92) contrast(1.06)}
+.hero .ph::after{background:linear-gradient(180deg,rgba(17,17,17,.28),rgba(17,17,17,.06) 35%,rgba(17,17,17,.9))}
 .plate .badge{min-height:0;grid-template-rows:100px auto;align-items:end;align-content:start;justify-items:start;gap:12px}
 .plate .badge img,.plate .badge img.tl,.plate .badge img.pl,.plate .badge img.nbc,.plate .badge img.jcp{width:auto;height:100px;max-width:100%;object-fit:contain;object-position:left bottom;margin:0;border-radius:0;align-self:end}
 .plate .badge img.jcp{border-radius:10px}
