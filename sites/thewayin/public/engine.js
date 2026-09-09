@@ -126,13 +126,19 @@
     /* the mark comes in and goes out again; the shutter arrives; the line is typed out on it */
     var typeSplit = new SplitText("#gType", { type: "chars" }), caret = $("#gCaret");
     gsap.set(typeSplit.chars, { autoAlpha: 0 });
+    /* each letter appears in turn and the caret moves to sit right after it, so it follows the typing */
+    var typing = gsap.timeline();
+    typeSplit.chars.forEach(function (c, i) {
+      typing.call(function () { gsap.set(c, { autoAlpha: 1 }); if (caret && c.after) c.after(caret); }, null, i * 0.055);
+    });
     intro.fromTo("#gLogo", { autoAlpha: 0, scale: .9 }, { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power3.out" }, 0.25)
       .to("#gLogo", { autoAlpha: 0, scale: 1.05, duration: .7, ease: "power2.in" }, 2.4)
       /* the line is typed on the black screen, holds, then fades; only then does the shutter appear */
       .set("#gStencil2", { autoAlpha: 1 }, 3.2)
       .call(function () { if (caret) caret.classList.add("on"); }, null, 3.2)
-      .to(typeSplit.chars, { autoAlpha: 1, duration: .01, stagger: .055, ease: "none" }, 3.4)
-      .call(function () { if (caret) caret.classList.remove("on"); }, null, 5.5)
+      .add(typing, 3.4)
+      .call(function () { if (caret) { caret.classList.remove("on"); caret.classList.add("blink"); } }, null, 5.2)
+      .call(function () { if (caret) caret.classList.remove("blink"); }, null, 5.9)
       .to("#gStencil2", { autoAlpha: 0, y: -12, duration: .7, ease: "power2.in" }, 5.8)
       .fromTo("#gSlats, #gate .rail, #gate .housing", { autoAlpha: 0 }, { autoAlpha: 1, duration: .9, ease: "power2.out" }, 6.5)
       .add("gate", 7.7)

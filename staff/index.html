@@ -795,9 +795,15 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 #gate .glogo{width:clamp(240px,32vw,520px)}
 #gate .line2 .caret{display:inline-block;width:.08em;height:.95em;margin-left:.08em;vertical-align:-.1em;background:#fff;opacity:0;animation:caret .8s steps(1) infinite}
 @keyframes caret{50%{opacity:0}}
-#gate .line2 .caret.on{opacity:1}
+#gate .line2 .caret.on{opacity:1;animation:none}
+#gate .line2 .caret.blink{opacity:1;animation:caret .8s steps(1) infinite}
+#gate .line2 .caret{position:relative;top:.04em}
 .mark img{height:58px}
 .hero .ph{z-index:1}
+/* the whole of Unit 19 shows, at full height, with a blurred copy of itself filling the sides */
+.hero .ph img.bg{filter:blur(22px) brightness(.42) saturate(.9)!important;transform:scale(1.12)!important}
+.hero .ph img.fg{position:absolute;left:50%;top:50%;height:108%;width:auto;max-width:none;transform:translate(-50%,-50%)!important;object-fit:cover;box-shadow:0 0 140px rgba(0,0,0,.7)}
+@media(max-width:820px){.hero .ph img.fg{height:auto;width:100%}}
 .plate .badge{min-height:0;grid-template-rows:100px auto;align-items:end;align-content:start;justify-items:start;gap:12px}
 .plate .badge img,.plate .badge img.tl,.plate .badge img.pl,.plate .badge img.nbc,.plate .badge img.jcp{width:auto;height:100px;max-width:100%;object-fit:contain;object-position:left bottom;margin:0;border-radius:0;align-self:end}
 .plate .badge img.jcp{border-radius:10px}
@@ -848,7 +854,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
 
 <!-- ══ THE HERO: the shutter opens as you scroll ══ -->
 <section class="hero" id="top" aria-label="The way in">
-  <div class="ph" aria-hidden="true"><img src="../assets/journey/ch10-a.webp" width="1078" height="1254" alt="" decoding="async"></div>
+  <div class="ph" aria-hidden="true"><img class="bg" src="../assets/journey/ch10-a.webp" width="1078" height="1254" alt="" decoding="async"><img class="fg" src="../assets/journey/ch10-a.webp" width="1078" height="1254" alt="" decoding="async"></div>
   <div class="shutter" id="shutter" aria-hidden="true"><div class="slats" id="slats"></div><div class="rail l"></div><div class="rail r"></div><div class="housing"></div></div>
   <div class="daylight" id="daylight" aria-hidden="true"></div>
   <div class="in" id="heroIn">
@@ -1001,7 +1007,7 @@ ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
         <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
     </figure>
-    <figure class="photo rv"><img src="../assets/journey/ch13-b.webp" width="1078" height="1254" style="object-position:50% 62%" alt="The team in front of the first container of Firestorm stock on Christmas Eve 2024" loading="lazy" decoding="async"><figcaption>The team unloading one of their containers at Christmas</figcaption></figure>
+    <figure class="photo rv"><img src="../assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>The team unloading one of their containers at Christmas</figcaption></figure>
   </div>
 </section>
 
