@@ -1163,18 +1163,20 @@ body.bio-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.bio{transition:none}}
 
 /* ── 10 Sept: the achievements, the film after the three points, the timeline on request, the site's shades, the graphs ── */
-.bar>.wrap>div{min-height:0;padding:12px 18px;gap:14px}
+.bar .wrap{max-width:none;padding-inline:clamp(12px,2vw,40px);grid-template-columns:repeat(4,auto);justify-content:space-between}
+.bar>.wrap>div{min-height:92px;padding:16px clamp(14px,1.6vw,26px);gap:clamp(12px,1.2vw,18px);min-width:0}
 .bar img{height:40px}
 .bar .b1 img.kab{height:60px;width:60px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 8px 22px rgba(30,143,255,.35)}
-.bar .b2 img{height:32px}
+.bar .b2 img{height:30px}
 .bar .bw{gap:3px}
-.bar .bw>b{font-size:clamp(14px,1.15vw,17px);white-space:nowrap;color:var(--porcelain)}
-.bar small,.bar .b1 small,.bar .b2 small,.bar .b3 small,.bar .b3 small.dt,.bar .b4 small{color:var(--pale-2);font-size:9.5px}
-.bar em,.bar .b1 em,.bar .b2 em,.bar .b4 em{color:var(--pale-2);font-size:10px;white-space:nowrap}
-.bar .b3 .bw>b.big{font-size:clamp(22px,1.9vw,28px);color:var(--porcelain);line-height:1;display:flex;align-items:baseline;gap:8px}
+.bar .bw>b{font-size:clamp(15px,1.25vw,19px);white-space:nowrap;color:var(--porcelain);letter-spacing:0}
+.bar small,.bar .b1 small,.bar .b2 small,.bar .b3 small,.bar .b3 small.dt,.bar .b4 small{color:var(--pale-2);font-size:10.5px}
+.bar em,.bar .b1 em,.bar .b2 em,.bar .b4 em{color:var(--pale-2);font-size:11px;white-space:nowrap}
+.bar .b3 .bw>b.big{font-size:clamp(24px,2.2vw,32px);color:var(--porcelain);line-height:1;display:flex;align-items:baseline;gap:8px}
 .bar .b3 .bw>b.big .ps{font-family:var(--sans);font-size:9.5px;letter-spacing:.2em;font-weight:600;color:var(--pale-2)}
 .lg-ebay.xl{font-size:34px}
-@media(max-width:1100px){.bar .bw>b,.bar em{white-space:normal}}
+@media(max-width:1180px){.bar .bw>b,.bar em{white-space:normal}}
+@media(max-width:760px){.bar .wrap{grid-template-columns:1fr 1fr}}
 .filmsec{padding:clamp(40px,6vw,80px) 0}
 .filmsec .film{margin:0}
 .tl-view{font:inherit;width:124px;height:84px;border:1px dashed rgba(255,45,141,.55);background:rgba(255,45,141,.06);color:var(--pink);border-radius:3px;cursor:pointer;
@@ -1283,8 +1285,8 @@ body.bio-open{overflow:hidden}
 
 <div class="bar" aria-label="Four snapshot facts">
   <div class="wrap">
-    <div class="b1"><img class="kab" src="assets/kings-awards-blue.png" alt="The King's Awards for Enterprise" width="480" height="480" decoding="async"><span class="bw"><small>July 2026</small><b>King's Awards for Enterprise</b><em>Social impact · nominee</em></span></div>
-    <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+ <span class="ps">products sold</span></b><em>Ranked No. 1 fire extinguisher seller on <i class="lg-ebay"><b>e</b><b>b</b><b>a</b><b>y</b></i> &amp; <i class="lg-temu">temu</i></em></span></div>
+    <div class="b1"><img class="kab" src="assets/kings-entered.png" alt="" width="480" height="480" decoding="async"><span class="bw"><small>Entered · 2027</small><b>King's Awards for Enterprise</b><em>Social impact</em></span></div>
+    <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+ <span class="ps">products sold</span></b><em>Ranked No. 1 for fire extinguishers on <i class="lg-ebay"><b>e</b><b>b</b><b>a</b><b>y</b></i> &amp; <i class="lg-temu">temu</i></em></span></div>
     <div class="b2"><img src="assets/myta.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
     <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
   </div>
@@ -1359,8 +1361,6 @@ body.bio-open{overflow:hidden}
     <div class="tl rv" id="timeline" aria-label="To Freedom and beyond, 2019 to now">
       <div class="yhead">To Freedom and beyond · 2019 to now</div>
       <ol class="tl-list">
-      <li><i class="nopic-box" aria-hidden="true">2005</i><span class="when">2005 – 2012</span><span class="what"><b>Learning to sell.</b>Lucozade and KitKat Chunkies sold at school, bought with a first loan from dad: no paperwork, no credit check, no interest. Car washes and car boot sales followed. The first lesson in business: somebody may help you begin, but what happens next is your responsibility.</span></li>
-      <li><i class="nopic-box" aria-hidden="true">2014</i><span class="when">2014 – 2019</span><span class="what"><b>Architecture at Salford.</b>An undergraduate degree and a two-year Master's at the University of Salford. Research, detail, presentation and the habit of revising an idea until every part serves a purpose: the training later used to build brands, not buildings.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch1-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
       <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">Summer 2019</span><span class="what"><b>Harvard.</b>A summer placement at Harvard University during the Master's, a few years after nearly leaving education altogether.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/salboy.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">2019 – 2020</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
@@ -1381,7 +1381,7 @@ body.bio-open{overflow:hidden}
       <li><button class="tl-view" type="button" data-src="assets/journey/ch3-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/team-races.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">June 2026</span><span class="what"><b>Three of three.</b>All three of the first T Level cohort complete their placements and move into paid roles.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch21a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Containers arrive back to back, the company is number one for fire extinguishers on eBay and Temu, and the Amazon and Shopify launches are in preparation.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/kings-awards.png" data-cur-label="View">View image <i>↗</i></button><span class="when">September 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>The King's Awards application goes in, supported by this portfolio and The Way In. Shortlisted the same month for the Manchester Young Talent Awards, Agent of Change.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/kings-entered.png" data-cur-label="View">View image <i>↗</i></button><span class="when">September 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>The King's Awards application goes in, supported by this portfolio and The Way In. Shortlisted the same month for the Manchester Young Talent Awards, Agent of Change.</span></li>
       </ol>
     </div>
   </div>
@@ -1452,27 +1452,27 @@ body.bio-open{overflow:hidden}
         <p class="def">£1,048,616, from £268,162 two years earlier. Statutory accounts, approved 7 September 2026.</p>
         <div class="per">Financial years to 31 August · Freedom Fire &amp; Safety Ltd</div>
       </div>
-      <div class="metric" style="--acc:#ff74b8">
+      <div class="metric" style="--acc:#ff5ca3">
         <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
         <p class="def">Ranked by sales against every seller in the Fire Extinguishers category, GB, in eBay's own listing quality report.</p>
         <div class="per">12 months to end of July 2026 · eBay storefront</div>
       </div>
-      <div class="metric" style="--acc:#c60f6e">
+      <div class="metric" style="--acc:#ff74b8">
         <div class="v">500,000+</div><div class="k">Products sold</div>
         <p class="def">Fire extinguishers first, then alarms, batteries, gloves and cleaning products, across every channel since the first listing.</p>
         <div class="per">March 2019 – September 2026 · all channels</div>
       </div>
-      <div class="metric" style="--acc:#F4F1EB">
+      <div class="metric" style="--acc:#e0217f">
         <div class="v">3</div><div class="k">Registered brands</div>
         <p class="def">FIRESTORM, FXL and SKYLINE, all registered in the company's name. Twelve more in preparation.</p>
         <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
       </div>
-      <div class="metric" style="--acc:#A8A6A1">
+      <div class="metric" style="--acc:#c60f6e">
         <div class="v">£70k</div><div class="k">Net profit after tax · 2026</div>
         <p class="def">£70,175, the second profitable year in a row, after the years when stock, compliance and systems were built ahead of revenue. No external equity.</p>
         <div class="per">Financial years to 31 August · Freedom Fire &amp; Safety Ltd</div>
       </div>
-      <div class="metric" style="--acc:#ffb3d6">
+      <div class="metric" style="--acc:#ff8fc6">
         <div class="v">30+</div><div class="k">Global suppliers</div>
         <p class="def">Direct relationships with manufacturers, each reviewed for certification, test reports, factory audits and batch traceability before approval.</p>
         <div class="per">2024 – 2026 · direct sourcing</div>
@@ -1518,7 +1518,7 @@ body.bio-open{overflow:hidden}
             with an invitation to Belfast to meet eBay's UK leadership.
             Shortlisted for the Manchester Young Talent Awards' Agent of Change award in 2026. Approached by Temu UK to open its
             fire extinguisher category. A global producer that chose a small Greater Manchester warehouse as its first UK client.
-            Nominated for the King's Awards for Enterprise.</dd>
+            Entered for the King's Awards for Enterprise 2027.</dd>
             <dt>Result</dt><dd>Growth over two comparable years, recognition, and a seat in the conversations that decide
             how the category is sold.</dd>
           </dl>
@@ -1781,7 +1781,7 @@ body.bio-open{overflow:hidden}
           <div class="bd"><img class="dc" src="assets/disability-confident.png" width="525" height="261" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1 · Level 2 Employer in progress</small></div>
           <div class="bd"><img src="assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>T Level Ambassador Network · employer ambassador</small></div>
           <div class="bd"><img class="myta" src="assets/myta.png" width="640" height="236" alt="Manchester Young Talent Awards" loading="lazy" decoding="async"><small>Manchester Young Talent Awards 2026 · Agent of Change · shortlisted</small></div>
-          <div class="bd"><img class="kae" src="assets/kings-awards.png" width="640" height="640" alt="The King's Awards for Enterprise" loading="lazy" decoding="async"><small>The King's Awards for Enterprise 2026 · Young Founder · nominee</small></div>
+          <div class="bd"><img class="kae" src="assets/kings-entered.png" width="480" height="480" alt="" loading="lazy" decoding="async"><small>Entered for The King's Awards for Enterprise 2027 · Social impact</small></div>
         </div>
       </aside>
       <div class="body rv">
@@ -1852,8 +1852,6 @@ body.bio-open{overflow:hidden}
   <div class="wrap rv">
     <div class="ch-tag">End note — Resilience</div>
     <div class="quo">
-      <q>The hardest resilience was personal. At 15, I lost my mum. By 30, I had buried both my best friends, my
-      sister-in-law and, recently, my nana, who raised me. Each loss affected the person still expected to lead.</q>
       <q>Through so much loss at a young age, I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
       promised to build.</q>
