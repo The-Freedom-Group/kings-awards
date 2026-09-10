@@ -1166,7 +1166,11 @@ body.bio-open{overflow:hidden}
 .bar .wrap{max-width:none;padding-inline:clamp(12px,2vw,40px);grid-template-columns:repeat(4,auto);justify-content:space-between}
 .bar>.wrap>div{min-height:92px;padding:16px clamp(14px,1.6vw,26px);gap:clamp(12px,1.2vw,18px);min-width:0}
 .bar img{height:40px}
-.bar .b1 img.kab{height:60px;width:60px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 8px 22px rgba(30,143,255,.35)}
+.kab2{display:grid;place-content:center;width:62px;height:62px;border-radius:50%;border:1.5px solid var(--pink);box-shadow:0 0 0 5px rgba(255,45,141,.08);flex:0 0 auto;text-align:center;line-height:1}
+.kab2 b{font-family:var(--disp);font-weight:400;font-size:19px;color:var(--porcelain);letter-spacing:.01em}
+.kab2 small{font-family:var(--sans);font-size:7px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--pink);margin-top:3px}
+.kab2.ink{width:84px;height:84px;border-color:var(--ink);box-shadow:0 0 0 6px rgba(16,16,16,.05);align-self:center;justify-self:start}
+.kab2.ink b{font-size:26px;color:var(--ink)}.kab2.ink small{font-size:8.5px}
 .bar .b2 img{height:30px}
 .bar .bw{gap:3px}
 .bar .bw>b{font-size:clamp(15px,1.25vw,19px);white-space:nowrap;color:var(--porcelain);letter-spacing:0}
@@ -1285,7 +1289,7 @@ body.bio-open{overflow:hidden}
 
 <div class="bar" aria-label="Four snapshot facts">
   <div class="wrap">
-    <div class="b1"><img class="kab" src="../assets/kings-entered.png" alt="" width="480" height="480" decoding="async"><span class="bw"><small>Entered · 2027</small><b>King's Awards for Enterprise</b><em>Social impact</em></span></div>
+    <div class="b1"><span class="kab2" aria-hidden="true"><b>2027</b><small>Entered</small></span><span class="bw"><small>Entered · 2027</small><b>King's Awards for Enterprise</b><em>Social impact</em></span></div>
     <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+ <span class="ps">products sold</span></b><em>Ranked No. 1 for fire extinguishers on <i class="lg-ebay"><b>e</b><b>b</b><b>a</b><b>y</b></i> &amp; <i class="lg-temu">temu</i></em></span></div>
     <div class="b2"><img src="../assets/myta.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
     <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
@@ -1781,7 +1785,7 @@ body.bio-open{overflow:hidden}
           <div class="bd"><img class="dc" src="../assets/disability-confident.png" width="525" height="261" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1 · Level 2 Employer in progress</small></div>
           <div class="bd"><img src="../assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>T Level Ambassador Network · employer ambassador</small></div>
           <div class="bd"><img class="myta" src="../assets/myta.png" width="640" height="236" alt="Manchester Young Talent Awards" loading="lazy" decoding="async"><small>Manchester Young Talent Awards 2026 · Agent of Change · shortlisted</small></div>
-          <div class="bd"><img class="kae" src="../assets/kings-entered.png" width="480" height="480" alt="" loading="lazy" decoding="async"><small>Entered for The King's Awards for Enterprise 2027 · Social impact</small></div>
+          <div class="bd"><span class="kab2 ink" aria-hidden="true"><b>2027</b><small>Entered</small></span><small>Entered for The King's Awards for Enterprise 2027 · Social impact</small></div>
         </div>
       </aside>
       <div class="body rv">
