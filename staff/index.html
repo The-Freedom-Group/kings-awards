@@ -856,8 +856,10 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 @media(max-width:900px){ol.spine.journey li{flex-basis:min(78vw,300px);grid-template-columns:1fr}ol.spine.journey .pic{width:100%;height:150px;max-width:none;aspect-ratio:auto}ol.spine.journey li::before{top:-39px}}
 
 /* the route runs down the left, turns along the timeline, and carries on down the right */
-.route.rh{left:calc(var(--strip) / 2);right:calc(var(--strip) / 2);width:auto;top:0;bottom:auto;height:4px;margin-top:-2px}
-.route.rh .track,.route.rh .lit{left:0;right:0;top:0;width:auto;height:4px;margin:0;transform-origin:left center}
+.route .track,.route .lit{width:5px;margin-left:-2.5px}
+.route .lit{box-shadow:0 0 16px rgba(225,6,0,.8),0 0 4px rgba(255,90,60,.9)}
+.route.rh{left:calc(var(--strip) / 2);right:calc(var(--strip) / 2);width:auto;top:0;bottom:auto;height:5px;margin-top:-2.5px}
+.route.rh .track,.route.rh .lit{left:0;right:0;top:0;width:auto;height:5px;margin:0;transform-origin:left center}
 .route.rh .lit{transform:scaleX(0);background:linear-gradient(90deg,var(--red),#ff5a3c)}
 .route.rr{left:auto;right:0}
 .route-head{position:absolute;left:0;top:0;width:0;height:0;z-index:10;pointer-events:none;will-change:transform}

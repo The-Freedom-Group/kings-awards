@@ -255,7 +255,7 @@
     var stripW = route.offsetWidth || 20, lx = stripW / 2, rx = W - stripW / 2;
     /* where the timeline's line sits, in the story's own coordinates; without a timeline the route stays on the left */
     var yTl = H - 24;
-    if (tlRail) { var tr = tlRail.getBoundingClientRect(), sr = story.getBoundingClientRect(); yTl = tr.top - sr.top + 32.5; }
+    if (tlRail) { var tr = tlRail.getBoundingClientRect(), sr = pageEl.getBoundingClientRect(); yTl = tr.top - sr.top + 32.5; }
     var segA = Math.max(1, yTl - top), segB = Math.max(1, rx - lx), segC = Math.max(0, H - 24 - yTl), L = segA + segB + segC;
     /* the line reads ahead of the viewport, and arrives at the foot exactly when the page does */
     var target = clamp((y + vh * 0.58 - top) / Math.max(1, H - vh * 0.42 - top), 0, 1);
