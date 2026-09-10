@@ -1025,3 +1025,19 @@
   if (toTl) toTl.addEventListener("click", function () { hide(); });
   window.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && bio.classList.contains("on")) { hide(); ev.stopImmediatePropagation(); } }, true);
 })();
+
+
+/* ── the timeline pictures, on request ── */
+(function () {
+  var lb = document.getElementById("lb"), img = document.getElementById("lbImg"), x = document.getElementById("lbX");
+  if (!lb || !img) return;
+  function open(src) { img.src = src; lb.hidden = false; document.body.classList.add("bio-open"); }
+  function close() { lb.hidden = true; img.src = ""; document.body.classList.remove("bio-open"); }
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest && ev.target.closest(".tl-view");
+    if (b) { open(b.getAttribute("data-src")); return; }
+    if (!lb.hidden && !img.contains(ev.target)) close();
+  });
+  if (x) x.addEventListener("click", close);
+  window.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !lb.hidden) { close(); ev.stopImmediatePropagation(); } }, true);
+})();
