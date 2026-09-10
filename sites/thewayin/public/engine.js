@@ -32,7 +32,7 @@
 
   /* ── smooth scrolling ─────────────────────────────────────── */
   var smoother = null;
-  if (animate) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0.4, normalizeScroll: true, ignoreMobileResize: true, effects: true });
+  if (animate) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0.4, normalizeScroll: true, ignoreMobileResize: true, effects: true, onUpdate: function (self) { if (typeof drawRoute === "function") drawRoute(self.scrollTop()); } });
   window.__smoother = smoother;
   function scrollY() { return smoother ? smoother.scrollTop() : (window.pageYOffset || html.scrollTop); }
   function scrollTo(target) {
@@ -223,7 +223,7 @@
       var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };
       window.__tlST = ScrollTrigger.create({
         trigger: tlPin, start: "center center", end: function () { return "+=" + tlDist(); },
-        pin: tlPin, pinSpacing: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true,
+        pin: tlPin, pinSpacing: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
         onUpdate: function (st) { gsap.set(tlOl, { x: -st.progress * tlDist() }); },
         onRefresh: function (st) { gsap.set(tlOl, { x: -st.progress * tlDist() }); }
       });
@@ -292,7 +292,7 @@
     var tlOlEl = st ? $("#timeline ol.spine.journey") : null, tlDistNow = tlOlEl ? Math.max(1, tlOlEl.scrollWidth - tlOlEl.clientWidth) : 1;
     if (!detour) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
     else if (st && sy < st.start) { hx = lx; hy = Math.min(hyLin, yTl); side = "left"; pA = clamp((hy - top) / segA, 0, 1); }
-    else if (st && sy <= st.end) { pA = 1; pB = clamp(-(parseFloat(gsap.getProperty(tlOlEl, "x")) || 0) / tlDistNow, 0, 1); hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
+    else if (st && sy <= st.end) { pA = 1; pB = clamp((sy - st.start) / Math.max(1, st.end - st.start), 0, 1); hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
     else if (!st && hyLin < yTl) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
     else if (!st && hyLin < yTl + cb) { pA = 1; pB = (hyLin - yTl) / cb; hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
     else if (hyLin < yP - cb) { pA = 1; pB = 1; pC = clamp((hyLin - yTl) / Math.max(1, yP - cb - yTl), 0, 1); hx = rx; hy = yTl + pC * (yP - yTl); side = "right"; }
@@ -351,7 +351,7 @@
       if (now) now.classList.toggle("on", y > window.innerHeight * 0.5);
       if (floor && stations.length) { var r = floor.getBoundingClientRect(), lp = clamp((window.innerHeight * 0.85 - r.top) / (r.height + window.innerHeight * 0.25), 0, 1); floor.style.setProperty("--lp", lp.toFixed(3)); stations.forEach(function (st, k) { st.classList.toggle("lit", lp >= (k + 0.5) / stations.length); }); }
     }
-    drawRoute(y);
+    if (!smoother) drawRoute(y);
     if (prog) { progP = reduce ? progT : progP + (progT - progP) * 0.16; if (Math.abs(progT - progP) < 0.0004) progP = progT; prog.style.transform = "scaleX(" + progP.toFixed(4) + ")"; }
     requestAnimationFrame(frame);
   }
