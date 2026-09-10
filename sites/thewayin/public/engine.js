@@ -247,45 +247,65 @@
       var t = document.createElement("i"); t.className = "tick"; t.sec = sec; route.appendChild(t); ticks.push(t);
     });
   }
-  var routeH = $("#routeH"), litH = $("#routeLitH"), routeR = $("#routeR"), litR = $("#routeLitR"), trackR = $("#routeTrackR"), headWrap = $("#routeHeadWrap"), tlRail = $(".tl-rail");
+  var routeH = $("#routeH"), litH = $("#routeLitH"), routeR = $("#routeR"), litR = $("#routeLitR"), trackR = $("#routeTrackR"),
+      routeH2 = $("#routeH2"), litH2 = $("#routeLitH2"), trackE = $("#routeTrackE"), litE = $("#routeLitE"),
+      headWrap = $("#routeHeadWrap"), tlRail = $(".tl-rail"), peopleEl = $("#people");
+  /* the route: down the left to the timeline, along its line to the right, straight down the right, back across to
+     the left just above The People, then down the left as before. Five segments, one continuous measure of progress. */
   function drawRoute(y) {
     if (!route || !lit || !story) return;
     var pageEl = $("#smooth-content") || document.body, vh = window.innerHeight;
-    var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, W = story.offsetWidth;
+    var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, W = story.offsetWidth, end = H - 24;
     var stripW = route.offsetWidth || 20, lx = stripW / 2, rx = W - stripW / 2;
-    /* where the timeline's line sits, in the story's own coordinates; without a timeline the route stays on the left */
-    var yTl = H - 24;
-    if (tlRail) { var tr = tlRail.getBoundingClientRect(), sr = pageEl.getBoundingClientRect(); yTl = tr.top - sr.top + 32.5; }
-    var segA = Math.max(1, yTl - top), segB = Math.max(1, rx - lx), segC = Math.max(0, H - 24 - yTl), L = segA + segB + segC;
+    var pr = pageEl.getBoundingClientRect(), detour = !!(tlRail && peopleEl);
+    var yTl = end, yP = end;
+    if (detour) {
+      yTl = tlRail.getBoundingClientRect().top - pr.top + 32.5;
+      yP = peopleEl.getBoundingClientRect().top - pr.top - 64;
+      if (yP <= yTl + 40) yP = yTl + 40;
+    }
+    var segA = Math.max(1, yTl - top), segB = detour ? Math.max(1, rx - lx) : 0, segC = detour ? Math.max(1, yP - yTl) : 0,
+        segD = segB, segE = Math.max(0, end - yP), L = segA + segB + segC + segD + segE;
     /* the line reads ahead of the viewport, and arrives at the foot exactly when the page does */
     var target = clamp((y + vh * 0.58 - top) / Math.max(1, H - vh * 0.42 - top), 0, 1);
     litP = reduce ? target : litP + (target - litP) * 0.16;
     if (Math.abs(target - litP) < 0.0004) litP = target;
-    var reach = litP * L, hx, hy, side;
-    if (reach <= segA) { hx = lx; hy = top + reach; side = "left"; }
-    else if (reach <= segA + segB) { hx = lx + (reach - segA); hy = yTl; side = "along"; }
-    else { hx = rx; hy = yTl + (reach - segA - segB); side = "right"; }
-    lit.style.top = top + "px"; lit.style.height = segA + "px"; lit.style.transform = "scaleY(" + clamp(Math.min(reach, segA) / segA, 0, 1).toFixed(4) + ")";
+    var reach = litP * L, hx, hy, side, r = reach;
+    if (r <= segA) { hx = lx; hy = top + r; side = "left"; }
+    else if ((r -= segA) <= segB) { hx = lx + r; hy = yTl; side = "along"; }
+    else if ((r -= segB) <= segC) { hx = rx; hy = yTl + r; side = "right"; }
+    else if ((r -= segC) <= segD) { hx = rx - r; hy = yP; side = "back"; }
+    else { r -= segD; hx = lx; hy = yP + r; side = "left"; }
+    var pA = clamp(reach / segA, 0, 1), pB = clamp((reach - segA) / Math.max(1, segB), 0, 1), pC = clamp((reach - segA - segB) / Math.max(1, segC), 0, 1),
+        pD = clamp((reach - segA - segB - segC) / Math.max(1, segD), 0, 1), pE = clamp((reach - segA - segB - segC - segD) / Math.max(1, segE), 0, 1);
+    lit.style.top = top + "px"; lit.style.height = segA + "px"; lit.style.transform = "scaleY(" + pA.toFixed(4) + ")";
     if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = segA + "px"; }
-    if (routeH) { routeH.style.top = yTl + "px"; routeH.style.display = tlRail ? "" : "none"; }
-    if (litH) litH.style.transform = "scaleX(" + clamp((reach - segA) / segB, 0, 1).toFixed(4) + ")";
-    if (routeR) { routeR.style.top = yTl + "px"; routeR.style.height = segC + "px"; routeR.style.bottom = "auto"; routeR.style.display = tlRail ? "" : "none"; }
+    if (trackE) { trackE.style.top = yP + "px"; trackE.style.height = segE + "px"; trackE.style.display = detour ? "" : "none"; }
+    if (litE) { litE.style.top = yP + "px"; litE.style.height = segE + "px"; litE.style.transform = "scaleY(" + pE.toFixed(4) + ")"; litE.style.display = detour ? "" : "none"; }
+    if (routeH) { routeH.style.top = yTl + "px"; routeH.style.display = detour ? "" : "none"; }
+    if (litH) litH.style.transform = "scaleX(" + pB.toFixed(4) + ")";
+    if (routeR) { routeR.style.top = yTl + "px"; routeR.style.height = segC + "px"; routeR.style.bottom = "auto"; routeR.style.display = detour ? "" : "none"; }
     if (trackR) { trackR.style.top = "0"; trackR.style.height = segC + "px"; }
-    if (litR) { litR.style.top = "0"; litR.style.height = segC + "px"; litR.style.transform = "scaleY(" + clamp((reach - segA - segB) / Math.max(1, segC), 0, 1).toFixed(4) + ")"; }
+    if (litR) { litR.style.top = "0"; litR.style.height = segC + "px"; litR.style.transform = "scaleY(" + pC.toFixed(4) + ")"; }
+    if (routeH2) { routeH2.style.top = yP + "px"; routeH2.style.display = detour ? "" : "none"; }
+    if (litH2) litH2.style.transform = "scaleX(" + pD.toFixed(4) + ")";
     if (headWrap) {
       headWrap.style.transform = "translate3d(" + hx.toFixed(1) + "px," + hy.toFixed(1) + "px,0)";
       headWrap.classList.toggle("flip", side === "right");
       headWrap.classList.toggle("along", side === "along");
+      headWrap.classList.toggle("below", side === "back");
     }
     var v = Math.abs(litP - lastLit) * L; lastLit = litP; stillFrames = v < 0.25 ? stillFrames + 1 : 0;
     if (headWrap) headWrap.classList.toggle("moving", stillFrames < 70);
+    /* a tick per chapter, on whichever strip the route is using at that height */
     var here = null;
     for (var i = 0; i < ticks.length; i++) {
-      var sec = ticks[i].sec, st = sec.offsetTop, onRight = !!tlRail && st > yTl;
+      var sec = ticks[i].sec, st = sec.offsetTop, onRight = detour && st > yTl && st < yP;
       var host = onRight ? routeR : route;
       if (host && ticks[i].parentNode !== host) host.appendChild(ticks[i]);
       ticks[i].style.top = (onRight ? st - yTl : st) + "px";
-      var passed = onRight ? (reach >= segA + segB + (st - yTl) - 2) : (reach >= (st - top) - 2);
+      var need = onRight ? segA + segB + (st - yTl) : (st >= yP ? segA + segB + segC + segD + (st - yP) : (st - top));
+      var passed = reach >= need - 2;
       ticks[i].classList.toggle("on", passed);
       if (passed) here = i;
     }

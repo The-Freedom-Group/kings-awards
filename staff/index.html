@@ -862,6 +862,8 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 .route.rh .track,.route.rh .lit{left:0;right:0;top:0;width:auto;height:5px;margin:0;transform-origin:left center}
 .route.rh .lit{transform:scaleX(0);background:linear-gradient(90deg,var(--red),#ff5a3c)}
 .route.rr{left:auto;right:0}
+.route.rh.back .lit{transform-origin:right center;background:linear-gradient(270deg,var(--red),#ff5a3c)}
+.route-head.below .lbl{top:22px;left:auto;right:-6px;transform:none}
 .route-head{position:absolute;left:0;top:0;width:0;height:0;z-index:10;pointer-events:none;will-change:transform}
 .route-head .head{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;border:3px solid var(--red);
   box-shadow:0 0 0 3px rgba(255,255,255,.12),0 0 18px 4px rgba(225,6,0,.55);transition:width .25s,height .25s,margin .25s}
@@ -1191,9 +1193,10 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 
 </div><!-- /story -->
 </main>
-<div class="route" id="route" aria-hidden="true"><i class="track" id="routeTrack"></i><div class="lit" id="routeLit"></div></div>
+<div class="route" id="route" aria-hidden="true"><i class="track" id="routeTrack"></i><div class="lit" id="routeLit"></div><i class="track" id="routeTrackE"></i><div class="lit" id="routeLitE"></div></div>
 <div class="route rh" id="routeH" aria-hidden="true"><i class="track" id="routeTrackH"></i><div class="lit" id="routeLitH"></div></div>
 <div class="route rr" id="routeR" aria-hidden="true"><i class="track" id="routeTrackR"></i><div class="lit" id="routeLitR"></div></div>
+<div class="route rh back" id="routeH2" aria-hidden="true"><i class="track" id="routeTrackH2"></i><div class="lit" id="routeLitH2"></div></div>
 <div class="route-head" id="routeHeadWrap" aria-hidden="true"><i class="head" id="routeHead"></i><span class="lbl" id="routeLbl"><b id="routeLblN">01</b><span id="routeLblT">Why it exists</span></span></div>
 
 <footer id="footer">
