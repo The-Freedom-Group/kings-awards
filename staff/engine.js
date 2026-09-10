@@ -247,33 +247,54 @@
       var t = document.createElement("i"); t.className = "tick"; t.sec = sec; route.appendChild(t); ticks.push(t);
     });
   }
+  var routeH = $("#routeH"), litH = $("#routeLitH"), routeR = $("#routeR"), litR = $("#routeLitR"), trackR = $("#routeTrackR"), headWrap = $("#routeHeadWrap"), tlRail = $(".tl-rail");
   function drawRoute(y) {
     if (!route || !lit || !story) return;
     var pageEl = $("#smooth-content") || document.body, vh = window.innerHeight;
-    var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, span = Math.max(1, H - 24 - top);
+    var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, W = story.offsetWidth;
+    var stripW = route.offsetWidth || 20, lx = stripW / 2, rx = W - stripW / 2;
+    /* where the timeline's line sits, in the story's own coordinates; without a timeline the route stays on the left */
+    var yTl = H - 24;
+    if (tlRail) { var tr = tlRail.getBoundingClientRect(), sr = story.getBoundingClientRect(); yTl = tr.top - sr.top + 32.5; }
+    var segA = Math.max(1, yTl - top), segB = Math.max(1, rx - lx), segC = Math.max(0, H - 24 - yTl), L = segA + segB + segC;
     /* the line reads ahead of the viewport, and arrives at the foot exactly when the page does */
     var target = clamp((y + vh * 0.58 - top) / Math.max(1, H - vh * 0.42 - top), 0, 1);
     litP = reduce ? target : litP + (target - litP) * 0.16;
     if (Math.abs(target - litP) < 0.0004) litP = target;
-    var reach = top + litP * span;
-    lit.style.top = top + "px"; lit.style.height = span + "px"; lit.style.transform = "scaleY(" + litP.toFixed(4) + ")";
-    if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = span + "px"; }
-    if (routeHead) routeHead.style.transform = "translate3d(0," + reach.toFixed(1) + "px,0)";
-    /* the label beside the lamp names the chapter while you move, then goes quiet */
-    var v = Math.abs(litP - lastLit) * span; lastLit = litP; stillFrames = v < 0.25 ? stillFrames + 1 : 0;
-    route.classList.toggle("moving", stillFrames < 70);
+    var reach = litP * L, hx, hy, side;
+    if (reach <= segA) { hx = lx; hy = top + reach; side = "left"; }
+    else if (reach <= segA + segB) { hx = lx + (reach - segA); hy = yTl; side = "along"; }
+    else { hx = rx; hy = yTl + (reach - segA - segB); side = "right"; }
+    lit.style.top = top + "px"; lit.style.height = segA + "px"; lit.style.transform = "scaleY(" + clamp(Math.min(reach, segA) / segA, 0, 1).toFixed(4) + ")";
+    if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = segA + "px"; }
+    if (routeH) { routeH.style.top = yTl + "px"; routeH.style.display = tlRail ? "" : "none"; }
+    if (litH) litH.style.transform = "scaleX(" + clamp((reach - segA) / segB, 0, 1).toFixed(4) + ")";
+    if (routeR) { routeR.style.top = yTl + "px"; routeR.style.height = segC + "px"; routeR.style.bottom = "auto"; routeR.style.display = tlRail ? "" : "none"; }
+    if (trackR) { trackR.style.top = "0"; trackR.style.height = segC + "px"; }
+    if (litR) { litR.style.top = "0"; litR.style.height = segC + "px"; litR.style.transform = "scaleY(" + clamp((reach - segA - segB) / Math.max(1, segC), 0, 1).toFixed(4) + ")"; }
+    if (headWrap) {
+      headWrap.style.transform = "translate3d(" + hx.toFixed(1) + "px," + hy.toFixed(1) + "px,0)";
+      headWrap.classList.toggle("flip", side === "right");
+      headWrap.classList.toggle("along", side === "along");
+    }
+    var v = Math.abs(litP - lastLit) * L; lastLit = litP; stillFrames = v < 0.25 ? stillFrames + 1 : 0;
+    if (headWrap) headWrap.classList.toggle("moving", stillFrames < 70);
     var here = null;
     for (var i = 0; i < ticks.length; i++) {
-      var st = ticks[i].sec.offsetTop; ticks[i].style.top = st + "px"; ticks[i].classList.toggle("on", reach >= st - 2);
-      if (reach >= st - 2) here = i;
+      var sec = ticks[i].sec, st = sec.offsetTop, onRight = !!tlRail && st > yTl;
+      var host = onRight ? routeR : route;
+      if (host && ticks[i].parentNode !== host) host.appendChild(ticks[i]);
+      ticks[i].style.top = (onRight ? st - yTl : st) + "px";
+      var passed = onRight ? (reach >= segA + segB + (st - yTl) - 2) : (reach >= (st - top) - 2);
+      ticks[i].classList.toggle("on", passed);
+      if (passed) here = i;
     }
-    for (var j = 0; j < ticks.length; j++) ticks[j].classList.toggle("here", j === here);
+    for (var k = 0; k < ticks.length; k++) ticks[k].classList.toggle("here", k === here);
     if (routeLbl) {
-      routeLbl.style.transform = "translate3d(0," + reach.toFixed(1) + "px,0) translateY(-50%)";
       var meta = here !== null ? (TITLES[ticks[here].sec.id] || ["00", "The way in"]) : ["00", "The way in"];
       if (routeLblN.textContent !== meta[0]) { routeLblN.textContent = meta[0]; routeLblT.textContent = meta[1]; }
     }
-    route.classList.toggle("landed", litP >= 0.999);
+    if (headWrap) headWrap.classList.toggle("landed", litP >= 0.999);
   }
   var peopleSec = $("#people"), prog = $("#prog"), now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT"), lastCard = "", lastY = -1;
   var floor = $("#floor"), stations = $$("#floor .st");

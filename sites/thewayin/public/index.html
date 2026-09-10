@@ -843,8 +843,6 @@ body.cur-label .cur-ring::before{border-radius:50%;transform:none;background:var
 .intro .fu-1 .more summary{display:inline-block}
 /* the timeline, sideways, its line running in from the red rail on the left */
 .tl-rail{position:relative;margin-top:clamp(28px,4vw,48px)}
-.tl-rail::before{content:"";position:absolute;left:-100vw;right:0;top:31px;height:3px;background:linear-gradient(90deg,var(--red) 0,var(--red) 55%,rgba(225,6,0,.35));z-index:0}
-.tl-rail::after{content:"";position:absolute;right:0;top:25px;width:15px;height:15px;border-radius:50%;background:var(--red);box-shadow:0 0 12px rgba(225,6,0,.8)}
 ol.spine.journey{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;padding:64px 0 22px;margin:0;border-top:0;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent;-webkit-overflow-scrolling:touch}
 ol.spine.journey::before{display:none}
 ol.spine.journey li{flex:0 0 clamp(250px,22vw,300px);display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;gap:12px;padding:0 24px 0 0;margin:0 22px 0 0;border-bottom:0;scroll-snap-align:start;position:relative;align-items:start}
@@ -857,6 +855,26 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 .tl-hint{margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--pale-3)}
 .tl-hint i{font-style:normal;color:var(--red)}
 @media(max-width:900px){ol.spine.journey li{flex-basis:min(78vw,300px);grid-template-columns:1fr}ol.spine.journey .pic{width:100%;height:150px;max-width:none;aspect-ratio:auto}ol.spine.journey li::before{top:-39px}}
+
+/* the route runs down the left, turns along the timeline, and carries on down the right */
+.route.rh{left:calc(var(--strip) / 2);right:calc(var(--strip) / 2);width:auto;top:0;bottom:auto;height:4px;margin-top:-2px}
+.route.rh .track,.route.rh .lit{left:0;right:0;top:0;width:auto;height:4px;margin:0;transform-origin:left center}
+.route.rh .lit{transform:scaleX(0);background:linear-gradient(90deg,var(--red),#ff5a3c)}
+.route.rr{left:auto;right:0}
+.route-head{position:absolute;left:0;top:0;width:0;height:0;z-index:10;pointer-events:none;will-change:transform}
+.route-head .head{position:absolute;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;border:3px solid var(--red);
+  box-shadow:0 0 0 3px rgba(255,255,255,.12),0 0 18px 4px rgba(225,6,0,.55);transition:width .25s,height .25s,margin .25s}
+.route-head.moving .head{width:20px;height:20px;margin:-10px 0 0 -10px}
+.route-head.landed .head{background:var(--red);border-color:#fff}
+.route-head .lbl{position:absolute;left:18px;top:0;transform:translateY(-50%);display:flex;align-items:center;gap:9px;padding:6px 10px 6px 8px;border-radius:3px;
+  background:var(--black);color:#fff;border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 24px rgba(0,0,0,.35);white-space:nowrap;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;opacity:0;transition:opacity .35s}
+.route-head .lbl b{font-family:var(--disp);font-variation-settings:"wdth" 118,"wght" 900;font-size:13px;letter-spacing:.04em;color:var(--red);line-height:1}
+.route-head.moving .lbl{opacity:1}
+.route-head.flip .lbl{left:auto;right:18px}
+.route-head.along .lbl{top:22px;left:-6px;transform:none}
+@media(max-width:1199px){.route-head .lbl{display:none}}
+@media(max-width:820px){.route-head .head,.route-head.moving .head{width:10px;height:10px;margin:-5px 0 0 -5px;border-width:2px}.route.rh{left:5px;right:5px;height:3px;margin-top:-1.5px}.route.rh .track,.route.rh .lit{height:3px}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -1050,7 +1068,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="dylan" data-name="Dylan" data-role="Warehouse operative" data-route="Direct, inclusive recruitment" data-since="April 2025" data-support="Started part-time on the warehouse floor and trained on the job; now full-time" data-skills="Container unloading, stock control, racking and pallet work" data-resp="Containers, stock control and the racking" data-next="Growing the warehouse operation" data-b="#fff" data-consent="approved" data-photo="assets/people/dylan.jpg" data-stream="8fc4a2b19dcb8442b5f42648e6197474" aria-haspopup="dialog" style="--b:#fff;--a:rgba(225,6,0,.5)">
         <img class="por" src="assets/people/dylan-sm.jpg" srcset="assets/people/dylan-sm.jpg 525w, assets/people/dylan.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">D</span>
         <span class="cap"><b>Dylan</b><span>Warehouse operative</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Direct, inclusive recruitment" data-since="Paid role from 2025; four to five days a week" data-support="Hours built around his course until it finished" data-skills="Platform channels, imagery, efficiency" data-resp="Product images, listings and compliance across the storefronts" data-next="Growing the image work as new channels open" data-b="#fff" data-consent="approved" data-photo="assets/people/elliot.jpg" data-stream="4d13acdf85d9654ef1af01b4b54b434a" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Direct, inclusive recruitment" data-since="From 2025; four to five days a week" data-support="Hours built around his course until it finished" data-skills="Platform channels, imagery, efficiency" data-resp="Product images, listings and compliance across the storefronts" data-next="Growing the image work as new channels open" data-b="#fff" data-consent="approved" data-photo="assets/people/elliot.jpg" data-stream="4d13acdf85d9654ef1af01b4b54b434a" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
         <img class="por" src="assets/people/elliot-sm.jpg" srcset="assets/people/elliot-sm.jpg 525w, assets/people/elliot.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">E</span>
         <span class="cap"><b>Elliot</b><span>Ecommerce assistant</span></span></button>
       <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="Volunteer" data-since="2019" data-support="Access to the company's systems, with someone to check work with" data-skills="IT support, networks, devices" data-resp="The company's IT" data-next="Helping with rehabilitation facilities, and being a role model" data-b="#8A8A85" data-consent="approved" data-photo="assets/people/billy.jpg" data-stream="3a270ac4b7f1b68971db3ee4f468559e" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(201,201,196,.25)">
@@ -1085,7 +1103,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
         <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
     </figure>
-    <figure class="photo rv"><img src="assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>The team in one of their containers at Unit 19</figcaption></figure>
+    <figure class="photo rv"><img src="assets/journey/ch13-team.webp" width="1200" height="1024" alt="The team standing inside an open shipping container at Unit 19" loading="lazy" decoding="async"><figcaption>Team Group Photo After Unloading Container</figcaption></figure>
   </div>
 </section>
 
@@ -1172,7 +1190,10 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 
 </div><!-- /story -->
 </main>
-<div class="route" id="route" aria-hidden="true"><i class="track" id="routeTrack"></i><div class="lit" id="routeLit"></div><i class="head" id="routeHead"></i><span class="lbl" id="routeLbl"><b id="routeLblN">01</b><span id="routeLblT">Why it exists</span></span></div>
+<div class="route" id="route" aria-hidden="true"><i class="track" id="routeTrack"></i><div class="lit" id="routeLit"></div></div>
+<div class="route rh" id="routeH" aria-hidden="true"><i class="track" id="routeTrackH"></i><div class="lit" id="routeLitH"></div></div>
+<div class="route rr" id="routeR" aria-hidden="true"><i class="track" id="routeTrackR"></i><div class="lit" id="routeLitR"></div></div>
+<div class="route-head" id="routeHeadWrap" aria-hidden="true"><i class="head" id="routeHead"></i><span class="lbl" id="routeLbl"><b id="routeLblN">01</b><span id="routeLblT">Why it exists</span></span></div>
 
 <footer id="footer">
   <div class="wrap">
