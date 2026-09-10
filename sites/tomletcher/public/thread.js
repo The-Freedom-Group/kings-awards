@@ -128,8 +128,8 @@
   });
 
   /* ── poster words, one per chapter ────────────────────────── */
-  var PW = { c01: "SPARK", c02: "STEPS", c03: "PROOF", c04: "METHOD",
-             c05: "PEOPLE", c06: "FUTURE", c07: "RECORD", c08: "NEXT" };
+  var PW = { c01: "SPARK", c02: "PROOF", c03: "METHOD", c04: "PEOPLE",
+             c05: "FUTURE", c06: "RECORD", c07: "NEXT" };
   var pws = [];
   Object.keys(PW).forEach(function (id) {
     var sec = document.getElementById(id);
@@ -199,7 +199,7 @@
      Speeds are in degrees per second, so the motion is the same at any frame rate. The entrance
      animation keeps its transform transition; once it has played, the "go" class removes the
      transition so each frame's position applies instantly and the motion is continuous. */
-  var SPEED = { A: 0.9, B: 0.55, C: 0.35 }, ROCKET_SPEED = 9, lastT = 0, wasIn = false, goTimer = null;
+  var SPEED = { A: 1.6, B: 1.0, C: 0.65 }, ROCKET_SPEED = 12, lastT = 0, wasIn = false, goTimer = null;
   function orbitStep(ts) {
     if (!mapEl) return;
     var inView = mapEl.classList.contains("in") && document.body.dataset.grp !== "list";
@@ -275,7 +275,10 @@
       svg     = $("#threadSvg"),
       track   = $("#tTrack"),
       live    = $("#tLive"),
+      track2  = $("#tTrack2"),
+      live2   = $("#tLive2"),
       head    = $("#tHead");
+  var ringA = 0, ringB = 0, ringLen = 0;
 
   /* L and R ride the empty margin outside the text column, so the
      line never crosses a word. C is the centre. */
@@ -285,12 +288,10 @@
     { id: "c02",  side: "R", y: 0.42 },
     { id: "c03",  side: "L", y: 0.42 },
     { id: "c04",  side: "R", y: 0.42 },
-    { id: "c05",  side: "L", y: 0.42 },
-    { id: "c06",  side: "C", y: 0.40 },
-    { id: "slab", side: "C", y: 0.50, noKnot: true },
-    { id: "c07",  side: "L", y: 0.42 },
-    { id: "c08",  side: "C", y: 0.52 },
-    { id: "resilience", side: "C", y: 0.5, noKnot: true }
+    { id: "c05",  side: "C", y: 0.40, core: true },
+    { id: "c06",  side: "L", y: 0.42 },
+    { id: "c07",  side: "C", y: 0.52 },
+    { id: "resilience", side: "C", y: 0.5, ring: true }
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [];
@@ -374,9 +375,29 @@
       pts.push(heroExit);
     }
 
+    var er0 = explore.getBoundingClientRect();
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
+      if (p.core) {
+        /* the line runs through the Freedom Group planet at the centre of the map */
+        var mp = el.querySelector(".map"), mr = mp ? mp.getBoundingClientRect() : null;
+        if (mr && mr.width > 0 && document.body.dataset.grp !== "list") {
+          pts.push({ x: mr.left + mr.width / 2 - er0.left, y: mr.top + mr.height / 2 - er0.top, id: p.id, el: el, noKnot: true });
+          return;
+        }
+      }
+      if (p.ring) {
+        /* the end note: the line splits above the words, encircles them, and rejoins below */
+        var tag = el.querySelector(".ch-tag"), quo = el.querySelector(".quo");
+        if (tag && quo) {
+          var tr0 = tag.getBoundingClientRect(), qr = quo.getBoundingClientRect();
+          var top0 = tr0.top - er0.top - 34, bot0 = qr.bottom - er0.top + 34, half = qr.width / 2 + 64;
+          pts.push({ x: CX, y: top0, id: "ringTop", el: el, noKnot: true });
+          pts.push({ x: CX, y: bot0, id: "ringBot", el: el, noKnot: true, arc: half });
+          return;
+        }
+      }
       pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y,
                  id: p.id, el: el, noKnot: !!p.noKnot });
     });
@@ -392,8 +413,18 @@
     }
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
+    var dAtA = "", dAtB = "", d2 = "";
     for (var i = 0; i < pts.length - 1; i++) {
       var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5;
+      if (b.arc) {
+        /* the ring: this stroke takes the left half, the second stroke the right, both top to bottom */
+        var ry = Math.max(1, (b.y - a.y) / 2);
+        dAtA = d;
+        d += " A " + b.arc.toFixed(1) + " " + ry.toFixed(1) + " 0 0 0 " + b.x.toFixed(1) + " " + b.y.toFixed(1);
+        dAtB = d;
+        d2 = "M " + a.x.toFixed(1) + " " + a.y.toFixed(1) + " A " + b.arc.toFixed(1) + " " + ry.toFixed(1) + " 0 0 1 " + b.x.toFixed(1) + " " + b.y.toFixed(1);
+        continue;
+      }
       d += " C " + a.x.toFixed(1) + " " + (a.y + dy).toFixed(1) +
            ", " + b.x.toFixed(1) + " " + (b.y - dy).toFixed(1) +
            ", " + b.x.toFixed(1) + " " + b.y.toFixed(1);
@@ -402,6 +433,10 @@
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     track.setAttribute("d", d);
     live.setAttribute("d", d);
+    if (track2 && live2) {
+      track2.setAttribute("d", d2); live2.setAttribute("d", d2);
+      track2.style.display = live2.style.display = d2 ? "" : "none";
+    }
 
     try { totalLen = live.getTotalLength(); } catch (e) { totalLen = 0; }
     if (!totalLen) return false;
@@ -418,6 +453,19 @@
     }
     live.style.strokeDasharray = totalLen;
     live.style.strokeDashoffset = totalLen;
+    /* where the ring opens and closes, as fractions of the main stroke; the right half is drawn in step */
+    ringA = ringB = ringLen = 0;
+    if (dAtB && live2) {
+      var pr2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      svg.appendChild(pr2);
+      try {
+        pr2.setAttribute("d", dAtA); ringA = pr2.getTotalLength() / totalLen;
+        pr2.setAttribute("d", dAtB); ringB = pr2.getTotalLength() / totalLen;
+        ringLen = live2.getTotalLength();
+      } catch (e) { ringA = ringB = ringLen = 0; }
+      svg.removeChild(pr2);
+      live2.style.strokeDasharray = ringLen; live2.style.strokeDashoffset = ringLen;
+    }
 
     knots.forEach(function (k) { k.remove(); });
     knots = []; knotAt = [];
@@ -498,6 +546,10 @@
     var p = clamp(fracAtY(y + window.innerHeight * 0.62), 0, 1);
     p = Math.max(p, heroFrac * heroIn);
     live.style.strokeDashoffset = totalLen * (1 - p);
+    if (live2 && ringLen) {
+      var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
+      live2.style.strokeDashoffset = ringLen * (1 - p2);
+    }
     thread.classList.toggle("on", p > 0.004);
 
     /* the head rides the line, then settles at the page's edge and beacons */
@@ -655,11 +707,26 @@
   var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
   var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], c01:["01","The Spark"],
-    c02:["02","Step by Step"], c03:["03","Proof, Not Promise"], c04:["04","How I Build"],
-    c05:["05","Built With People"], c06:["06","The Next Ten Years"], slab:["—","Seven Years"],
-    c07:["07","The Company"], c08:["08","Still Building"], resilience:["—","Resilience"] };
+    c02:["02","Proof, Not Promise"], c03:["03","How I Build"], c04:["04","Built With People"],
+    c05:["05","The Next Ten Years"], c06:["06","The Company"], c07:["07","Still Building"],
+    resilience:["—","End note"] };
   var lastCard = "";
   var lastY = -1, velY = 0;
+  function flowSpine(y, cur2, inFooter) {
+    if (!spine.length) return;
+    var si = -1, n = spine.length;
+    spine.forEach(function (a, k) { if (a.dataset.t === cur2) si = k; });
+    if (si < 0 && (cur2 === "resilience" || inFooter)) si = n;
+    var f = 0;
+    if (si >= n) f = 1;
+    else if (si >= 0) {
+      var sec = document.getElementById(spine[si].dataset.t);
+      var within = sec ? clamp((y + window.innerHeight * 0.42 - sec.offsetTop) / Math.max(1, sec.offsetHeight), 0, 1) : 0;
+      f = Math.min(1, (si + within) / Math.max(1, n - 1));
+    }
+    spine.forEach(function (a, k) { a.classList.toggle("on", k === si); a.classList.toggle("done", k < si); });
+    if (spineEl) spineEl.style.setProperty("--f", f.toFixed(4));
+  }
 
   function frame() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
@@ -712,7 +779,7 @@
       if (inFooter) dark = true;
       if (spineEl) spineEl.classList.toggle("away", inFooter);
       document.body.classList.toggle("dark-chrome", dark && exploring);
-      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+      flowSpine(y, cur2, inFooter);
 
       /* progress hairline */
       if (prog) {
@@ -766,7 +833,7 @@
       });
       var exploring = document.body.dataset.view === "explore";
       document.body.classList.toggle("dark-chrome", dark && exploring);
-      spine.forEach(function (a) { a.classList.toggle("on", a.dataset.t === cur2); });
+      flowSpine(y, cur2, cur2 === null && y > window.innerHeight);
       if (exploring) drawThread(y);
     }
     window.addEventListener("scroll", still, { passive: true });

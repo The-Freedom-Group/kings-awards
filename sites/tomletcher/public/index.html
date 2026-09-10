@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tom Letcher — Founder. Operator. Builder.</title>
-<meta name="description" content="Tom Letcher, founder of Freedom Fire &amp; Safety Ltd. From one second-hand fire extinguisher to a nationwide, multi-channel safety business: the story, the method, and the platform being built next.">
+<meta name="description" content="Tom Letcher, founder and MD of Freedom Fire &amp; Safety Ltd. From one second-hand fire extinguisher to a nationwide, multi-channel safety business: the story, the method, and the platform being built next.">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#F4F1EB">
 <meta property="og:type" content="profile">
@@ -112,7 +112,8 @@ body.dark-chrome .card .t{color:var(--pale)}
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 body.dark-chrome .card .d{border-top-color:var(--rule-d);color:var(--pale-3)}
 .card.away{opacity:0;transform:translateY(14px);pointer-events:none}
-@media(max-width:1699px){.card{display:none}}
+@media(max-width:1699px){.card{width:106px;padding:10px 11px 11px}.card .n{font-size:32px;margin:6px 0 2px}.card .t{font-size:12.5px}.card .k{font-size:8.5px}}
+@media(max-width:1499px){.card{display:none}}
 body[data-view="record"] .card{display:none}
 
 /* ── accent sweep ───────────────────────────────────────────── */
@@ -524,7 +525,7 @@ body.ready .hl-node{opacity:1}
 
 /* serif quotation */
 .quo{margin:clamp(38px,6vw,72px) 0;padding-left:clamp(18px,2.6vw,32px);border-left:2px solid var(--pink)}
-.quo q{quotes:none;display:block;font-family:var(--serif);font-style:italic;
+.quo q{quotes:"\201C" "\201D";display:block;font-family:var(--serif);font-style:italic;
   font-size:clamp(24px,4vw,44px);line-height:1.2}
 .quo .by{margin-top:16px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
   font-weight:500;color:var(--ink-3)}
@@ -991,7 +992,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 @media(min-width:821px){.hero-sub .fob-sub{white-space:nowrap;max-width:none}}
 .bar>.wrap>div{display:flex;align-items:center;gap:16px;padding:18px 20px;text-align:left;text-transform:none;letter-spacing:0;font-weight:400;font-size:12px;min-height:96px}
 .bar img{width:auto;height:56px;flex:0 0 auto;object-fit:contain}
-.bar .b1 img{height:64px}.bar .b2 img{height:40px;background:#fff;padding:5px 7px;border-radius:3px}
+.bar .b1 img{height:64px}.bar .b2 img{height:40px}
 .bar .bw{display:grid;gap:4px;line-height:1.1}
 .bar small{font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
 .bar .bw>b{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:clamp(15px,1.25vw,19px);color:var(--porcelain);line-height:1}
@@ -1153,7 +1154,7 @@ body.bio-open{overflow:hidden}
 .bio-close-line em{color:var(--pink);font-style:italic}
 .bio-dates{position:sticky;top:clamp(60px,8vw,100px);border-top:1px solid var(--rule-d);padding-top:22px}
 .bio-dates dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:14px 20px;font-size:14.5px;line-height:1.55}
-.bio-dates dt{font-family:var(--disp);text-transform:uppercase;font-size:18px;line-height:1.1;color:var(--pink);white-space:nowrap;padding-top:2px}
+.bio-dates dt{font-family:var(--disp);text-transform:uppercase;font-size:16px;line-height:1.1;color:var(--pink);white-space:nowrap;padding-top:3px}
 .bio-dates dd{margin:0;color:var(--pale-2);font-weight:300;border-bottom:1px solid var(--rule-d);padding-bottom:12px}
 .bio-dates dd b{color:var(--pale);font-weight:600}
 .bio-next{margin:22px 0 0;font-size:14.5px;color:var(--pale-2);line-height:1.6}
@@ -1179,6 +1180,12 @@ body.bio-open{overflow:hidden}
 .bar em,.bar .b1 em,.bar .b2 em,.bar .b4 em{color:var(--pale-2);font-size:11px;white-space:nowrap}
 .bar .b3 .bw>b.big{font-size:clamp(24px,2.2vw,32px);color:var(--pink);line-height:1;display:flex;align-items:baseline;gap:8px}
 .bar .b3 .bw>b.big .ps{font-family:var(--disp);font-size:clamp(15px,1.25vw,19px);letter-spacing:0;font-weight:400;text-transform:uppercase;color:var(--porcelain)}
+/* one palette for all four: pink dates, porcelain marks */
+.bar small,.bar .b1 small,.bar .b2 small,.bar .b3 small,.bar .b3 small.dt,.bar .b4 small{color:var(--pink)}
+.bar .lg-ebay b,.bar .lg-ebay b:nth-child(n){color:var(--porcelain)}
+.bar .b2 img{height:34px;background:none;padding:0}
+.lg-men{font-family:var(--disp);font-size:30px;line-height:1;color:var(--porcelain);border:2px solid var(--pink);padding:9px 10px 6px;letter-spacing:.05em;flex:0 0 auto;text-transform:uppercase}
+@media(max-width:760px){.lg-men{font-size:22px;padding:7px 8px 4px}}
 .lg-ebay.xl{font-size:34px}
 @media(max-width:1180px){.bar .bw>b,.bar em{white-space:normal}}
 @media(max-width:760px){.bar .wrap{grid-template-columns:1fr 1fr}}
@@ -1206,6 +1213,36 @@ body.bio-open{overflow:hidden}
 .chart .da{filter:drop-shadow(0 0 6px rgba(255,45,141,.8))}
 .chart svg g.bar-g path,.chart svg rect.seg{filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
 .charts{margin-top:clamp(40px,6vw,72px)}
+
+/* ── notes, 10 Sept: spine flow, one-line stand, eBay badge, carbon design, footer chapters ── */
+.spine::before{content:"";position:absolute;left:5.5px;top:8px;bottom:8px;width:1px;background:var(--rule);z-index:-1}
+body.dark-chrome .spine::before{background:#333}
+.spine::after{content:"";position:absolute;left:5.5px;top:8px;width:1px;height:calc((100% - 16px) * var(--f,0));background:var(--pink);box-shadow:0 0 8px rgba(255,45,141,.55);z-index:-1;transition:height .45s cubic-bezier(.2,.8,.25,1)}
+.spine a.done{color:var(--pink);opacity:.72}
+.spine a.done::before{background:var(--pink)}
+body.dark-chrome .spine a.on,body.dark-chrome .spine a.done{color:var(--pink)}
+body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{background:var(--pink)}
+.spine{isolation:isolate}
+@media(min-width:900px){.stand.one-line{white-space:nowrap;max-width:none}}
+.bd.bd-ebay .lg-ebay.bd-lg{font-size:56px;align-self:center;letter-spacing:-.06em;justify-self:start;line-height:1}
+.env-head{display:grid;grid-template-columns:1fr auto;gap:clamp(20px,3vw,48px);align-items:end}
+.env-h{font-size:clamp(28px,3.4vw,46px);line-height:.95;margin:6px 0 14px}
+.env-head .stand{margin:0}
+.env-marks{list-style:none;margin:0;padding:0;display:grid;gap:10px;min-width:220px}
+.env-marks li{display:grid;gap:2px;padding:10px 14px;border-left:2px solid var(--pink);background:rgba(255,45,141,.05)}
+.env-marks b{font-family:var(--disp);text-transform:uppercase;font-weight:400;font-size:17px;line-height:1}
+.env-marks span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.env .pill.env-grid{gap:14px;background:none;border:0;counter-reset:env;margin:30px 0 18px}
+.env .pill.env-grid div{position:relative;border:1px solid var(--rule);padding:30px 22px 24px;background:linear-gradient(180deg,#fff,var(--porcelain));counter-increment:env;transition:transform .3s,box-shadow .3s,border-color .3s}
+.env .pill.env-grid div::before{content:"0" counter(env);font-family:var(--disp);font-size:34px;line-height:1;color:var(--pink);display:block;margin-bottom:12px}
+.env .pill.env-grid div::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--pink),rgba(255,45,141,0))}
+.env .pill.env-grid div:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(16,16,16,.08);border-color:var(--pink)}
+@media(max-width:820px){.env-head{grid-template-columns:1fr}.env-marks{grid-template-columns:1fr 1fr 1fr;min-width:0}}
+@media(max-width:560px){.env-marks{grid-template-columns:1fr}}
+.ft-ch a{display:inline-flex;align-items:baseline;gap:9px}
+.ft-ch a span{font-family:var(--disp);font-size:11px;letter-spacing:.06em;color:var(--pink);min-width:18px;margin-right:10px;display:inline-block}
+.ft-brand img{height:172px}
+.ft-credit{margin-top:8px;font-size:10.5px;letter-spacing:.06em;color:var(--pale-3)}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1234,8 +1271,8 @@ body.bio-open{overflow:hidden}
     <a class="mono-mark" href="#top" data-mag aria-label="Tom Letcher — top">TL</a>
     <span class="now" id="now" aria-hidden="true"><b id="nowN">00</b><span id="nowT">Tom Letcher</span></span>
     <nav>
-      <a href="#c01">Story</a><a href="#c03">Proof</a>
-      <a href="#c04">Method</a><a href="#c06">Future</a><a href="#c08">Next</a>
+      <a href="#c01">Story</a><a href="#c02">Proof</a>
+      <a href="#c03">Method</a><a href="#c05">Future</a><a href="#c07">Next</a>
     </nav>
     <button class="burger" id="burger" data-mag aria-label="Open chapter menu" aria-expanded="false">
       <i></i><i></i></button>
@@ -1247,21 +1284,20 @@ body.bio-open{overflow:hidden}
   <ol>
     <li><a href="#top"><span>00</span>Tom Letcher</a></li>
     <li><a href="#c01"><span>01</span>The Spark</a></li>
-    <li><a href="#c02"><span>02</span>Step by Step</a></li>
-    <li><a href="#c03"><span>03</span>Proof, Not Promise</a></li>
-    <li><a href="#c04"><span>04</span>How I Build</a></li>
-    <li><a href="#c05"><span>05</span>Built With People</a></li>
-    <li><a href="#c06"><span>06</span>The Next Ten Years</a></li>
-    <li><a href="#c07"><span>07</span>The Company</a></li>
-    <li><a href="#c08"><span>08</span>Still Building</a></li>
+    <li><a href="#c02"><span>02</span>Proof, Not Promise</a></li>
+    <li><a href="#c03"><span>03</span>How I Build</a></li>
+    <li><a href="#c04"><span>04</span>Built With People</a></li>
+    <li><a href="#c05"><span>05</span>The Next Ten Years</a></li>
+    <li><a href="#c06"><span>06</span>The Company</a></li>
+    <li><a href="#c07"><span>07</span>Still Building</a></li>
   </ol>
 </div>
 
 <aside class="spine" id="spine">
-  <a href="#c01" data-t="c01">01</a><a href="#c02" data-t="c02">02</a>
-  <a href="#c03" data-t="c03">03</a><a href="#c04" data-t="c04">04</a>
-  <a href="#c05" data-t="c05">05</a><a href="#c06" data-t="c06">06</a>
-  <a href="#c07" data-t="c07">07</a><a href="#c08" data-t="c08">08</a>
+  <a href="#c01" data-t="c01">01</a>
+  <a href="#c02" data-t="c02">02</a><a href="#c03" data-t="c03">03</a>
+  <a href="#c04" data-t="c04">04</a><a href="#c05" data-t="c05">05</a>
+  <a href="#c06" data-t="c06">06</a><a href="#c07" data-t="c07">07</a>
 </aside>
 
 <div id="explore">
@@ -1279,7 +1315,7 @@ body.bio-open{overflow:hidden}
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Founder of Freedom Fire &amp; Safety Ltd &amp; the Freedom Group forming around it.</p></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Founder &amp; MD of Freedom Fire &amp; Safety Ltd, and the Freedom Group forming around it.</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
         <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
@@ -1290,32 +1326,32 @@ body.bio-open{overflow:hidden}
 
 <div class="bar" aria-label="Four snapshot facts">
   <div class="wrap">
-    <div class="b1"><span class="kab2"><svg class="kab-svg" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="91.50" y1="50.00" x2="93.50" y2="50.00" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="91.27" y1="54.34" x2="93.26" y2="54.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="90.59" y1="58.63" x2="92.55" y2="59.04" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="89.47" y1="62.82" x2="91.37" y2="63.44" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="87.91" y1="66.88" x2="89.74" y2="67.69" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="85.94" y1="70.75" x2="87.67" y2="71.75" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="83.57" y1="74.39" x2="85.19" y2="75.57" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="80.84" y1="77.77" x2="82.33" y2="79.11" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="77.77" y1="80.84" x2="79.11" y2="82.33" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="74.39" y1="83.57" x2="75.57" y2="85.19" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="70.75" y1="85.94" x2="71.75" y2="87.67" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="66.88" y1="87.91" x2="67.69" y2="89.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="62.82" y1="89.47" x2="63.44" y2="91.37" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="58.63" y1="90.59" x2="59.04" y2="92.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="54.34" y1="91.27" x2="54.55" y2="93.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="50.00" y1="91.50" x2="50.00" y2="93.50" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="45.66" y1="91.27" x2="45.45" y2="93.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="41.37" y1="90.59" x2="40.96" y2="92.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="37.18" y1="89.47" x2="36.56" y2="91.37" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="33.12" y1="87.91" x2="32.31" y2="89.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="29.25" y1="85.94" x2="28.25" y2="87.67" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="25.61" y1="83.57" x2="24.43" y2="85.19" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="22.23" y1="80.84" x2="20.89" y2="82.33" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="19.16" y1="77.77" x2="17.67" y2="79.11" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="16.43" y1="74.39" x2="14.81" y2="75.57" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="14.06" y1="70.75" x2="12.33" y2="71.75" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="12.09" y1="66.88" x2="10.26" y2="67.69" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="10.53" y1="62.82" x2="8.63" y2="63.44" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="9.41" y1="58.63" x2="7.45" y2="59.04" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="8.73" y1="54.34" x2="6.74" y2="54.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="8.50" y1="50.00" x2="6.50" y2="50.00" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="8.73" y1="45.66" x2="6.74" y2="45.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="9.41" y1="41.37" x2="7.45" y2="40.96" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="10.53" y1="37.18" x2="8.63" y2="36.56" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="12.09" y1="33.12" x2="10.26" y2="32.31" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="14.06" y1="29.25" x2="12.33" y2="28.25" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="16.43" y1="25.61" x2="14.81" y2="24.43" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="19.16" y1="22.23" x2="17.67" y2="20.89" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="22.23" y1="19.16" x2="20.89" y2="17.67" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="25.61" y1="16.43" x2="24.43" y2="14.81" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="29.25" y1="14.06" x2="28.25" y2="12.33" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="33.12" y1="12.09" x2="32.31" y2="10.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="37.18" y1="10.53" x2="36.56" y2="8.63" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="41.37" y1="9.41" x2="40.96" y2="7.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="45.66" y1="8.73" x2="45.45" y2="6.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="50.00" y1="8.50" x2="50.00" y2="6.50" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="54.34" y1="8.73" x2="54.55" y2="6.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="58.63" y1="9.41" x2="59.04" y2="7.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="62.82" y1="10.53" x2="63.44" y2="8.63" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="66.88" y1="12.09" x2="67.69" y2="10.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="70.75" y1="14.06" x2="71.75" y2="12.33" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="74.39" y1="16.43" x2="75.57" y2="14.81" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="77.77" y1="19.16" x2="79.11" y2="17.67" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="80.84" y1="22.23" x2="82.33" y2="20.89" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="83.57" y1="25.61" x2="85.19" y2="24.43" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="85.94" y1="29.25" x2="87.67" y2="28.25" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="87.91" y1="33.12" x2="89.74" y2="32.31" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="89.47" y1="37.18" x2="91.37" y2="36.56" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="90.59" y1="41.37" x2="92.55" y2="40.96" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="91.27" y1="45.66" x2="93.26" y2="45.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><path d="M37.3 81.5 A34 34 0 0 1 16.6 56.5" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/><path d="M0 0 C1.8 -2.6 5.2 -2.6 6 0 C5.2 2.6 1.8 2.6 0 0 Z" transform="translate(37.26 81.52) rotate(202.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -2.9 5.2 -2.9 6 0 C5.2 2.9 1.8 2.9 0 0 Z" transform="translate(32.24 78.99) rotate(211.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.1 5.2 -3.1 6 0 C5.2 3.1 1.8 3.1 0 0 Z" transform="translate(27.69 75.66) rotate(221.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.4 5.2 -3.4 6 0 C5.2 3.4 1.8 3.4 0 0 Z" transform="translate(23.76 71.63) rotate(230.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.6 5.2 -3.6 6 0 C5.2 3.6 1.8 3.6 0 0 Z" transform="translate(20.56 67.00) rotate(240.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.9 5.2 -3.9 6 0 C5.2 3.9 1.8 3.9 0 0 Z" transform="translate(18.15 61.91) rotate(249.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -4.1 5.2 -4.1 6 0 C5.2 4.1 1.8 4.1 0 0 Z" transform="translate(16.62 56.49) rotate(259.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M62.7 81.5 A34 34 0 0 0 83.4 56.5" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/><path d="M0 0 C1.8 -2.6 5.2 -2.6 6 0 C5.2 2.6 1.8 2.6 0 0 Z" transform="translate(62.74 81.52) rotate(-22.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -2.9 5.2 -2.9 6 0 C5.2 2.9 1.8 2.9 0 0 Z" transform="translate(67.76 78.99) rotate(-31.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.1 5.2 -3.1 6 0 C5.2 3.1 1.8 3.1 0 0 Z" transform="translate(72.31 75.66) rotate(-41.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.4 5.2 -3.4 6 0 C5.2 3.4 1.8 3.4 0 0 Z" transform="translate(76.24 71.63) rotate(-50.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.6 5.2 -3.6 6 0 C5.2 3.6 1.8 3.6 0 0 Z" transform="translate(79.44 67.00) rotate(-60.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.9 5.2 -3.9 6 0 C5.2 3.9 1.8 3.9 0 0 Z" transform="translate(81.85 61.91) rotate(-69.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -4.1 5.2 -4.1 6 0 C5.2 4.1 1.8 4.1 0 0 Z" transform="translate(83.38 56.49) rotate(-79.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M50 16.5 l1.6 3.4 3.6.4-2.7 2.5.7 3.6L50 24.6l-3.2 1.8.7-3.6-2.7-2.5 3.6-.4z" fill="currentColor"/><text x="50" y="57.5" text-anchor="middle" class="kab-yr">2027</text><text x="50" y="69" text-anchor="middle" class="kab-en">ENTERED</text></svg></span><span class="bw"><small>Entered · 2027</small><b>King's Awards for Enterprise</b><em>Social impact</em></span></div>
-    <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+ <span class="ps">products sold</span></b><em>Ranked No. 1 for fire extinguishers on eBay &amp; Temu</em></span></div>
-    <div class="b2"><img src="assets/myta.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
-    <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
+    <div class="b1"><span class="lg-men" aria-hidden="true">MEN</span><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em>£150,000 Salboy competition · Runner-up</em></span></div>
+    <div class="b3"><span class="bw"><small class="dt">2019 – 2026</small><b class="big">500,000+ <span class="ps">products sold</span></b><em>No.1 fire extinguishers on eBay &amp; Temu</em></span></div>
+    <div class="b2"><img src="assets/myta-mono.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
+    <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>April 2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
   </div>
 </div>
 
 <section class="scene" id="ones" aria-label="Start, now and next">
   <div class="stick">
-    <div class="yr" id="sceneYr">The beginning · March 2019</div>
+    <div class="yr" id="sceneYr">The beginning · December 2019</div>
     <div class="phs" id="phs">
-      <div class="ph on" data-yr="The beginning · March 2019"><div>
+      <div class="ph on" data-yr="The beginning · December 2019"><div>
         <em>The beginning</em>
         <h3>One rusty fire extinguisher.</h3>
         <p>Second-hand, refurbished, listed on Facebook Marketplace and collected by the buyer. No plan, no investors, no company.</p></div></div>
       <div class="ph" data-yr="Currently · September 2026"><div>
         <em>Currently</em>
-        <h3>To No. 1 on eBay.</h3>
+        <h3>To No.1 on eBay.</h3>
         <p>500,000 products sold, a portfolio of registered brands, one warehouse, a team that runs the day, and a ten-year plan for a global multi-brand ecommerce group.</p></div></div>
       <div class="ph" data-yr="The future · 2027 and beyond"><div>
         <em>The future</em>
-        <h3>A platform, not a shop.</h3>
+        <h3>A £100m projection.</h3>
         <p>Amazon, Temu, Shopify and OnBuy at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
     </div>
     <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
-    <div class="cnt">Trading since <b>March 2019</b><br>Incorporated 2021</div>
+    <div class="cnt">Trading since <b>December 2019</b><br>Incorporated 2021</div>
   </div>
 </section>
 
@@ -1334,30 +1370,12 @@ body.bio-open{overflow:hidden}
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started<br>with one rusty<br>fire extinguisher</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, March 2019. An architecture background, a second-hand fire extinguisher nobody else saw value in,
-      and a Facebook Marketplace listing.</p>
+      <p class="stand">Bury, December 2019. An architect by training, a delivery van, and a second-hand fire extinguisher nobody else saw any value in. One listing, one buyer, and everything since paid for by the sale before it.</p>
     </div>
-    <div class="cols eq">
-      <div class="body rv">
-        <div class="ch-tag sm">The first sale</div>
-        <p>Before Freedom Fire there was one overlooked object: <b>a rusty, second-hand fire extinguisher</b>, cleaned
-        up and listed for sale. One person took a chance on it. That sale paid for the next, and what the trade
-        called scrap turned out to be a market.</p>
-      </div>
-      <div class="body rv">
-        <div class="ch-tag sm">From one sale to a company</div>
-        <p>The first customer collected in person. The second wanted four hundred. The third asked whether it
-        could be posted. Each question became the next stage. By 2021 a corner of the family warehouse was turning out
-        <b>800 to 1,000 units a week</b>, and on 27 August 2021 <b>Freedom Fire &amp; Safety Ltd</b> was incorporated. <button data-cur-label="More" class="more" type="button" data-pop="p-origin" aria-label="The full origin"></button></p>
-        <div class="pop" id="p-origin" hidden><b>The full origin</b><p><b>September 2019.</b> About 400 mixed fire extinguishers to a fire-training buyer in Bolton, roughly a pound each. The first proof that demand was real and came in volume.</p><p><b>January 2020.</b> A Nottingham takeaway paid online and asked for the fire extinguisher to be sent. Fire extinguishers cannot go with any courier, so the parcel had to be packed properly and a carrier found. From then on the business was not limited to people who could collect in person.</p><p><b>Summer 2020.</b> Trading as Freedom Fire from a rented corner of the family warehouse: students cleaning and refilling hundreds of units a day, pallets to Scotland, Wales and London, and six containers of refurbished stock for exporters into West and Central Africa. By 2021 the supply of second-hand stock could no longer keep up.</p></div>
-      </div>
-    </div>
-
     <div class="bio-cta rv">
       <div>
         <div class="ch-tag sm">Before Freedom</div>
-        <p>A schoolboy with a bag of Lucozade and KitKat Chunkies. A mum lost at 15. Architecture at Salford, a summer at Harvard,
-        a £150,000 competition lost by a whisker, two job offers turned down, and one second-hand fire extinguisher in the back of a van.</p>
+        <p>I was almost kicked out of university. Then I finished runner-up in a competition that could have changed my life, and losing it gave me the drive to build an empire of my own, starting with one second-hand fire extinguisher.</p>
       </div>
       <button class="bio-btn" type="button" id="bioOpen" data-mag data-cur-label="Read">Read Tom's biography <i>→</i></button>
     </div>
@@ -1366,96 +1384,46 @@ body.bio-open{overflow:hidden}
     <div class="tl rv" id="timeline" aria-label="To Freedom and beyond, 2019 to now">
       <div class="yhead">To Freedom and beyond · 2019 to now</div>
       <ol class="tl-list">
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch1-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
-      <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">Summer 2019</span><span class="what"><b>Harvard.</b>A summer placement at Harvard University during the Master's, a few years after nearly leaving education altogether.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/salboy.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">2019 – 2020</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
-      <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">2019 – 2020</span><span class="what"><b>Two job offers, both declined.</b>Two architecture jobs offered straight after graduating, and both turned down for a delivery driver's job at his dad's cleaning company. On one ordinary delivery, a second-hand fire extinguisher. To anyone else, an old piece of equipment. To him, the beginning of something.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/harvard.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/salboy.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2019</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
+      <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">October 2019</span><span class="what"><b>Two job offers, both declined.</b>Two architecture jobs offered straight after graduating, and both turned down for a delivery driver's job at his dad's cleaning company. On one ordinary delivery, a second-hand fire extinguisher. To anyone else, an old piece of equipment. To him, the beginning of something.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch1-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch4-d.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">June 2020</span><span class="what"><b>Freedom Fire.</b>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch6-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2021</span><span class="what"><b>The company.</b>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/people/jojo.jpg" data-cur-label="View">View image <i>↗</i></button><span class="when">2021</span><span class="what"><b>The first placements.</b>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch7-b.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch8-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">2023</span><span class="what"><b>The year of building.</b>Thousands of products researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch9-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">May 2024</span><span class="what"><b>The eBay awards.</b>Four months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/people/jojo.jpg" data-cur-label="View">View image <i>↗</i></button><span class="when">November 2021</span><span class="what"><b>The first placements.</b>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch7-b.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">May 2022</span><span class="what"><b>A front door of its own.</b>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch8-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2023</span><span class="what"><b>The year of building.</b>After 18 months of building, thousands of products have been researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch9-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2024</span><span class="what"><b>The eBay awards.</b>Three months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch12-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2024</span><span class="what"><b>FIRESTORM.</b>The company's own brand is born: the FIRESTORM trade mark is filed in August and registered in November.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch10-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">November 2024</span><span class="what"><b>Unit 19, the headquarters.</b>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch10-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2024</span><span class="what"><b>Unit 19, the headquarters.</b>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch13-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2024</span><span class="what"><b>The first container.</b>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch16-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/tlevel-trio.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch16-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">Autumn 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/web-duo.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">2025 – 2026</span><span class="what"><b>Students build the website.</b>Two of the T Level students spend six months building the company's new website and storefronts from scratch.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch18-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">March 2026</span><span class="what"><b>Three brands.</b>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch3-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/team-races.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">June 2026</span><span class="what"><b>Three of three.</b>All three of the first T Level cohort complete their placements and move into paid roles.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch21a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Containers arrive back to back, the company is number one for fire extinguishers on eBay and Temu, and the Amazon and Shopify launches are in preparation.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/kings-entered.png" data-cur-label="View">View image <i>↗</i></button><span class="when">September 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>The King's Awards application goes in, supported by this portfolio and The Way In. Shortlisted the same month for the Manchester Young Talent Awards, Agent of Change.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch3-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/kings-entered.png" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>Entered for the King's Awards for Enterprise 2027, Promoting Opportunity: the ways young people come into the company, the placements, and the roles they moved into.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/ch13-team.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/myta-card.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">September 2026</span><span class="what"><b>Manchester Young Talent Awards.</b>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/oct2026-launch.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2026</span><span class="what"><b>Amazon and the shop launch.</b>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</span></li>
       </ol>
     </div>
   </div>
 </section>
 
-<!-- ══ 02 FROM SALE TO SYSTEM ══ -->
-<section class="ch" id="c02" data-n="02">
-  <div class="wrap">
-    <div class="rv">
-      <div class="ch-tag">02 — Step by Step</div>
-      <h2>Eight problems. Eight fixes.</h2>
-      <em class="scr" aria-hidden="true" style="right:4%;top:6%">build.</em>
-      <p class="stand">One problem at a time. What was in the way, what we did, and what it gave us.</p>
-    </div>
-    <div class="stages rv">
-      <div class="stage"><div class="n">01</div><h3>Refurbished stock</h3>
-        <dl><dt>Problem</dt><dd>No money, no product.</dd>
-        <dt>What we did</dt><dd>Cleaned up fire extinguishers the trade was scrapping, and sold them for training use.</dd>
-        <dt>Result</dt><dd>Up to 1,000 units a week by 2021.</dd></dl></div>
-      <div class="stage"><div class="n">02</div><h3>Selling online</h3>
-        <dl><dt>Problem</dt><dd>Facebook Marketplace only reached Bury.</dd>
-        <dt>What we did</dt><dd>Listed one CO2 fire extinguisher on eBay in December 2020.</dd>
-        <dt>Result</dt><dd>The store built on that listing is now number one on eBay UK.</dd></dl></div>
-      <div class="stage"><div class="n">03</div><h3>Becoming a company</h3>
-        <dl><dt>Problem</dt><dd>Customers wanted a real company behind the work.</dd>
-        <dt>What we did</dt><dd>Incorporated Freedom Fire &amp; Safety Ltd in August 2021.</dd>
-        <dt>Result</dt><dd>Two incomes: online sales and on-site servicing.</dd></dl></div>
-      <div class="stage"><div class="n">04</div><h3>A warehouse of our own</h3>
-        <dl><dt>Problem</dt><dd>Nowhere to hold stock, and buyers expect next-day delivery.</dd>
-        <dt>What we did</dt><dd>Moved to Unit 10 in 2022, then to the Unit 19 headquarters in 2024.</dd>
-        <dt>Result</dt><dd>Thousands of orders a month from one site.</dd></dl></div>
-      <div class="stage"><div class="n">05</div><h3>Our own brand</h3>
-        <dl><dt>Problem</dt><dd>Buying from distributors left no margin.</dd>
-        <dt>What we did</dt><dd>Went direct to a global producer and created FIRESTORM in 2024.</dd>
-        <dt>Result</dt><dd>Our own brand on every cylinder, at a price that works.</dd></dl></div>
-      <div class="stage"><div class="n">06</div><h3>More than one marketplace</h3>
-        <dl><dt>Problem</dt><dd>One marketplace is one point of failure.</dd>
-        <dt>What we did</dt><dd>Opened Temu in 2025 and Amazon in 2026. Shopify and OnBuy are next.</dd>
-        <dt>Result</dt><dd>Temu UK's first dedicated fire extinguisher seller.</dd></dl></div>
-      <div class="stage"><div class="n">07</div><h3>Servicing and trade</h3>
-        <dl><dt>Problem</dt><dd>Online sales rise and fall.</dd>
-        <dt>What we did</dt><dd>Built a nationwide servicing and installation team.</dd>
-        <dt>Result</dt><dd>Contracts with colleges, offices and property companies that renew every year.</dd></dl></div>
-      <div class="stage"><div class="n">08</div><h3>Systems</h3>
-        <dl><dt>Problem</dt><dd>Too much for one person and a spreadsheet.</dd>
-        <dt>What we did</dt><dd>An order system, one support desk and our own supply-chain tracker.</dd>
-        <dt>Result</dt><dd>The team runs the day-to-day, not the founder.</dd></dl></div>
-    </div>
-    <figure class="plate wide crop">
-      <img src="assets/journey/ch13-team.webp" width="1200" height="1024" style="object-position:50% 58%" alt="The team standing inside an open shipping container on a trailer at Unit 19" decoding="async">
-      <figcaption>Team HQ</figcaption>
-    </figure>
-  </div>
-</section>
-
 <!-- ══ 03 PROOF, NOT PROMISE ══ -->
-<section class="ch dark" id="c03" data-n="03">
+<section class="ch dark" id="c02" data-n="02">
   <div class="wrap">
     <div class="rv">
-      <div class="ch-tag">03 — Proof, Not Promise</div>
-      <h2>Six numbers. Each one says what it counts.</h2>
+      <div class="ch-tag">02 — Proof, Not Promise</div>
+      <h2>Six numbers, and the source behind each one.</h2>
       <p class="stand">Each covers a stated period, and each is checked against a source: the statutory accounts, the marketplaces' own reports, the trade mark register.</p>
     </div>
 
     <div class="metrics rv" id="proof">
       <div class="metric" style="--acc:#FF2D8D">
-        <div class="v">£1.05m</div><div class="k">Turnover · year to August 2026</div>
-        <p class="def">£1,048,616, from £268,162 two years earlier. Statutory accounts, approved 7 September 2026.</p>
-        <div class="per">Financial years to 31 August · Freedom Fire &amp; Safety Ltd</div>
+        <div class="v">£3m</div><div class="k">Revenue to date</div>
+        <p class="def">Every sale since the first listing, across every channel. £1,048,616 of it came in the year to August 2026 alone, from £268,162 two years earlier.</p>
+        <div class="per">December 2019 – September 2026 · all channels</div>
       </div>
       <div class="metric" style="--acc:#ff5ca3">
         <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
@@ -1465,17 +1433,17 @@ body.bio-open{overflow:hidden}
       <div class="metric" style="--acc:#ff74b8">
         <div class="v">500,000+</div><div class="k">Products sold</div>
         <p class="def">Fire extinguishers first, then alarms, batteries, gloves and cleaning products, across every channel since the first listing.</p>
-        <div class="per">March 2019 – September 2026 · all channels</div>
+        <div class="per">December 2019 – September 2026 · all channels</div>
       </div>
       <div class="metric" style="--acc:#e0217f">
         <div class="v">3</div><div class="k">Registered brands</div>
-        <p class="def">FIRESTORM, FXL and SKYLINE, all registered in the company's name. Twelve more in preparation.</p>
+        <p class="def">FIRESTORM, FXL and SKYLINE, all registered in the company's name. 12 more in preparation.</p>
         <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
       </div>
       <div class="metric" style="--acc:#c60f6e">
-        <div class="v">£70k</div><div class="k">Net profit after tax · 2026</div>
-        <p class="def">£70,175, the second profitable year in a row, after the years when stock, compliance and systems were built ahead of revenue. No external equity.</p>
-        <div class="per">Financial years to 31 August · Freedom Fire &amp; Safety Ltd</div>
+        <div class="v">75,000+</div><div class="k">Customer reviews</div>
+        <p class="def">Feedback left by customers across the marketplaces since the first storefront opened: the record behind the number-one ranking.</p>
+        <div class="per">2020 – 2026 · eBay, Temu and Amazon</div>
       </div>
       <div class="metric" style="--acc:#ff8fc6">
         <div class="v">30+</div><div class="k">Global suppliers</div>
@@ -1487,10 +1455,10 @@ body.bio-open{overflow:hidden}
 </section>
 
 <!-- ══ 04 HOW I BUILD ══ -->
-<section class="ch" id="c04" data-n="04">
+<section class="ch" id="c03" data-n="03">
   <div class="wrap">
     <div class="rv">
-      <div class="ch-tag">04 — How I Build</div>
+      <div class="ch-tag">03 — How I Build</div>
       <h2>Five decisions, and what they cost.</h2>
       <em class="scr" aria-hidden="true" style="right:5%;top:0">decide.</em>
       <p class="stand">The same shape every time: a constraint, a decision, what was built, the result, and what it changed.</p>
@@ -1505,7 +1473,7 @@ body.bio-open{overflow:hidden}
             selling it well to a person with a phone and a problem.</dd>
             <dt>Decision</dt><dd>Treat the category like any other online essential: own the product, explain it plainly,
             ship it next day, and build the tools that answer the question before the customer has to ask.</dd>
-            <dt>Implementation</dt><dd>A business store built over twelve months, direct manufacturing and the Firestorm brand in 2024,
+            <dt>Implementation</dt><dd>A business store built over 12 months, direct manufacturing and the Firestorm brand in 2024,
             and buying that replaces a phone call: clear specifications, kits and tracked delivery.</dd>
             <dt>Result</dt><dd>Number one of 1,193 fire extinguisher sellers on eBay UK by July 2026, and a category that is now bought
             the way any other online essential is.</dd>
@@ -1585,16 +1553,16 @@ body.bio-open{overflow:hidden}
     <div class="quo rv">
       <q>Find a non-seasonal, grudge-purchase niche: a product everybody needs and nobody wants, where the competition is
       less. Then make this boring product sexy. Build a system around it. Repeat.</q>
-      <div class="by">Tom Letcher, founder</div>
+      <div class="by">Tom Letcher, Founder &amp; MD</div>
     </div>
   </div>
 </section>
 
 <!-- ══ 05 BUILT WITH PEOPLE ══ -->
-<section class="ch dark" id="c05" data-n="05">
+<section class="ch dark" id="c04" data-n="04">
   <div class="wrap">
     <div class="rv">
-      <div class="ch-tag">05 — Built With People</div>
+      <div class="ch-tag">04 — Built With People</div>
       <h2>A founder who hires is not the same as one who delegates.</h2>
       <em class="scr" aria-hidden="true" style="right:3%;top:8%">people.</em>
       <p class="stand">The roles that exist now, how responsibility was handed over, and what was built so other people
@@ -1627,12 +1595,12 @@ body.bio-open{overflow:hidden}
 </section>
 
 <!-- ══ 06 THE NEXT TEN YEARS ══ -->
-<section class="ch dark" id="c06" data-n="06">
+<section class="ch dark" id="c05" data-n="05">
   <div class="wrap">
     <div class="rv">
       <div class="grp-head">
         <div>
-          <div class="ch-tag">06 — The Next Ten Years</div>
+          <div class="ch-tag">05 — The Next Ten Years</div>
           <h2>From one rusty fire extinguisher to a £100m vision.</h2>
         </div>
       </div>
@@ -1762,22 +1730,13 @@ body.bio-open{overflow:hidden}
   </div>
 </section>
 
-<section class="slab dark" id="slab">
-  <div class="in-w rv">
-    <div class="k">Seven years</div>
-    <h2>From one fire extinguisher<br>to a global group.</h2>
-    <em class="scr" aria-hidden="true" style="right:-4%;bottom:8%;position:absolute">group.</em>
-    <div class="f">2019 — present</div>
-  </div>
-</section>
-
 <!-- ══ 07 THE RECORD ══ -->
-<section class="ch" id="c07" data-n="07" style="padding-top:0">
+<section class="ch" id="c06" data-n="06">
   <div class="wrap">
     <div class="rv">
-      <div class="ch-tag">07 — The Company</div>
+      <div class="ch-tag">06 — The Company</div>
       <h2>One company, built from the ground up.</h2>
-      <p class="stand">What Freedom Fire &amp; Safety Ltd is, where it works from, and what it owns.</p>
+      <p class="stand one-line">What the company is, where it works from, and what it owns.</p>
     </div>
     <div class="cols">
       <aside class="side rv">
@@ -1786,26 +1745,30 @@ body.bio-open{overflow:hidden}
           <div class="bd"><img class="dc" src="assets/disability-confident.png" width="525" height="261" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1 · Level 2 Employer in progress</small></div>
           <div class="bd"><img src="assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>T Level Ambassador Network · employer ambassador</small></div>
           <div class="bd"><img class="myta" src="assets/myta.png" width="640" height="236" alt="Manchester Young Talent Awards" loading="lazy" decoding="async"><small>Manchester Young Talent Awards 2026 · Agent of Change · shortlisted</small></div>
-          <div class="bd"><span class="kab2 ink"><svg class="kab-svg" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="91.50" y1="50.00" x2="93.50" y2="50.00" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="91.27" y1="54.34" x2="93.26" y2="54.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="90.59" y1="58.63" x2="92.55" y2="59.04" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="89.47" y1="62.82" x2="91.37" y2="63.44" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="87.91" y1="66.88" x2="89.74" y2="67.69" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="85.94" y1="70.75" x2="87.67" y2="71.75" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="83.57" y1="74.39" x2="85.19" y2="75.57" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="80.84" y1="77.77" x2="82.33" y2="79.11" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="77.77" y1="80.84" x2="79.11" y2="82.33" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="74.39" y1="83.57" x2="75.57" y2="85.19" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="70.75" y1="85.94" x2="71.75" y2="87.67" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="66.88" y1="87.91" x2="67.69" y2="89.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="62.82" y1="89.47" x2="63.44" y2="91.37" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="58.63" y1="90.59" x2="59.04" y2="92.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="54.34" y1="91.27" x2="54.55" y2="93.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="50.00" y1="91.50" x2="50.00" y2="93.50" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="45.66" y1="91.27" x2="45.45" y2="93.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="41.37" y1="90.59" x2="40.96" y2="92.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="37.18" y1="89.47" x2="36.56" y2="91.37" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="33.12" y1="87.91" x2="32.31" y2="89.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="29.25" y1="85.94" x2="28.25" y2="87.67" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="25.61" y1="83.57" x2="24.43" y2="85.19" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="22.23" y1="80.84" x2="20.89" y2="82.33" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="19.16" y1="77.77" x2="17.67" y2="79.11" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="16.43" y1="74.39" x2="14.81" y2="75.57" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="14.06" y1="70.75" x2="12.33" y2="71.75" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="12.09" y1="66.88" x2="10.26" y2="67.69" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="10.53" y1="62.82" x2="8.63" y2="63.44" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="9.41" y1="58.63" x2="7.45" y2="59.04" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="8.73" y1="54.34" x2="6.74" y2="54.55" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="8.50" y1="50.00" x2="6.50" y2="50.00" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="8.73" y1="45.66" x2="6.74" y2="45.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="9.41" y1="41.37" x2="7.45" y2="40.96" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="10.53" y1="37.18" x2="8.63" y2="36.56" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="12.09" y1="33.12" x2="10.26" y2="32.31" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="14.06" y1="29.25" x2="12.33" y2="28.25" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="16.43" y1="25.61" x2="14.81" y2="24.43" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="19.16" y1="22.23" x2="17.67" y2="20.89" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="22.23" y1="19.16" x2="20.89" y2="17.67" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="25.61" y1="16.43" x2="24.43" y2="14.81" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="29.25" y1="14.06" x2="28.25" y2="12.33" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="33.12" y1="12.09" x2="32.31" y2="10.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="37.18" y1="10.53" x2="36.56" y2="8.63" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="41.37" y1="9.41" x2="40.96" y2="7.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="45.66" y1="8.73" x2="45.45" y2="6.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="50.00" y1="8.50" x2="50.00" y2="6.50" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="54.34" y1="8.73" x2="54.55" y2="6.74" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="58.63" y1="9.41" x2="59.04" y2="7.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="62.82" y1="10.53" x2="63.44" y2="8.63" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="66.88" y1="12.09" x2="67.69" y2="10.26" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="70.75" y1="14.06" x2="71.75" y2="12.33" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="74.39" y1="16.43" x2="75.57" y2="14.81" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="77.77" y1="19.16" x2="79.11" y2="17.67" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="80.84" y1="22.23" x2="82.33" y2="20.89" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="83.57" y1="25.61" x2="85.19" y2="24.43" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="85.94" y1="29.25" x2="87.67" y2="28.25" stroke="currentColor" stroke-width=".9" opacity="1"/><line x1="87.91" y1="33.12" x2="89.74" y2="32.31" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="89.47" y1="37.18" x2="91.37" y2="36.56" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="90.59" y1="41.37" x2="92.55" y2="40.96" stroke="currentColor" stroke-width=".5" opacity=".55"/><line x1="91.27" y1="45.66" x2="93.26" y2="45.45" stroke="currentColor" stroke-width=".5" opacity=".55"/><path d="M37.3 81.5 A34 34 0 0 1 16.6 56.5" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/><path d="M0 0 C1.8 -2.6 5.2 -2.6 6 0 C5.2 2.6 1.8 2.6 0 0 Z" transform="translate(37.26 81.52) rotate(202.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -2.9 5.2 -2.9 6 0 C5.2 2.9 1.8 2.9 0 0 Z" transform="translate(32.24 78.99) rotate(211.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.1 5.2 -3.1 6 0 C5.2 3.1 1.8 3.1 0 0 Z" transform="translate(27.69 75.66) rotate(221.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.4 5.2 -3.4 6 0 C5.2 3.4 1.8 3.4 0 0 Z" transform="translate(23.76 71.63) rotate(230.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.6 5.2 -3.6 6 0 C5.2 3.6 1.8 3.6 0 0 Z" transform="translate(20.56 67.00) rotate(240.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.9 5.2 -3.9 6 0 C5.2 3.9 1.8 3.9 0 0 Z" transform="translate(18.15 61.91) rotate(249.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -4.1 5.2 -4.1 6 0 C5.2 4.1 1.8 4.1 0 0 Z" transform="translate(16.62 56.49) rotate(259.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M62.7 81.5 A34 34 0 0 0 83.4 56.5" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/><path d="M0 0 C1.8 -2.6 5.2 -2.6 6 0 C5.2 2.6 1.8 2.6 0 0 Z" transform="translate(62.74 81.52) rotate(-22.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -2.9 5.2 -2.9 6 0 C5.2 2.9 1.8 2.9 0 0 Z" transform="translate(67.76 78.99) rotate(-31.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.1 5.2 -3.1 6 0 C5.2 3.1 1.8 3.1 0 0 Z" transform="translate(72.31 75.66) rotate(-41.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.4 5.2 -3.4 6 0 C5.2 3.4 1.8 3.4 0 0 Z" transform="translate(76.24 71.63) rotate(-50.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.6 5.2 -3.6 6 0 C5.2 3.6 1.8 3.6 0 0 Z" transform="translate(79.44 67.00) rotate(-60.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -3.9 5.2 -3.9 6 0 C5.2 3.9 1.8 3.9 0 0 Z" transform="translate(81.85 61.91) rotate(-69.5) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M0 0 C1.8 -4.1 5.2 -4.1 6 0 C5.2 4.1 1.8 4.1 0 0 Z" transform="translate(83.38 56.49) rotate(-79.0) scale(0.90)" fill="currentColor" opacity=".9"/><path d="M50 16.5 l1.6 3.4 3.6.4-2.7 2.5.7 3.6L50 24.6l-3.2 1.8.7-3.6-2.7-2.5 3.6-.4z" fill="currentColor"/><text x="50" y="57.5" text-anchor="middle" class="kab-yr">2027</text><text x="50" y="69" text-anchor="middle" class="kab-en">ENTERED</text></svg></span><small>Entered for The King's Awards for Enterprise 2027 · Social impact</small></div>
+          <div class="bd bd-ebay"><span class="lg-ebay bd-lg" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><small>eBay UK Business Awards 2024 · Social Impact · one of five finalists</small></div>
         </div>
       </aside>
       <div class="body rv">
         <table class="tbl">
           <tr><th>Company</th><td>Freedom Fire &amp; Safety Ltd</td></tr>
-          <tr><th>Founder</th><td>Tom Letcher</td></tr>
-          <tr><th>Began</th><td>Sole trader from March 2019; trading as Freedom Fire from June 2020; incorporated 27 August 2021</td></tr>
+          <tr><th>Founder &amp; MD</th><td>Tom Letcher</td></tr>
+          <tr><th>Began</th><td>Sole trader from December 2019; trading as Freedom Fire from June 2020; incorporated 27 August 2021</td></tr>
           <tr><th>Based</th><td>Unit 19, Pilsworth Industrial Estate, Bury, Greater Manchester</td></tr>
           <tr><th>What it does</th><td>A growing portfolio of branded products, fire safety first, then alarms, batteries, PPE, gloves and cleaning, sold online and to trade, with fire extinguisher servicing and installation on site</td></tr>
-          <tr><th>Brands</th><td>Firestorm, FXL and Skyline, registered in the company's name; twelve more in preparation</td></tr>
+          <tr><th>Brands</th><td>Firestorm, FXL and Skyline, registered in the company's name; 12 more in preparation</td></tr>
           <tr><th>Channels</th><td>eBay, Temu and Amazon today; Shopify and OnBuy in preparation; national retailers, servicing facilities and B2B supply to follow</td></tr>
         </table>
       </div>
     <button class="fold-t" type="button" data-fold="cols">Read more</button>
     </div>
     <div class="env rv">
-      <div class="ch-tag">Carbon footprint</div>
-      <p class="stand">Where the footprint sits, and what is done about each part.</p>
-      <div class="pill">
+      <div class="env-head">
+        <div><div class="ch-tag">Carbon footprint</div>
+        <h3 class="env-h">Longer life. Fewer miles. Less waste.</h3>
+        <p class="stand">Where the footprint sits, and what is done about each part.</p></div>
+        <ul class="env-marks" aria-label="Carbon footprint, in brief"><li><b>Refurbish</b><span>before replace</span></li><li><b>Full containers</b><span>not part loads</span></li><li><b>Specialist recovery</b><span>at end of life</span></li></ul>
+      </div>
+      <div class="pill env-grid">
         <div><h4>Longer life</h4><p>Inspection, servicing and compliant refurbishment extend service life instead of replacing fire extinguishers before they need it. The range is moving with the industry away from fluorinated foam.</p></div>
         <div><h4>End of life</h4><p>Expired, discharged or damaged fire extinguishers go to specialist partners, CheckFire Group and
           Jewel Fire Group, for controlled processing and metal recovery. Waste-transfer documentation gives traceability.</p></div>
@@ -1827,23 +1790,11 @@ body.bio-open{overflow:hidden}
 
 
 <!-- ══ 08 STILL BUILDING ══ -->
-<section class="ch dark next" id="c08" data-n="08">
+<section class="ch dark next" id="c07" data-n="07">
   <div class="wrap rv">
-    <div class="ch-tag" style="justify-content:center">08 — Still Building</div>
+    <div class="ch-tag" style="justify-content:center">07 — Still Building</div>
     <h2>The line does not stop here.</h2>
-    <p class="stand">The projects on the bench now. The same method, applied again.</p>
-    <div class="projects">
-      <div class="proj"><span class="pn">01</span><h3>Freedom Brain</h3><p>An AI-enabled operations hub: staff schedules, priorities, stock,
-        supplier records, compliance documents and performance data in one place, prompting actions and flagging risks.</p></div>
-      <div class="proj"><span class="pn">02</span><h3>The fire extinguisher calculator</h3><p>An online tool that turns the technical rules on fire
-        cover into a plain recommendation for a home or premises, built from the question customers kept asking.</p></div>
-      <div class="proj"><span class="pn">03</span><h3>Freedom Freight</h3><p>The in-house supply-chain tracker that follows every consignment from
-        factory to warehouse, and the seed of a logistics arm.</p></div>
-      <div class="proj"><span class="pn">04</span><h3>Our own ecommerce store</h3><p>A Shopify store built in-house by the team, so that customers can buy direct and no single marketplace decides the future.</p></div>
-      <div class="proj"><span class="pn">05</span><h3>Twelve more brands</h3><p>Firestorm, FXL and Skyline first. The next marks cover alarms, batteries,
-        PPE, gloves and cleaning products, each built on the same sourcing, warehouse and systems.</p></div>
-      <div class="proj"><span class="pn">06</span><h3>Amazon, trade, retail and servicing</h3><p>The Amazon storefront opened in 2026. Supply to national retailers and B2B customers, national servicing facilities, and the proposed Freedom Distribution and Freedom Facilities companies to carry them.</p></div>
-    </div>
+    <p class="stand">The same method, applied again: Freedom Brain, the fire extinguisher calculator, Freedom Freight, the company's own store, 12 more brands, and the channels still to open.</p>
     <div class="acts">
       <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
       <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
@@ -1868,7 +1819,9 @@ body.bio-open{overflow:hidden}
 <div class="thread" id="thread" aria-hidden="true">
   <svg id="threadSvg" preserveAspectRatio="none">
     <path class="track" id="tTrack"></path>
+    <path class="track" id="tTrack2"></path>
     <path class="live" id="tLive"></path>
+    <path class="live" id="tLive2"></path>
   </svg>
   <i class="head" id="tHead"></i>
 </div>
@@ -1890,35 +1843,34 @@ body.bio-open{overflow:hidden}
       <article class="bio-prose">
         <p>My dad loaned me the money to buy that first batch of chocolate and drinks. It was the first business loan I ever had, arranged without paperwork, credit checks or interest. It gave me my first lesson in business: somebody may help you begin, but what happens next is your responsibility.</p>
         <p>Throughout childhood and into university, I kept starting small ventures: selling at school, washing neighbours' cars, trading at car boot sales and running side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
-        <p>Life beyond those early ventures was turbulent. I attended St Monica's High School and, in 2012, lost my mum when I was 15. I carried that loss into adulthood and into the University of Salford, where I began studying architecture.</p>
+        <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In 2012, when I was 15, I lost my mum. I carried that loss into adulthood and into the University of Salford, where I began studying architecture.</p>
         <p>Architecture taught me far more than how to design buildings. It trained me to respect detail, understand how systems connect and transform an empty space into a workable vision. It taught me research, presentation, problem solving and the discipline of revising an idea repeatedly until every element served a purpose.</p>
         <p>At 19, during my second year, my best friend died in a motorbike accident. Grief knocked me off course and I came close to losing my place at university. But I recovered, completed my undergraduate degree and continued directly into a two-year Master's.</p>
-        <p>During my Master's, I explored how design could create opportunity for young people who felt disconnected from education and society. In summer 2019, that journey took me to a placement at Harvard University, an experience that felt almost impossible considering how close I had come to leaving university altogether.</p>
-        <p>Later, aged 23, I entered the Manchester Evening News and Salboy competition to win a £150,000 apartment. Entrants had to propose a creative scheme that would benefit Salford's surrounding community. My proposal continued the work behind my Master's thesis: helping young men like me move away from the streets and towards education, purpose and opportunity.</p>
+        <p>During my Master's, I explored how design could create opportunity for young people who felt disconnected from education and society. In July 2019, that journey took me to a summer placement at Harvard University and MIT, an experience that felt almost impossible considering how close I had come to leaving university altogether.</p>
+        <p>Later that summer, aged 23, I entered the Manchester Evening News and Salboy competition to win a £150,000 apartment. Entrants had to propose a creative scheme that would benefit Salford's surrounding community. My proposal continued the work behind my Master's thesis: helping young men like me move away from the streets and towards education, purpose and opportunity.</p>
         <p class="bio-pull">I reached the final and finished as runner-up.</p>
         <p>At the time, it felt like the greatest professional loss of my young life. I believed winning could provide security and perhaps the platform from which everything else would begin. Losing taught me something more valuable: no competition, employer or institution was going to discover my ambition for me. Nobody else could find the hunger inside me, and nobody was coming to hand me my future.</p>
         <p>Architecture had not rejected me. I was offered two jobs immediately after graduating and turned them both down. There was something inside me that knew I could not spend my life working for somebody else. Ironically, the only boss I ever had was my dad.</p>
-        <p>Instead, I went to work for his cleaning company as a delivery driver.</p>
-        <p>On paper, it looked like a dramatic step backwards: from architecture, a Master's degree and Harvard to loading cleaning products into a van. There was no impressive title, carefully designed studio or obvious career path. But sometimes the route towards your future looks nothing like progress while you are travelling through it.</p>
+        <p>Instead, I went to work for his cleaning company as a delivery driver. On paper, it looked like a dramatic step backwards: from architecture, a Master's degree and Harvard to loading cleaning products into a van. There was no impressive title, carefully designed studio or obvious career path. But sometimes the route towards your future looks nothing like progress while you are travelling through it.</p>
         <p>During one ordinary delivery, I came across a second-hand fire extinguisher.</p>
         <p class="bio-close-line">To anybody else, it was an old piece of equipment.<br><em>To me, it looked like the beginning of something.</em></p>
       </article>
       <aside class="bio-dates">
         <div class="ch-tag sm">The story before the business</div>
         <dl>
-          <dt>1996</dt><dd><b>The story begins.</b> Born in Greater Manchester and raised around the energy, risk and unpredictability of family business.</dd>
-          <dt>2005 – 2012</dt><dd><b>Learning to sell.</b> From selling products at a car wash to trading chocolate, sweets, Lucozade and KitKat Chunkies at school. Dad provided the first informal business loan, without paperwork, credit checks or interest.</dd>
-          <dt>2007 – 2012</dt><dd><b>St Monica's High School.</b> School years shaped by constant business ideas, selling at school, car washes, car boot sales and a turbulent personal life.</dd>
-          <dt>2012</dt><dd><b>Losing Mum.</b> Michele died following her battle with breast cancer. Tom was 15. The loss forced him to grow up earlier than expected.</dd>
-          <dt>2014</dt><dd><b>University of Salford.</b> Began studying architecture and developed the design thinking, attention to detail and understanding of interconnected systems that would later shape how he built businesses and brands.</dd>
-          <dt>2015</dt><dd><b>Another devastating loss.</b> At 19, his best friend died in a motorbike accident. He struggled through second year and came close to losing his university place.</dd>
-          <dt>2016 – 2017</dt><dd><b>Turning it around.</b> Recovered academically, rebuilt his confidence and completed the undergraduate architecture degree, side hustles running alongside.</dd>
-          <dt>2017 – 2019</dt><dd><b>A two-year Master's.</b> Straight into postgraduate study. The thesis explored how design, community and education could create better routes for young people at risk of being left behind.</dd>
-          <dt>Summer 2019</dt><dd><b>Harvard University.</b> A summer placement at Harvard, an extraordinary milestone after almost falling out of education only a few years earlier.</dd>
-          <dt>2019 – 2020</dt><dd><b>The £150,000 competition.</b> Reached the final of the Manchester Evening News and Salboy competition to win a £150,000 apartment. The community-focused proposal finished as runner-up.</dd>
-          <dt>2019 – 2020</dt><dd><b>The rejection that created hunger.</b> The biggest early professional disappointment. It taught him that recognition could not create ambition and security could not replace hunger.</dd>
-          <dt>2019 – 2020</dt><dd><b>Choosing a different road.</b> Two architecture job offers, both turned down. Something inside him knew he could not spend his life working for somebody else. Ironically, the only boss he ever had was his dad.</dd>
-          <dt>2019 – 2020</dt><dd><b>One second-hand fire extinguisher.</b> Delivering for his dad's cleaning company, he found a second-hand extinguisher and recognised an opportunity others had overlooked.</dd>
+          <dt>April 1996</dt><dd><b>The story begins.</b> I was born in Greater Manchester and raised around the energy, risk and unpredictability of family business.</dd>
+          <dt>2005 – 2012</dt><dd><b>Learning to sell.</b> From selling products at a car wash to trading chocolate, sweets, Lucozade and KitKat Chunkies at school, I became fascinated by making something grow from very little. My dad provided my first informal business loan, without paperwork, credit checks or interest.</dd>
+          <dt>Sept 2007 – July 2012</dt><dd><b>St.&nbsp;Monica's High School.</b> School years shaped by constant business ideas, selling at school, car washes, car boot sales and a turbulent personal life.</dd>
+          <dt>2012</dt><dd><b>Losing Mum.</b> My mum, Michele, died following her battle with breast cancer. I was 15. The loss forced me to grow up earlier than expected.</dd>
+          <dt>Sept 2014</dt><dd><b>University of Salford.</b> I began studying architecture and developed the design thinking, attention to detail and understanding of interconnected systems that would later shape how I built businesses and brands.</dd>
+          <dt>2015</dt><dd><b>Another devastating loss.</b> At 19, my best friend died in a motorbike accident. I struggled through second year and came close to losing my university place.</dd>
+          <dt>2016 – July 2017</dt><dd><b>Turning it around.</b> I recovered academically, rebuilt my confidence and graduated from my undergraduate architecture degree, side hustles running alongside.</dd>
+          <dt>Sept 2017 – 2019</dt><dd><b>A two-year Master's degree.</b> Straight into postgraduate study. My thesis explored how design, community and education could create better routes for young people at risk of being left behind. Completed in 2019.</dd>
+          <dt>July 2019</dt><dd><b>Harvard University and MIT.</b> I secured a summer placement at Harvard University and MIT, an extraordinary milestone after almost falling out of education only a few years earlier.</dd>
+          <dt>Aug 2019</dt><dd><b>The £150,000 competition.</b> I reached the final of the Manchester Evening News and Salboy competition to win a £150,000 apartment. My community-focused proposal finished as runner-up.</dd>
+          <dt>Aug 2019</dt><dd><b>The rejection that created hunger.</b> Losing the competition became my biggest early professional disappointment. It taught me that recognition could not create ambition and security could not replace hunger.</dd>
+          <dt>Oct 2019</dt><dd><b>Choosing a different road.</b> I received two architecture job offers and turned them both down. Something inside me knew I could not spend my life working for somebody else. Ironically, the only boss I ever had was my dad.</dd>
+          <dt>Dec 2019</dt><dd><b>One second-hand fire extinguisher.</b> Delivering for my dad's cleaning company, I found a second-hand fire extinguisher and recognised an opportunity others had overlooked.</dd>
         </dl>
         <p class="bio-next">That moment closes the story before the business and begins the Freedom timeline. <a href="#timeline" id="bioToTimeline">See the timeline <i>→</i></a></p>
       </aside>
@@ -1936,11 +1888,12 @@ body.bio-open{overflow:hidden}
       </a>
     </div>
     <div class="ft-grid">
-      <div class="ft-brand"><img src="assets/group-logo-light.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
+      <div class="ft-brand"><img src="assets/group-logo-white.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
         <p class="ft-addr">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p>
-        <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p></div>
+        <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p>
+        <p class="ft-credit">Harvard photograph: Kenneth C. Zirkel, Wikimedia Commons, CC BY 4.0.</p></div>
       <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
-      <div><h4>The story</h4><p><a href="#c01">The Spark</a><br><a href="#c03">Proof</a><br><a href="#c04">How I Build</a><br><a href="#c06">The Next Ten Years</a><br><a href="#c08">Still Building</a></p></div>
+      <div><h4>The story</h4><p class="ft-ch"><a href="#top"><span>00</span>Tom Letcher</a><br><a href="#c01"><span>01</span>The Spark</a><br><a href="#c02"><span>02</span>Proof, Not Promise</a><br><a href="#c03"><span>03</span>How I Build</a><br><a href="#c04"><span>04</span>Built With People</a><br><a href="#c05"><span>05</span>The Next Ten Years</a><br><a href="#c06"><span>06</span>The Company</a><br><a href="#c07"><span>07</span>Still Building</a></p></div>
       <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p></div>
     </div>
   </div>
