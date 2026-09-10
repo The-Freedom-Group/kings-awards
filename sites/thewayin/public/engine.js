@@ -218,13 +218,14 @@
     /* the call, letter by letter; the footer arriving */
     /* the timeline: when its row of cards reaches the middle of the screen the page holds still and
        further scrolling moves the cards sideways; once the last card is in, the page carries on */
-    var tlSec = $("#timeline"), tlOl = $("#timeline ol.spine.journey"), tlRailEl = $("#timeline .tl-rail");
-    if (tlSec && tlOl && tlRailEl && window.matchMedia("(min-width: 900px)").matches) {
+    var tlSec = $("#timeline"), tlOl = $("#timeline ol.spine.journey"), tlPin = $("#tlPin");
+    if (tlSec && tlOl && tlPin && window.matchMedia("(min-width: 900px)").matches) {
       var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };
       window.__tlST = ScrollTrigger.create({
-        trigger: tlRailEl, start: "center center", end: function () { return "+=" + tlDist(); },
-        pin: tlRailEl, pinSpacing: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
-        onUpdate: function (st) { tlOl.scrollLeft = st.progress * tlDist(); }
+        trigger: tlPin, start: "center center", end: function () { return "+=" + tlDist(); },
+        pin: tlPin, pinSpacing: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true,
+        onUpdate: function (st) { gsap.set(tlOl, { x: -st.progress * tlDist() }); },
+        onRefresh: function (st) { gsap.set(tlOl, { x: -st.progress * tlDist() }); }
       });
     }
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });

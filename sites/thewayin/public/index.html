@@ -843,6 +843,10 @@ body.cur-label .cur-ring::before{border-radius:50%;transform:none;background:var
 .intro .fu-1 .more summary{display:inline-block}
 /* the timeline, sideways, its line running in from the red rail on the left */
 .tl-rail{position:relative;margin-top:clamp(28px,4vw,48px);padding-bottom:8px}
+.tl-pin{position:relative;will-change:transform;transition:none!important}
+/* while the page can pin it, the row is moved as one piece rather than scrolled, so nothing snaps or fights the scroll */
+@media(min-width:900px){html.js.has-gsap .tl-pin ol.spine.journey{overflow:visible;scroll-snap-type:none;scrollbar-width:none;will-change:transform}
+  html.js.has-gsap .tl-pin ol.spine.journey li{scroll-snap-align:none}}
 ol.spine.journey{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;padding:64px 0 22px;margin:0;border-top:0;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent;-webkit-overflow-scrolling:touch}
 ol.spine.journey::before{display:none}
 ol.spine.journey li{flex:0 0 clamp(250px,22vw,300px);display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;gap:12px;padding:0 24px 0 0;margin:0 22px 0 0;border-bottom:0;scroll-snap-align:start;position:relative;align-items:start}
@@ -1015,7 +1019,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         who joined, where they worked, and what they were trusted with.</p>
       </div>
     </div>
-    <div class="tl-rail rv"><ol class="spine journey">
+    <div class="tl-pin" id="tlPin"><div class="tl-rail rv"><ol class="spine journey">
       <li class="haspic"><img class="pic" src="assets/journey/ch1-a.webp" alt="A row of refurbished red extinguishers" loading="lazy" decoding="async"><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b><span class="fx"> Tom Letcher sells one refurbished extinguisher from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch4-a.webp" alt="The Freedom Fire team in 2020, the year the students joined the bench" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>The first students on the bench.</b><span class="fx"> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></span></li>
       <li class="haspic"><img class="pic" src="assets/journey/ch6-a.webp" alt="An engineer in a hi-vis vest on a customer site" loading="lazy" decoding="async"><span class="when">Aug 2021</span><span class="what"><b>The company.</b><span class="fx"> Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install extinguishers on commercial sites alongside the online range.</span></span></li>
@@ -1032,7 +1036,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <li class="haspic"><img class="pic" src="assets/journey/ch15-a.webp" alt="Bill presenting the Freedom Group project at the weekly meeting" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>Presenting to the team.</b><span class="fx"> At the weekly meeting a different colleague presents their work and takes feedback from the room, so confidence and leadership are built by everyone, not handed down.</span></span></li>
       <li class="haspic"><img class="pic logo" src="assets/jobcentre-plus.png" alt="Jobcentre Plus" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students arrive, and two young people are recruited through the Government's Jobs Guarantee with the Growth Company. The newest ways in.</span></span></li>
     </ol></div>
-    <div class="tl-hint" aria-hidden="true">Keep scrolling <i>→</i> the timeline moves sideways</div>
+    <div class="tl-hint" aria-hidden="true">Keep scrolling <i>→</i> the timeline moves sideways</div></div>
   </div>
 </section>
 
