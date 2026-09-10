@@ -120,6 +120,7 @@
     var intro = gsap.timeline(); window.__intro = intro;
     setTimeout(function () { if (intro.progress() < 1) intro.progress(1); }, 22000);
     var skipAnim = $("#skipAnim"); if (skipAnim) skipAnim.addEventListener("click", function () { intro.progress(1); });
+    var gateSkip = $("#gateSkip"); if (gateSkip) { gate.classList.add("armed"); gateSkip.addEventListener("click", function () { intro.progress(1); }); }
     var hurry = function () { if (intro.progress() < 1) intro.timeScale(2.5); };
     ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, hurry, { passive: true, once: true }); });
     var flSplit = new SplitText("#fl", { type: "chars" });
