@@ -270,14 +270,15 @@
     var target = clamp((y + vh * 0.58 - top) / Math.max(1, H - vh * 0.42 - top), 0, 1);
     litP = reduce ? target : litP + (target - litP) * 0.16;
     if (Math.abs(target - litP) < 0.0004) litP = target;
-    var reach = litP * L, hx, hy, side, r = reach;
-    if (r <= segA) { hx = lx; hy = top + r; side = "left"; }
-    else if ((r -= segA) <= segB) { hx = lx + r; hy = yTl; side = "along"; }
-    else if ((r -= segB) <= segC) { hx = rx; hy = yTl + r; side = "right"; }
-    else if ((r -= segC) <= segD) { hx = rx - r; hy = yP; side = "back"; }
-    else { r -= segD; hx = lx; hy = yP + r; side = "left"; }
-    var pA = clamp(reach / segA, 0, 1), pB = clamp((reach - segA) / Math.max(1, segB), 0, 1), pC = clamp((reach - segA - segB) / Math.max(1, segC), 0, 1),
-        pD = clamp((reach - segA - segB - segC) / Math.max(1, segD), 0, 1), pE = clamp((reach - segA - segB - segC - segD) / Math.max(1, segE), 0, 1);
+    /* the lamp keeps pace with the reader: its height on the page follows the scroll directly, and each crossing
+       is folded into a short stretch of scroll so the lamp is never left behind or racing ahead */
+    var hyLin = top + litP * Math.max(1, end - top), cb = detour ? Math.min(140, Math.max(40, (yP - yTl) / 4)) : 0;
+    var hx, hy, side, pA, pB = 0, pC = 0, pD = 0, pE = 0;
+    if (!detour || hyLin < yTl) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
+    else if (hyLin < yTl + cb) { pA = 1; pB = (hyLin - yTl) / cb; hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
+    else if (hyLin < yP - cb) { pA = 1; pB = 1; pC = (hyLin - yTl - cb) / Math.max(1, yP - yTl - 2 * cb); hx = rx; hy = yTl + pC * (yP - yTl); side = "right"; }
+    else if (hyLin < yP) { pA = 1; pB = 1; pC = 1; pD = (hyLin - (yP - cb)) / cb; hx = rx - pD * (rx - lx); hy = yP; side = "back"; }
+    else { pA = 1; pB = 1; pC = 1; pD = 1; pE = clamp((hyLin - yP) / Math.max(1, segE), 0, 1); hx = lx; hy = hyLin; side = "left"; }
     lit.style.top = top + "px"; lit.style.height = segA + "px"; lit.style.transform = "scaleY(" + pA.toFixed(4) + ")";
     if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = segA + "px"; }
     if (trackE) { trackE.style.top = yP + "px"; trackE.style.height = segE + "px"; trackE.style.display = detour ? "" : "none"; }
@@ -295,7 +296,7 @@
       headWrap.classList.toggle("along", side === "along");
       headWrap.classList.toggle("below", side === "back");
     }
-    var v = Math.abs(litP - lastLit) * L; lastLit = litP; stillFrames = v < 0.25 ? stillFrames + 1 : 0;
+    var v = Math.abs(litP - lastLit) * (end - top); lastLit = litP; stillFrames = v < 0.25 ? stillFrames + 1 : 0;
     if (headWrap) headWrap.classList.toggle("moving", stillFrames < 70);
     /* a tick per chapter, on whichever strip the route is using at that height */
     var here = null;
@@ -304,8 +305,7 @@
       var host = onRight ? routeR : route;
       if (host && ticks[i].parentNode !== host) host.appendChild(ticks[i]);
       ticks[i].style.top = (onRight ? st - yTl : st) + "px";
-      var need = onRight ? segA + segB + (st - yTl) : (st >= yP ? segA + segB + segC + segD + (st - yP) : (st - top));
-      var passed = reach >= need - 2;
+      var passed = hyLin >= st - 2;
       ticks[i].classList.toggle("on", passed);
       if (passed) here = i;
     }
