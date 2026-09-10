@@ -216,6 +216,17 @@
       .to(introSec, { backgroundColor: "#F4F4F1" }, 0);
 
     /* the call, letter by letter; the footer arriving */
+    /* the timeline: when its row of cards reaches the middle of the screen the page holds still and
+       further scrolling moves the cards sideways; once the last card is in, the page carries on */
+    var tlSec = $("#timeline"), tlOl = $("#timeline ol.spine.journey"), tlRailEl = $("#timeline .tl-rail");
+    if (tlSec && tlOl && tlRailEl && window.matchMedia("(min-width: 900px)").matches) {
+      var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };
+      window.__tlST = ScrollTrigger.create({
+        trigger: tlRailEl, start: "center center", end: function () { return "+=" + tlDist(); },
+        pin: tlRailEl, pinSpacing: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
+        onUpdate: function (st) { tlOl.scrollLeft = st.progress * tlDist(); }
+      });
+    }
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
     gsap.timeline({ scrollTrigger: { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
       .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
@@ -273,23 +284,27 @@
     /* the lamp keeps pace with the reader: its height on the page follows the scroll directly, and each crossing
        is folded into a short stretch of scroll so the lamp is never left behind or racing ahead */
     var hyLin = top + litP * Math.max(1, end - top), cb = detour ? Math.min(140, Math.max(40, (yP - yTl) / 4)) : 0;
-    var hx, hy, side, pA, pB = 0, pC = 0, pD = 0, pE = 0;
-    if (!detour || hyLin < yTl) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
-    else if (hyLin < yTl + cb) { pA = 1; pB = (hyLin - yTl) / cb; hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
-    else if (hyLin < yP - cb) { pA = 1; pB = 1; pC = (hyLin - yTl - cb) / Math.max(1, yP - yTl - 2 * cb); hx = rx; hy = yTl + pC * (yP - yTl); side = "right"; }
+    var st = window.__tlST || null, sy = y, hx, hy, side, pA, pB = 0, pC = 0, pD = 0, pE = 0;
+    if (!detour) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
+    else if (st && sy < st.start) { hx = lx; hy = Math.min(hyLin, yTl); side = "left"; pA = clamp((hy - top) / segA, 0, 1); }
+    else if (st && sy <= st.end) { pA = 1; pB = clamp(st.progress, 0, 1); hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
+    else if (!st && hyLin < yTl) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
+    else if (!st && hyLin < yTl + cb) { pA = 1; pB = (hyLin - yTl) / cb; hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
+    else if (hyLin < yP - cb) { pA = 1; pB = 1; pC = clamp((hyLin - yTl) / Math.max(1, yP - cb - yTl), 0, 1); hx = rx; hy = yTl + pC * (yP - yTl); side = "right"; }
     else if (hyLin < yP) { pA = 1; pB = 1; pC = 1; pD = (hyLin - (yP - cb)) / cb; hx = rx - pD * (rx - lx); hy = yP; side = "back"; }
     else { pA = 1; pB = 1; pC = 1; pD = 1; pE = clamp((hyLin - yP) / Math.max(1, segE), 0, 1); hx = lx; hy = hyLin; side = "left"; }
-    lit.style.top = top + "px"; lit.style.height = segA + "px"; lit.style.transform = "scaleY(" + pA.toFixed(4) + ")";
+    var reach = litP * L;
+    lit.style.top = top + "px"; lit.style.height = (pA * segA).toFixed(1) + "px"; lit.style.transform = "none";
     if (routeTrack) { routeTrack.style.top = top + "px"; routeTrack.style.height = segA + "px"; }
     if (trackE) { trackE.style.top = yP + "px"; trackE.style.height = segE + "px"; trackE.style.display = detour ? "" : "none"; }
-    if (litE) { litE.style.top = yP + "px"; litE.style.height = segE + "px"; litE.style.transform = "scaleY(" + pE.toFixed(4) + ")"; litE.style.display = detour ? "" : "none"; }
+    if (litE) { litE.style.top = yP + "px"; litE.style.height = (pE * segE).toFixed(1) + "px"; litE.style.transform = "none"; litE.style.display = detour ? "" : "none"; }
     if (routeH) { routeH.style.top = yTl + "px"; routeH.style.display = detour ? "" : "none"; }
-    if (litH) litH.style.transform = "scaleX(" + pB.toFixed(4) + ")";
+    if (litH) { litH.style.width = (pB * 100).toFixed(2) + "%"; litH.style.transform = "none"; }
     if (routeR) { routeR.style.top = yTl + "px"; routeR.style.height = segC + "px"; routeR.style.bottom = "auto"; routeR.style.display = detour ? "" : "none"; }
     if (trackR) { trackR.style.top = "0"; trackR.style.height = segC + "px"; }
-    if (litR) { litR.style.top = "0"; litR.style.height = segC + "px"; litR.style.transform = "scaleY(" + pC.toFixed(4) + ")"; }
+    if (litR) { litR.style.top = "0"; litR.style.height = (pC * segC).toFixed(1) + "px"; litR.style.transform = "none"; }
     if (routeH2) { routeH2.style.top = yP + "px"; routeH2.style.display = detour ? "" : "none"; }
-    if (litH2) litH2.style.transform = "scaleX(" + pD.toFixed(4) + ")";
+    if (litH2) { litH2.style.width = (pD * 100).toFixed(2) + "%"; litH2.style.left = "auto"; litH2.style.right = "0"; litH2.style.transform = "none"; }
     if (headWrap) {
       headWrap.style.transform = "translate3d(" + hx.toFixed(1) + "px," + hy.toFixed(1) + "px,0)";
       headWrap.classList.toggle("flip", side === "right");
