@@ -269,11 +269,14 @@
     var pageEl = $("#smooth-content") || document.body, vh = window.innerHeight;
     var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, W = story.offsetWidth, end = H - 24;
     var stripW = route.offsetWidth || 20, lx = stripW / 2, rx = W - stripW / 2;
-    var pr = pageEl.getBoundingClientRect(), detour = !!(tlRail && peopleEl);
+    /* positions come from layout, never from the screen, so nothing lags the smoother by a frame */
+    function pageTop(el) { var t = 0; while (el && el !== pageEl) { t += el.offsetTop; el = el.offsetParent; } return t; }
+    var detour = !!(tlRail && peopleEl), st = window.__tlST || null;
     var yTl = end, yP = end;
     if (detour) {
-      yTl = tlRail.getBoundingClientRect().top - pr.top + 32.5;
-      yP = peopleEl.getBoundingClientRect().top - pr.top - 64;
+      yTl = pageTop(tlRail) + 32.5;
+      if (st) yTl += clamp(y - st.start, 0, Math.max(0, st.end - st.start));   /* while pinned the line rides with the page */
+      yP = pageTop(peopleEl) - 64;
       if (yP <= yTl + 40) yP = yTl + 40;
     }
     var segA = Math.max(1, yTl - top), segB = detour ? Math.max(1, rx - lx) : 0, segC = detour ? Math.max(1, yP - yTl) : 0,
@@ -285,10 +288,11 @@
     /* the lamp keeps pace with the reader: its height on the page follows the scroll directly, and each crossing
        is folded into a short stretch of scroll so the lamp is never left behind or racing ahead */
     var hyLin = top + litP * Math.max(1, end - top), cb = detour ? Math.min(140, Math.max(40, (yP - yTl) / 4)) : 0;
-    var st = window.__tlST || null, sy = y, hx, hy, side, pA, pB = 0, pC = 0, pD = 0, pE = 0;
+    var sy = y, hx, hy, side, pA, pB = 0, pC = 0, pD = 0, pE = 0;
+    var tlOlEl = st ? $("#timeline ol.spine.journey") : null, tlDistNow = tlOlEl ? Math.max(1, tlOlEl.scrollWidth - tlOlEl.clientWidth) : 1;
     if (!detour) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
     else if (st && sy < st.start) { hx = lx; hy = Math.min(hyLin, yTl); side = "left"; pA = clamp((hy - top) / segA, 0, 1); }
-    else if (st && sy <= st.end) { pA = 1; pB = clamp(st.progress, 0, 1); hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
+    else if (st && sy <= st.end) { pA = 1; pB = clamp(-(parseFloat(gsap.getProperty(tlOlEl, "x")) || 0) / tlDistNow, 0, 1); hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
     else if (!st && hyLin < yTl) { hx = lx; hy = hyLin; side = "left"; pA = clamp((hyLin - top) / segA, 0, 1); }
     else if (!st && hyLin < yTl + cb) { pA = 1; pB = (hyLin - yTl) / cb; hx = lx + pB * (rx - lx); hy = yTl; side = "along"; }
     else if (hyLin < yP - cb) { pA = 1; pB = 1; pC = clamp((hyLin - yTl) / Math.max(1, yP - cb - yTl), 0, 1); hx = rx; hy = yTl + pC * (yP - yTl); side = "right"; }
