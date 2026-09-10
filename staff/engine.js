@@ -400,7 +400,7 @@
     if (d.stream && cust) {
       if (v) { v.pause(); v.removeAttribute("src"); v.hidden = true; }
       var fr = document.createElement("iframe");
-      fr.src = "https://customer-" + cust + ".cloudflarestream.com/" + d.stream + "/iframe?preload=metadata&letterboxColor=%23000000";
+      fr.src = "https://customer-" + cust + ".cloudflarestream.com/" + d.stream + "/iframe?preload=metadata&letterboxColor=%23000000&defaultTextTrack=en";
       fr.allow = "accelerometer; gyroscope; encrypted-media; picture-in-picture; fullscreen"; fr.allowFullscreen = true;
       fr.title = "Film with " + d.name; fr.loading = "lazy";
       vid.appendChild(fr); vid.classList.add("has-video");
