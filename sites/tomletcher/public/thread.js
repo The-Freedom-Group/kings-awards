@@ -297,8 +297,10 @@
   function lockScrollTo(yy) { try { window.scrollTo({ top: yy, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, yy); } }
   /* a hold takes the page where the crossing notch left it, so nothing snaps; only a long overshoot eases back */
   function settle(h, y, dy) {
-    if (Math.abs(dy) < 160) { h.lock = y; return; }
-    try { window.scrollTo({ top: h.lock, left: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, h.lock); }
+    /* one instant move to the exact lock, which also cancels the notch's own scroll animation; then it is
+       left alone, and only re-checked every third of a second so nothing can oscillate */
+    h.settleAt = performance.now() + 350;
+    lockScrollTo(h.lock);
   }
   window.addEventListener("wheel", function (e) {
     if (!holdActive) return;
@@ -465,27 +467,58 @@
         ridePts.push({ x: FB.ox + 58 * FB.sx, y: FB.oy + 252 * FB.sy, origin: true });
         yrs.forEach(function (yr) { ridePts.push({ x: FB.ox + years[yr].cx * FB.sx, y: FB.oy + (years[yr].top - 7) * FB.sy, top: true }); });
 
-        var parsePts = function (sel) {
-          var pl = svgL.querySelector(sel); if (!pl) return [];
-          return pl.getAttribute("points").trim().split(/\s+/).map(function (t) { var q = t.split(","); return { x: FL.ox + parseFloat(q[0]) * FL.sx, y: FL.oy + parseFloat(q[1]) * FL.sy }; });
-        };
-        var act = parsePts("polyline.ln.act"), tgt = parsePts("polyline.ln.tgt");
-        var lineIdx = ridePts.length;
-        act.forEach(function (q) { ridePts.push(q); }); tgt.slice(1).forEach(function (q) { ridePts.push(q); });
-        if (ridePts.length < 3) return;
-        /* one continuous curve through every point, Catmull-Rom made cubic; it arrives level at the £100m point */
-        (function smooth(list) {
+        /* the growth chart's own lines become smooth curves (Catmull-Rom made cubic), and the ride uses the
+           same curve, so the two coincide exactly. The points are kept on the element for later rebuilds. */
+        var chain = function (list, level) {
           for (var i2 = 1; i2 < list.length; i2++) {
             var p0 = list[Math.max(0, i2 - 2)], p1 = list[i2 - 1], p2 = list[i2], p3 = list[Math.min(list.length - 1, i2 + 1)];
             p2.c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
             p2.c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
           }
-          var end = list[list.length - 1]; end.c2 = { x: end.x - 46, y: end.y + 2 };
-          /* it settles onto the growth chart's baseline level, with no dip under the axis */
-          var o2 = list[lineIdx], n2 = list[lineIdx + 1];
-          if (o2) o2.c2 = { x: o2.x - 90, y: o2.y };
-          if (n2) n2.c1 = { x: o2.x + 30, y: o2.y };
-        })(ridePts);
+          if (list.length > 1) { var f0 = list[0], f1 = list[1], en = list[list.length - 1];
+            f1.c1 = { x: f0.x + (f1.x - f0.x) * 0.35, y: f0.y };                      /* leaves the baseline level */
+            en.c2 = { x: en.x - Math.abs(en.x - list[list.length - 2].x) * 0.35, y: en.y + level }; }  /* arrives level */
+          return list;
+        };
+        var toD = function (list) {
+          var out = "M " + list[0].x.toFixed(2) + " " + list[0].y.toFixed(2);
+          for (var i3 = 1; i3 < list.length; i3++) { var q = list[i3]; out += " C " + q.c1.x.toFixed(2) + " " + q.c1.y.toFixed(2) + ", " + q.c2.x.toFixed(2) + " " + q.c2.y.toFixed(2) + ", " + q.x.toFixed(2) + " " + q.y.toFixed(2); }
+          return out;
+        };
+        var readPts = function (sel) {
+          var elx = svgL.querySelector(sel); if (!elx) return { el: null, pts: [] };
+          var src = elx.getAttribute("data-points") || elx.getAttribute("points") || "";
+          return { el: elx, pts: src.trim().split(/\s+/).map(function (t) { var q = t.split(","); return { x: parseFloat(q[0]), y: parseFloat(q[1]) }; }) };
+        };
+        var actV = readPts(".ln.act"), tgtV = readPts(".ln.tgt");
+        [actV, tgtV].forEach(function (o, oi) {
+          if (!o.el || o.pts.length < 2) return;
+          var pathEl = o.el;
+          if (pathEl.tagName.toLowerCase() === "polyline") {
+            pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            Array.prototype.forEach.call(o.el.attributes, function (at) { if (at.name !== "points") pathEl.setAttribute(at.name, at.value); });
+            pathEl.setAttribute("data-points", o.el.getAttribute("points"));
+            o.el.parentNode.replaceChild(pathEl, o.el);
+          }
+          pathEl.setAttribute("d", toD(chain(o.pts.map(function (q) { return { x: q.x, y: q.y }; }), oi ? 2 : 0)));
+        });
+        var toDoc = function (q) { return { x: FL.ox + q.x * FL.sx, y: FL.oy + q.y * FL.sy }; };
+        var act = chain(actV.pts.map(toDoc), 0), tgt = chain(tgtV.pts.map(toDoc), 2);
+        var lineIdx = ridePts.length;
+        /* the bars: the line hops from top to top like a rabbit, a clean arc each time */
+        for (var hi = 1; hi < ridePts.length; hi++) {
+          var a0 = ridePts[hi - 1], a1 = ridePts[hi], dxh = a1.x - a0.x, apex = Math.min(a0.y, a1.y) - Math.max(44, Math.min(120, Math.abs(dxh) * 0.55));
+          a1.c1 = { x: a0.x + dxh * 0.22, y: apex }; a1.c2 = { x: a1.x - dxh * 0.22, y: apex };
+        }
+        /* the last hop carries it across into the growth chart and lands it on the baseline */
+        if (act.length) {
+          var lastTop = ridePts[ridePts.length - 1], land = act[0], dxl = land.x - lastTop.x;
+          land.c1 = { x: lastTop.x + dxl * 0.25, y: Math.min(lastTop.y, land.y) - 150 }; land.c2 = { x: land.x - dxl * 0.18, y: land.y - 150 };
+          ridePts.push(land);
+          for (var ai = 1; ai < act.length; ai++) ridePts.push(act[ai]);
+          if (tgt.length) { tgt[0].c1 = null; for (var ti = 1; ti < tgt.length; ti++) ridePts.push(tgt[ti]); }
+        }
+        if (ridePts.length < 3) return;
         /* fractions of the ride's length for each bar and for the start of the line chart */
         var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
         var Lr = cum[cum.length - 1] || 1;
@@ -494,7 +527,8 @@
         /* down the margin to the left of the panel, then in through its side at the axis */
         pts.push({ x: fb0.x - 36, y: fb0.y + figB.offsetHeight * 0.3, id: "chartsIn", el: el, noKnot: true });
         pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 130, y: ridePts[0].y },
-                   yS: ridePts[0].y, yE: ridePts[0].y, lock: Math.max(0, co0.y + el.offsetHeight / 2 - window.innerHeight / 2) });
+                   yS: ridePts[0].y, yE: ridePts[0].y,
+                   lock: Math.max(0, Math.max(co0.y + el.offsetHeight + 56 - window.innerHeight, Math.min(co0.y - 96, co0.y + el.offsetHeight / 2 - window.innerHeight / 2))) });
         return;
       }
       if (p.ring) {
@@ -750,10 +784,11 @@
           else if (dy < 0) { h.phase = "hold"; h.prog = h.shown = 1; settle(h, y, dy); }
         }
         if (h.phase === "hold") {
-          h.shown += (h.prog - h.shown) * 0.14;
+          h.shown += (h.prog - h.shown) * 0.09;
           if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
           else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; lockScrollTo(h.lock - 8); }
           else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";   /* dragged away: let it go */
+          else if (Math.abs(dy) > 2 && performance.now() > (h.settleAt || 0)) settle(h, y, dy);   /* once settled, stay exactly there */
         }
         if (h.phase === "hold") { p = h.a + (h.b - h.a) * clamp(h.shown, 0, 1); holdActive = h; }
         else if (h.phase === "before") p = Math.min(p, h.a);
