@@ -309,13 +309,40 @@
     h.prog = h.shown = dir ? 1 : 0;
     lockScrollTo(y);                       /* cancels the notch's own animation where we stand */
   }
+  /* virtual scrolling on desktop: the wheel moves a target and the page eases to it every frame. The browser
+     never animates a wheel notch itself, so a lock can cap the target and the page glides onto it and stays. */
+  var vs = { on: false, cur: 0, tgt: 0, last: -9, extAt: 0 };
+  if (fine && !reduce) { vs.on = true; vs.cur = vs.tgt = window.pageYOffset || document.documentElement.scrollTop; }
+  function maxScroll() { return Math.max(0, (document.documentElement.scrollHeight || 0) - window.innerHeight); }
   window.addEventListener("wheel", function (e) {
-    if (!holdActive) return;
-    e.preventDefault();
-    if (holdActive.phase !== "hold") return;
+    if (document.body.classList.contains("bio-open")) return;           /* the reader and the lightbox scroll themselves */
+    if (e.ctrlKey) return;                                                /* pinch zoom */
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
-    holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02);
+    if (holdActive) {
+      e.preventDefault();
+      if (holdActive.phase === "hold") holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02);
+      return;
+    }
+    if (!vs.on) return;
+    e.preventDefault();
+    vs.tgt = clamp(vs.tgt + d, 0, maxScroll());
   }, { passive: false });
+  /* a scroll we did not make (the scrollbar, a key, an anchor) becomes the new position and target */
+  window.addEventListener("scroll", function () {
+    if (!vs.on) return;
+    var sy = window.pageYOffset || document.documentElement.scrollTop;
+    if (Math.abs(sy - vs.last) > 1.5) { vs.cur = vs.tgt = sy; vs.extAt = performance.now(); }
+  }, { passive: true });
+  var vsT = 0;
+  function vsStep(now) {
+    if (!vs.on) return;
+    var dt = vsT ? Math.min(0.05, (now - vsT) / 1000) : 0.016; vsT = now;
+    var diff = vs.tgt - vs.cur;
+    if (Math.abs(diff) < 0.2) { if (diff) vs.cur = vs.tgt; else return; }
+    else vs.cur += diff * (1 - Math.exp(-dt * 10));
+    var next = Math.round(vs.cur * 2) / 2;
+    if (next !== vs.last) { vs.last = next; try { window.scrollTo({ top: next, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, next); } }
+  }
   var touchY = null;
   window.addEventListener("touchstart", function (e) { touchY = e.touches[0].clientY; }, { passive: true });
   window.addEventListener("touchmove", function (e) {
@@ -793,30 +820,59 @@
     p = Math.max(p, heroFrac * heroIn);
     if (holds.length && !reduce) {
       holdActive = null;
+      var ext = vs.on && performance.now() - vs.extAt < 200;                /* an anchor or the scrollbar is moving the page */
       holds.forEach(function (h) {
         var dy = y - h.lock, hadY = h.prevY !== undefined, down = hadY && y > h.prevY, up = hadY && y < h.prevY;
-        if (h.phase === "before") {
-          if (dy >= 320) h.phase = "after";                                   /* jumped past: nothing plays */
-          else if (dy >= 0 || (dy >= -REACH && down)) approach(h, y, 0);
-        } else if (h.phase === "after") {
-          if (dy <= -320) h.phase = "before";                                 /* jumped back above */
-          else if (dy < 0 || (dy <= REACH && up)) approach(h, y, 1);
-        }
-        if (h.phase === "approach") {
-          if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";      /* dragged away: let it go */
-          else {
-            var ta = clamp((performance.now() - h.t0) / h.dur, 0, 1), ea = 1 - Math.pow(1 - ta, 3);
-            lockScrollTo(h.from + (h.lock - h.from) * ea);
-            if (ta >= 1) { h.phase = "hold"; h.settleAt = performance.now() + 350; lockScrollTo(h.lock); }
+        if (vs.on) {
+          if (ext) {
+            /* while something else moves the page, the holds only follow where it goes */
+            if (h.phase === "hold" || h.phase === "approach") { h.phase = dy > 0 ? "after" : "before"; h.shown = h.prog = dy > 0 ? 1 : 0; }
+            if (h.phase === "before" && dy >= 320) h.phase = "after";
+            if (h.phase === "after" && dy <= -320) h.phase = "before";
+          } else if (h.phase === "before") {
+            if (dy >= 320) h.phase = "after";
+            else if (vs.tgt >= h.lock - 0.5) { vs.tgt = h.lock; h.phase = "approach"; h.dir = 0; h.prog = h.shown = 0; h.t0 = performance.now(); }
+          } else if (h.phase === "after") {
+            if (dy <= -320) h.phase = "before";
+            else if (vs.tgt < h.lock - 0.5 && y > h.lock - 320) { vs.tgt = h.lock; h.phase = "approach"; h.dir = 1; h.prog = h.shown = 1; h.t0 = performance.now(); }
+          }
+          if (h.phase === "approach") {
+            vs.tgt = h.lock;
+            if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";
+            else if (Math.abs(vs.cur - h.lock) < 1.5 || performance.now() - (h.t0 || 0) > 1400) { vs.cur = vs.tgt = h.lock; h.phase = "hold"; }
             else holdActive = h;
           }
-        }
-        if (h.phase === "hold") {
-          h.shown += (h.prog - h.shown) * 0.09;
-          if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
-          else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; lockScrollTo(h.lock - 8); }
-          else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";   /* dragged away: let it go */
-          else if (Math.abs(dy) > 2 && performance.now() > (h.settleAt || 0)) settle(h, y, dy);   /* once settled, stay exactly there */
+          if (h.phase === "hold") {
+            vs.tgt = h.lock;
+            h.shown += (h.prog - h.shown) * 0.09;
+            if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
+            else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; vs.tgt = h.lock - 10; }
+            else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";
+          }
+        } else {
+          if (h.phase === "before") {
+            if (dy >= 320) h.phase = "after";                                   /* jumped past: nothing plays */
+            else if (dy >= 0 || (dy >= -REACH && down)) approach(h, y, 0);
+          } else if (h.phase === "after") {
+            if (dy <= -320) h.phase = "before";                                 /* jumped back above */
+            else if (dy < 0 || (dy <= REACH && up)) approach(h, y, 1);
+          }
+          if (h.phase === "approach") {
+            if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";      /* dragged away: let it go */
+            else {
+              var ta = clamp((performance.now() - h.t0) / h.dur, 0, 1), ea = 1 - Math.pow(1 - ta, 3);
+              lockScrollTo(h.from + (h.lock - h.from) * ea);
+              if (ta >= 1) { h.phase = "hold"; h.settleAt = performance.now() + 350; lockScrollTo(h.lock); }
+              else holdActive = h;
+            }
+          }
+          if (h.phase === "hold") {
+            h.shown += (h.prog - h.shown) * 0.09;
+            if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
+            else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; lockScrollTo(h.lock - 8); }
+            else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";   /* dragged away: let it go */
+            else if (Math.abs(dy) > 2 && performance.now() > (h.settleAt || 0)) settle(h, y, dy);   /* once settled, stay exactly there */
+          }
         }
         if (h.phase === "hold") { p = h.a + (h.b - h.a) * clamp(h.shown, 0, 1); holdActive = h; }
         else if (h.phase === "approach") p = h.dir ? Math.max(p, h.b) : Math.min(p, h.a);
@@ -1048,6 +1104,7 @@
   }
 
   function frame() {
+    vsStep(performance.now());
     var y = window.pageYOffset || document.documentElement.scrollTop;
     var moved = y !== lastY;
     /* if the page has changed height since the line was measured (fonts, images), measure it again */
