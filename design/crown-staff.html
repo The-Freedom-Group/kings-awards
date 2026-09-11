@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>King's Awards card — The Way In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#0d0d0d}
+.card{width:1200px;height:900px;position:relative;background:#0d0d0d;color:#fff;font-family:"Archivo",Arial,sans-serif;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:#E10600}
+.card .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1.2px,transparent 1.4px);background-size:34px 34px;background-position:17px 17px}
+.crown{position:absolute;left:50%;top:118px;width:460px;transform:translateX(-50%);filter:drop-shadow(0 0 22px rgba(225,6,0,.35))}
+.k{position:absolute;left:0;right:0;top:500px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.32em;text-transform:uppercase;color:#E10600;font-weight:500}
+.t{position:absolute;left:0;right:0;top:544px;text-align:center;font-weight:900;font-variation-settings:"wdth" 112,"wght" 900;font-size:58px;line-height:1;letter-spacing:-.01em;text-transform:uppercase}
+.y{position:absolute;left:0;right:0;top:688px;text-align:center;font-weight:900;font-variation-settings:"wdth" 125,"wght" 900;font-size:100px;line-height:1;color:#E10600;letter-spacing:-.02em}
+.s{position:absolute;left:0;right:0;top:822px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.28em;text-transform:uppercase;color:#b8b8b2}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="dots"></div>
+  <svg class="crown" viewBox="0 0 400 300" aria-hidden="true">
+    <defs>
+      <linearGradient id="band" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9d9d3"/></linearGradient>
+    </defs>
+    <path d="M62 128 L62 214 L338 214 L338 128 L268 176 L200 78 L132 176 Z" fill="none" stroke="#ffffff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M62 214 L62 246 L338 246 L338 214" fill="none" stroke="#ffffff" stroke-width="7" stroke-linejoin="round"/>
+    <line x1="62" y1="214" x2="338" y2="214" stroke="#ffffff" stroke-width="3" opacity=".55"/>
+    <circle cx="62" cy="120" r="10" fill="#E10600"/><circle cx="200" cy="70" r="12" fill="#E10600"/><circle cx="338" cy="120" r="10" fill="#E10600"/>
+    <circle cx="132" cy="176" r="5" fill="#ffffff"/><circle cx="268" cy="176" r="5" fill="#ffffff"/>
+    <path d="M200 132 L216 156 L200 180 L184 156 Z" fill="#E10600"/>
+    <circle cx="110" cy="230" r="6.5" fill="#E10600"/><circle cx="155" cy="230" r="6.5" fill="#E10600"/><circle cx="200" cy="230" r="6.5" fill="#E10600"/><circle cx="245" cy="230" r="6.5" fill="#E10600"/><circle cx="290" cy="230" r="6.5" fill="#E10600"/>
+  </svg>
+  <div class="k">Entered for</div>
+  <div class="t">The King's Awards<br>for Enterprise</div>
+  <div class="y">2027</div>
+  <div class="s">Promoting Opportunity · The Way In</div>
+</div>
+</body>
+</html>
