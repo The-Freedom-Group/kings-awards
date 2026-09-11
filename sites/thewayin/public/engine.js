@@ -400,7 +400,7 @@
     $("#pfName").textContent = d.name; $("#pfRole").textContent = d.role;
     $("#pfRoute").textContent = d.route; $("#pfRoute2").textContent = d.route; $("#pfBand").style.setProperty("--b", d.b || "#111");
     $("#pfSince").textContent = d.since || "";
-    $("#pfSupport").textContent = d.support || ""; $("#pfSkills").textContent = d.skills || "";
+    $("#pfSupport").textContent = d.support || ""; (function () { var ul = $("#pfSkills .pf-list"); if (!ul) { $("#pfSkills").textContent = d.skills || ""; return; } ul.innerHTML = ""; (d.skills || "").split(",").forEach(function (t) { t = t.trim(); if (!t) return; var li = document.createElement("li"); li.textContent = t.charAt(0).toUpperCase() + t.slice(1); ul.appendChild(li); }); })();
     $("#pfResp").textContent = d.resp || ""; $("#pfNext").textContent = d.next || "";
     $$("#pfFields .opt").forEach(function (el) { el.style.display = el.querySelector("b").textContent ? "" : "none"; });
     $("#pfQ").textContent = "Film with " + d.name + ": to be recorded";
