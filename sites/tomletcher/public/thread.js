@@ -524,7 +524,10 @@
         var Lr = cum[cum.length - 1] || 1;
         marks.years = yrs.map(function (_, yi) { return cum[yi + 1] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
         var co0 = pageXY(el), fb0 = pageXY(figB);
-        /* down the margin to the left of the panel, then in through its side at the axis */
+        /* straight down out of the system from the planet, then down the margin to the left of the panel,
+           then in through its side at the axis */
+        var mapEl2 = document.querySelector("#c05 .map");
+        if (mapEl2) { var mo2 = pageXY(mapEl2); pts.push({ x: mo2.x + mapEl2.offsetWidth * 0.5, y: mo2.y + mapEl2.offsetHeight + 40, id: "mapOut", el: el, noKnot: true }); }
         pts.push({ x: fb0.x - 36, y: fb0.y + figB.offsetHeight * 0.3, id: "chartsIn", el: el, noKnot: true });
         pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 130, y: ridePts[0].y },
                    yS: ridePts[0].y, yE: ridePts[0].y,
@@ -691,10 +694,12 @@
       try { pr4.setAttribute("d", dRideIn); rIn = pr4.getTotalLength(); pr4.setAttribute("d", dRideOut); rOut = pr4.getTotalLength(); } catch (e) { rIn = rOut = 0; }
       svg.removeChild(pr4);
       if (rOut > rIn) {
+        /* the exit is paced from where the scroll target sits when the hold lets go, so nothing jumps */
+        var exit0 = Math.max(rideMeta.yE, (rideMeta.lock || 0) + window.innerHeight * 0.62), prevV = exit0;
         for (var sr = 0; sr < samples.length; sr++) {
           var smp = samples[sr];
           if (smp.l >= rIn && smp.l <= rOut) smp.y = rideMeta.yS + (rideMeta.yE - rideMeta.yS) * (smp.l - rIn) / (rOut - rIn);
-          else if (smp.l > rOut && smp.y < rideMeta.yE) smp.y = rideMeta.yE;
+          else if (smp.l > rOut) { var paced = Math.max(prevV, smp.y, exit0 + (smp.l - rOut) * 0.85); smp.y = paced; prevV = paced; }
         }
         rideA = rIn / totalLen; rideB = rOut / totalLen;
         holdDefs.push({ id: "charts", lock: rideMeta.lock, a: rideA, b: rideB, px: 2600 });
