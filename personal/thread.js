@@ -526,10 +526,13 @@
         var co0 = pageXY(el), fb0 = pageXY(figB);
         /* straight down out of the system from the planet, then down the margin to the left of the panel,
            then in through its side at the axis */
+        /* it sweeps left above the panel, arrives vertical in the margin beside it, and runs down that margin */
+        /* straight down out of the system to just below it, then one S across the gap into the margin beside the
+           panel, arriving vertical, then down that margin */
         var mapEl2 = document.querySelector("#c05 .map");
-        if (mapEl2) { var mo2 = pageXY(mapEl2); pts.push({ x: mo2.x + mapEl2.offsetWidth * 0.5, y: mo2.y + mapEl2.offsetHeight + 40, id: "mapOut", el: el, noKnot: true }); }
-        pts.push({ x: fb0.x - 36, y: fb0.y + figB.offsetHeight * 0.3, id: "chartsIn", el: el, noKnot: true });
-        pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 130, y: ridePts[0].y },
+        if (mapEl2) { var mo2 = pageXY(mapEl2), mb = mo2.y + mapEl2.offsetHeight; pts.push({ x: mo2.x + mapEl2.offsetWidth * 0.5, y: mb + 30, id: "mapOut", el: el, noKnot: true, cpIn: { x: mo2.x + mapEl2.offsetWidth * 0.5, y: mb - 120 } }); }
+        pts.push({ x: fb0.x - 40, y: fb0.y + 30, id: "chartsIn", el: el, noKnot: true, cpIn: { x: fb0.x - 40, y: fb0.y - 110 } });
+        pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 110, y: ridePts[0].y },
                    yS: ridePts[0].y, yE: ridePts[0].y,
                    lock: Math.max(0, Math.max(co0.y + el.offsetHeight + 56 - window.innerHeight, Math.min(co0.y - 96, co0.y + el.offsetHeight / 2 - window.innerHeight / 2))) });
         return;
@@ -571,7 +574,7 @@
         a.loop.pts.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
         dLoopOut = d; loopMeta = a.loop; loopMarks = a.loop.marks || null; from = a.loop.end;
         var dy2 = (b.y - from.y) * 0.5, cIn = b.cpIn || { x: b.x, y: b.y - dy2 };
-        d += " C " + f1(from.x + Math.min(90, dy2 * 0.5)) + " " + f1(from.y + 6) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
+        d += " C " + f1(from.x) + " " + f1(from.y + Math.max(200, dy2 * 1.2)) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
       if (a.rideTo) {
