@@ -1184,6 +1184,7 @@ body.bio-open{overflow:hidden}
 .bar small,.bar .b1 small,.bar .b2 small,.bar .b3 small,.bar .b3 small.dt,.bar .b4 small{color:var(--pink)}
 .bar .lg-ebay b,.bar .lg-ebay b:nth-child(n){color:var(--porcelain)}
 .bar .b2 img{height:34px;background:none;padding:0}
+.bar .b1 img.men{height:52px;width:52px;border-radius:4px}
 .bar .b3 .lg-big{font-family:var(--disp);font-size:clamp(30px,2.6vw,42px);line-height:1;color:var(--pink);flex:0 0 auto;letter-spacing:.01em}
 .bar .b3 .bw>b .n{display:none}
 .lg-men{font-family:var(--disp);font-size:30px;line-height:1;color:var(--porcelain);border:2px solid var(--pink);padding:9px 10px 6px;letter-spacing:.05em;flex:0 0 auto;text-transform:uppercase}
@@ -1269,11 +1270,12 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .map.lap .node .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 45%,transparent),0 0 40px 12px var(--p2),0 0 90px 24px color-mix(in srgb,var(--p2) 45%,transparent);filter:brightness(1.14) saturate(1.12)}
 .map .tape{transition:filter .7s}
 .map.lap .tape{filter:drop-shadow(0 0 8px rgba(255,255,255,.55))}
-.endnote .sigwrap{--w:0%;--pen:0;position:relative;display:inline-block;margin-top:96px;z-index:1;padding:0 18px}
-.endnote .sig{font-family:"Great Vibes",cursive;font-size:clamp(50px,5.6vw,84px);line-height:1.1;color:var(--pink);text-shadow:0 0 28px rgba(255,45,141,.35);
-  -webkit-mask-image:linear-gradient(90deg,#000 calc(var(--w) - 44px),rgba(0,0,0,0) var(--w));mask-image:linear-gradient(90deg,#000 calc(var(--w) - 44px),rgba(0,0,0,0) var(--w))}
-.endnote .pen{position:absolute;left:var(--w);top:56%;width:7px;height:7px;margin:-3.5px 0 0 -26px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.22),0 0 16px 5px rgba(255,45,141,.9);opacity:var(--pen);transition:opacity .25s;pointer-events:none}
-@media(prefers-reduced-motion:reduce){.endnote .sig{-webkit-mask-image:none;mask-image:none}.endnote .pen{display:none}}
+.endnote .sigwrap{position:relative;display:inline-block;margin-top:96px;z-index:1;font-size:clamp(50px,5.6vw,84px);line-height:1;min-height:1.6em;min-width:6.4em}
+.endnote .sigwrap canvas{display:block}
+.endnote .sig-pen{position:absolute;left:-14px;top:-190px;width:28px;height:200px;transform-origin:14px 190px;pointer-events:none;opacity:0;
+  filter:drop-shadow(5px 9px 7px rgba(0,0,0,.65));transition:opacity .35s;will-change:transform}
+.endnote .sigwrap.writing .sig-pen{opacity:1}
+@media(prefers-reduced-motion:reduce){.endnote .sig-pen{display:none}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1358,7 +1360,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 
 <div class="bar" aria-label="Four snapshot facts">
   <div class="wrap">
-    <div class="b1"><span class="lg-men" aria-hidden="true">MEN</span><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em>£150,000 Salboy competition · Runner-up</em></span></div>
+    <div class="b1"><img class="men" src="../assets/men-logo.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em>£150,000 Salboy competition · Runner-up</em></span></div>
     <div class="b3"><span class="lg-big" aria-hidden="true">500,000+</span><span class="bw"><small class="dt">2019 – 2026</small><b>Products sold</b><em>No.1 fire extinguishers on eBay &amp; Temu</em></span></div>
     <div class="b2"><img src="../assets/myta-mono.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
     <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>April 2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
@@ -1432,9 +1434,9 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <li><button class="tl-view" type="button" data-src="../assets/journey/temu-one.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/tlevel-trio.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch18-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">March 2026</span><span class="what"><b>Three brands.</b>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/ch3-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/ch13-team.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/kings-entered.png" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>Entered for the King's Awards for Enterprise 2027, Promoting Opportunity: the ways young people come into the company, the placements, and the roles they moved into.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/ch13-team.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/number-one.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/myta-card.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">September 2026</span><span class="what"><b>Manchester Young Talent Awards.</b>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/oct2026-launch.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2026</span><span class="what"><b>Amazon and the shop launch.</b>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</span></li>
       </ol>
@@ -1844,7 +1846,25 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
       promised to build.</q>
     </div>
-    <div class="sigwrap" id="sigWrap" aria-label="Tom Letcher"><div class="sig" aria-hidden="true">Tom Letcher</div><i class="pen" aria-hidden="true"></i></div>
+    <div class="sigwrap" id="sigWrap" role="img" aria-label="Tom Letcher, signed">
+      <canvas id="sigCv" aria-hidden="true"></canvas>
+      <svg class="sig-pen" id="sigPen" viewBox="-14 -190 28 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="penBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3a3a"/><stop offset=".38" stop-color="#6a6a6a"/><stop offset=".5" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0a0a0a"/></linearGradient>
+          <linearGradient id="penCap" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a4a4a"/><stop offset=".4" stop-color="#8a8a8a"/><stop offset=".55" stop-color="#3a3a3a"/><stop offset="1" stop-color="#101010"/></linearGradient>
+          <linearGradient id="penNib" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff8e0"/><stop offset=".5" stop-color="#e8cf8a"/><stop offset="1" stop-color="#a8842a"/></linearGradient>
+        </defs>
+        <rect x="-9" y="-188" width="18" height="52" rx="9" fill="url(#penCap)"/>
+        <rect x="5.5" y="-182" width="2.6" height="34" rx="1.3" fill="#d8d5cf"/>
+        <rect x="-9" y="-138" width="18" height="4" fill="#FF2D8D"/>
+        <rect x="-9" y="-134" width="18" height="66" fill="url(#penBody)"/>
+        <rect x="-9" y="-70" width="18" height="5" fill="#FF2D8D"/>
+        <path d="M-9 -65 L9 -65 L7.2 -33 L-7.2 -33 Z" fill="#161616"/>
+        <path d="M-7 -33 L7 -33 L1.3 -3 L0 0 L-1.3 -3 Z" fill="url(#penNib)"/>
+        <line x1="0" y1="-24" x2="0" y2="-3" stroke="#8a6a1c" stroke-width="1"/>
+        <circle cx="0" cy="-24" r="1.7" fill="#8a6a1c"/>
+      </svg>
+    </div>
   </div>
 </section>
 
