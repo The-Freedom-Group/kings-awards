@@ -291,6 +291,82 @@
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
   var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null, tlRows = [];
+  /* ── The Journey: a strip of moments the wheel travels while the page holds ── */
+  var jy = { el: $("#timeline"), stage: $("#jyStage"), strip: $("#jyStrip"), track: $("#jyTrack"), count: $("#jyCount"), year: $("#jyYear"), hint: $("#jyHint"),
+             cards: [], n: 0, centres: [], live: false, pending: null, f: -1, lit: null, head: null, pulse: null, knots: [], yrs: [], bound: false, yr: "" };
+  function buildJourney() {
+    if (!jy.el || !jy.stage || !jy.strip) return;
+    jy.cards = $$(".jy-card", jy.strip); jy.n = jy.cards.length; if (!jy.n) return;
+    jy.el.classList.add("live"); jy.el.classList.toggle("touch", !vs.on);
+    if (!vs.on && jy.hint) jy.hint.textContent = "Swipe to travel the line";
+    var sl = vs.on ? 0 : jy.strip.scrollLeft;
+    jy.centres = jy.cards.map(function (c) { return c.offsetLeft + sl + c.offsetWidth / 2; });
+    if (jy.track) {
+      var W2 = Math.max(jy.strip.scrollWidth, jy.centres[jy.n - 1] + jy.stage.clientWidth), H2 = 96, Y = 38, ns = "http://www.w3.org/2000/svg";
+      jy.track.setAttribute("viewBox", "0 0 " + W2 + " " + H2); jy.track.style.width = W2 + "px";
+      jy.track.innerHTML = "";
+      var mk = function (tag, attrs, parent) { var e2 = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k2) { e2.setAttribute(k2, attrs[k2]); }); (parent || jy.track).appendChild(e2); return e2; };
+      mk("line", { "class": "jt-base", x1: 0, x2: W2, y1: Y, y2: Y });
+      jy.lit = mk("line", { "class": "jt-lit", x1: 0, x2: jy.centres[0], y1: Y, y2: Y });
+      jy.knots = jy.centres.map(function (cx) { return mk("circle", { "class": "jt-knot", cx: cx, cy: Y, r: 5 }); });
+      jy.pulse = mk("circle", { "class": "jt-pulse", cx: jy.centres[0], cy: Y, r: 7 });
+      jy.head = mk("circle", { "class": "jt-head", cx: jy.centres[0], cy: Y, r: 5.5 });
+      jy.yrs = []; var seen = {};
+      jy.cards.forEach(function (c, i2) {
+        var yr = (c.getAttribute("data-when") || "").replace(/\D/g, "").slice(-4); if (!yr || seen[yr]) return; seen[yr] = true;
+        var t2 = mk("text", { "class": "jt-yr", x: jy.centres[i2], y: Y + 32, "text-anchor": "middle" }); t2.textContent = yr;
+        t2.addEventListener("click", function () { jumpJourney(i2 / (jy.n - 1)); });
+        jy.yrs.push({ el: t2, i: i2 });
+      });
+    }
+    if (!vs.on && !jy.bound) {
+      jy.bound = true;
+      jy.strip.addEventListener("scroll", function () {
+        var mx = jy.strip.scrollWidth - jy.strip.clientWidth; setJourney(mx > 0 ? jy.strip.scrollLeft / mx : 0, null, true);
+      }, { passive: true });
+    }
+    jy.live = true; var keep = jy.f; jy.f = -1; setJourney(keep >= 0 ? keep : 0, null, true);
+  }
+  function setJourney(f, h, force) {
+    if (!jy.live) return;
+    f = clamp(f, 0, 1);
+    if (!force && Math.abs(f - jy.f) < 0.0005) return;
+    if (jy.f >= 0 && Math.abs(f - jy.f) > 0.002) jy.el.classList.add("moved");
+    jy.f = f;
+    var t = f * (jy.n - 1), i = Math.round(t), lo = Math.floor(t), hi = Math.min(jy.n - 1, lo + 1), k = t - lo;
+    var cx = jy.centres[lo] + (jy.centres[hi] - jy.centres[lo]) * k;
+    var shift = vs.on ? -(cx - jy.centres[0]) : -jy.strip.scrollLeft;
+    if (vs.on) jy.strip.style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0)";
+    if (jy.track) jy.track.style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0)";
+    jy.cards.forEach(function (c, idx) {
+      c.classList.toggle("is-active", idx === i); c.classList.toggle("is-past", idx < i);
+      if (!c.__img) c.__img = c.querySelector(".jy-pic img");
+      if (c.__img && Math.abs(idx - t) < 2.5) c.__img.style.setProperty("--px", ((jy.centres[idx] - cx) * 0.045).toFixed(1) + "px");
+    });
+    if (jy.year) {
+      var yr2 = (jy.cards[i].getAttribute("data-when") || "").replace(/\D/g, "").slice(-4);
+      if (yr2 && yr2 !== jy.yr) { jy.yr = yr2; jy.year.textContent = yr2; }
+      jy.year.style.transform = "translate(calc(-50% + " + ((i - t) * 70).toFixed(1) + "px),-50%)";
+    }
+    if (jy.lit) jy.lit.setAttribute("x2", cx.toFixed(1));
+    if (jy.head) jy.head.setAttribute("cx", cx.toFixed(1));
+    if (jy.pulse) jy.pulse.setAttribute("cx", cx.toFixed(1));
+    jy.knots.forEach(function (kn, idx) { kn.classList.toggle("on", jy.centres[idx] <= cx + 1); });
+    jy.yrs.forEach(function (y2) { y2.el.classList.toggle("on", y2.i <= i); });
+    if (jy.count) jy.count.textContent = (i + 1 < 10 ? "0" : "") + (i + 1) + " / " + (jy.n < 10 ? "0" : "") + jy.n;
+  }
+  function jumpJourney(f) {
+    var h = holds.filter(function (x) { return x.id === "journey"; })[0];
+    if (!vs.on || !h) { if (jy.strip) jy.strip.scrollTo({ left: f * (jy.strip.scrollWidth - jy.strip.clientWidth), behavior: "smooth" }); return; }
+    if (h.phase === "hold") h.prog = f;
+    else { jy.pending = f; vs.tgt = h.phase === "after" ? h.lock - 1 : h.lock; }
+  }
+  function stepJourney(dir) {
+    var f = clamp(Math.round(jy.f * (jy.n - 1)) + dir, 0, jy.n - 1) / (jy.n - 1); jumpJourney(f);
+  }
+  var jyPrev = $("#jyPrev"), jyNext = $("#jyNext");
+  if (jyPrev) jyPrev.addEventListener("click", function () { stepJourney(-1); });
+  if (jyNext) jyNext.addEventListener("click", function () { stepJourney(1); });
   var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
@@ -321,7 +397,7 @@
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     if (holdActive) {
       e.preventDefault();
-      if (holdActive.phase === "hold") holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02);
+      if (holdActive.phase === "hold") { holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02); holdActive.fedAt = performance.now(); }
       return;
     }
     if (!vs.on) return;
@@ -350,22 +426,23 @@
     if (!holdActive || touchY === null) return;
     e.preventDefault();
     var ty = e.touches[0].clientY;
-    if (holdActive.phase === "hold") holdActive.prog = clamp(holdActive.prog + (touchY - ty) / (holdActive.px * 0.5), -0.02, 1.02);
+    if (holdActive.phase === "hold") { holdActive.prog = clamp(holdActive.prog + (touchY - ty) / (holdActive.px * 0.5), -0.02, 1.02); holdActive.fedAt = performance.now(); }
     touchY = ty;
   }, { passive: false });
   window.addEventListener("keydown", function (e) {
     if (!holdActive) return;
     var k = e.key, d = 0;
+    if (holdActive.id === "journey" && (k === "ArrowRight" || k === "ArrowLeft")) { e.preventDefault(); if (holdActive.phase === "hold") stepJourney(k === "ArrowRight" ? 1 : -1); return; }
     if (k === "ArrowDown" || k === "PageDown" || k === " ") d = 0.12; else if (k === "ArrowUp" || k === "PageUp") d = -0.12; else return;
     e.preventDefault();
-    if (holdActive.phase === "hold") holdActive.prog = clamp(holdActive.prog + d, -0.02, 1.02);
+    if (holdActive.phase === "hold") { holdActive.prog = clamp(holdActive.prog + d, -0.02, 1.02); holdActive.fedAt = performance.now(); }
   });
 
   /* L and R ride the empty margin outside the text column, so the
      line never crosses a word. C is the centre. */
   var PLAN = [
     { id: "ones", side: "C", y: 0.50, noKnot: true },
-    { id: "c01",  side: "L", y: 0.16, rail: true },
+    { id: "c01",  side: "L", y: 0.12, journey: true },
     { id: "c02",  side: "R", y: 0.42 },
     { id: "c03",  side: "L", y: 0.42 },
     { id: "c04",  side: "R", y: 0.42 },
@@ -481,9 +558,21 @@
           /* the line arrives from the right, level with the planet, and stops on it while the rings light up */
           var eIn = ringPt("C", 0);
           pts.push({ x: core.x, y: core.y, id: p.id, el: el, noKnot: true, cpIn: { x: eIn.x + Math.min(160, mr.w * 0.12), y: core.y },
-                     loop: { pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y } });
+                     loop: { id: "map", pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, lock: holdLock, px: 3400 } });
           return;
         }
+      }
+      if (p.journey) {
+        pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: false });
+        if (jy.stage) {
+          var so = pageXY(jy.stage), sh = jy.stage.offsetHeight, midY = so.y + sh * 0.5, vh = window.innerHeight;
+          var headEl = jy.el.querySelector(".jy-head"), hy = headEl ? pageXY(headEl).y : so.y - 60;
+          var jLock = Math.max(0, Math.max(so.y + sh + 28 - vh, Math.min(hy - 96, midY - vh / 2)));
+          var jExit = { x: so.x + jy.stage.offsetWidth + 24, y: midY };
+          pts.push({ x: so.x - 24, y: midY, id: "journeyIn", el: el, noKnot: true,
+                     loop: { id: "journey", pts: [jExit], end: jExit, yA: midY, yB: midY, lock: jLock, px: Math.max(2400, jy.n * 230) } });
+        }
+        return;
       }
       if (p.rail) {
         /* the timeline: the chapter's knot up by the heading, then straight down the rail through every
@@ -619,16 +708,18 @@
     }
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
-    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null, dRideIn = "", dRideOut = "", holdDefs = [];
+    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null, dRideIn = "", dRideOut = "", holdDefs = [], loops = [];
     rideMeta = null;
     var f1 = function (v) { return v.toFixed(1); };
     for (var i = 0; i < pts.length - 1; i++) {
       var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5, from = a;
       if (a.loop) {
-        /* lap the inner ring, then leave from its bottom heading right, curving down to the next point */
-        dLoopIn = d;
+        /* a held stretch: the line runs it while the page holds, then leaves from its end for the next point */
+        var lpIn = d;
         a.loop.pts.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
-        dLoopOut = d; loopMeta = a.loop; loopMarks = a.loop.marks || null; from = a.loop.end;
+        loops.push({ meta: a.loop, dIn: lpIn, dOut: d });
+        if (a.loop.id === "map") { loopMeta = a.loop; loopMarks = a.loop.marks || null; }
+        from = a.loop.end;
         var dy2 = (b.y - from.y) * 0.5, cIn = b.cpIn || { x: b.x, y: b.y - dy2 };
         d += " C " + f1(from.x) + " " + f1(from.y + Math.max(200, dy2 * 1.2)) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
@@ -727,24 +818,33 @@
        virtual height: the approach, the lap and the exit are spread evenly over a window either side
        of the ring, and the samples just after the exit hold at the window's foot */
     loopA = loopB = 0; hasHold = false;
-    if (loopMeta && dLoopOut) {
+    loops.forEach(function (lp) {
       var pr3 = document.createElementNS("http://www.w3.org/2000/svg", "path"), lIn = 0, lOut = 0;
       svg.appendChild(pr3);
-      try { pr3.setAttribute("d", dLoopIn); lIn = pr3.getTotalLength(); pr3.setAttribute("d", dLoopOut); lOut = pr3.getTotalLength(); } catch (e) { lIn = lOut = 0; }
+      try { pr3.setAttribute("d", lp.dIn); lIn = pr3.getTotalLength(); pr3.setAttribute("d", lp.dOut); lOut = pr3.getTotalLength(); } catch (e) { lIn = lOut = 0; }
       svg.removeChild(pr3);
-      if (lOut >= lIn) {
-        hasHold = true;
-        var lA = lIn;
-        for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= loopMeta.yA) { lA = samples[si].l; break; } }
-        for (var sj = 0; sj < samples.length; sj++) {
-          var sm = samples[sj];
-          if (sm.l >= lA && sm.l <= lOut) sm.y = loopMeta.yA + (loopMeta.yB - loopMeta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
-          else if (sm.l > lOut && sm.y < loopMeta.yB) sm.y = loopMeta.yB;
-        }
-        loopA = lA / totalLen; loopB = lOut / totalLen;
-        holdDefs.push({ id: "map", lock: holdLock, a: loopA, b: loopB, px: 3400 });
+      if (lOut < lIn) return;
+      var lA = lIn;
+      for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= lp.meta.yA) { lA = samples[si].l; break; } }
+      for (var sj = 0; sj < samples.length; sj++) {
+        var sm = samples[sj];
+        if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
+        else if (sm.l > lOut && sm.y < lp.meta.yB) sm.y = lp.meta.yB;
       }
-    }
+      if (lp.meta.id === "journey") {
+        /* the exit is paced from where the page sits when the hold lets go, so the head walks off the stage
+           instead of jumping down the line */
+        var ex0 = lp.meta.lock + window.innerHeight * 0.62, pv = ex0;
+        for (var sk = 0; sk < samples.length; sk++) {
+          var sq = samples[sk];
+          if (sq.l > lOut) { var pcd = Math.max(pv, sq.y, ex0 + (sq.l - lOut) * 0.85); sq.y = pcd; pv = pcd; }
+        }
+      }
+      var fa = lA / totalLen, fb = lOut / totalLen;
+      if (lp.meta.id === "map") { loopA = fa; loopB = fb; hasHold = true; }
+      if (lp.meta.id === "journey" && !vs.on) return;          /* on touch the strip scrolls itself */
+      holdDefs.push({ id: lp.meta.id, lock: lp.meta.lock, a: fa, b: fb, px: lp.meta.px || 3400 });
+    });
     /* the ride climbs, so its samples take a virtual height too: a window below its entry point */
     rideA = rideB = 0;
     if (rideMeta && dRideOut) {
@@ -942,6 +1042,16 @@
     var lapping = !!(mapHold && mapHold.phase === "hold");
     orbitBoostTarget = lapping ? 1 : 0;
     thread.classList.toggle("lap", lapping);
+    var jyHold = holds.filter(function (h) { return h.id === "journey"; })[0];
+    if (jyHold) {
+      if (jyHold.phase === "hold" && jy.pending !== null) { jyHold.prog = jy.pending; jy.pending = null; }
+      /* once the wheel rests, the strip settles on the nearest moment */
+      if (jyHold.phase === "hold" && jy.n > 1 && jyHold.prog >= 0 && jyHold.prog <= 1 && performance.now() - (jyHold.fedAt || 0) > 140) {
+        var snapF = Math.round(jyHold.prog * (jy.n - 1)) / (jy.n - 1);
+        jyHold.prog += (snapF - jyHold.prog) * 0.16;
+      }
+      setJourney(jyHold.phase === "before" ? 0 : jyHold.phase === "after" ? 1 : clamp(jyHold.shown, 0, 1), jyHold);
+    }
     if (mapEl) {
       var f = lapping ? clamp(mapHold.shown, 0, 1) : -1;
       mapEl.classList.toggle("lap", lapping);
@@ -1257,7 +1367,7 @@
   function rebuild() {
     clearTimeout(rebuildTimer);
     rebuildTimer = setTimeout(function () {
-      buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
+      buildJourney(); buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
     }, 140);
   }
   window.addEventListener("resize", rebuild);
@@ -1266,7 +1376,7 @@
   window.addEventListener("load", rebuild);
   if ("ResizeObserver" in window && explore) new ResizeObserver(rebuild).observe(explore);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
-  buildPath(); measureScene(); measureMarquees();
+  buildJourney(); buildPath(); measureScene(); measureMarquees();
 
   /* ══ EXPLORE ⇄ VERIFIED RECORD (pink wipe) ════════════════ */
   var mE = $("#mExplore"), mR = $("#mRecord"), wipe = $("#wipe");
@@ -1518,7 +1628,7 @@
     at = (i + views.length) % views.length;
     var b = views[at], li = b.closest("li");
     img.src = b.getAttribute("data-src");
-    var w = li ? li.querySelector(".when") : null, t = li ? li.querySelector(".what b") : null;
+    var w = li ? (li.querySelector(".jy-when") || li.querySelector(".when")) : null, t = li ? (li.querySelector(".jy-title") || li.querySelector(".what b")) : null;
     if (capWhen) capWhen.textContent = w ? w.textContent : "";
     if (capWhat) capWhat.textContent = t ? t.textContent : "";
     if (capN) capN.textContent = (at + 1) + " / " + views.length + (b.getAttribute("data-credit") ? "  ·  " + b.getAttribute("data-credit") : "");
