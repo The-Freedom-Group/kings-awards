@@ -283,6 +283,30 @@
       live2   = $("#tLive2"),
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0;
+  /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
+     the ring; HOLD_PX is how much wheel travel one lap takes */
+  var builtH = 0, HOLD_PX = 2800, holdLock = 0, hold = { active: false, done: false, prog: 0, shown: 0, prevDy: -1 };
+  var sigWrap = $("#sigWrap"), sigEnd = 0;
+  function lockScroll() { try { window.scrollTo({ top: holdLock, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock); } }
+  window.addEventListener("wheel", function (e) {
+    if (!hold.active) return;
+    e.preventDefault();
+    var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+    hold.prog = clamp(hold.prog + d / HOLD_PX, -0.02, 1.02);
+  }, { passive: false });
+  var touchY = null;
+  window.addEventListener("touchstart", function (e) { touchY = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener("touchmove", function (e) {
+    if (!hold.active || touchY === null) return;
+    e.preventDefault();
+    var ty = e.touches[0].clientY; hold.prog = clamp(hold.prog + (touchY - ty) / (HOLD_PX * 0.5), -0.02, 1.02); touchY = ty;
+  }, { passive: false });
+  window.addEventListener("keydown", function (e) {
+    if (!hold.active) return;
+    var k = e.key, d = 0;
+    if (k === "ArrowDown" || k === "PageDown" || k === " ") d = 0.12; else if (k === "ArrowUp" || k === "PageUp") d = -0.12; else return;
+    e.preventDefault(); hold.prog = clamp(hold.prog + d, -0.02, 1.02);
+  });
 
   /* L and R ride the empty margin outside the text column, so the
      line never crosses a word. C is the centre. */
@@ -308,6 +332,7 @@
 
     var W = explore.offsetWidth, H = explore.offsetHeight;
     if (!W || !H) return false;
+    builtH = H;
 
     /* find the text column so the line can run outside it */
     var col = explore.querySelector(".ch .wrap") || explore.querySelector(".wrap");
@@ -401,7 +426,7 @@
           for (var dg = 180; dg >= -270; dg -= 3) { var q2 = ringPt(dg); loopPts.push(q2); if (q2.y < yMin) yMin = q2.y; if (q2.y > yMax) yMax = q2.y; }
           var entry = loopPts[0], exit = loopPts[loopPts.length - 1];
           pts.push({ x: entry.x, y: entry.y, id: p.id, el: el, noKnot: true,
-                     loop: { pts: loopPts.slice(1), end: exit, yA: yMin - mr.height * 0.22, yB: yMax + mr.height * 0.22 } });
+                     loop: { pts: loopPts.slice(1), end: exit, yA: entry.y, yB: entry.y } });
           return;
         }
       }
@@ -539,9 +564,17 @@
           else if (sm.l > lOut && sm.y < loopMeta.yB) sm.y = loopMeta.yB;
         }
         loopA = lA / totalLen; loopB = lOut / totalLen;
+        holdLock = loopMeta.yA - window.innerHeight * 0.62;
+        var y0 = window.pageYOffset || document.documentElement.scrollTop;
+        if (!hold.active || Math.abs(y0 - holdLock) > 320) { hold.active = false; hold.done = y0 > holdLock + 40; hold.prog = hold.shown = hold.done ? 1 : 0; hold.prevDy = y0 - holdLock; }
       }
     }
     ySamples = samples;
+    /* the signature writes itself out between the ring closing and the line passing beneath it */
+    sigEnd = 0;
+    if (sigWrap && sigWrap.offsetHeight) {
+      var so = pageXY(sigWrap); sigEnd = fracAtY(so.y + sigWrap.offsetHeight + 150);
+    }
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
     /* the furthest the reader can scroll is the foot of the page; the
@@ -598,7 +631,34 @@
     if (!totalLen || thread.style.display === "none") return;
     var p = clamp(fracAtY(y + window.innerHeight * 0.62), 0, 1);
     p = Math.max(p, heroFrac * heroIn);
+    if (loopB > loopA && !reduce) {
+      var dy = y - holdLock;
+      if (!hold.active) {
+        if (!hold.done && dy >= 320) hold.done = true; else if (hold.done && dy <= -320) hold.done = false;
+        /* crossing the lock line from above starts the lap; crossing it from below rewinds it;
+           a long jump (an anchor, the scrollbar) skips it */
+        if (!hold.done && dy >= 0 && hold.prevDy < 0) { if (dy < 320) { hold.active = true; hold.prog = hold.shown = 0; lockScroll(); } else hold.done = true; }
+        else if (hold.done && dy < 0 && hold.prevDy >= 0) { if (dy > -320) { hold.active = true; hold.prog = hold.shown = 1; lockScroll(); } else hold.done = false; }
+      }
+      if (hold.active) {
+        hold.shown += (hold.prog - hold.shown) * 0.14;
+        p = loopA + (loopB - loopA) * clamp(hold.shown, 0, 1);
+        if (hold.prog > 1 && hold.shown > 0.995) { hold.active = false; hold.done = true; p = loopB; dy = 0; }
+        else if (hold.prog < 0 && hold.shown < 0.005) {
+          hold.active = false; hold.done = false; p = loopA; dy = -8;
+          try { window.scrollTo({ top: holdLock - 8, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock - 8); }
+        }
+        if (hold.active && Math.abs(dy) > 1) { if (Math.abs(dy) > 320) { hold.active = false; hold.done = dy > 0; } else lockScroll(); }
+      } else if (hold.done && p < loopB) p = loopB;
+      else if (!hold.done && p > loopA) p = loopA;
+      hold.prevDy = dy;
+    }
     live.style.strokeDashoffset = totalLen * (1 - p);
+    if (sigWrap) {
+      var sp = sigEnd > ringB ? clamp((p - ringB) / (sigEnd - ringB), 0, 1) : (p > ringB ? 1 : 0);
+      sigWrap.style.setProperty("--w", (sp * 100).toFixed(2) + "%");
+      sigWrap.style.setProperty("--pen", sp > 0.01 && sp < 0.99 ? "1" : "0");
+    }
     if (live2 && ringLen) {
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
@@ -788,6 +848,8 @@
   function frame() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
     var moved = y !== lastY;
+    /* if the page has changed height since the line was measured (fonts, images), measure it again */
+    if (builtH && explore && explore.offsetHeight !== builtH) { builtH = explore.offsetHeight; rebuild(); }
     velY = lerp(velY, moved ? y - lastY : 0, 0.12);
     lastY = y;
 
@@ -814,7 +876,8 @@
       });
     }
 
-    if (moved || velY !== 0) {
+    /* the held lap and the signature move without the page scrolling, so those frames draw too */
+    if (moved || velY !== 0 || hold.active) {
       if (chrome) chrome.classList.toggle("stuck", y > 40);
 
       /* hero: portrait drifts against the scroll */

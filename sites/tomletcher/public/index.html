@@ -1266,10 +1266,14 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .thread.lap .live{filter:drop-shadow(0 0 5px rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(255,45,141,.6))}
 .thread.lap .head{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.28),0 0 26px 8px rgba(255,45,141,.9)}
 .map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
-.map.lap .node .orb{box-shadow:0 0 0 2px rgba(255,255,255,.22),0 0 36px 10px rgba(255,45,141,.6);filter:brightness(1.12) saturate(1.1)}
+.map.lap .node .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 45%,transparent),0 0 40px 12px var(--p2),0 0 90px 24px color-mix(in srgb,var(--p2) 45%,transparent);filter:brightness(1.14) saturate(1.12)}
 .map .tape{transition:filter .7s}
 .map.lap .tape{filter:drop-shadow(0 0 8px rgba(255,255,255,.55))}
-.endnote .sig{font-family:"Great Vibes",cursive;font-size:clamp(50px,5.6vw,84px);line-height:1;color:var(--pink);margin-top:96px;text-shadow:0 0 28px rgba(255,45,141,.35);position:relative;z-index:1}
+.endnote .sigwrap{--w:0%;--pen:0;position:relative;display:inline-block;margin-top:96px;z-index:1;padding:0 18px}
+.endnote .sig{font-family:"Great Vibes",cursive;font-size:clamp(50px,5.6vw,84px);line-height:1.1;color:var(--pink);text-shadow:0 0 28px rgba(255,45,141,.35);
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(var(--w) - 44px),rgba(0,0,0,0) var(--w));mask-image:linear-gradient(90deg,#000 calc(var(--w) - 44px),rgba(0,0,0,0) var(--w))}
+.endnote .pen{position:absolute;left:var(--w);top:56%;width:7px;height:7px;margin:-3.5px 0 0 -26px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.22),0 0 16px 5px rgba(255,45,141,.9);opacity:var(--pen);transition:opacity .25s;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.endnote .sig{-webkit-mask-image:none;mask-image:none}.endnote .pen{display:none}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1840,7 +1844,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
       promised to build.</q>
     </div>
-    <div class="sig" aria-label="Tom Letcher">Tom Letcher</div>
+    <div class="sigwrap" id="sigWrap" aria-label="Tom Letcher"><div class="sig" aria-hidden="true">Tom Letcher</div><i class="pen" aria-hidden="true"></i></div>
   </div>
 </section>
 
