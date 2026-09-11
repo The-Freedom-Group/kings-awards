@@ -200,7 +200,7 @@
      animation keeps its transform transition; once it has played, the "go" class removes the
      transition so each frame's position applies instantly and the motion is continuous. */
   var SPEED = { A: 1.0, B: 1.0, C: 1.0 }, ROCKET_SPEED = 12, lastT = 0, wasIn = false, goTimer = null;
-  var orbitBoost = 0, orbitBoostTarget = 0;
+  var orbitBoost = 0, orbitBoostTarget = 0, orbitNodes = null;
   function orbitStep(ts) {
     if (!mapEl) return;
     var inView = mapEl.classList.contains("in") && document.body.dataset.grp !== "list";
@@ -215,7 +215,8 @@
     /* while the line is lapping the inner ring the whole system turns faster, easing in and out */
     orbitBoost += (orbitBoostTarget - orbitBoost) * Math.min(1, dt * 3);
     dt *= 1 + 3.2 * orbitBoost;
-    $$(".map .node[data-ring]", mapEl).forEach(function (nd) {
+    if (!orbitNodes) orbitNodes = $$(".map .node[data-ring]", mapEl);
+    orbitNodes.forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       if (ring === "0" || !RINGS[ring]) return;
       var a = (+nd.dataset.a || 0) + SPEED[ring] * dt; if (a > 360) a -= 360;
@@ -289,7 +290,7 @@
       live2   = $("#tLive2"),
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
-  var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect");
+  var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null;
   var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
@@ -891,21 +892,24 @@
     }
     if (rideMeta && rideB > rideA && chartsEl) {
       /* the bars stand up as the line reaches them; the line chart is revealed to wherever the head has got */
+      if (!chartParts) chartParts = { segs: $$("#chBars g.seg-g", chartsEl), vls: $$("#chBars .vl", chartsEl), dots: $$("#chLine .dot-g", chartsEl), lvls: $$("#chLine .vl", chartsEl) };
+      chartParts.segs.forEach(function (g) { if (!g.__yr) g.__yr = (g.getAttribute("data-t") || "").split(" ")[0]; });
+      chartParts.dots.forEach(function (g) { if (g.__cx === undefined) { var c0 = g.querySelector("circle"); g.__cx = c0 ? parseFloat(c0.getAttribute("cx")) : -1; } });
+      chartParts.lvls.forEach(function (t) { if (t.__x === undefined) t.__x = parseFloat(t.getAttribute("x")); });
       var chartHold = holds.filter(function (h) { return h.id === "charts"; })[0];
       var rp = chartHold ? (chartHold.phase === "hold" ? clamp(chartHold.shown, 0, 1) : chartHold.phase === "after" ? 1 : 0) : clamp((p - rideA) / (rideB - rideA), 0, 1), mk2 = rideMeta.marks;
-      mk2.yearNames.forEach(function (yr, yi) {
-        var on = rp >= mk2.years[yi] - 0.005;
-        $$("#chBars g.seg-g", chartsEl).forEach(function (g) { if ((g.getAttribute("data-t") || "").indexOf(yr) === 0) g.classList.toggle("up", on); });
-      });
-      $$("#chBars .vl", chartsEl).forEach(function (t, ti) { t.classList.toggle("up", rp >= (mk2.years[ti] || 0) - 0.005); });
+      var upBy = {};
+      mk2.yearNames.forEach(function (yr, yi) { upBy[yr] = rp >= mk2.years[yi] - 0.005; });
+      chartParts.segs.forEach(function (g) { g.classList.toggle("up", !!upBy[g.__yr]); });
+      chartParts.vls.forEach(function (t, ti) { t.classList.toggle("up", rp >= (mk2.years[ti] || 0) - 0.005); });
       var vx = 0;
       if (rp >= mk2.lineStart) {
         var hp = live.getPointAtLength(totalLen * p); vx = (hp.x - mk2.L.ox) / mk2.L.sx;
         if (rp >= 0.999) vx = 640;
       }
       if (lineClipRect) lineClipRect.setAttribute("width", Math.max(0, Math.min(640, vx + 2)).toFixed(1));
-      $$("#chLine .dot-g", chartsEl).forEach(function (g) { var c = g.querySelector("circle"); g.classList.toggle("up", !!c && parseFloat(c.getAttribute("cx")) <= vx + 1); });
-      $$("#chLine .vl", chartsEl).forEach(function (t) { t.classList.toggle("up", parseFloat(t.getAttribute("x")) <= vx + 1); });
+      chartParts.dots.forEach(function (g) { g.classList.toggle("up", g.__cx >= 0 && g.__cx <= vx + 1); });
+      chartParts.lvls.forEach(function (t) { t.classList.toggle("up", t.__x <= vx + 1); });
     }
     if (live2 && ringLen) {
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;

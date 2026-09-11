@@ -4,7 +4,7 @@
     "name": "Tom Letcher",
     "role": "Founder, programme sponsor and mentor",
     "counted_as_participant": false,
-    "photo": "assets/people/tom.jpg",
+    "photo": "assets/people/tom.41c70a26.jpg",
     "film": "on Cloudflare Stream",
     "stream_id": "443a12d351a0fd0d7272a13c82b98833"
   },
@@ -19,7 +19,7 @@
       "consent_date": "2026-09-04",
       "voice": true,
       "film": "on Cloudflare Stream",
-      "photo": "assets/people/bill.jpg",
+      "photo": "assets/people/bill.1f58541d.jpg",
       "film_recorded": "2026-09-05",
       "stream_id": "650dffb1a624a01d81be73d6a3c873d3"
     },
@@ -32,7 +32,7 @@
       "consent": "approved",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
-      "photo": "assets/people/harrison.jpg",
+      "photo": "assets/people/harrison.2c63feda.jpg",
       "film": "on Cloudflare Stream",
       "film_recorded": "2026-09-06",
       "stream_id": "dac8994822150ac8d73eec942de3984f"
@@ -46,7 +46,7 @@
       "consent": "approved",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-05",
-      "photo": "assets/people/gabriel.jpg",
+      "photo": "assets/people/gabriel.27197177.jpg",
       "film": "on Cloudflare Stream",
       "film_recorded": "2026-09-05",
       "stream_id": "175aad7dbebdc9d3693d4d952c08e4c6"
@@ -60,7 +60,7 @@
       "consent": "approved",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
-      "photo": "assets/people/jojo.jpg",
+      "photo": "assets/people/jojo.25c32fed.jpg",
       "film": "on Cloudflare Stream",
       "film_recorded": "2026-09-06",
       "stream_id": "8083fa4205480457455b23c771acea87"
@@ -73,7 +73,7 @@
       "consent": "approved",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
-      "photo": "assets/people/elliot.jpg",
+      "photo": "assets/people/elliot.ef1b9934.jpg",
       "film": "on Cloudflare Stream",
       "film_recorded": "2026-09-06",
       "stream_id": "4d13acdf85d9654ef1af01b4b54b434a",
@@ -87,7 +87,7 @@
       "consent": "approved",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-07",
-      "photo": "assets/people/dylan.jpg",
+      "photo": "assets/people/dylan.7b272e23.jpg",
       "film": "on Cloudflare Stream",
       "stream_id": "8fc4a2b19dcb8442b5f42648e6197474",
       "since": "April 2025, part-time at first"
@@ -101,7 +101,7 @@
       "film": "on Cloudflare Stream",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
-      "photo": "assets/people/billy.jpg",
+      "photo": "assets/people/billy.536d1857.jpg",
       "stream_id": "3a270ac4b7f1b68971db3ee4f468559e",
       "since": "2019"
     },
@@ -113,7 +113,7 @@
       "consent": "approved",
       "consent_scope": "name, image and film",
       "consent_date": "2026-09-06",
-      "photo": "assets/people/josh.jpg",
+      "photo": "assets/people/josh.fb59cf36.jpg",
       "film": "on Cloudflare Stream",
       "film_recorded": "2026-09-06",
       "stream_id": "f767b8d2dd9cde79e72653d7fbae5ce7",
