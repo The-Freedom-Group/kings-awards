@@ -1165,7 +1165,7 @@ body.bio-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.bio{transition:none}}
 
 /* ── 10 Sept: the achievements, the film after the three points, the timeline on request, the site's shades, the graphs ── */
-.bar .wrap{max-width:none;padding-inline:clamp(12px,2vw,40px);grid-template-columns:repeat(4,auto);justify-content:space-between}
+.bar .wrap{max-width:none;padding-inline:clamp(12px,2vw,40px);grid-template-columns:repeat(4,1fr);justify-content:stretch;align-items:stretch}
 .bar>.wrap>div{min-height:92px;padding:16px clamp(14px,1.6vw,26px);gap:clamp(12px,1.2vw,18px);min-width:0}
 .bar img{height:40px}
 .kab2{display:block;width:74px;height:74px;flex:0 0 auto;color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,45,141,.35))}
@@ -1268,9 +1268,17 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .thread.lap .live{filter:drop-shadow(0 0 5px rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(255,45,141,.6))}
 .thread.lap .head{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.28),0 0 26px 8px rgba(255,45,141,.9)}
 .map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
-.map.lap .node .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 45%,transparent),0 0 40px 12px var(--p2),0 0 90px 24px color-mix(in srgb,var(--p2) 45%,transparent);filter:brightness(1.14) saturate(1.12)}
 .map .tape{transition:filter .7s}
-.map.lap .tape{filter:drop-shadow(0 0 8px rgba(255,255,255,.55))}
+
+/* ── notes, 11 Sept (3) ── */
+.bio-grid{grid-template-columns:1fr}
+.bio-prose{max-width:72ch}
+.bio-after{margin-top:26px}
+.tl-list .what a.tl-link{color:var(--pink);font-weight:500}
+.map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
+.map.lap-core .node.core .orb,.map.lap-a .node[data-ring="A"] .orb,.map.lap-b .node[data-ring="B"] .orb,.map.lap-c .node[data-ring="C"] .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 45%,transparent),0 0 40px 12px var(--p2),0 0 90px 24px color-mix(in srgb,var(--p2) 45%,transparent);filter:brightness(1.14) saturate(1.12)}
+.map .tape,.map .ringB,.map .ringC{transition:filter .6s}
+.map.lap-a .tape,.map.lap-b .ringB,.map.lap-c .ringC{filter:drop-shadow(0 0 8px rgba(255,255,255,.6))}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1344,7 +1352,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">The man behind Freedom Fire &amp; Safety Ltd &amp; the Freedom Group forming around it.</p></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">The managing director of Freedom Fire &amp; Safety Ltd and Freedom Group Enterprise Limited.</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
         <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
@@ -1377,10 +1385,9 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ph" data-yr="The future · 2027 and beyond"><div>
         <em>The future</em>
         <h3>A £100m projection.</h3>
-        <p>Amazon, Temu, Shopify and OnBuy at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
+        <p>Amazon, Temu, Shopify, OnBuy and D2C at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
     </div>
     <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
-    <div class="cnt">Trading since <b>December 2019</b><br>Incorporated 2021</div>
   </div>
 </section>
 
@@ -1399,12 +1406,12 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started<br>with one rusty<br>fire extinguisher</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, December 2019. An architect by training, a delivery van, and a second-hand fire extinguisher nobody else saw any value in. One listing, one buyer, and everything since paid for by the sale before it.</p>
+      <p class="stand">Bury, December 2019. An architecture graduate, a delivery van, and a second-hand fire extinguisher nobody else saw any value in. One listing, one buyer, and everything since paid for by the sale before it.</p>
     </div>
     <div class="bio-cta rv">
       <div>
         <div class="ch-tag sm">Before Freedom</div>
-        <p>I was almost kicked out of university. Then I finished runner-up in a competition that could have changed my life, and losing it gave me the drive to build an empire of my own, starting with one second-hand fire extinguisher.</p>
+        <p>“I was almost kicked out of university after a heavy loss. Then I finished runner-up in a competition that could have changed my life, and losing it gave me the drive to build an empire of my own, starting with one second-hand fire extinguisher.”</p>
       </div>
       <button class="bio-btn" type="button" id="bioOpen" data-mag data-cur-label="Read">Read Tom's biography <i>→</i></button>
     </div>
@@ -1413,25 +1420,25 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
     <div class="tl rv" id="timeline" aria-label="To Freedom and beyond, 2019 to now">
       <div class="yhead">To Freedom and beyond · 2019 to now</div>
       <ol class="tl-list">
-      <li><button class="tl-view" type="button" data-src="../assets/journey/harvard-mit.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/salboy.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2019</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/harvard.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/salboy-close.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2019</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
       <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">October 2019</span><span class="what"><b>Two job offers, both declined.</b>Two architecture jobs offered straight after graduating, and both turned down for a delivery driver's job at his dad's cleaning company. On one ordinary delivery, a second-hand fire extinguisher. To anyone else, an old piece of equipment. To him, the beginning of something.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch1-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch4-d.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">June 2020</span><span class="what"><b>Freedom Fire.</b>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/ch6-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2021</span><span class="what"><b>The company.</b>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/people/jojo.jpg" data-cur-label="View">View image <i>↗</i></button><span class="when">November 2021</span><span class="what"><b>The first placements.</b>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/ff-card.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2021</span><span class="what"><b>The company.</b>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/nbc-card.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">November 2021</span><span class="what"><b>The first placements.</b>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch7-b.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">May 2022</span><span class="what"><b>A front door of its own.</b>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch8-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2023</span><span class="what"><b>The year of building.</b>After 18 months of building, thousands of products have been researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch9-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2024</span><span class="what"><b>The eBay awards.</b>Three months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch12-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2024</span><span class="what"><b>FIRESTORM.</b>The company's own brand is born: the FIRESTORM trade mark is filed in August and registered in November.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch10-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2024</span><span class="what"><b>Unit 19, the headquarters.</b>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch13-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2024</span><span class="what"><b>The first container.</b>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/temu-one.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/tlevel-trio.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/temu.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/tlevel-card.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from. The full programme is on <a class="tl-link" href="../staff/index.html">The Way In</a>.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch18-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">March 2026</span><span class="what"><b>Three brands.</b>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/ch13-team.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/kings-entered.png" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>Entered for the King's Awards for Enterprise 2027, Promoting Opportunity: the ways young people come into the company, the placements, and the roles they moved into.</span></li>
-      <li><button class="tl-view" type="button" data-src="../assets/journey/number-one.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/kings-entered.png" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2026</span><span class="what"><b>The King's Awards for Enterprise.</b>Nominated for Promoting Opportunity by the Greater Manchester Growth Company, and entered for the Young Founder award.</span></li>
+      <li><button class="tl-view" type="button" data-src="../assets/journey/ebay-one.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2026</span><span class="what"><b>Number one.</b>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/myta-card.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">September 2026</span><span class="what"><b>Manchester Young Talent Awards.</b>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</span></li>
       <li><button class="tl-view" type="button" data-src="../assets/journey/oct2026-launch.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2026</span><span class="what"><b>Amazon and the shop launch.</b>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</span></li>
       </ol>
@@ -1444,15 +1451,15 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
   <div class="wrap">
     <div class="rv">
       <div class="ch-tag">02 — Proof, Not Promise</div>
-      <h2>Six numbers, and the source behind each one.</h2>
-      <p class="stand">Each covers a stated period, and each is checked against a source: the statutory accounts, the marketplaces' own reports, the trade mark register.</p>
+      <h2>Six numbers that tell the story.</h2>
+      <p class="stand">Each covers a stated period: the marketplaces' own reports, the trade mark register, and the plan for the next five years.</p>
     </div>
 
     <div class="metrics rv" id="proof">
       <div class="metric" style="--acc:#FF2D8D">
-        <div class="v">£3m</div><div class="k">Revenue to date</div>
-        <p class="def">Sales across every channel since the first listing in December 2019. The most recent year alone brought in £1,048,616, up from £268,162 two years earlier.</p>
-        <div class="per">December 2019 – September 2026 · all channels</div>
+        <div class="v">£26m</div><div class="k">Five-year projection</div>
+        <p class="def">The multi-channel plan to 2031: eBay, Amazon, Temu, Shopify, TikTok Shop and OnBuy, with on-site servicing and B2B trade supply alongside them.</p>
+        <div class="per">2026 – 2031 · eight channels · the group plan</div>
       </div>
       <div class="metric" style="--acc:#ff5ca3">
         <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
@@ -1580,9 +1587,8 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
     </div>
 
     <div class="quo rv">
-      <q>Find a non-seasonal, grudge-purchase niche: a product everybody needs and nobody wants, where the competition is
-      less. Then make this boring product sexy. Build a system around it. Repeat.</q>
-      <div class="by">Tom Letcher, Founder &amp; MD</div>
+      <q>Find a non-seasonal niche: a product everybody needs and nobody wants, where the competition is less. Then make this boring product sexy. Build a system around it, and repeat.</q>
+      <div class="by">Founder &amp; MD</div>
     </div>
   </div>
 </section>
@@ -1596,24 +1602,6 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <em class="scr" aria-hidden="true" style="right:3%;top:8%">people.</em>
       <p class="stand">The roles that exist now, how responsibility was handed over, and what was built so other people
       can run the work.</p>
-    </div>
-    <div class="cols">
-      <aside class="side rv">
-        <p>Placements have been hosted since 2021. Formal T Level industry placements began in October 2025; by June
-        2026 all three students had been offered long-term roles. <button data-cur-label="More" class="more" type="button" data-pop="p-place" aria-label="More on placements"></button></p>
-        <div class="pop" id="p-place" hidden><b>Placements</b><p>The first learners came from New Bridge College in 2021, including young people with additional needs. One of the earliest placements progressed into long-term, full-time employment. The T Level placements are with Bury College, supported by the Growth Company. At least eight young people have been supported so far.</p></div>
-      </aside>
-      <div class="body rv">
-        <p><b>Roles created.</b> Web development, warehouse and fulfilment, IT, ecommerce operations and servicing, most
-        filled by people who came in on a placement, through Jobcentre Plus or while still studying.</p>
-        <p><b>Responsibility delegated.</b> The website and storefronts were built from scratch by two Bury College T Level students, who now run them. Fulfilment runs from the
-        warehouse team's own order queue. The Amazon storefront, opened in 2026, is run with a specialist agency. Suppliers, carriers
-        and marketplace compliance each have a named owner.</p>
-        <p><b>Systems built for others.</b> The order system, the support desk, the listing workflows and the supply-chain
-        tracker exist so a new starter can do useful work in their first week, and nothing depends on one person
-        remembering.</p>
-      </div>
-    <button class="fold-t" type="button" data-fold="cols">Read more</button>
     </div>
     <a class="wayin rv" href="../staff/index.html" data-mag>
       <span class="k">How people come into the company</span>
@@ -1634,14 +1622,6 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
         </div>
       </div>
       <p class="stand">Where the line has been, and where it is aimed: a ten-year plan for Freedom Global as a £100m multi-brand ecommerce platform and the commercial engine of the Freedom Group.</p>
-    </div>
-
-    <div class="vt-row rv">
-      <span class="vt-k">The group</span>
-      <div class="vt" role="group" aria-label="Group view">
-        <button type="button" id="vMap" aria-pressed="true">Map</button><s>/</s>
-        <button type="button" id="vList" aria-pressed="false">List</button>
-      </div>
     </div>
 
     <div class="grp rv">
@@ -1692,19 +1672,19 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
         <button data-cur-label="Select" class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200">
           <span class="orb"></span><span class="lbl">Freedom Facilities</span>
           <span class="st">Proposed</span></button>
-        <button data-cur-label="Select" class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="35">
+        <button data-cur-label="Select" class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="20">
           <span class="orb"></span><span class="lbl">Freedom Distribution</span>
           <span class="st">Proposed</span></button>
-        <button data-cur-label="Select" class="node" data-k="form" data-s="future" data-ring="C" data-ang="250">
+        <button data-cur-label="Select" class="node" data-k="form" data-s="future" data-ring="C" data-ang="260">
           <span class="orb"></span><span class="lbl">Property</span>
           <span class="st">Option</span></button>
-        <button data-cur-label="Select" class="node" data-k="freight" data-s="future" data-ring="C" data-ang="20">
+        <button data-cur-label="Select" class="node" data-k="freight" data-s="future" data-ring="C" data-ang="350">
           <span class="orb"></span><span class="lbl">Logistics</span>
           <span class="st">Option</span></button>
-        <button data-cur-label="Select" class="node" data-k="fly" data-s="future" data-ring="C" data-ang="300">
+        <button data-cur-label="Select" class="node" data-k="fly" data-s="future" data-ring="C" data-ang="80">
           <span class="orb"></span><span class="lbl">Drone technology</span>
           <span class="st">Option</span></button>
-        <button data-cur-label="Select" class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="150">
+        <button data-cur-label="Select" class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="170">
           <span class="orb"></span><span class="lbl">Energy</span>
           <span class="st">Option</span></button>
       </div>
@@ -1715,31 +1695,6 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
         Select a planet.</p>
         <a class="go" id="pGo" href="https://www.freedomgroup.uk" target="_blank" rel="noopener" style="display:none">Explore ↗</a>
       </div>
-    </div>
-
-    <div class="grp-list rv">
-      <h4>Trading now</h4>
-      <ul>
-        <li><span class="nm">Freedom Fire &amp; Safety Ltd</span><span class="ds">Incorporated 27 August
-          2021. Owned brands, direct sourcing, one warehouse, servicing nationwide, eBay, Temu and Amazon storefronts.
-          Trades online as Freedom Global.</span></li>
-      </ul>
-      <h4>Proposed · 24 to 36 months</h4>
-      <ul>
-        <li><span class="nm">Freedom Facilities</span><span class="ds">Compliance, servicing and facilities on recurring
-          contracts.</span></li>
-        <li><span class="nm">Freedom Distribution</span><span class="ds">Trade and B2B supply of the owned brands to
-          retailers, wholesalers and distributors.</span></li>
-      </ul>
-      <h4>Long-term options</h4>
-      <ul>
-        <li><span class="nm">Property</span><span class="ds">A commercial property platform for the group's own premises.</span></li>
-        <li><span class="nm">Logistics</span><span class="ds">A logistics arm for imports and freight control.</span></li>
-        <li><span class="nm">Drone technology</span><span class="ds">Aerial surveying and inspection.</span></li>
-        <li><span class="nm">Energy</span><span class="ds">Fuel, forecourts and energy.</span></li>
-      </ul>
-      <p class="src" style="margin-top:22px;font-size:13px;color:var(--pale-3)">The full group portfolio is set out at
-        <a href="https://www.freedomgroup.uk" style="color:var(--pink)">freedomgroup.uk</a>.</p>
     </div>
 
     <div class="charts rv" aria-label="Growth so far and the ten-year target">
@@ -1823,7 +1778,6 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
   <div class="wrap rv">
     <div class="ch-tag" style="justify-content:center">07 — Still Building</div>
     <h2>The line does not stop here.</h2>
-    <p class="stand">The same method, applied again: Freedom Brain, the fire extinguisher calculator, Freedom Freight, the company's own store, 12 more brands, and the channels still to open.</p>
     <div class="acts">
       <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
       <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
@@ -1835,7 +1789,6 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 <!-- ══ END NOTE · RESILIENCE ══ -->
 <section class="ch dark endnote" id="resilience" aria-label="End note: resilience">
   <div class="wrap rv">
-    <div class="ch-tag">End note — Resilience</div>
     <div class="quo">
       <q>Through so much loss at a young age, I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
@@ -1871,38 +1824,22 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
     <div class="bio-grid">
       <article class="bio-prose">
         <p>My dad loaned me the money to buy that first batch of chocolate and drinks. It was the first business loan I ever had, arranged without paperwork, credit checks or interest. It gave me my first lesson in business: somebody may help you begin, but what happens next is your responsibility.</p>
-        <p>Throughout childhood and into university, I kept starting small ventures: selling at school, washing neighbours' cars, trading at car boot sales and running side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
-        <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In 2012, when I was 15, I lost my mum. I carried that loss into adulthood and into the University of Salford, where I began studying architecture.</p>
+        <p>From August 2005, throughout childhood and into university, I kept starting small ventures: selling at school, cleaning neighbours' cars for money, car boot sales growing up, and side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
+        <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In March 2012, when I was 15, I lost my mum, Michele, to breast cancer. I left school that July and carried the loss into adulthood, and in September 2014 into the University of Salford, where I began studying architecture.</p>
         <p>Architecture taught me far more than how to design buildings. It trained me to respect detail, understand how systems connect and transform an empty space into a workable vision. It taught me research, presentation, problem solving and the discipline of revising an idea repeatedly until every element served a purpose.</p>
-        <p>At 19, during my second year, my best friend died in a motorbike accident. Grief knocked me off course and I came close to losing my place at university. But I recovered, completed my undergraduate degree and continued directly into a two-year Master's.</p>
-        <p>During my Master's, I explored how design could create opportunity for young people who felt disconnected from education and society. In July 2019, that journey took me to a summer placement at Harvard University and MIT, an experience that felt almost impossible considering how close I had come to leaving university altogether.</p>
-        <p>Later that summer, aged 23, I entered the Manchester Evening News and Salboy competition to win a £150,000 apartment. Entrants had to propose a creative scheme that would benefit Salford's surrounding community. My proposal continued the work behind my Master's thesis: helping young men like me move away from the streets and towards education, purpose and opportunity.</p>
+        <p>In July 2015, at 19, my best friend died in a motorbike accident. Grief derailed my second year and I came close to losing my place at university. But I recovered, graduated in July 2017 and continued directly into a two-year Master's.</p>
+        <p>During my Master's, I explored how design could create opportunity for young people who felt disconnected from education and society. In July 2019, the month I graduated from the Master's, that journey took me to a summer placement at Harvard University and MIT, an experience that felt almost impossible considering how close I had come to leaving university altogether.</p>
+        <p>In August 2019, aged 23, I entered the Manchester Evening News and Salboy competition to win a £150,000 apartment. Entrants had to propose a creative scheme that would benefit Salford's surrounding community. My proposal continued the work behind my Master's thesis: helping young men like me move away from the streets and towards education, purpose and opportunity.</p>
         <p class="bio-pull">I reached the final and finished as runner-up.</p>
         <p>At the time, it felt like the greatest professional loss of my young life. I believed winning could provide security and perhaps the platform from which everything else would begin. Losing taught me something more valuable: no competition, employer or institution was going to discover my ambition for me. Nobody else could find the hunger inside me, and nobody was coming to hand me my future.</p>
-        <p>Architecture had not rejected me. I was offered two jobs immediately after graduating and turned them both down. There was something inside me that knew I could not spend my life working for somebody else. Ironically, the only boss I ever had was my dad.</p>
+        <p>Architecture had not rejected me. In October 2019 I was offered two architecture jobs and turned them both down. There was something inside me that knew I could not spend my life working for somebody else. Ironically, the only boss I ever had was my dad.</p>
         <p>Instead, I went to work for his cleaning company as a delivery driver. On paper, it looked like a dramatic step backwards: from architecture, a Master's degree and Harvard to loading cleaning products into a van. There was no impressive title, carefully designed studio or obvious career path. But sometimes the route towards your future looks nothing like progress while you are travelling through it.</p>
-        <p>During one ordinary delivery, I came across a second-hand fire extinguisher.</p>
+        <p>In December 2019, during one ordinary delivery, I came across a second-hand fire extinguisher.</p>
         <p class="bio-close-line">To anybody else, it was an old piece of equipment.<br><em>To me, it looked like the beginning of something.</em></p>
-      </article>
-      <aside class="bio-dates">
-        <div class="ch-tag sm">The story before the business</div>
-        <dl>
-          <dt>April 1996</dt><dd><b>The story begins.</b> I was born in Greater Manchester and raised around the energy, risk and unpredictability of family business.</dd>
-          <dt>2005 – 2012</dt><dd><b>Learning to sell.</b> From selling products at a car wash to trading chocolate, sweets, Lucozade and KitKat Chunkies at school, I became fascinated by making something grow from very little. My dad provided my first informal business loan, without paperwork, credit checks or interest.</dd>
-          <dt>Sept 2007 – July 2012</dt><dd><b>St.&nbsp;Monica's High School.</b> School years shaped by constant business ideas, selling at school, car washes, car boot sales and a turbulent personal life.</dd>
-          <dt>2012</dt><dd><b>Losing Mum.</b> My mum, Michele, died following her battle with breast cancer. I was 15. The loss forced me to grow up earlier than expected.</dd>
-          <dt>Sept 2014</dt><dd><b>University of Salford.</b> I began studying architecture and developed the design thinking, attention to detail and understanding of interconnected systems that would later shape how I built businesses and brands.</dd>
-          <dt>2015</dt><dd><b>Another devastating loss.</b> At 19, my best friend died in a motorbike accident. I struggled through second year and came close to losing my university place.</dd>
-          <dt>2016 – July 2017</dt><dd><b>Graduated, undergraduate.</b> I recovered academically, rebuilt my confidence and graduated from my undergraduate architecture degree, side hustles running alongside.</dd>
-          <dt>Sept 2017 – 2019</dt><dd><b>Graduated, postgraduated.</b> Straight into postgraduate study. My thesis explored how design, community and education could create better routes for young people at risk of being left behind. Completed in 2019.</dd>
-          <dt>July 2019</dt><dd><b>Harvard University and MIT.</b> I secured a summer placement at Harvard University and MIT, an extraordinary milestone after almost falling out of education only a few years earlier.</dd>
-          <dt>Aug 2019</dt><dd><b>The £150,000 competition.</b> I reached the final of the Manchester Evening News and Salboy competition to win a £150,000 apartment. My community-focused proposal finished as runner-up.</dd>
-          <dt>Aug 2019</dt><dd><b>The rejection that created hunger.</b> Losing the competition became my biggest early professional disappointment. It taught me that recognition could not create ambition and security could not replace hunger.</dd>
-          <dt>Oct 2019</dt><dd><b>Choosing a different road.</b> I received two architecture job offers and turned them both down. Something inside me knew I could not spend my life working for somebody else. Ironically, the only boss I ever had was my dad.</dd>
-          <dt>Dec 2019</dt><dd><b>One second-hand fire extinguisher.</b> Delivering for my dad's cleaning company, I found a second-hand fire extinguisher and recognised an opportunity others had overlooked.</dd>
-        </dl>
+        <p class="bio-after">From that point I built Freedom Fire as a sole trader, and on 27 August 2021 it became a limited company. Over the years that followed we went on to establish rapid ecommerce growth, becoming number one for fire extinguishers on eBay and number one on Temu.</p>
+        <p class="bio-after">We endured more loss along the way: another close friend when I was 27, and my sister-in-law when I was 28. Through the hardship, even when the chips were down, we carried on, and became the start of what we like to call a £100 million enterprise.</p>
         <p class="bio-next">That moment closes the story before the business and begins the Freedom timeline. <a href="#timeline" id="bioToTimeline">See the timeline <i>→</i></a></p>
-      </aside>
+      </article>
     </div>
   </div>
 </div>
@@ -1920,7 +1857,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ft-brand"><img src="../assets/group-logo-white.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
         <p class="ft-addr">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p>
         <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p>
-        <p class="ft-credit">Photographs: Harvard, Kenneth C. Zirkel, CC BY 4.0; MIT, Beyond My Ken, CC BY-SA 4.0; both via Wikimedia Commons.</p></div>
+        <p class="ft-credit">Harvard photograph: Kenneth C. Zirkel, Wikimedia Commons, CC BY 4.0.</p></div>
       <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
       <div><h4>The story</h4><p class="ft-ch"><a href="#top"><span>00</span>Tom Letcher</a><br><a href="#c01"><span>01</span>The Spark</a><br><a href="#c02"><span>02</span>Proof, Not Promise</a><br><a href="#c03"><span>03</span>How I Build</a><br><a href="#c04"><span>04</span>Built With People</a><br><a href="#c05"><span>05</span>The Next Ten Years</a><br><a href="#c06"><span>06</span>The Company</a><br><a href="#c07"><span>07</span>Still Building</a></p></div>
       <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p></div>

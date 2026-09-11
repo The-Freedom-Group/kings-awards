@@ -199,7 +199,7 @@
      Speeds are in degrees per second, so the motion is the same at any frame rate. The entrance
      animation keeps its transform transition; once it has played, the "go" class removes the
      transition so each frame's position applies instantly and the motion is continuous. */
-  var SPEED = { A: 1.6, B: 1.0, C: 0.65 }, ROCKET_SPEED = 12, lastT = 0, wasIn = false, goTimer = null;
+  var SPEED = { A: 1.0, B: 1.0, C: 1.0 }, ROCKET_SPEED = 12, lastT = 0, wasIn = false, goTimer = null;
   var orbitBoost = 0, orbitBoostTarget = 0;
   function orbitStep(ts) {
     if (!mapEl) return;
@@ -249,28 +249,34 @@
   }
 
   /* ── metric counters ──────────────────────────────────────── */
-  var counters = $$(".metric .v").filter(function (v) {
-    var t = v.textContent.trim();
-    return /^[0-9]+$/.test(t) && +t < 1000;   /* years are labels, not quantities */
-  });
-  counters.forEach(function (v) { v.dataset.to = v.textContent.trim(); });
-  function countUp(v) {
-    var to = +v.dataset.to, t0 = null, dur = 1100;
-    if (reduce) { v.textContent = to; return; }
+  /* every number counts up on arrival: the largest numeric token in each is animated, the rest of the text stays */
+  var counters = $$(".metric .v").map(function (v) {
+    var html = v.innerHTML, text = v.textContent, m = text.match(/\d[\d,]*(?:\.\d+)?/g);
+    if (!m) return null;
+    var tok = m.reduce(function (a, b) { return parseFloat(b.replace(/,/g, "")) > parseFloat(a.replace(/,/g, "")) ? b : a; });
+    var val = parseFloat(tok.replace(/,/g, "")), dec = (tok.split(".")[1] || "").length;
+    return { el: v, html: html, tok: tok, val: val, dec: dec };
+  }).filter(Boolean);
+  function fmtNum(n, dec) { var f = n.toFixed(dec), parts = f.split("."); parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); return parts.join("."); }
+  function setCount(c, n) { c.el.innerHTML = c.html.replace(c.tok, fmtNum(n, c.dec)); }
+  function countUp(c) {
+    var t0 = null, dur = 1200;
+    if (reduce) { setCount(c, c.val); return; }
     (function step(ts) {
       if (!t0) t0 = ts;
       var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-      v.textContent = Math.round(to * e);
+      setCount(c, c.val * e);
       if (k < 1) requestAnimationFrame(step);
     })(performance.now());
   }
   if ("IntersectionObserver" in window && !reduce) {
     var ioc = new IntersectionObserver(function (es) {
       es.forEach(function (en) {
-        if (en.isIntersecting) countUp(en.target); else en.target.textContent = "0";
+        var c = counters.filter(function (x) { return x.el === en.target; })[0]; if (!c) return;
+        if (en.isIntersecting) countUp(c); else setCount(c, 0);
       });
     }, { threshold: 0.5 });
-    counters.forEach(function (v) { v.textContent = "0"; ioc.observe(v); });
+    counters.forEach(function (c) { setCount(c, 0); ioc.observe(c.el); });
   }
 
   /* ══ THE THREAD ═══════════════════════════════════════════ */
@@ -282,10 +288,10 @@
       track2  = $("#tTrack2"),
       live2   = $("#tLive2"),
       head    = $("#tHead");
-  var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0;
+  var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
-  var builtH = 0, HOLD_PX = 2800, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
+  var builtH = 0, HOLD_PX = 5600, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
   hold.active = false;
   function lockScroll() { try { window.scrollTo({ top: holdLock, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock); } }
   window.addEventListener("wheel", function (e) {
@@ -423,21 +429,30 @@
           mr.height = mr.h;
           /* the page holds with the map centred on screen */
           holdLock = Math.max(0, cy + mr.h / 2 - window.innerHeight / 2);
-          var ringPt = function (deg) { var q = ringXY("A", deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
-          var loopPts = [], yMin = Infinity, yMax = -Infinity;
-          for (var dg = 180; dg >= -270; dg -= 3) { var q2 = ringPt(dg); loopPts.push(q2); if (q2.y < yMin) yMin = q2.y; if (q2.y > yMax) yMax = q2.y; }
-          var entry = loopPts[0], exit = loopPts[loopPts.length - 1];
-          pts.push({ x: entry.x, y: entry.y, id: p.id, el: el, noKnot: true,
-                     loop: { pts: loopPts.slice(1), end: exit, yA: entry.y, yB: entry.y } });
+          var ringPt = function (ring, deg) { var q = ringXY(ring, deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
+          var core = { x: cx + 50 * sx, y: cy + 38 * sy };
+          var loopPts = [], marks = {}, len = 0, last = core;
+          var add = function (q) { len += Math.hypot(q.x - last.x, q.y - last.y); loopPts.push(q); last = q; };
+          ["A", "B", "C"].forEach(function (ring) {
+            add(ringPt(ring, 0)); marks[ring + "0"] = len;
+            for (var dg = 3; dg <= 360; dg += 3) add(ringPt(ring, dg));
+            marks[ring + "1"] = len;
+          });
+          add({ x: core.x, y: core.y }); marks.total = len;
+          Object.keys(marks).forEach(function (k) { if (k !== "total") marks[k] /= len; });
+          /* the line arrives from the right, level with the planet, and runs straight in to it */
+          var eIn = ringPt("C", 0);
+          pts.push({ x: core.x, y: core.y, id: p.id, el: el, noKnot: true, cpIn: { x: eIn.x + Math.min(160, mr.w * 0.12), y: core.y },
+                     loop: { pts: loopPts, end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, marks: marks } });
           return;
         }
       }
       if (p.ring) {
         /* the end note: the line splits above the words, encircles them, and rejoins below */
-        var tag = el.querySelector(".ch-tag"), quo = el.querySelector(".quo");
-        if (tag && quo) {
-          var to = pageXY(tag), qo = pageXY(quo), qTop = qo.y - 14, qBot = qo.y + quo.offsetHeight + 14;
-          var top0 = to.y - 40, bot0 = qBot + 64, half = quo.offsetWidth / 2 + 70;
+        var quo = el.querySelector(".quo");
+        if (quo) {
+          var qo = pageXY(quo), qTop = qo.y - 14, qBot = qo.y + quo.offsetHeight + 14;
+          var top0 = qTop - 70, bot0 = qBot + 64, half = quo.offsetWidth / 2 + 70;
           pts.push({ x: CX, y: top0, id: "ringTop", el: el, noKnot: true });
           pts.push({ x: CX, y: bot0, id: "ringBot", el: el, noKnot: true, arc: half, qTop: qTop, qBot: qBot });
           return;
@@ -466,7 +481,7 @@
         /* lap the inner ring, then leave from its bottom heading right, curving down to the next point */
         dLoopIn = d;
         a.loop.pts.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
-        dLoopOut = d; loopMeta = a.loop; from = a.loop.end;
+        dLoopOut = d; loopMeta = a.loop; loopMarks = a.loop.marks || null; from = a.loop.end;
         var dy2 = (b.y - from.y) * 0.5;
         d += " C " + f1(from.x + Math.min(90, dy2 * 0.5)) + " " + f1(from.y + 6) + ", " + f1(b.x) + " " + f1(b.y - dy2) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
@@ -485,8 +500,9 @@
         d2 = "M " + f1(a.x) + " " + f1(a.y) + side(1);
         continue;
       }
+      var c2 = b.cpIn || { x: b.x, y: b.y - dy };
       d += " C " + f1(a.x) + " " + f1(a.y + dy) +
-           ", " + f1(b.x) + " " + f1(b.y - dy) +
+           ", " + f1(c2.x) + " " + f1(c2.y) +
            ", " + f1(b.x) + " " + f1(b.y);
     }
 
@@ -661,7 +677,14 @@
     var lapping = loopB > loopA && p > loopA && p < loopB;
     orbitBoostTarget = lapping ? 1 : 0;
     thread.classList.toggle("lap", lapping);
-    if (mapEl) mapEl.classList.toggle("lap", lapping);
+    if (mapEl) {
+      var f = lapping ? (p - loopA) / (loopB - loopA) : -1, mk = loopMarks || {};
+      mapEl.classList.toggle("lap", lapping);
+      mapEl.classList.toggle("lap-core", lapping && (f < (mk.A0 || 0) || f > (mk.C1 || 1)));
+      mapEl.classList.toggle("lap-a", lapping && f >= (mk.A0 || 0) && f < (mk.A1 || 0));
+      mapEl.classList.toggle("lap-b", lapping && f >= (mk.B0 || 0) && f < (mk.B1 || 0));
+      mapEl.classList.toggle("lap-c", lapping && f >= (mk.C0 || 0) && f < (mk.C1 || 0));
+    }
     thread.classList.toggle("on", p > 0.004);
 
     /* the head rides the line, then settles at the page's edge and beacons */
@@ -910,7 +933,7 @@
           if (card) { cardN.textContent = meta[0]; cardT.textContent = meta[1]; }
           if (now)  { nowN.textContent = meta[0]; nowT.textContent = meta[1]; }
         }
-        var early = y < window.innerHeight * 0.45 || inFooter;
+        var early = y < window.innerHeight * 0.45 || inFooter || cur2 === "resilience";
         if (card) card.classList.toggle("away", early);
         if (cardPg && cur2) {
           var cs = document.getElementById(cur2);
@@ -1012,8 +1035,8 @@
   var vM = $("#vMap"), vL = $("#vList");
   function setGrp(g) {
     document.body.dataset.grp = g;
-    vM.setAttribute("aria-pressed", g === "map");
-    vL.setAttribute("aria-pressed", g === "list");
+    if (vM) vM.setAttribute("aria-pressed", g === "map");
+    if (vL) vL.setAttribute("aria-pressed", g === "list");
     rebuild();
   }
   if (vM && vL) {
