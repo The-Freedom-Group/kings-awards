@@ -293,27 +293,26 @@
   var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
-  var builtH = 0, HOLD_PX = 3400, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
-  hold.active = false;
-  function lockScroll() { try { window.scrollTo({ top: holdLock, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock); } }
+  var builtH = 0, holdLock = 0, holds = [], holdActive = null, hold = { active: false };
+  function lockScrollTo(yy) { try { window.scrollTo({ top: yy, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, yy); } }
   window.addEventListener("wheel", function (e) {
-    if (hold.phase !== "hold") return;
+    if (!holdActive) return;
     e.preventDefault();
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
-    hold.prog = clamp(hold.prog + d / HOLD_PX, -0.02, 1.02);
+    holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02);
   }, { passive: false });
   var touchY = null;
   window.addEventListener("touchstart", function (e) { touchY = e.touches[0].clientY; }, { passive: true });
   window.addEventListener("touchmove", function (e) {
-    if (hold.phase !== "hold" || touchY === null) return;
+    if (!holdActive || touchY === null) return;
     e.preventDefault();
-    var ty = e.touches[0].clientY; hold.prog = clamp(hold.prog + (touchY - ty) / (HOLD_PX * 0.5), -0.02, 1.02); touchY = ty;
+    var ty = e.touches[0].clientY; holdActive.prog = clamp(holdActive.prog + (touchY - ty) / (holdActive.px * 0.5), -0.02, 1.02); touchY = ty;
   }, { passive: false });
   window.addEventListener("keydown", function (e) {
-    if (hold.phase !== "hold") return;
+    if (!holdActive) return;
     var k = e.key, d = 0;
     if (k === "ArrowDown" || k === "PageDown" || k === " ") d = 0.12; else if (k === "ArrowUp" || k === "PageUp") d = -0.12; else return;
-    e.preventDefault(); hold.prog = clamp(hold.prog + d, -0.02, 1.02);
+    e.preventDefault(); holdActive.prog = clamp(holdActive.prog + d, -0.02, 1.02);
   });
 
   /* L and R ride the empty margin outside the text column, so the
@@ -326,7 +325,7 @@
     { id: "c04",  side: "R", y: 0.42 },
     { id: "c05",  side: "C", y: 0.40, core: true },
     { id: "charts", ride: true },
-    { id: "c06",  side: "L", y: 0.42 },
+    { id: "c06",  side: "R", y: 0.42 },
     { id: "c07",  side: "C", y: 0.5, ring: true }
   ];
 
@@ -457,21 +456,38 @@
           if (!years[yr] || top < years[yr].top) years[yr] = { top: top, cx: cx };
         });
         var yrs = Object.keys(years).sort(), ridePts = [], marks = { years: [], yearNames: yrs, lineStart: 0, L: FL };
-        yrs.forEach(function (yr) { ridePts.push({ x: FB.ox + years[yr].cx * FB.sx, y: FB.oy + (years[yr].top - 7) * FB.sy }); });
+        /* the line comes in at the chart's origin and rises over the bar tops on one smooth curve */
+        ridePts.push({ x: FB.ox + 58 * FB.sx, y: FB.oy + 252 * FB.sy, origin: true });
+        yrs.forEach(function (yr) { ridePts.push({ x: FB.ox + years[yr].cx * FB.sx, y: FB.oy + (years[yr].top - 7) * FB.sy, top: true }); });
+        (function smooth(list) {
+          for (var i2 = 1; i2 < list.length; i2++) {
+            var p0 = list[Math.max(0, i2 - 2)], p1 = list[i2 - 1], p2 = list[i2], p3 = list[Math.min(list.length - 1, i2 + 1)];
+            p2.c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
+            p2.c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+          }
+        })(ridePts);
         var parsePts = function (sel) {
           var pl = svgL.querySelector(sel); if (!pl) return [];
           return pl.getAttribute("points").trim().split(/\s+/).map(function (t) { var q = t.split(","); return { x: FL.ox + parseFloat(q[0]) * FL.sx, y: FL.oy + parseFloat(q[1]) * FL.sy }; });
         };
         var act = parsePts("polyline.ln.act"), tgt = parsePts("polyline.ln.tgt");
         var lineIdx = ridePts.length;
+        if (act.length) {
+          /* from the last bar top, one S-curve across to the growth chart's own first point */
+          var lastTop = ridePts[ridePts.length - 1], o2 = act[0];
+          o2.c1 = { x: lastTop.x + (o2.x - lastTop.x) * 0.5, y: lastTop.y }; o2.c2 = { x: lastTop.x + (o2.x - lastTop.x) * 0.5, y: o2.y };
+        }
         act.forEach(function (q) { ridePts.push(q); }); tgt.slice(1).forEach(function (q) { ridePts.push(q); });
         if (ridePts.length < 3) return;
         /* fractions of the ride's length for each bar and for the start of the line chart */
         var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
         var Lr = cum[cum.length - 1] || 1;
-        marks.years = yrs.map(function (_, yi) { return cum[yi] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
-        pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks,
-                   yS: ridePts[0].y, yE: Math.max(ridePts[0].y + 600, pageXY(el).y + el.offsetHeight + window.innerHeight * 0.42) });
+        marks.years = yrs.map(function (_, yi) { return cum[yi + 1] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
+        var co0 = pageXY(el), fb0 = pageXY(figB);
+        /* down the margin to the left of the panel, then in through its side at the axis */
+        pts.push({ x: fb0.x - 36, y: fb0.y + figB.offsetHeight * 0.3, id: "chartsIn", el: el, noKnot: true });
+        pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 130, y: ridePts[0].y },
+                   yS: ridePts[0].y, yE: ridePts[0].y, lock: Math.max(0, co0.y + el.offsetHeight / 2 - window.innerHeight / 2) });
         return;
       }
       if (p.ring) {
@@ -500,7 +516,7 @@
     }
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
-    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null, dRideIn = "", dRideOut = "";
+    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null, dRideIn = "", dRideOut = "", holdDefs = [];
     rideMeta = null;
     var f1 = function (v) { return v.toFixed(1); };
     for (var i = 0; i < pts.length - 1; i++) {
@@ -510,17 +526,20 @@
         dLoopIn = d;
         a.loop.pts.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
         dLoopOut = d; loopMeta = a.loop; loopMarks = a.loop.marks || null; from = a.loop.end;
-        var dy2 = (b.y - from.y) * 0.5;
-        d += " C " + f1(from.x + Math.min(90, dy2 * 0.5)) + " " + f1(from.y + 6) + ", " + f1(b.x) + " " + f1(b.y - dy2) + ", " + f1(b.x) + " " + f1(b.y);
+        var dy2 = (b.y - from.y) * 0.5, cIn = b.cpIn || { x: b.x, y: b.y - dy2 };
+        d += " C " + f1(from.x + Math.min(90, dy2 * 0.5)) + " " + f1(from.y + 6) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
       if (a.rideTo) {
         /* along the bar tops and up the line chart's curve, then on to the next point */
         dRideIn = d;
-        a.rideTo.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
+        a.rideTo.forEach(function (q) {
+          d += q.c1 ? (" C " + f1(q.c1.x) + " " + f1(q.c1.y) + ", " + f1(q.c2.x) + " " + f1(q.c2.y) + ", " + f1(q.x) + " " + f1(q.y)) : (" L " + f1(q.x) + " " + f1(q.y));
+        });
         dRideOut = d; rideMeta = a; from = a.rideTo[a.rideTo.length - 1];
-        var dy3 = Math.max(80, (b.y - from.y) * 0.5);
-        d += " C " + f1(from.x + 40) + " " + f1(from.y - 30) + ", " + f1(b.x) + " " + f1(b.y - dy3) + ", " + f1(b.x) + " " + f1(b.y);
+        /* off the top of the growth chart heading right, then down the right-hand margin */
+        var dy3 = Math.max(120, (b.y - from.y) * 0.5);
+        d += " C " + f1(from.x + 160) + " " + f1(from.y + 10) + ", " + f1(b.x) + " " + f1(b.y - dy3) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
       if (b.arc) {
@@ -620,10 +639,7 @@
           else if (sm.l > lOut && sm.y < loopMeta.yB) sm.y = loopMeta.yB;
         }
         loopA = lA / totalLen; loopB = lOut / totalLen;
-        var y0 = window.pageYOffset || document.documentElement.scrollTop;
-        if (hold.phase !== "hold" || Math.abs(y0 - holdLock) > 320) {
-          hold.phase = y0 > holdLock + 40 ? "after" : "before"; hold.prog = hold.shown = hold.phase === "after" ? 1 : 0;
-        }
+        holdDefs.push({ id: "map", lock: holdLock, a: loopA, b: loopB, px: 3400 });
       }
     }
     /* the ride climbs, so its samples take a virtual height too: a window below its entry point */
@@ -640,7 +656,9 @@
           else if (smp.l > rOut && smp.y < rideMeta.yE) smp.y = rideMeta.yE;
         }
         rideA = rIn / totalLen; rideB = rOut / totalLen;
+        holdDefs.push({ id: "charts", lock: rideMeta.lock, a: rideA, b: rideB, px: 2600 });
         if (chartsEl) chartsEl.classList.add("ride");
+        if (lineClipRect) lineClipRect.setAttribute("width", "0");
         if (rideSvg && rTrack && rLive && chartsEl) {
           var co2 = pageXY(chartsEl); rideBox = { x: co2.x, y: co2.y, w: chartsEl.offsetWidth, h: chartsEl.offsetHeight };
           rideSvg.setAttribute("viewBox", rideBox.x + " " + rideBox.y + " " + rideBox.w + " " + rideBox.h);
@@ -649,6 +667,13 @@
         }
       }
     }
+    /* each hold keeps its state if the page is still at it; otherwise it starts fresh for where the page is */
+    var yNow = window.pageYOffset || document.documentElement.scrollTop;
+    holds = holdDefs.sort(function (u, v) { return u.lock - v.lock; }).map(function (def) {
+      var old = holds.filter(function (h) { return h.id === def.id; })[0];
+      if (old && old.phase === "hold" && Math.abs(yNow - def.lock) <= 320) { def.phase = "hold"; def.prog = old.prog; def.shown = old.shown; return def; }
+      def.phase = yNow > def.lock + 40 ? "after" : "before"; def.prog = def.shown = def.phase === "after" ? 1 : 0; return def;
+    });
     ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
@@ -706,29 +731,29 @@
     if (!totalLen || thread.style.display === "none") return;
     var p = clamp(fracAtY(y + window.innerHeight * 0.62), 0, 1);
     p = Math.max(p, heroFrac * heroIn);
-    if (hasHold && !reduce) {
-      var dy = y - holdLock;
-      if (hold.phase === "before") {
-        if (dy >= 320) hold.phase = "after";                                  /* jumped past: no lap */
-        else if (dy >= 0) { hold.phase = "hold"; hold.prog = hold.shown = 0; lockScroll(); }
-      } else if (hold.phase === "after") {
-        if (dy <= -320) hold.phase = "before";                                /* jumped back above: lap ahead */
-        else if (dy < 0) { hold.phase = "hold"; hold.prog = hold.shown = 1; lockScroll(); }
-      }
-      if (hold.phase === "hold") {
-        hold.shown += (hold.prog - hold.shown) * 0.14;
-        if (hold.prog > 1 && hold.shown > 0.995) { hold.phase = "after"; hold.shown = 1; }
-        else if (hold.prog < 0 && hold.shown < 0.005) {
-          hold.phase = "before"; hold.shown = 0;
-          try { window.scrollTo({ top: holdLock - 8, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock - 8); }
+    if (holds.length && !reduce) {
+      holdActive = null;
+      holds.forEach(function (h) {
+        var dy = y - h.lock;
+        if (h.phase === "before") {
+          if (dy >= 320) h.phase = "after";                                   /* jumped past: nothing plays */
+          else if (dy >= 0) { h.phase = "hold"; h.prog = h.shown = 0; lockScrollTo(h.lock); }
+        } else if (h.phase === "after") {
+          if (dy <= -320) h.phase = "before";                                 /* jumped back above */
+          else if (dy < 0) { h.phase = "hold"; h.prog = h.shown = 1; lockScrollTo(h.lock); }
         }
-        else if (Math.abs(dy) > 320) hold.phase = dy > 0 ? "after" : "before";  /* dragged away: let it go */
-        else if (Math.abs(dy) > 1) lockScroll();
-      }
-      if (hold.phase === "hold") p = loopA + (loopB - loopA) * clamp(hold.shown, 0, 1);
-      else if (hold.phase === "before") p = Math.min(p, loopA);
-      else p = Math.max(p, loopB);
-      hold.active = hold.phase === "hold";
+        if (h.phase === "hold") {
+          h.shown += (h.prog - h.shown) * 0.14;
+          if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
+          else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; lockScrollTo(h.lock - 8); }
+          else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";   /* dragged away: let it go */
+          else if (Math.abs(dy) > 1) lockScrollTo(h.lock);
+        }
+        if (h.phase === "hold") { p = h.a + (h.b - h.a) * clamp(h.shown, 0, 1); holdActive = h; }
+        else if (h.phase === "before") p = Math.min(p, h.a);
+        else p = Math.max(p, h.b);
+      });
+      hold.active = !!holdActive;
     }
     live.style.strokeDashoffset = totalLen * (1 - p);
     if (rLive && rideBox) {
@@ -739,7 +764,8 @@
     }
     if (rideMeta && rideB > rideA && chartsEl) {
       /* the bars stand up as the line reaches them; the line chart is revealed to wherever the head has got */
-      var rp = clamp((p - rideA) / (rideB - rideA), 0, 1), mk2 = rideMeta.marks;
+      var chartHold = holds.filter(function (h) { return h.id === "charts"; })[0];
+      var rp = chartHold ? (chartHold.phase === "hold" ? clamp(chartHold.shown, 0, 1) : chartHold.phase === "after" ? 1 : 0) : clamp((p - rideA) / (rideB - rideA), 0, 1), mk2 = rideMeta.marks;
       mk2.yearNames.forEach(function (yr, yi) {
         var on = rp >= mk2.years[yi] - 0.005;
         $$("#chBars g.seg-g", chartsEl).forEach(function (g) { if ((g.getAttribute("data-t") || "").indexOf(yr) === 0) g.classList.toggle("up", on); });
@@ -759,11 +785,12 @@
       live2.style.strokeDashoffset = ringLen * (1 - p2);
     }
     /* while the page holds on the pink planet the glow runs outward: the planet, ring A, ring B, ring C, the planet */
-    var lapping = hasHold && hold.phase === "hold";
+    var mapHold = holds.filter(function (h) { return h.id === "map"; })[0];
+    var lapping = !!(mapHold && mapHold.phase === "hold");
     orbitBoostTarget = lapping ? 1 : 0;
     thread.classList.toggle("lap", lapping);
     if (mapEl) {
-      var f = lapping ? clamp(hold.shown, 0, 1) : -1;
+      var f = lapping ? clamp(mapHold.shown, 0, 1) : -1;
       mapEl.classList.toggle("lap", lapping);
       /* the planet; ring A's line, then its planets; ring B; ring C; the planet again */
       var ph = function (a, b) { return lapping && f >= a && f < b; };
