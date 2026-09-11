@@ -58,7 +58,7 @@ h1,h2,h3{margin:0;font-family:var(--disp);font-weight:400;text-transform:upperca
 .skip:focus-visible{top:14px;outline-offset:0}
 
 /* ── custom cursor ──────────────────────────────────────────── */
-.cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;display:none;opacity:0;transition:opacity .3s}
+.cur{position:fixed;left:0;top:0;z-index:1000;pointer-events:none;display:none;opacity:0;transition:opacity .3s}
 html.cur-on .cur{display:block}
 .cur.seen{opacity:1}
 .cur.idle{opacity:0;transition:opacity 1.2s}
@@ -1243,6 +1243,21 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
 .ft-ch a span{font-family:var(--disp);font-size:11px;letter-spacing:.06em;color:var(--pink);min-width:18px;margin-right:10px;display:inline-block}
 .ft-brand img{height:172px}
 .ft-credit{margin-top:8px;font-size:10.5px;letter-spacing:.06em;color:var(--pale-3)}
+
+/* ── notes, 11 Sept: lightbox navigation, corner-card progress ── */
+.lb{grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(10px,2vw,28px);place-content:stretch;padding-inline:clamp(12px,3vw,48px)}
+.lb-fig{margin:0;display:grid;justify-items:center;gap:12px;min-width:0}
+.lb-fig img{max-width:min(1100px,80vw);max-height:76vh}
+.lb-fig figcaption{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;justify-content:center;max-width:70ch;text-align:center;color:var(--pale-2);font-size:13.5px;line-height:1.5}
+.lb-fig figcaption b{font-family:var(--disp);text-transform:uppercase;font-size:20px;color:var(--pink);font-weight:400;line-height:1}
+.lb-fig figcaption i{font-style:normal;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pale-3)}
+.lb-nav{width:56px;height:56px;border-radius:50%;border:1px solid var(--rule-d);background:rgba(16,16,16,.7);color:var(--pale);font:inherit;font-size:22px;cursor:pointer;display:grid;place-content:center;transition:border-color .25s,color .25s,transform .25s}
+.lb-nav:hover{border-color:var(--pink);color:var(--pink);transform:scale(1.06)}
+.lb-nav[disabled]{opacity:.25;pointer-events:none}
+@media(max-width:700px){.lb{grid-template-columns:1fr;gap:12px}.lb-nav{width:44px;height:44px;justify-self:center}.lb-fig img{max-width:92vw}}
+.card .pg{display:block;height:2px;background:var(--rule);margin-top:11px;position:relative;overflow:hidden}
+body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
+.card .pg::after{content:"";position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--pink);transform:scaleX(var(--p,0));transform-origin:left;transition:transform .2s linear}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1259,6 +1274,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
   <div class="k">Chapter</div>
   <div class="n" id="cardN">00</div>
   <div class="t" id="cardT">Tom Letcher</div>
+  <i class="pg" id="cardPg" aria-hidden="true"></i>
 </aside>
 
 <div class="enter" id="enter" aria-hidden="true">
@@ -1315,7 +1331,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Founder of Freedom Fire &amp; Safety Ltd &amp; the Freedom Group forming around it.</p></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">The man behind Freedom Fire &amp; Safety Ltd &amp; the Freedom Group forming around it.</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
         <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
@@ -1370,7 +1386,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started<br>with one rusty<br>fire extinguisher</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, December 2019. An architect by training, a delivery van, and a second-hand fire extinguisher nobody else saw any value in. One listing, one buyer, and everything since paid for by the sale before it.</p>
+      <p class="stand">Bury, December 2019. An architect by training, a delivery van, and one second-hand fire extinguisher the rest of the world had already written off. One listing. One buyer. Every sale since has paid for the next, and a company grew out of what the trade called scrap.</p>
     </div>
     <div class="bio-cta rv">
       <div>
@@ -1422,7 +1438,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
     <div class="metrics rv" id="proof">
       <div class="metric" style="--acc:#FF2D8D">
         <div class="v">£3m</div><div class="k">Revenue to date</div>
-        <p class="def">Every sale since the first listing, across every channel. £1,048,616 of it came in the year to August 2026 alone, from £268,162 two years earlier.</p>
+        <p class="def">Sales across every channel since the first listing in December 2019. The most recent year alone brought in £1,048,616, up from £268,162 two years earlier.</p>
         <div class="per">December 2019 – September 2026 · all channels</div>
       </div>
       <div class="metric" style="--acc:#ff5ca3">
@@ -1443,7 +1459,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
       <div class="metric" style="--acc:#c60f6e">
         <div class="v">75,000+</div><div class="k">Customer reviews</div>
         <p class="def">Feedback left by customers across the marketplaces since the first storefront opened: the record behind the number-one ranking.</p>
-        <div class="per">2020 – 2026 · eBay, Temu and Amazon</div>
+        <div class="per">2020 – 2026 · eBay, Temu and more</div>
       </div>
       <div class="metric" style="--acc:#ff8fc6">
         <div class="v">30+</div><div class="k">Global suppliers</div>
@@ -1878,7 +1894,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
   </div>
 </div>
 
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image" hidden><button class="lb-x" id="lbX" type="button" data-cur-label="Close" aria-label="Close">Close</button><img id="lbImg" src="" alt=""></div>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image" hidden><button class="lb-x" id="lbX" type="button" data-cur-label="Close" aria-label="Close">Close</button><button class="lb-nav prev" id="lbPrev" type="button" data-cur-label="Back" aria-label="Previous image">←</button><figure class="lb-fig"><img id="lbImg" src="" alt=""><figcaption id="lbCap"><b id="lbWhen"></b><span id="lbWhat"></span><i id="lbN"></i></figcaption></figure><button class="lb-nav next" id="lbNext" type="button" data-cur-label="Next" aria-label="Next image">→</button></div>
 
 <footer id="foot">
   <div class="wrap">

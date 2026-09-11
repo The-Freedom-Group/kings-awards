@@ -200,6 +200,7 @@
      animation keeps its transform transition; once it has played, the "go" class removes the
      transition so each frame's position applies instantly and the motion is continuous. */
   var SPEED = { A: 1.6, B: 1.0, C: 0.65 }, ROCKET_SPEED = 12, lastT = 0, wasIn = false, goTimer = null;
+  var orbitBoost = 0, orbitBoostTarget = 0;
   function orbitStep(ts) {
     if (!mapEl) return;
     var inView = mapEl.classList.contains("in") && document.body.dataset.grp !== "list";
@@ -211,6 +212,9 @@
     if (!inView || !mapEl.classList.contains("go")) { lastT = ts; return; }
     var dt = lastT ? Math.min(0.05, (ts - lastT) / 1000) : 0; lastT = ts;
     if (!dt) return;
+    /* while the line is lapping the inner ring the whole system turns faster, easing in and out */
+    orbitBoost += (orbitBoostTarget - orbitBoost) * Math.min(1, dt * 3);
+    dt *= 1 + 3.2 * orbitBoost;
     $$(".map .node[data-ring]", mapEl).forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       if (ring === "0" || !RINGS[ring]) return;
@@ -278,7 +282,7 @@
       track2  = $("#tTrack2"),
       live2   = $("#tLive2"),
       head    = $("#tHead");
-  var ringA = 0, ringB = 0, ringLen = 0;
+  var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0;
 
   /* L and R ride the empty margin outside the text column, so the
      line never crosses a word. C is the centre. */
@@ -380,10 +384,17 @@
       var el = document.getElementById(p.id);
       if (!el) return;
       if (p.core) {
-        /* the line runs through the Freedom Group planet at the centre of the map */
+        /* the line joins the inner orbit at its left-hand point, laps it once, carries on round to the
+           bottom and leaves from there; the whole ring is traced in the map's own geometry */
         var mp = el.querySelector(".map"), mr = mp ? mp.getBoundingClientRect() : null;
         if (mr && mr.width > 0 && document.body.dataset.grp !== "list") {
-          pts.push({ x: mr.left + mr.width / 2 - er0.left, y: mr.top + mr.height / 2 - er0.top, id: p.id, el: el, noKnot: true });
+          var cx = mr.left - er0.left, cy = mr.top - er0.top, sx = mr.width / 100, sy = mr.height / 76;
+          var ringPt = function (deg) { var q = ringXY("A", deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
+          var loopPts = [], yMin = Infinity, yMax = -Infinity;
+          for (var dg = 180; dg >= -270; dg -= 3) { var q2 = ringPt(dg); loopPts.push(q2); if (q2.y < yMin) yMin = q2.y; if (q2.y > yMax) yMax = q2.y; }
+          var entry = loopPts[0], exit = loopPts[loopPts.length - 1];
+          pts.push({ x: entry.x, y: entry.y, id: p.id, el: el, noKnot: true,
+                     loop: { pts: loopPts.slice(1), end: exit, yA: yMin - mr.height * 0.22, yB: yMax + mr.height * 0.22 } });
           return;
         }
       }
@@ -413,21 +424,35 @@
     }
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
-    var dAtA = "", dAtB = "", d2 = "";
+    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null;
+    var f1 = function (v) { return v.toFixed(1); };
     for (var i = 0; i < pts.length - 1; i++) {
-      var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5;
-      if (b.arc) {
-        /* the ring: this stroke takes the left half, the second stroke the right, both top to bottom */
-        var ry = Math.max(1, (b.y - a.y) / 2);
-        dAtA = d;
-        d += " A " + b.arc.toFixed(1) + " " + ry.toFixed(1) + " 0 0 0 " + b.x.toFixed(1) + " " + b.y.toFixed(1);
-        dAtB = d;
-        d2 = "M " + a.x.toFixed(1) + " " + a.y.toFixed(1) + " A " + b.arc.toFixed(1) + " " + ry.toFixed(1) + " 0 0 1 " + b.x.toFixed(1) + " " + b.y.toFixed(1);
+      var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5, from = a;
+      if (a.loop) {
+        /* lap the inner ring, then leave from its bottom heading right, curving down to the next point */
+        dLoopIn = d;
+        a.loop.pts.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
+        dLoopOut = d; loopMeta = a.loop; from = a.loop.end;
+        var dy2 = (b.y - from.y) * 0.5;
+        d += " C " + f1(from.x + Math.min(90, dy2 * 0.5)) + " " + f1(from.y + 6) + ", " + f1(b.x) + " " + f1(b.y - dy2) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
-      d += " C " + a.x.toFixed(1) + " " + (a.y + dy).toFixed(1) +
-           ", " + b.x.toFixed(1) + " " + (b.y - dy).toFixed(1) +
-           ", " + b.x.toFixed(1) + " " + b.y.toFixed(1);
+      if (b.arc) {
+        /* the end note: the line splits in two at the top, each half swings out round the words and they
+           rejoin at the bottom; this stroke takes the left, the second stroke the right */
+        var midY = (a.y + b.y) / 2, k = (b.y - a.y) * 0.3, half = b.arc;
+        dAtA = d;
+        d += " C " + f1(a.x) + " " + f1(a.y + k) + ", " + f1(a.x - half) + " " + f1(midY - k) + ", " + f1(a.x - half) + " " + f1(midY) +
+             " C " + f1(a.x - half) + " " + f1(midY + k) + ", " + f1(b.x) + " " + f1(b.y - k) + ", " + f1(b.x) + " " + f1(b.y);
+        dAtB = d;
+        d2 = "M " + f1(a.x) + " " + f1(a.y) +
+             " C " + f1(a.x) + " " + f1(a.y + k) + ", " + f1(a.x + half) + " " + f1(midY - k) + ", " + f1(a.x + half) + " " + f1(midY) +
+             " C " + f1(a.x + half) + " " + f1(midY + k) + ", " + f1(b.x) + " " + f1(b.y - k) + ", " + f1(b.x) + " " + f1(b.y);
+        continue;
+      }
+      d += " C " + f1(a.x) + " " + f1(a.y + dy) +
+           ", " + f1(b.x) + " " + f1(b.y - dy) +
+           ", " + f1(b.x) + " " + f1(b.y);
     }
 
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -488,6 +513,26 @@
       knots.push(k); knotAt.push(best.l / totalLen);
     });
 
+    /* the lap round the ring is not a descent, so for the scroll mapping its samples are given a
+       virtual height: the approach, the lap and the exit are spread evenly over a window either side
+       of the ring, and the samples just after the exit hold at the window's foot */
+    loopA = loopB = 0;
+    if (loopMeta && dLoopOut) {
+      var pr3 = document.createElementNS("http://www.w3.org/2000/svg", "path"), lIn = 0, lOut = 0;
+      svg.appendChild(pr3);
+      try { pr3.setAttribute("d", dLoopIn); lIn = pr3.getTotalLength(); pr3.setAttribute("d", dLoopOut); lOut = pr3.getTotalLength(); } catch (e) { lIn = lOut = 0; }
+      svg.removeChild(pr3);
+      if (lOut > lIn) {
+        var lA = lIn;
+        for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= loopMeta.yA) { lA = samples[si].l; break; } }
+        for (var sj = 0; sj < samples.length; sj++) {
+          var sm = samples[sj];
+          if (sm.l >= lA && sm.l <= lOut) sm.y = loopMeta.yA + (loopMeta.yB - loopMeta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
+          else if (sm.l > lOut && sm.y < loopMeta.yB) sm.y = loopMeta.yB;
+        }
+        loopA = lA / totalLen; loopB = lOut / totalLen;
+      }
+    }
     ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
@@ -550,6 +595,7 @@
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
     }
+    orbitBoostTarget = (loopB > loopA && p > loopA && p < loopB) ? 1 : 0;
     thread.classList.toggle("on", p > 0.004);
 
     /* the head rides the line, then settles at the page's edge and beacons */
@@ -704,9 +750,9 @@
   var yrail = $("#yrail"), c03El = yrail ? yrail.closest(".ch") : null;
   function W() { return explore ? explore.offsetWidth : window.innerWidth; }
   var chrome = $("#chrome"), spine = $$(".spine a"), spineEl = $("#spine");
-  var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT");
+  var prog = $("#prog"), card = $("#card"), cardN = $("#cardN"), cardT = $("#cardT"), cardPg = $("#cardPg");
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
-  var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], c01:["01","The Spark"],
+  var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], filmsec:["00","The two-minute story"], c01:["01","The Spark"],
     c02:["02","Proof, Not Promise"], c03:["03","How I Build"], c04:["04","Built With People"],
     c05:["05","The Next Ten Years"], c06:["06","The Company"], c07:["07","Still Building"],
     resilience:["—","End note"] };
@@ -797,6 +843,10 @@
         }
         var early = y < window.innerHeight * 0.45 || inFooter;
         if (card) card.classList.toggle("away", early);
+        if (cardPg && cur2) {
+          var cs = document.getElementById(cur2);
+          if (cs) cardPg.style.setProperty("--p", clamp((y + window.innerHeight * 0.42 - cs.offsetTop) / Math.max(1, cs.offsetHeight), 0, 1).toFixed(3));
+        }
         if (now)  now.classList.toggle("on", !early);
       }
 
@@ -851,6 +901,8 @@
     }, 140);
   }
   window.addEventListener("resize", rebuild);
+  window.addEventListener("load", rebuild);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { rebuild(); });
   window.addEventListener("load", rebuild);
   if ("ResizeObserver" in window && explore) new ResizeObserver(rebuild).observe(explore);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
@@ -1097,14 +1149,37 @@
 /* ── the timeline pictures, on request ── */
 (function () {
   var lb = document.getElementById("lb"), img = document.getElementById("lbImg"), x = document.getElementById("lbX");
+  var prev = document.getElementById("lbPrev"), next = document.getElementById("lbNext"), fig = lb ? lb.querySelector(".lb-fig") : null;
+  var capWhen = document.getElementById("lbWhen"), capWhat = document.getElementById("lbWhat"), capN = document.getElementById("lbN");
   if (!lb || !img) return;
-  function open(src) { img.src = src; lb.hidden = false; document.body.classList.add("bio-open"); }
+  var views = Array.prototype.slice.call(document.querySelectorAll(".tl-view")), at = -1;
+  function show(i) {
+    if (!views.length) return;
+    at = (i + views.length) % views.length;
+    var b = views[at], li = b.closest("li");
+    img.src = b.getAttribute("data-src");
+    var w = li ? li.querySelector(".when") : null, t = li ? li.querySelector(".what b") : null;
+    if (capWhen) capWhen.textContent = w ? w.textContent : "";
+    if (capWhat) capWhat.textContent = t ? t.textContent : "";
+    if (capN) capN.textContent = (at + 1) + " / " + views.length;
+    img.alt = (w ? w.textContent + ": " : "") + (t ? t.textContent : "");
+  }
+  function open(i) { show(i); lb.hidden = false; document.body.classList.add("bio-open"); }
   function close() { lb.hidden = true; img.src = ""; document.body.classList.remove("bio-open"); }
   document.addEventListener("click", function (ev) {
     var b = ev.target.closest && ev.target.closest(".tl-view");
-    if (b) { open(b.getAttribute("data-src")); return; }
-    if (!lb.hidden && !img.contains(ev.target)) close();
+    if (b) { open(views.indexOf(b)); return; }
+    if (lb.hidden) return;
+    if (ev.target.closest && ev.target.closest(".lb-nav")) return;
+    if (!fig || !fig.contains(ev.target)) close();
   });
+  if (prev) prev.addEventListener("click", function () { show(at - 1); });
+  if (next) next.addEventListener("click", function () { show(at + 1); });
   if (x) x.addEventListener("click", close);
-  window.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !lb.hidden) { close(); ev.stopImmediatePropagation(); } }, true);
+  window.addEventListener("keydown", function (ev) {
+    if (lb.hidden) return;
+    if (ev.key === "Escape") { close(); ev.stopImmediatePropagation(); }
+    else if (ev.key === "ArrowRight") { show(at + 1); ev.preventDefault(); }
+    else if (ev.key === "ArrowLeft") { show(at - 1); ev.preventDefault(); }
+  }, true);
 })();
