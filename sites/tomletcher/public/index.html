@@ -19,7 +19,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,Times New Roman,serif' font-style='italic' font-size='34' fill='%23F4F1EB'%3ETL%3C/text%3E%3Cpath d='M14 54h36' stroke='%23FF2D8D' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════════════════
    TOM LETCHER — THE FREEDOM LINE
@@ -1260,6 +1260,16 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
 .card .pg{display:block;height:2px;background:var(--rule);margin-top:11px;position:relative;overflow:hidden}
 body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .card .pg::after{content:"";position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--pink);transform:scaleX(var(--p,0));transform-origin:left;transition:transform .2s linear}
+
+/* ── notes, 11 Sept (2): the lap, the glow, the signature ── */
+.thread .live{transition:filter .5s}
+.thread.lap .live{filter:drop-shadow(0 0 5px rgba(255,255,255,.55)) drop-shadow(0 0 10px rgba(255,45,141,.6))}
+.thread.lap .head{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.28),0 0 26px 8px rgba(255,45,141,.9)}
+.map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
+.map.lap .node .orb{box-shadow:0 0 0 2px rgba(255,255,255,.22),0 0 36px 10px rgba(255,45,141,.6);filter:brightness(1.12) saturate(1.1)}
+.map .tape{transition:filter .7s}
+.map.lap .tape{filter:drop-shadow(0 0 8px rgba(255,255,255,.55))}
+.endnote .sig{font-family:"Great Vibes",cursive;font-size:clamp(50px,5.6vw,84px);line-height:1;color:var(--pink);margin-top:96px;text-shadow:0 0 28px rgba(255,45,141,.35);position:relative;z-index:1}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1388,7 +1398,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started<br>with one rusty<br>fire extinguisher</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, December 2019. An architect by training, a delivery van, and one second-hand fire extinguisher the rest of the world had already written off. One listing. One buyer. Every sale since has paid for the next, and a company grew out of what the trade called scrap.</p>
+      <p class="stand">Bury, December 2019. An architect by training, a delivery van, and a second-hand fire extinguisher nobody else saw any value in. One listing, one buyer, and everything since paid for by the sale before it.</p>
     </div>
     <div class="bio-cta rv">
       <div>
@@ -1402,7 +1412,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
     <div class="tl rv" id="timeline" aria-label="To Freedom and beyond, 2019 to now">
       <div class="yhead">To Freedom and beyond · 2019 to now</div>
       <ol class="tl-list">
-      <li><button class="tl-view" type="button" data-src="assets/journey/harvard.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/harvard-mit.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/salboy.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2019</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
       <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">October 2019</span><span class="what"><b>Two job offers, both declined.</b>Two architecture jobs offered straight after graduating, and both turned down for a delivery driver's job at his dad's cleaning company. On one ordinary delivery, a second-hand fire extinguisher. To anyone else, an old piece of equipment. To him, the beginning of something.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch1-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
@@ -1415,7 +1425,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <li><button class="tl-view" type="button" data-src="assets/journey/ch12-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2024</span><span class="what"><b>FIRESTORM.</b>The company's own brand is born: the FIRESTORM trade mark is filed in August and registered in November.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch10-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2024</span><span class="what"><b>Unit 19, the headquarters.</b>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch13-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2024</span><span class="what"><b>The first container.</b>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</span></li>
-      <li><button class="tl-view" type="button" data-src="assets/journey/ch16-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/temu-one.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2025</span><span class="what"><b>Temu.</b>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/tlevel-trio.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">October 2025</span><span class="what"><b>T Level placements begin.</b>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch18-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">March 2026</span><span class="what"><b>Three brands.</b>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch3-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">April 2026</span><span class="what"><b>Half a million products.</b>Sales across every channel pass 500,000 products since the first listing.</span></li>
@@ -1829,8 +1839,8 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <q>Through so much loss at a young age, I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
       promised to build.</q>
-      <div class="by">Tom Letcher · in his own words</div>
     </div>
+    <div class="sig" aria-label="Tom Letcher">Tom Letcher</div>
   </div>
 </section>
 
@@ -1909,7 +1919,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ft-brand"><img src="assets/group-logo-white.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
         <p class="ft-addr">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p>
         <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p>
-        <p class="ft-credit">Harvard photograph: Kenneth C. Zirkel, Wikimedia Commons, CC BY 4.0.</p></div>
+        <p class="ft-credit">Photographs: Harvard, Kenneth C. Zirkel, CC BY 4.0; MIT, Beyond My Ken, CC BY-SA 4.0; both via Wikimedia Commons.</p></div>
       <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
       <div><h4>The story</h4><p class="ft-ch"><a href="#top"><span>00</span>Tom Letcher</a><br><a href="#c01"><span>01</span>The Spark</a><br><a href="#c02"><span>02</span>Proof, Not Promise</a><br><a href="#c03"><span>03</span>How I Build</a><br><a href="#c04"><span>04</span>Built With People</a><br><a href="#c05"><span>05</span>The Next Ten Years</a><br><a href="#c06"><span>06</span>The Company</a><br><a href="#c07"><span>07</span>Still Building</a></p></div>
       <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p></div>

@@ -380,15 +380,22 @@
     }
 
     var er0 = explore.getBoundingClientRect();
+    /* an element's place on the page from layout alone: the reveal transforms never touch offsets */
+    var pageXY = function (el) {
+      var x = 0, y = 0;
+      while (el && el !== explore) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+      return { x: x, y: y };
+    };
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
       if (p.core) {
         /* the line joins the inner orbit at its left-hand point, laps it once, carries on round to the
            bottom and leaves from there; the whole ring is traced in the map's own geometry */
-        var mp = el.querySelector(".map"), mr = mp ? mp.getBoundingClientRect() : null;
-        if (mr && mr.width > 0 && document.body.dataset.grp !== "list") {
-          var cx = mr.left - er0.left, cy = mr.top - er0.top, sx = mr.width / 100, sy = mr.height / 76;
+        var mp = el.querySelector(".map"), mr = mp && mp.offsetWidth ? { w: mp.offsetWidth, h: mp.offsetHeight } : null;
+        if (mr && document.body.dataset.grp !== "list") {
+          var mo = pageXY(mp), cx = mo.x, cy = mo.y, sx = mr.w / 100, sy = mr.h / 76;
+          mr.height = mr.h;
           var ringPt = function (deg) { var q = ringXY("A", deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
           var loopPts = [], yMin = Infinity, yMax = -Infinity;
           for (var dg = 180; dg >= -270; dg -= 3) { var q2 = ringPt(dg); loopPts.push(q2); if (q2.y < yMin) yMin = q2.y; if (q2.y > yMax) yMax = q2.y; }
@@ -402,10 +409,10 @@
         /* the end note: the line splits above the words, encircles them, and rejoins below */
         var tag = el.querySelector(".ch-tag"), quo = el.querySelector(".quo");
         if (tag && quo) {
-          var tr0 = tag.getBoundingClientRect(), qr = quo.getBoundingClientRect();
-          var top0 = tr0.top - er0.top - 34, bot0 = qr.bottom - er0.top + 34, half = qr.width / 2 + 64;
+          var to = pageXY(tag), qo = pageXY(quo), qTop = qo.y - 14, qBot = qo.y + quo.offsetHeight + 14;
+          var top0 = to.y - 40, bot0 = qBot + 64, half = quo.offsetWidth / 2 + 70;
           pts.push({ x: CX, y: top0, id: "ringTop", el: el, noKnot: true });
-          pts.push({ x: CX, y: bot0, id: "ringBot", el: el, noKnot: true, arc: half });
+          pts.push({ x: CX, y: bot0, id: "ringBot", el: el, noKnot: true, arc: half, qTop: qTop, qBot: qBot });
           return;
         }
       }
@@ -440,14 +447,15 @@
       if (b.arc) {
         /* the end note: the line splits in two at the top, each half swings out round the words and they
            rejoin at the bottom; this stroke takes the left, the second stroke the right */
-        var midY = (a.y + b.y) / 2, k = (b.y - a.y) * 0.3, half = b.arc;
-        dAtA = d;
-        d += " C " + f1(a.x) + " " + f1(a.y + k) + ", " + f1(a.x - half) + " " + f1(midY - k) + ", " + f1(a.x - half) + " " + f1(midY) +
-             " C " + f1(a.x - half) + " " + f1(midY + k) + ", " + f1(b.x) + " " + f1(b.y - k) + ", " + f1(b.x) + " " + f1(b.y);
-        dAtB = d;
-        d2 = "M " + f1(a.x) + " " + f1(a.y) +
-             " C " + f1(a.x) + " " + f1(a.y + k) + ", " + f1(a.x + half) + " " + f1(midY - k) + ", " + f1(a.x + half) + " " + f1(midY) +
-             " C " + f1(a.x + half) + " " + f1(midY + k) + ", " + f1(b.x) + " " + f1(b.y - k) + ", " + f1(b.x) + " " + f1(b.y);
+        var half = b.arc, qT = b.qTop, qB = b.qBot, kIn = Math.max(24, (qT - a.y) * 0.9), kOut = Math.max(24, (b.y - qB) * 0.9);
+        var side = function (sgn) {
+          var xs = a.x + sgn * half;
+          return " C " + f1(a.x) + " " + f1(a.y + kIn) + ", " + f1(xs) + " " + f1(qT - kIn * 0.6) + ", " + f1(xs) + " " + f1(qT) +
+                 " L " + f1(xs) + " " + f1(qB) +
+                 " C " + f1(xs) + " " + f1(qB + kOut * 0.6) + ", " + f1(b.x) + " " + f1(b.y - kOut) + ", " + f1(b.x) + " " + f1(b.y);
+        };
+        dAtA = d; d += side(-1); dAtB = d;
+        d2 = "M " + f1(a.x) + " " + f1(a.y) + side(1);
         continue;
       }
       d += " C " + f1(a.x) + " " + f1(a.y + dy) +
@@ -595,7 +603,10 @@
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
     }
-    orbitBoostTarget = (loopB > loopA && p > loopA && p < loopB) ? 1 : 0;
+    var lapping = loopB > loopA && p > loopA && p < loopB;
+    orbitBoostTarget = lapping ? 1 : 0;
+    thread.classList.toggle("lap", lapping);
+    if (mapEl) mapEl.classList.toggle("lap", lapping);
     thread.classList.toggle("on", p > 0.004);
 
     /* the head rides the line, then settles at the page's edge and beacons */
