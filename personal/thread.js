@@ -672,10 +672,12 @@
     if (mapEl) {
       var f = lapping ? clamp(hold.shown, 0, 1) : -1;
       mapEl.classList.toggle("lap", lapping);
-      mapEl.classList.toggle("lap-core", lapping && (f < 0.18 || f >= 0.9));
-      mapEl.classList.toggle("lap-a", lapping && f >= 0.18 && f < 0.42);
-      mapEl.classList.toggle("lap-b", lapping && f >= 0.42 && f < 0.66);
-      mapEl.classList.toggle("lap-c", lapping && f >= 0.66 && f < 0.9);
+      /* the planet; ring A's line, then its planets; ring B; ring C; the planet again */
+      var ph = function (a, b) { return lapping && f >= a && f < b; };
+      mapEl.classList.toggle("lap-core", lapping && (f < 0.12 || f >= 0.88));
+      mapEl.classList.toggle("lap-a-ring", ph(0.12, 0.22)); mapEl.classList.toggle("lap-a", ph(0.22, 0.37));
+      mapEl.classList.toggle("lap-b-ring", ph(0.37, 0.47)); mapEl.classList.toggle("lap-b", ph(0.47, 0.62));
+      mapEl.classList.toggle("lap-c-ring", ph(0.62, 0.72)); mapEl.classList.toggle("lap-c", ph(0.72, 0.88));
     }
     thread.classList.toggle("on", p > 0.004);
 

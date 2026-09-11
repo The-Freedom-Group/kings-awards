@@ -1167,10 +1167,10 @@ body.bio-open{overflow:hidden}
 /* ── 10 Sept: the achievements, the film after the three points, the timeline on request, the site's shades, the graphs ── */
 .bar .wrap{max-width:none;padding-inline:clamp(12px,2vw,40px);grid-template-columns:repeat(4,1fr);justify-content:stretch;align-items:stretch}
 .bar>.wrap>div{min-width:0;justify-content:center;padding-inline:clamp(14px,1.6vw,28px)}
-.bar .bw{min-width:0}
-.bar .bw>b{white-space:normal;font-size:clamp(13px,1.05vw,17px);line-height:1.05}
-.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:normal;font-size:10.5px;line-height:1.35}
-.bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{white-space:normal}
+.bar .bw{min-width:0;flex:0 1 auto}
+.bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{white-space:nowrap;font-size:clamp(12.5px,1vw,15.5px);line-height:1.05}
+.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:nowrap;font-size:10px;line-height:1.35;letter-spacing:.08em}
+@media(max-width:1280px){.bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b,.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:normal}}
 .bar .b3 .lg-big{font-size:clamp(26px,2.2vw,36px)}
 .bar>.wrap>div{min-height:92px;padding:16px clamp(14px,1.6vw,26px);gap:clamp(12px,1.2vw,18px);min-width:0}
 .bar img{height:40px}
@@ -1286,8 +1286,8 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .tl-list .what a.tl-link{color:var(--pink);font-weight:500}
 .map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
 .map.lap-core .node.core .orb,.map.lap-a .node[data-ring="A"] .orb,.map.lap-b .node[data-ring="B"] .orb,.map.lap-c .node[data-ring="C"] .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 45%,transparent),0 0 40px 12px var(--p2),0 0 90px 24px color-mix(in srgb,var(--p2) 45%,transparent);filter:brightness(1.14) saturate(1.12)}
-.map .tape,.map .ringB,.map .ringC{transition:filter .6s}
-.map.lap-a .tape,.map.lap-b .ringB,.map.lap-c .ringC{filter:drop-shadow(0 0 8px rgba(255,255,255,.6))}
+.map .tape,.map .ringB,.map .ringC{transition:filter .5s,stroke .5s,stroke-width .5s}
+.map.lap-a-ring .tape,.map.lap-a .tape,.map.lap-b-ring .ringB,.map.lap-b .ringB,.map.lap-c-ring .ringC,.map.lap-c .ringC{stroke:#fff;stroke-width:2.6;filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px var(--pink))}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1460,7 +1460,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
   <div class="wrap">
     <div class="rv">
       <div class="ch-tag">02 — Proof, Not Promise</div>
-      <h2>Six numbers.</h2>
+      <h2>Six numbers that tell the story.</h2>
       <p class="stand">Five are measured to date, from the marketplaces' own reports and the trade mark register. One is the plan: a five-year projection, not a result.</p>
     </div>
 
