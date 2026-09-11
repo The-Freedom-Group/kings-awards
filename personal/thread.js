@@ -290,7 +290,7 @@
       live2   = $("#tLive2"),
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
-  var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null;
+  var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null, tlRows = [];
   var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
@@ -365,7 +365,7 @@
      line never crosses a word. C is the centre. */
   var PLAN = [
     { id: "ones", side: "C", y: 0.50, noKnot: true },
-    { id: "c01",  side: "L", y: 0.42 },
+    { id: "c01",  side: "L", y: 0.16, rail: true },
     { id: "c02",  side: "R", y: 0.42 },
     { id: "c03",  side: "L", y: 0.42 },
     { id: "c04",  side: "R", y: 0.42 },
@@ -484,6 +484,23 @@
                      loop: { pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y } });
           return;
         }
+      }
+      if (p.rail) {
+        /* the timeline: the chapter's knot up by the heading, then straight down the rail through every
+           entry's knot; each row lights as the line reaches it */
+        pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: false });
+        var tlEl = document.getElementById("timeline");
+        tlRows = [];
+        if (tlEl) {
+          tlEl.classList.add("rail");
+          $$(".tl-list li", tlEl).forEach(function (li) {
+            var kn = li.querySelector(".tl-knot"); if (!kn) return;
+            var ko = pageXY(kn);
+            var pt = { x: ko.x + kn.offsetWidth / 2, y: ko.y + kn.offsetHeight / 2, id: "tl", el: el, noKnot: true, row: li };
+            pts.push(pt); tlRows.push(pt);
+          });
+        }
+        return;
       }
       if (p.ride) {
         /* the charts: the line runs along the tops of the bars, then rides the line chart's own curve to the
@@ -762,6 +779,11 @@
       if (old && old.phase === "hold" && Math.abs(yNow - def.lock) <= 320) { def.phase = "hold"; def.prog = old.prog; def.shown = old.shown; return def; }
       def.phase = yNow > def.lock + 40 ? "after" : "before"; def.prog = def.shown = def.phase === "after" ? 1 : 0; return def;
     });
+    tlRows.forEach(function (pt) {
+      var best = samples[0], bd = Infinity;
+      samples.forEach(function (sp) { var dd = (sp.x - pt.x) * (sp.x - pt.x) + (sp.y - pt.y) * (sp.y - pt.y); if (dd < bd) { bd = dd; best = sp; } });
+      pt.frac = best.l / totalLen;
+    });
     ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
@@ -946,6 +968,7 @@
     for (var i = 0; i < knots.length; i++) {
       knots[i].classList.toggle("hit", p >= knotAt[i]);
     }
+    for (var ri = 0; ri < tlRows.length; ri++) tlRows[ri].row.classList.toggle("lit", p >= tlRows[ri].frac - 0.001);
   }
 
   /* ══ CURSOR ═══════════════════════════════════════════════ */
