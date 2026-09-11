@@ -297,14 +297,22 @@
   function lockScrollTo(yy) { try { window.scrollTo({ top: yy, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, yy); } }
   /* a hold takes the page where the crossing notch left it, so nothing snaps; only a long overshoot eases back */
   function settle(h, y, dy) {
-    /* one instant move to the exact lock, which also cancels the notch's own scroll animation; then it is
-       left alone, and only re-checked every third of a second so nothing can oscillate */
     h.settleAt = performance.now() + 350;
     lockScrollTo(h.lock);
+  }
+  /* within reach of a lock the wheel is taken over and the page decelerates onto the lock: an ease-out over
+     roughly a third of a second, scaled to the distance, so the stop is a glide rather than a snap */
+  var REACH = 150;
+  function approach(h, y, dir) {
+    h.phase = "approach"; h.dir = dir; h.from = y; h.t0 = performance.now();
+    h.dur = clamp(Math.abs(h.lock - y) * 3.4, 280, 560);
+    h.prog = h.shown = dir ? 1 : 0;
+    lockScrollTo(y);                       /* cancels the notch's own animation where we stand */
   }
   window.addEventListener("wheel", function (e) {
     if (!holdActive) return;
     e.preventDefault();
+    if (holdActive.phase !== "hold") return;
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02);
   }, { passive: false });
@@ -313,13 +321,16 @@
   window.addEventListener("touchmove", function (e) {
     if (!holdActive || touchY === null) return;
     e.preventDefault();
-    var ty = e.touches[0].clientY; holdActive.prog = clamp(holdActive.prog + (touchY - ty) / (holdActive.px * 0.5), -0.02, 1.02); touchY = ty;
+    var ty = e.touches[0].clientY;
+    if (holdActive.phase === "hold") holdActive.prog = clamp(holdActive.prog + (touchY - ty) / (holdActive.px * 0.5), -0.02, 1.02);
+    touchY = ty;
   }, { passive: false });
   window.addEventListener("keydown", function (e) {
     if (!holdActive) return;
     var k = e.key, d = 0;
     if (k === "ArrowDown" || k === "PageDown" || k === " ") d = 0.12; else if (k === "ArrowUp" || k === "PageUp") d = -0.12; else return;
-    e.preventDefault(); holdActive.prog = clamp(holdActive.prog + d, -0.02, 1.02);
+    e.preventDefault();
+    if (holdActive.phase === "hold") holdActive.prog = clamp(holdActive.prog + d, -0.02, 1.02);
   });
 
   /* L and R ride the empty margin outside the text column, so the
@@ -783,13 +794,22 @@
     if (holds.length && !reduce) {
       holdActive = null;
       holds.forEach(function (h) {
-        var dy = y - h.lock;
+        var dy = y - h.lock, hadY = h.prevY !== undefined, down = hadY && y > h.prevY, up = hadY && y < h.prevY;
         if (h.phase === "before") {
           if (dy >= 320) h.phase = "after";                                   /* jumped past: nothing plays */
-          else if (dy >= 0) { h.phase = "hold"; h.prog = h.shown = 0; settle(h, y, dy); }
+          else if (dy >= 0 || (dy >= -REACH && down)) approach(h, y, 0);
         } else if (h.phase === "after") {
           if (dy <= -320) h.phase = "before";                                 /* jumped back above */
-          else if (dy < 0) { h.phase = "hold"; h.prog = h.shown = 1; settle(h, y, dy); }
+          else if (dy < 0 || (dy <= REACH && up)) approach(h, y, 1);
+        }
+        if (h.phase === "approach") {
+          if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";      /* dragged away: let it go */
+          else {
+            var ta = clamp((performance.now() - h.t0) / h.dur, 0, 1), ea = 1 - Math.pow(1 - ta, 3);
+            lockScrollTo(h.from + (h.lock - h.from) * ea);
+            if (ta >= 1) { h.phase = "hold"; h.settleAt = performance.now() + 350; lockScrollTo(h.lock); }
+            else holdActive = h;
+          }
         }
         if (h.phase === "hold") {
           h.shown += (h.prog - h.shown) * 0.09;
@@ -799,8 +819,10 @@
           else if (Math.abs(dy) > 2 && performance.now() > (h.settleAt || 0)) settle(h, y, dy);   /* once settled, stay exactly there */
         }
         if (h.phase === "hold") { p = h.a + (h.b - h.a) * clamp(h.shown, 0, 1); holdActive = h; }
+        else if (h.phase === "approach") p = h.dir ? Math.max(p, h.b) : Math.min(p, h.a);
         else if (h.phase === "before") p = Math.min(p, h.a);
         else p = Math.max(p, h.b);
+        h.prevY = y;
       });
       hold.active = !!holdActive;
     }
