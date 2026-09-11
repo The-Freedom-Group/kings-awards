@@ -289,6 +289,8 @@
       live2   = $("#tLive2"),
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
+  var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect");
+  var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
   var builtH = 0, HOLD_PX = 3400, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
@@ -323,6 +325,7 @@
     { id: "c03",  side: "L", y: 0.42 },
     { id: "c04",  side: "R", y: 0.42 },
     { id: "c05",  side: "C", y: 0.40, core: true },
+    { id: "charts", ride: true },
     { id: "c06",  side: "L", y: 0.42 },
     { id: "c07",  side: "C", y: 0.5, ring: true }
   ];
@@ -437,6 +440,40 @@
           return;
         }
       }
+      if (p.ride) {
+        /* the charts: the line runs along the tops of the bars, then rides the line chart's own curve to the
+           £100m point; both charts build as it passes. Geometry from layout, viewBox scaled to the figures. */
+        var figB = $("#chBars"), figL = $("#chLine"), svgB = figB && figB.querySelector("svg"), svgL = figL && figL.querySelector("svg");
+        if (!figB || !figL || !svgB || !svgL) return;
+        var frame = function (fig, svg) {
+          var rf = fig.getBoundingClientRect(), rs = svg.getBoundingClientRect(), sc = rf.width && fig.offsetWidth ? rf.width / fig.offsetWidth : 1;
+          var fo = pageXY(fig), vb = svg.viewBox.baseVal, w = rs.width / sc, h = rs.height / sc;
+          return { ox: fo.x + (rs.left - rf.left) / sc, oy: fo.y + (rs.top - rf.top) / sc, sx: w / vb.width, sy: h / vb.height };
+        };
+        var FB = frame(figB, svgB), FL = frame(figL, svgL), years = {};
+        $$("g.seg-g", svgB).forEach(function (g) {
+          var yr = (g.getAttribute("data-t") || "").split(" ")[0], r = g.querySelector("rect"); if (!yr || !r) return;
+          var top = parseFloat(r.getAttribute("y")), cx = parseFloat(r.getAttribute("x")) + parseFloat(r.getAttribute("width")) / 2;
+          if (!years[yr] || top < years[yr].top) years[yr] = { top: top, cx: cx };
+        });
+        var yrs = Object.keys(years).sort(), ridePts = [], marks = { years: [], yearNames: yrs, lineStart: 0, L: FL };
+        yrs.forEach(function (yr) { ridePts.push({ x: FB.ox + years[yr].cx * FB.sx, y: FB.oy + (years[yr].top - 7) * FB.sy }); });
+        var parsePts = function (sel) {
+          var pl = svgL.querySelector(sel); if (!pl) return [];
+          return pl.getAttribute("points").trim().split(/\s+/).map(function (t) { var q = t.split(","); return { x: FL.ox + parseFloat(q[0]) * FL.sx, y: FL.oy + parseFloat(q[1]) * FL.sy }; });
+        };
+        var act = parsePts("polyline.ln.act"), tgt = parsePts("polyline.ln.tgt");
+        var lineIdx = ridePts.length;
+        act.forEach(function (q) { ridePts.push(q); }); tgt.slice(1).forEach(function (q) { ridePts.push(q); });
+        if (ridePts.length < 3) return;
+        /* fractions of the ride's length for each bar and for the start of the line chart */
+        var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
+        var Lr = cum[cum.length - 1] || 1;
+        marks.years = yrs.map(function (_, yi) { return cum[yi] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
+        pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks,
+                   yS: ridePts[0].y, yE: Math.max(ridePts[0].y + 600, pageXY(el).y + el.offsetHeight + window.innerHeight * 0.42) });
+        return;
+      }
       if (p.ring) {
         /* the end note: the line splits above the words, encircles them, and rejoins below */
         var quo = el.querySelector(".quo");
@@ -463,7 +500,8 @@
     }
 
     var d = heroPrefix || ("M " + pts[0].x.toFixed(1) + " " + pts[0].y.toFixed(1));
-    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null;
+    var dAtA = "", dAtB = "", d2 = "", dLoopIn = "", dLoopOut = "", loopMeta = null, dRideIn = "", dRideOut = "";
+    rideMeta = null;
     var f1 = function (v) { return v.toFixed(1); };
     for (var i = 0; i < pts.length - 1; i++) {
       var a = pts[i], b = pts[i + 1], dy = (b.y - a.y) * 0.5, from = a;
@@ -474,6 +512,15 @@
         dLoopOut = d; loopMeta = a.loop; loopMarks = a.loop.marks || null; from = a.loop.end;
         var dy2 = (b.y - from.y) * 0.5;
         d += " C " + f1(from.x + Math.min(90, dy2 * 0.5)) + " " + f1(from.y + 6) + ", " + f1(b.x) + " " + f1(b.y - dy2) + ", " + f1(b.x) + " " + f1(b.y);
+        continue;
+      }
+      if (a.rideTo) {
+        /* along the bar tops and up the line chart's curve, then on to the next point */
+        dRideIn = d;
+        a.rideTo.forEach(function (q) { d += " L " + f1(q.x) + " " + f1(q.y); });
+        dRideOut = d; rideMeta = a; from = a.rideTo[a.rideTo.length - 1];
+        var dy3 = Math.max(80, (b.y - from.y) * 0.5);
+        d += " C " + f1(from.x + 40) + " " + f1(from.y - 30) + ", " + f1(b.x) + " " + f1(b.y - dy3) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
       if (b.arc) {
@@ -579,6 +626,29 @@
         }
       }
     }
+    /* the ride climbs, so its samples take a virtual height too: a window below its entry point */
+    rideA = rideB = 0;
+    if (rideMeta && dRideOut) {
+      var pr4 = document.createElementNS("http://www.w3.org/2000/svg", "path"), rIn = 0, rOut = 0;
+      svg.appendChild(pr4);
+      try { pr4.setAttribute("d", dRideIn); rIn = pr4.getTotalLength(); pr4.setAttribute("d", dRideOut); rOut = pr4.getTotalLength(); } catch (e) { rIn = rOut = 0; }
+      svg.removeChild(pr4);
+      if (rOut > rIn) {
+        for (var sr = 0; sr < samples.length; sr++) {
+          var smp = samples[sr];
+          if (smp.l >= rIn && smp.l <= rOut) smp.y = rideMeta.yS + (rideMeta.yE - rideMeta.yS) * (smp.l - rIn) / (rOut - rIn);
+          else if (smp.l > rOut && smp.y < rideMeta.yE) smp.y = rideMeta.yE;
+        }
+        rideA = rIn / totalLen; rideB = rOut / totalLen;
+        if (chartsEl) chartsEl.classList.add("ride");
+        if (rideSvg && rTrack && rLive && chartsEl) {
+          var co2 = pageXY(chartsEl); rideBox = { x: co2.x, y: co2.y, w: chartsEl.offsetWidth, h: chartsEl.offsetHeight };
+          rideSvg.setAttribute("viewBox", rideBox.x + " " + rideBox.y + " " + rideBox.w + " " + rideBox.h);
+          rTrack.setAttribute("d", d); rLive.setAttribute("d", d);
+          rLive.style.strokeDasharray = totalLen; rLive.style.strokeDashoffset = totalLen;
+        }
+      }
+    }
     ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
@@ -661,6 +731,29 @@
       hold.active = hold.phase === "hold";
     }
     live.style.strokeDashoffset = totalLen * (1 - p);
+    if (rLive && rideBox) {
+      rLive.style.strokeDashoffset = totalLen * (1 - p);
+      var onRide = p > rideA - 0.004 && p < rideB + 0.004;
+      if (rideThread) rideThread.classList.toggle("on", onRide);
+      if (rHead && onRide) { var rp0 = live.getPointAtLength(totalLen * p); rHead.style.left = (rp0.x - rideBox.x) + "px"; rHead.style.top = (rp0.y - rideBox.y) + "px"; }
+    }
+    if (rideMeta && rideB > rideA && chartsEl) {
+      /* the bars stand up as the line reaches them; the line chart is revealed to wherever the head has got */
+      var rp = clamp((p - rideA) / (rideB - rideA), 0, 1), mk2 = rideMeta.marks;
+      mk2.yearNames.forEach(function (yr, yi) {
+        var on = rp >= mk2.years[yi] - 0.005;
+        $$("#chBars g.seg-g", chartsEl).forEach(function (g) { if ((g.getAttribute("data-t") || "").indexOf(yr) === 0) g.classList.toggle("up", on); });
+      });
+      $$("#chBars .vl", chartsEl).forEach(function (t, ti) { t.classList.toggle("up", rp >= (mk2.years[ti] || 0) - 0.005); });
+      var vx = 0;
+      if (rp >= mk2.lineStart) {
+        var hp = live.getPointAtLength(totalLen * p); vx = (hp.x - mk2.L.ox) / mk2.L.sx;
+        if (rp >= 0.999) vx = 640;
+      }
+      if (lineClipRect) lineClipRect.setAttribute("width", Math.max(0, Math.min(640, vx + 2)).toFixed(1));
+      $$("#chLine .dot-g", chartsEl).forEach(function (g) { var c = g.querySelector("circle"); g.classList.toggle("up", !!c && parseFloat(c.getAttribute("cx")) <= vx + 1); });
+      $$("#chLine .vl", chartsEl).forEach(function (t) { t.classList.toggle("up", parseFloat(t.getAttribute("x")) <= vx + 1); });
+    }
     if (live2 && ringLen) {
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
