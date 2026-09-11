@@ -295,6 +295,11 @@
      the ring; HOLD_PX is how much wheel travel one lap takes */
   var builtH = 0, holdLock = 0, holds = [], holdActive = null, hold = { active: false };
   function lockScrollTo(yy) { try { window.scrollTo({ top: yy, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, yy); } }
+  /* a hold takes the page where the crossing notch left it, so nothing snaps; only a long overshoot eases back */
+  function settle(h, y, dy) {
+    if (Math.abs(dy) < 160) { h.lock = y; return; }
+    try { window.scrollTo({ top: h.lock, left: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, h.lock); }
+  }
   window.addEventListener("wheel", function (e) {
     if (!holdActive) return;
     e.preventDefault();
@@ -459,26 +464,28 @@
         /* the line comes in at the chart's origin and rises over the bar tops on one smooth curve */
         ridePts.push({ x: FB.ox + 58 * FB.sx, y: FB.oy + 252 * FB.sy, origin: true });
         yrs.forEach(function (yr) { ridePts.push({ x: FB.ox + years[yr].cx * FB.sx, y: FB.oy + (years[yr].top - 7) * FB.sy, top: true }); });
-        (function smooth(list) {
-          for (var i2 = 1; i2 < list.length; i2++) {
-            var p0 = list[Math.max(0, i2 - 2)], p1 = list[i2 - 1], p2 = list[i2], p3 = list[Math.min(list.length - 1, i2 + 1)];
-            p2.c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
-            p2.c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
-          }
-        })(ridePts);
+
         var parsePts = function (sel) {
           var pl = svgL.querySelector(sel); if (!pl) return [];
           return pl.getAttribute("points").trim().split(/\s+/).map(function (t) { var q = t.split(","); return { x: FL.ox + parseFloat(q[0]) * FL.sx, y: FL.oy + parseFloat(q[1]) * FL.sy }; });
         };
         var act = parsePts("polyline.ln.act"), tgt = parsePts("polyline.ln.tgt");
         var lineIdx = ridePts.length;
-        if (act.length) {
-          /* from the last bar top, one S-curve across to the growth chart's own first point */
-          var lastTop = ridePts[ridePts.length - 1], o2 = act[0];
-          o2.c1 = { x: lastTop.x + (o2.x - lastTop.x) * 0.5, y: lastTop.y }; o2.c2 = { x: lastTop.x + (o2.x - lastTop.x) * 0.5, y: o2.y };
-        }
         act.forEach(function (q) { ridePts.push(q); }); tgt.slice(1).forEach(function (q) { ridePts.push(q); });
         if (ridePts.length < 3) return;
+        /* one continuous curve through every point, Catmull-Rom made cubic; it arrives level at the £100m point */
+        (function smooth(list) {
+          for (var i2 = 1; i2 < list.length; i2++) {
+            var p0 = list[Math.max(0, i2 - 2)], p1 = list[i2 - 1], p2 = list[i2], p3 = list[Math.min(list.length - 1, i2 + 1)];
+            p2.c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
+            p2.c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+          }
+          var end = list[list.length - 1]; end.c2 = { x: end.x - 46, y: end.y + 2 };
+          /* it settles onto the growth chart's baseline level, with no dip under the axis */
+          var o2 = list[lineIdx], n2 = list[lineIdx + 1];
+          if (o2) o2.c2 = { x: o2.x - 90, y: o2.y };
+          if (n2) n2.c1 = { x: o2.x + 30, y: o2.y };
+        })(ridePts);
         /* fractions of the ride's length for each bar and for the start of the line chart */
         var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
         var Lr = cum[cum.length - 1] || 1;
@@ -538,8 +545,8 @@
         });
         dRideOut = d; rideMeta = a; from = a.rideTo[a.rideTo.length - 1];
         /* off the top of the growth chart heading right, then down the right-hand margin */
-        var dy3 = Math.max(120, (b.y - from.y) * 0.5);
-        d += " C " + f1(from.x + 160) + " " + f1(from.y + 10) + ", " + f1(b.x) + " " + f1(b.y - dy3) + ", " + f1(b.x) + " " + f1(b.y);
+        var dy3 = Math.max(160, (b.y - from.y) * 0.5);
+        d += " C " + f1(from.x + 170) + " " + f1(from.y) + ", " + f1(b.x) + " " + f1(b.y - dy3) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
       if (b.arc) {
@@ -737,17 +744,16 @@
         var dy = y - h.lock;
         if (h.phase === "before") {
           if (dy >= 320) h.phase = "after";                                   /* jumped past: nothing plays */
-          else if (dy >= 0) { h.phase = "hold"; h.prog = h.shown = 0; lockScrollTo(h.lock); }
+          else if (dy >= 0) { h.phase = "hold"; h.prog = h.shown = 0; settle(h, y, dy); }
         } else if (h.phase === "after") {
           if (dy <= -320) h.phase = "before";                                 /* jumped back above */
-          else if (dy < 0) { h.phase = "hold"; h.prog = h.shown = 1; lockScrollTo(h.lock); }
+          else if (dy < 0) { h.phase = "hold"; h.prog = h.shown = 1; settle(h, y, dy); }
         }
         if (h.phase === "hold") {
           h.shown += (h.prog - h.shown) * 0.14;
           if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
           else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; lockScrollTo(h.lock - 8); }
           else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";   /* dragged away: let it go */
-          else if (Math.abs(dy) > 1) lockScrollTo(h.lock);
         }
         if (h.phase === "hold") { p = h.a + (h.b - h.a) * clamp(h.shown, 0, 1); holdActive = h; }
         else if (h.phase === "before") p = Math.min(p, h.a);
