@@ -285,84 +285,11 @@
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
-  var builtH = 0, HOLD_PX = 2800, holdLock = 0, hold = { active: false, done: false, prog: 0, shown: 0, prevDy: -1 };
-  var sigWrap = $("#sigWrap"), sigEnd = 0;
-  var sigCv = $("#sigCv"), sigPen = $("#sigPen"), sigCtx = sigCv ? sigCv.getContext("2d") : null;
-  var sig = { runs: [], W: 0, H: 0, pad: 0, textW: 0, baseY: 0, font: "", dpr: 1, penY: 0, last: -1, ready: false, sp: 0 };
-  var SIG_TEXT = "Tom Letcher";
-  function buildSig() {
-    if (!sigCv || !sigCtx || !sigWrap) return;
-    var fs = parseFloat(getComputedStyle(sigWrap).fontSize) || 72;
-    sig.font = "400 " + fs + "px 'Great Vibes', cursive";
-    var off = document.createElement("canvas"), oc = off.getContext("2d");
-    oc.font = sig.font;
-    var m = oc.measureText(SIG_TEXT), asc = m.actualBoundingBoxAscent || fs * 0.8, desc = m.actualBoundingBoxDescent || fs * 0.35;
-    sig.pad = Math.round(fs * 0.34); sig.textW = m.width;
-    sig.W = Math.ceil(m.width + sig.pad * 2); sig.H = Math.ceil(asc + desc + sig.pad * 1.2); sig.baseY = Math.round(sig.pad * 0.6 + asc);
-    /* the ink, column by column: where the pen has to be for every x it reaches */
-    off.width = sig.W; off.height = sig.H; oc.font = sig.font; oc.fillStyle = "#fff"; oc.textBaseline = "alphabetic";
-    oc.fillText(SIG_TEXT, sig.pad, sig.baseY);
-    var data = oc.getImageData(0, 0, sig.W, sig.H).data, runs = new Array(sig.W);
-    for (var x = 0; x < sig.W; x++) {
-      var col = [], inRun = false, y0 = 0;
-      for (var y = 0; y < sig.H; y++) {
-        var on = data[(y * sig.W + x) * 4 + 3] > 60;
-        if (on && !inRun) { inRun = true; y0 = y; }
-        else if (!on && inRun) { inRun = false; col.push([y0, y]); }
-      }
-      if (inRun) col.push([y0, sig.H]);
-      runs[x] = col;
-    }
-    sig.runs = runs; sig.dpr = Math.min(2, window.devicePixelRatio || 1);
-    sigCv.width = Math.round(sig.W * sig.dpr); sigCv.height = Math.round(sig.H * sig.dpr);
-    sigCv.style.width = sig.W + "px"; sigCv.style.height = sig.H + "px";
-    sigWrap.style.width = sig.W + "px"; sigWrap.style.height = sig.H + "px";
-    sig.ready = true; sig.last = -1; sig.penY = sig.baseY;
-    drawSig(sig.sp, true);
-  }
-  function drawSig(sp, force) {
-    sig.sp = sp;
-    if (!sig.ready) return;
-    if (!force && Math.abs(sp - sig.last) < 0.0005) return;
-    sig.last = sp;
-    var c = sigCtx, d = sig.dpr, W = sig.W, H = sig.H;
-    var xr = sig.pad * 0.55 + sp * (sig.textW + sig.pad * 0.9);   /* how far the pen has got */
-    c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, W, H);
-    c.save(); c.beginPath(); c.rect(0, 0, xr, H); c.clip();
-    c.font = sig.font; c.textBaseline = "alphabetic"; c.fillStyle = "#FF2D8D";
-    c.shadowColor = "rgba(255,45,141,.55)"; c.shadowBlur = 16;
-    c.fillText(SIG_TEXT, sig.pad, sig.baseY);
-    c.shadowBlur = 0;
-    /* the ink is still wet where the pen just was: a paler sheen on the last stretch */
-    if (sp > 0 && sp < 1) {
-      var g = c.createRadialGradient(xr, sig.penY, 0, xr, sig.penY, sig.pad * 1.4);
-      g.addColorStop(0, "rgba(255,255,255,.85)"); g.addColorStop(0.35, "rgba(255,180,215,.45)"); g.addColorStop(1, "rgba(255,255,255,0)");
-      c.globalCompositeOperation = "source-atop"; c.fillStyle = g; c.fillRect(0, 0, W, H); c.globalCompositeOperation = "source-over";
-    }
-    c.restore();
-    /* the pen: on the ink nearest where it was a moment ago, lifted where there is no ink to lay */
-    if (!sigPen) return;
-    var xi = Math.round(xr), best = null, bd = Infinity, lift = true;
-    for (var k = -3; k <= 3 && best === null; k++) {
-      var col = sig.runs[xi + k]; if (!col || !col.length) continue;
-      for (var r = 0; r < col.length; r++) {
-        var cy = (col[r][0] + col[r][1]) / 2, dd = Math.abs(cy - sig.penY);
-        if (dd < bd) { bd = dd; best = col[r]; }
-      }
-    }
-    if (best) { lift = false; sig.penY += ((best[1] - 2) - sig.penY) * 0.45; }
-    var writing = sp > 0.002 && sp < 0.998;
-    sigWrap.classList.toggle("writing", writing);
-    var tilt = 34 + Math.sin(xr * 0.06) * 3, up = lift ? -Math.min(14, sig.pad * 0.5) : 0;
-    sigPen.style.transform = "translate(" + xr.toFixed(1) + "px," + (sig.penY + up).toFixed(1) + "px) rotate(" + tilt.toFixed(1) + "deg)";
-  }
-  if (document.fonts && document.fonts.load) {
-    document.fonts.load("400 72px 'Great Vibes'").then(buildSig, buildSig);
-    document.fonts.ready.then(function () { buildSig(); });
-  } else buildSig();
+  var builtH = 0, HOLD_PX = 2800, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
+  hold.active = false;
   function lockScroll() { try { window.scrollTo({ top: holdLock, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock); } }
   window.addEventListener("wheel", function (e) {
-    if (!hold.active) return;
+    if (hold.phase !== "hold") return;
     e.preventDefault();
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     hold.prog = clamp(hold.prog + d / HOLD_PX, -0.02, 1.02);
@@ -370,12 +297,12 @@
   var touchY = null;
   window.addEventListener("touchstart", function (e) { touchY = e.touches[0].clientY; }, { passive: true });
   window.addEventListener("touchmove", function (e) {
-    if (!hold.active || touchY === null) return;
+    if (hold.phase !== "hold" || touchY === null) return;
     e.preventDefault();
     var ty = e.touches[0].clientY; hold.prog = clamp(hold.prog + (touchY - ty) / (HOLD_PX * 0.5), -0.02, 1.02); touchY = ty;
   }, { passive: false });
   window.addEventListener("keydown", function (e) {
-    if (!hold.active) return;
+    if (hold.phase !== "hold") return;
     var k = e.key, d = 0;
     if (k === "ArrowDown" || k === "PageDown" || k === " ") d = 0.12; else if (k === "ArrowUp" || k === "PageUp") d = -0.12; else return;
     e.preventDefault(); hold.prog = clamp(hold.prog + d, -0.02, 1.02);
@@ -494,6 +421,8 @@
         if (mr && document.body.dataset.grp !== "list") {
           var mo = pageXY(mp), cx = mo.x, cy = mo.y, sx = mr.w / 100, sy = mr.h / 76;
           mr.height = mr.h;
+          /* the page holds with the map centred on screen */
+          holdLock = Math.max(0, cy + mr.h / 2 - window.innerHeight / 2);
           var ringPt = function (deg) { var q = ringXY("A", deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
           var loopPts = [], yMin = Infinity, yMax = -Infinity;
           for (var dg = 180; dg >= -270; dg -= 3) { var q2 = ringPt(dg); loopPts.push(q2); if (q2.y < yMin) yMin = q2.y; if (q2.y > yMax) yMax = q2.y; }
@@ -637,17 +566,13 @@
           else if (sm.l > lOut && sm.y < loopMeta.yB) sm.y = loopMeta.yB;
         }
         loopA = lA / totalLen; loopB = lOut / totalLen;
-        holdLock = loopMeta.yA - window.innerHeight * 0.62;
         var y0 = window.pageYOffset || document.documentElement.scrollTop;
-        if (!hold.active || Math.abs(y0 - holdLock) > 320) { hold.active = false; hold.done = y0 > holdLock + 40; hold.prog = hold.shown = hold.done ? 1 : 0; hold.prevDy = y0 - holdLock; }
+        if (hold.phase !== "hold" || Math.abs(y0 - holdLock) > 320) {
+          hold.phase = y0 > holdLock + 40 ? "after" : "before"; hold.prog = hold.shown = hold.phase === "after" ? 1 : 0;
+        }
       }
     }
     ySamples = samples;
-    /* the signature writes itself out between the ring closing and the line passing beneath it */
-    sigEnd = 0;
-    if (sigWrap && sigWrap.offsetHeight) {
-      var so = pageXY(sigWrap); sigEnd = fracAtY(so.y + sigWrap.offsetHeight + 150);
-    }
     /* where the head lands: the very end of the line, on the button */
     endPt = samples[samples.length - 1]; endFrac = 0.999;
     /* the furthest the reader can scroll is the foot of the page; the
@@ -706,35 +631,29 @@
     p = Math.max(p, heroFrac * heroIn);
     if (loopB > loopA && !reduce) {
       var dy = y - holdLock;
-      if (!hold.active) {
-        /* crossing the lock line from above starts the lap; crossing it from below rewinds it;
-           a long jump (an anchor, the scrollbar) skips it. Otherwise a page above the lock has the lap
-           ahead of it and a page well below has it behind. */
-        if (!hold.done && dy >= 0 && hold.prevDy < 0) { if (dy < 320) { hold.active = true; hold.prog = hold.shown = 0; holdLock = y; dy = 0; } else hold.done = true; }
-        else if (hold.done && dy < 0 && hold.prevDy >= 0) { if (dy > -320) { hold.active = true; hold.prog = hold.shown = 1; holdLock = y; dy = 0; } else hold.done = false; }
-        else if (!hold.done && dy >= 320) hold.done = true;
-        else if (hold.done && dy < 0) hold.done = false;
+      if (hold.phase === "before") {
+        if (dy >= 320) hold.phase = "after";                                  /* jumped past: no lap */
+        else if (dy >= 0) { hold.phase = "hold"; hold.prog = hold.shown = 0; lockScroll(); }
+      } else if (hold.phase === "after") {
+        if (dy <= -320) hold.phase = "before";                                /* jumped back above: lap ahead */
+        else if (dy < 0) { hold.phase = "hold"; hold.prog = hold.shown = 1; lockScroll(); }
       }
-      if (hold.active) {
+      if (hold.phase === "hold") {
         hold.shown += (hold.prog - hold.shown) * 0.14;
-        p = loopA + (loopB - loopA) * clamp(hold.shown, 0, 1);
-        if (hold.prog > 1 && hold.shown > 0.995) { hold.active = false; hold.done = true; p = loopB; dy = 0; }
+        if (hold.prog > 1 && hold.shown > 0.995) { hold.phase = "after"; hold.shown = 1; }
         else if (hold.prog < 0 && hold.shown < 0.005) {
-          hold.active = false; hold.done = false; p = loopA; dy = -8;
+          hold.phase = "before"; hold.shown = 0;
           try { window.scrollTo({ top: holdLock - 8, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock - 8); }
         }
-        /* the wheel is swallowed while the lap runs, so the page only drifts on the tail of the notch that
-           arrived; the lock follows that drift instead of snapping back. A real jump (the scrollbar) ends the hold. */
-        if (hold.active && Math.abs(dy) > 1) { if (Math.abs(dy) > 320) { hold.active = false; hold.done = dy > 0; } else { holdLock = y; dy = 0; } }
-      } else if (hold.done && p < loopB) p = loopB;
-      else if (!hold.done && p > loopA) p = loopA;
-      hold.prevDy = dy;
+        else if (Math.abs(dy) > 320) hold.phase = dy > 0 ? "after" : "before";  /* dragged away: let it go */
+        else if (Math.abs(dy) > 1) lockScroll();
+      }
+      if (hold.phase === "hold") p = loopA + (loopB - loopA) * clamp(hold.shown, 0, 1);
+      else if (hold.phase === "before") p = Math.min(p, loopA);
+      else p = Math.max(p, loopB);
+      hold.active = hold.phase === "hold";
     }
     live.style.strokeDashoffset = totalLen * (1 - p);
-    if (sigWrap) {
-      var sp = sigEnd > ringB ? clamp((p - ringB) / (sigEnd - ringB), 0, 1) : (p > ringB ? 1 : 0);
-      drawSig(reduce ? (p > ringB ? 1 : 0) : sp);
-    }
     if (live2 && ringLen) {
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
@@ -1047,7 +966,7 @@
   function rebuild() {
     clearTimeout(rebuildTimer);
     rebuildTimer = setTimeout(function () {
-      buildSig(); buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
+      buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
     }, 140);
   }
   window.addEventListener("resize", rebuild);
