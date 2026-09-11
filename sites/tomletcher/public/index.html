@@ -1166,6 +1166,12 @@ body.bio-open{overflow:hidden}
 
 /* ── 10 Sept: the achievements, the film after the three points, the timeline on request, the site's shades, the graphs ── */
 .bar .wrap{max-width:none;padding-inline:clamp(12px,2vw,40px);grid-template-columns:repeat(4,1fr);justify-content:stretch;align-items:stretch}
+.bar>.wrap>div{min-width:0;justify-content:center;padding-inline:clamp(14px,1.6vw,28px)}
+.bar .bw{min-width:0}
+.bar .bw>b{white-space:normal;font-size:clamp(13px,1.05vw,17px);line-height:1.05}
+.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:normal;font-size:10.5px;line-height:1.35}
+.bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{white-space:normal}
+.bar .b3 .lg-big{font-size:clamp(26px,2.2vw,36px)}
 .bar>.wrap>div{min-height:92px;padding:16px clamp(14px,1.6vw,26px);gap:clamp(12px,1.2vw,18px);min-width:0}
 .bar img{height:40px}
 .kab2{display:block;width:74px;height:74px;flex:0 0 auto;color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,45,141,.35))}
@@ -1246,7 +1252,10 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
 .ft-ch a{display:inline-flex;align-items:baseline;gap:9px}
 .ft-ch a span{font-family:var(--disp);font-size:11px;letter-spacing:.06em;color:var(--pink);min-width:18px;margin-right:10px;display:inline-block}
 .ft-brand img{height:172px}
-.ft-credit{margin-top:8px;font-size:10.5px;letter-spacing:.06em;color:var(--pale-3)}
+.next .quo.endq{margin:clamp(34px,5vw,64px) auto 0;max-width:60ch;border-left:0;padding-left:0;text-align:center}
+.next .quo.endq q{font-size:clamp(21px,2.6vw,32px);line-height:1.3}
+.next .quo.endq .by{margin-top:18px}
+.next .acts{margin-top:clamp(96px,10vw,140px)}
 
 /* ── notes, 11 Sept: lightbox navigation, corner-card progress ── */
 .lb{grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(10px,2vw,28px);place-content:stretch;padding-inline:clamp(12px,3vw,48px)}
@@ -1385,7 +1394,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ph" data-yr="The future · 2027 and beyond"><div>
         <em>The future</em>
         <h3>A £100m projection.</h3>
-        <p>Amazon, Temu, Shopify, OnBuy and D2C at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
+        <p>D2C at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
     </div>
     <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
   </div>
@@ -1406,7 +1415,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started<br>with one rusty<br>fire extinguisher</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, December 2019. An architecture graduate, a delivery van, and a second-hand fire extinguisher nobody else saw any value in. One listing, one buyer, and everything since paid for by the sale before it.</p>
+      <p class="stand">Bury, December 2019. A master's in architecture, a delivery round for his dad's cleaning company, and one second-hand fire extinguisher that nobody else wanted. It sold. The next one paid for the one after. That is where Freedom Fire began.</p>
     </div>
     <div class="bio-cta rv">
       <div>
@@ -1420,7 +1429,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
     <div class="tl rv" id="timeline" aria-label="To Freedom and beyond, 2019 to now">
       <div class="yhead">To Freedom and beyond · 2019 to now</div>
       <ol class="tl-list">
-      <li><button class="tl-view" type="button" data-src="assets/journey/harvard.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
+      <li><button class="tl-view" type="button" data-src="assets/journey/harvard.webp" data-credit="Photo: Kenneth C. Zirkel, Wikimedia Commons, CC BY 4.0" data-cur-label="View">View image <i>↗</i></button><span class="when">July 2019</span><span class="what"><b>Harvard and MIT.</b>A summer placement at Harvard University and MIT during the Master's, a few years after nearly leaving education altogether.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/salboy-close.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">August 2019</span><span class="what"><b>Runner-up, the £150,000 competition.</b>At 23, a finalist in the Manchester Evening News and Salboy competition to win a £150,000 apartment, entered with a scheme to move young men from the streets towards education and opportunity. Runner-up. The loss that created the hunger: nobody was coming to hand him his future.</span></li>
       <li><i class="nopic-box" aria-hidden="true">2019</i><span class="when">October 2019</span><span class="what"><b>Two job offers, both declined.</b>Two architecture jobs offered straight after graduating, and both turned down for a delivery driver's job at his dad's cleaning company. On one ordinary delivery, a second-hand fire extinguisher. To anyone else, an old piece of equipment. To him, the beginning of something.</span></li>
       <li><button class="tl-view" type="button" data-src="assets/journey/ch1-a.webp" data-cur-label="View">View image <i>↗</i></button><span class="when">December 2019</span><span class="what"><b>One person, one listing.</b>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></li>
@@ -1451,8 +1460,8 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
   <div class="wrap">
     <div class="rv">
       <div class="ch-tag">02 — Proof, Not Promise</div>
-      <h2>Six numbers that tell the story.</h2>
-      <p class="stand">Each covers a stated period: the marketplaces' own reports, the trade mark register, and the plan for the next five years.</p>
+      <h2>Six numbers.</h2>
+      <p class="stand">Five are measured to date, from the marketplaces' own reports and the trade mark register. One is the plan: a five-year projection, not a result.</p>
     </div>
 
     <div class="metrics rv" id="proof">
@@ -1588,7 +1597,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 
     <div class="quo rv">
       <q>Find a non-seasonal niche: a product everybody needs and nobody wants, where the competition is less. Then make this boring product sexy. Build a system around it, and repeat.</q>
-      <div class="by">Founder &amp; MD</div>
+      <div class="by">Tom Letcher, Founder</div>
     </div>
   </div>
 </section>
@@ -1778,23 +1787,17 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
   <div class="wrap rv">
     <div class="ch-tag" style="justify-content:center">07 — Still Building</div>
     <h2>The line does not stop here.</h2>
+    <div class="quo endq">
+      <q>Through so much loss at a young age, I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
+      part of you wants to stay there, then adapting and continuing, because your team believes in the future you
+      promised to build.</q>
+      <div class="by">Tom Letcher</div>
+    </div>
     <div class="acts">
       <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
       <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
       <a class="act" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me</a>
     </div>
-  </div>
-</section>
-
-<!-- ══ END NOTE · RESILIENCE ══ -->
-<section class="ch dark endnote" id="resilience" aria-label="End note: resilience">
-  <div class="wrap rv">
-    <div class="quo">
-      <q>Through so much loss at a young age, I learned that resilience is not pretending hardship does not hurt. Sometimes it is getting out of bed when every
-      part of you wants to stay there, then adapting and continuing, because your team believes in the future you
-      promised to build.</q>
-    </div>
-    <div class="by signed">Tom Letcher</div>
   </div>
 </section>
 
@@ -1857,9 +1860,9 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
       <div class="ft-brand"><img src="assets/group-logo-white.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
         <p class="ft-addr">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p>
         <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p>
-        <p class="ft-credit">Harvard photograph: Kenneth C. Zirkel, Wikimedia Commons, CC BY 4.0.</p></div>
+</div>
       <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
-      <div><h4>The story</h4><p class="ft-ch"><a href="#top"><span>00</span>Tom Letcher</a><br><a href="#c01"><span>01</span>The Spark</a><br><a href="#c02"><span>02</span>Proof, Not Promise</a><br><a href="#c03"><span>03</span>How I Build</a><br><a href="#c04"><span>04</span>Built With People</a><br><a href="#c05"><span>05</span>The Next Ten Years</a><br><a href="#c06"><span>06</span>The Company</a><br><a href="#c07"><span>07</span>Still Building</a></p></div>
+      <div><h4>The story</h4><p><a href="#c01">Story</a><br><a href="#c02">Proof</a><br><a href="#c03">Method</a><br><a href="#c05">Future</a><br><a href="#c07">Next</a></p></div>
       <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p></div>
     </div>
   </div>

@@ -288,10 +288,10 @@
       track2  = $("#tTrack2"),
       live2   = $("#tLive2"),
       head    = $("#tHead");
-  var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null;
+  var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
-  var builtH = 0, HOLD_PX = 5600, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
+  var builtH = 0, HOLD_PX = 3400, holdLock = 0, hold = { phase: "before", prog: 0, shown: 0 };
   hold.active = false;
   function lockScroll() { try { window.scrollTo({ top: holdLock, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, holdLock); } }
   window.addEventListener("wheel", function (e) {
@@ -324,8 +324,7 @@
     { id: "c04",  side: "R", y: 0.42 },
     { id: "c05",  side: "C", y: 0.40, core: true },
     { id: "c06",  side: "L", y: 0.42 },
-    { id: "c07",  side: "C", y: 0.52 },
-    { id: "resilience", side: "C", y: 0.5, ring: true }
+    { id: "c07",  side: "C", y: 0.5, ring: true }
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [];
@@ -431,19 +430,10 @@
           holdLock = Math.max(0, cy + mr.h / 2 - window.innerHeight / 2);
           var ringPt = function (ring, deg) { var q = ringXY(ring, deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
           var core = { x: cx + 50 * sx, y: cy + 38 * sy };
-          var loopPts = [], marks = {}, len = 0, last = core;
-          var add = function (q) { len += Math.hypot(q.x - last.x, q.y - last.y); loopPts.push(q); last = q; };
-          ["A", "B", "C"].forEach(function (ring) {
-            add(ringPt(ring, 0)); marks[ring + "0"] = len;
-            for (var dg = 3; dg <= 360; dg += 3) add(ringPt(ring, dg));
-            marks[ring + "1"] = len;
-          });
-          add({ x: core.x, y: core.y }); marks.total = len;
-          Object.keys(marks).forEach(function (k) { if (k !== "total") marks[k] /= len; });
-          /* the line arrives from the right, level with the planet, and runs straight in to it */
+          /* the line arrives from the right, level with the planet, and stops on it while the rings light up */
           var eIn = ringPt("C", 0);
           pts.push({ x: core.x, y: core.y, id: p.id, el: el, noKnot: true, cpIn: { x: eIn.x + Math.min(160, mr.w * 0.12), y: core.y },
-                     loop: { pts: loopPts, end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, marks: marks } });
+                     loop: { pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y } });
           return;
         }
       }
@@ -567,13 +557,14 @@
     /* the lap round the ring is not a descent, so for the scroll mapping its samples are given a
        virtual height: the approach, the lap and the exit are spread evenly over a window either side
        of the ring, and the samples just after the exit hold at the window's foot */
-    loopA = loopB = 0;
+    loopA = loopB = 0; hasHold = false;
     if (loopMeta && dLoopOut) {
       var pr3 = document.createElementNS("http://www.w3.org/2000/svg", "path"), lIn = 0, lOut = 0;
       svg.appendChild(pr3);
       try { pr3.setAttribute("d", dLoopIn); lIn = pr3.getTotalLength(); pr3.setAttribute("d", dLoopOut); lOut = pr3.getTotalLength(); } catch (e) { lIn = lOut = 0; }
       svg.removeChild(pr3);
-      if (lOut > lIn) {
+      if (lOut >= lIn) {
+        hasHold = true;
         var lA = lIn;
         for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= loopMeta.yA) { lA = samples[si].l; break; } }
         for (var sj = 0; sj < samples.length; sj++) {
@@ -645,7 +636,7 @@
     if (!totalLen || thread.style.display === "none") return;
     var p = clamp(fracAtY(y + window.innerHeight * 0.62), 0, 1);
     p = Math.max(p, heroFrac * heroIn);
-    if (loopB > loopA && !reduce) {
+    if (hasHold && !reduce) {
       var dy = y - holdLock;
       if (hold.phase === "before") {
         if (dy >= 320) hold.phase = "after";                                  /* jumped past: no lap */
@@ -674,16 +665,17 @@
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
     }
-    var lapping = loopB > loopA && p > loopA && p < loopB;
+    /* while the page holds on the pink planet the glow runs outward: the planet, ring A, ring B, ring C, the planet */
+    var lapping = hasHold && hold.phase === "hold";
     orbitBoostTarget = lapping ? 1 : 0;
     thread.classList.toggle("lap", lapping);
     if (mapEl) {
-      var f = lapping ? (p - loopA) / (loopB - loopA) : -1, mk = loopMarks || {};
+      var f = lapping ? clamp(hold.shown, 0, 1) : -1;
       mapEl.classList.toggle("lap", lapping);
-      mapEl.classList.toggle("lap-core", lapping && (f < (mk.A0 || 0) || f > (mk.C1 || 1)));
-      mapEl.classList.toggle("lap-a", lapping && f >= (mk.A0 || 0) && f < (mk.A1 || 0));
-      mapEl.classList.toggle("lap-b", lapping && f >= (mk.B0 || 0) && f < (mk.B1 || 0));
-      mapEl.classList.toggle("lap-c", lapping && f >= (mk.C0 || 0) && f < (mk.C1 || 0));
+      mapEl.classList.toggle("lap-core", lapping && (f < 0.18 || f >= 0.9));
+      mapEl.classList.toggle("lap-a", lapping && f >= 0.18 && f < 0.42);
+      mapEl.classList.toggle("lap-b", lapping && f >= 0.42 && f < 0.66);
+      mapEl.classList.toggle("lap-c", lapping && f >= 0.66 && f < 0.9);
     }
     thread.classList.toggle("on", p > 0.004);
 
@@ -843,15 +835,14 @@
   var now = $("#now"), nowN = $("#nowN"), nowT = $("#nowT");
   var TITLES = { top:["00","Tom Letcher"], ones:["00","Start · Now · Next"], filmsec:["00","The two-minute story"], c01:["01","The Spark"],
     c02:["02","Proof, Not Promise"], c03:["03","How I Build"], c04:["04","Built With People"],
-    c05:["05","The Next Ten Years"], c06:["06","The Company"], c07:["07","Still Building"],
-    resilience:["—","End note"] };
+    c05:["05","The Next Ten Years"], c06:["06","The Company"], c07:["07","Still Building"] };
   var lastCard = "";
   var lastY = -1, velY = 0;
   function flowSpine(y, cur2, inFooter) {
     if (!spine.length) return;
     var si = -1, n = spine.length;
     spine.forEach(function (a, k) { if (a.dataset.t === cur2) si = k; });
-    if (si < 0 && (cur2 === "resilience" || inFooter)) si = n;
+    if (si < 0 && inFooter) si = n;
     var f = 0;
     if (si >= n) f = 1;
     else if (si >= 0) {
@@ -933,7 +924,7 @@
           if (card) { cardN.textContent = meta[0]; cardT.textContent = meta[1]; }
           if (now)  { nowN.textContent = meta[0]; nowT.textContent = meta[1]; }
         }
-        var early = y < window.innerHeight * 0.45 || inFooter || cur2 === "resilience";
+        var early = y < window.innerHeight * 0.45 || inFooter;
         if (card) card.classList.toggle("away", early);
         if (cardPg && cur2) {
           var cs = document.getElementById(cur2);
@@ -1253,7 +1244,7 @@
     var w = li ? li.querySelector(".when") : null, t = li ? li.querySelector(".what b") : null;
     if (capWhen) capWhen.textContent = w ? w.textContent : "";
     if (capWhat) capWhat.textContent = t ? t.textContent : "";
-    if (capN) capN.textContent = (at + 1) + " / " + views.length;
+    if (capN) capN.textContent = (at + 1) + " / " + views.length + (b.getAttribute("data-credit") ? "  ·  " + b.getAttribute("data-credit") : "");
     img.alt = (w ? w.textContent + ": " : "") + (t ? t.textContent : "");
   }
   function open(i) { show(i); lb.hidden = false; document.body.classList.add("bio-open"); }
