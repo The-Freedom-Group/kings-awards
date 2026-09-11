@@ -17,7 +17,7 @@ h1{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:34
 .sub{color:var(--pale-2);font-size:14px;margin:0 0 34px;max-width:70ch;line-height:1.6}
 .pair{display:grid;grid-template-columns:1fr;gap:40px;justify-items:center}
 .lbl{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--pale-2);margin-bottom:12px;text-align:center}
-/* 85 × 55 mm at 10 px per mm; a 3 mm bleed is the outer edge of the card */
+/* 85 × 55 mm at 10 px per mm: 1 mm = 10 px, so 9 pt type is about 32 px here */
 .card{position:relative;width:850px;height:550px;background:var(--carbon);color:var(--porcelain);overflow:hidden;border-radius:14px;
   box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)}
 .card .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.2px);background-size:36px 36px;background-position:14px 14px}
@@ -25,22 +25,27 @@ h1{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:34
 .card svg.line path{fill:none;stroke:var(--pink);stroke-width:2;stroke-linecap:round}
 .card svg.line path.faint{stroke:rgba(255,45,141,.16);stroke-width:1.4}
 .card .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 4px rgba(255,45,141,.18),0 0 18px rgba(255,45,141,.7)}
-/* front */
-.front .tl{position:absolute;left:56px;top:48px;font-family:var(--serif);font-size:38px;line-height:1;color:var(--porcelain)}
-.front .name{position:absolute;left:56px;bottom:150px;font-family:var(--disp);text-transform:uppercase;font-size:104px;line-height:.86;letter-spacing:-.005em;color:var(--porcelain)}
+/* front: the name, and how to reach him */
+.front .tl{position:absolute;left:56px;top:46px;font-family:var(--serif);font-size:40px;line-height:1;color:var(--porcelain)}
+.front .name{position:absolute;left:56px;top:118px;font-family:var(--disp);text-transform:uppercase;font-size:112px;line-height:.86;letter-spacing:-.005em;color:var(--porcelain)}
 .front .name span{display:block}
-.front .role{position:absolute;left:58px;bottom:104px;font-size:13.5px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;color:var(--pink)}
-.front .meta{position:absolute;left:58px;bottom:48px;display:flex;gap:28px;font-size:13px;letter-spacing:.06em;color:var(--pale-2)}
-.front .meta b{color:var(--porcelain);font-weight:500}
-.front .site{position:absolute;right:56px;top:52px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--porcelain);font-weight:500}
-.front .site i{display:inline-block;width:34px;height:2px;background:var(--pink);vertical-align:middle;margin-right:12px}
-/* back */
-.back .logo{position:absolute;left:50%;top:50%;width:300px;transform:translate(-50%,-56%)}
-.back .logo img{width:100%;height:auto;display:block;filter:drop-shadow(0 0 28px rgba(255,45,141,.22))}
-.back .url{position:absolute;left:0;right:0;bottom:66px;text-align:center;font-family:var(--serif);font-style:italic;font-size:26px;color:var(--porcelain);letter-spacing:.01em}
-.back .url small{display:block;font-family:var(--sans);font-style:normal;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--pink);margin-top:8px}
-.back .corner{position:absolute;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--pale-3)}
-.back .corner.a{left:56px;top:48px}.back .corner.b{right:56px;top:48px}
+.front .role{position:absolute;left:58px;top:322px;font-size:15px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;color:var(--pink)}
+.front .contact{position:absolute;left:58px;bottom:44px;display:grid;gap:9px;font-size:26px;line-height:1.15;letter-spacing:.01em;color:var(--porcelain);font-weight:400}
+.front .contact span{display:flex;align-items:center;gap:16px}
+.front .contact i{font-style:normal;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--pale-2);width:54px;flex:0 0 auto}
+.front .contact b{font-weight:500}
+/* back: the group, and where it lives */
+.back .logo{position:absolute;left:56px;top:50%;width:300px;transform:translateY(-52%)}
+.back .logo img{width:100%;height:auto;display:block;filter:drop-shadow(0 0 28px rgba(255,45,141,.2))}
+.back .grp{position:absolute;left:392px;right:44px;top:74px}
+.back .grp .k{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--pink);font-weight:500;margin-bottom:12px}
+.back .grp .site{font-family:var(--disp);text-transform:uppercase;font-size:56px;line-height:1;letter-spacing:.005em;color:var(--porcelain)}
+.back .details{position:absolute;left:392px;right:44px;top:196px;display:grid;gap:11px;font-size:21px;line-height:1.2;color:var(--porcelain)}
+.back .details span{display:flex;align-items:baseline;gap:14px}
+.back .details i{font-style:normal;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--pale-2);width:60px;flex:0 0 auto;transform:translateY(-3px)}
+.back .details b{font-weight:500}
+.back .details small{display:block;font-size:17px;color:var(--pale-2);font-weight:300;margin-top:2px}
+.back .reg{position:absolute;left:392px;right:44px;bottom:44px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pale-3)}
 .notes{margin-top:44px;color:var(--pale-2);font-size:13px;line-height:1.7;max-width:76ch}
 .notes b{color:var(--porcelain);font-weight:500}
 </style>
@@ -48,22 +53,25 @@ h1{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:34
 <body>
 <div class="sheet">
   <h1>Business card mock — Tom Letcher</h1>
-  <p class="sub">Carbon black on both sides, the portfolio's pink line and porcelain type. Standard 85 × 55 mm. The front is the name; the back is the Freedom Group mark and the site.</p>
+  <p class="sub">Carbon black on both sides, the portfolio's pink line and porcelain type. Standard 85 × 55 mm, drawn at 10 px per millimetre. The front is Tom; the back is the group.</p>
   <div class="pair">
     <div>
       <div class="lbl">Front</div>
       <div class="card front" id="front">
         <div class="dots"></div>
         <svg class="line" viewBox="0 0 850 550" preserveAspectRatio="none" aria-hidden="true">
-          <path class="faint" d="M0 418 H560 Q590 418 590 388 V300 Q590 270 620 270 H850"/>
-          <path d="M0 418 H560 Q590 418 590 388 V300 Q590 270 620 270 H720"/>
+          <path class="faint" d="M0 372 H590 Q620 372 620 342 V250 Q620 220 650 220 H850"/>
+          <path d="M0 372 H590 Q620 372 620 342 V250 Q620 220 650 220 H740"/>
         </svg>
-        <i class="knot" style="left:720px;top:270px"></i>
+        <i class="knot" style="left:740px;top:220px"></i>
         <div class="tl">TL</div>
-        <div class="site"><i></i>tomletcher.co.uk</div>
         <div class="name"><span>Tom</span><span>Letcher</span></div>
         <div class="role">Founder &amp; MD · The Freedom Group</div>
-        <div class="meta"><span><b>tom.letcher@freedomgroup.uk</b></span><span><b>0333 772 2723</b></span><span>Unit 19, Pilsworth, Bury BL9 8RE</span></div>
+        <div class="contact">
+          <span><i>Email</i><b>tom.letcher@freedomgroup.uk</b></span>
+          <span><i>Phone</i><b>0333 772 2723</b></span>
+          <span><i>Web</i><b>tomletcher.co.uk</b></span>
+        </div>
       </div>
     </div>
     <div>
@@ -71,21 +79,29 @@ h1{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:34
       <div class="card back" id="back">
         <div class="dots"></div>
         <svg class="line" viewBox="0 0 850 550" preserveAspectRatio="none" aria-hidden="true">
-          <path class="faint" d="M0 506 H850"/>
-          <path d="M0 506 H300"/>
-          <path class="faint" d="M0 80 H850"/>
-          <path d="M550 80 H850"/>
+          <path class="faint" d="M0 478 H850"/>
+          <path d="M0 478 H300"/>
+          <path class="faint" d="M0 60 H850"/>
+          <path d="M560 60 H850"/>
         </svg>
-        <i class="knot" style="left:300px;top:506px"></i>
-        <i class="knot" style="left:550px;top:80px"></i>
-        <div class="corner a">Freedom Fire &amp; Safety Ltd</div>
-        <div class="corner b">Bury · Greater Manchester</div>
+        <i class="knot" style="left:300px;top:478px"></i>
+        <i class="knot" style="left:560px;top:60px"></i>
         <div class="logo"><img src="../assets/group-logo-white.png" alt="The Freedom Group"></div>
-        <div class="url">tomletcher.co.uk<small>The story, the method, the plan</small></div>
+        <div class="grp">
+          <div class="k">The Freedom Group</div>
+          <div class="site">freedomgroup.uk</div>
+        </div>
+        <div class="details">
+          <span><i>Trading</i><b>Freedom Fire &amp; Safety Ltd<small>freedom-fire.co.uk</small></b></span>
+          <span><i>Address</i><b>Unit 19, Pilsworth Industrial Estate<small>Bury, Greater Manchester BL9 8RE</small></b></span>
+          <span><i>Phone</i><b>0333 772 2723</b></span>
+          <span><i>Email</i><b>info@freedom-fire.co.uk</b></span>
+        </div>
+        <div class="reg">Company no. 13589467</div>
       </div>
     </div>
   </div>
-  <p class="notes"><b>Print notes.</b> Black is the site's carbon (#101010) rather than pure black, so a matte or soft-touch laminate keeps the two blacks close; the pink is #FF2D8D (Pantone 806 C is the nearest spot colour) and reads best as a spot ink or a raised spot-UV line; the porcelain type is #F4F1EB. The pink thread is the site's line; the small dot is where it stops.</p>
+  <p class="notes"><b>Print notes.</b> At this scale 10 px is 1 mm, so the contact lines are about 7 pt and the name about 30 pt, which is standard card sizing. Black is the site's carbon (#101010) rather than pure black, so a matte or soft-touch laminate keeps the two blacks close; the pink is #FF2D8D (Pantone 806 C is the nearest spot colour) and reads best as a spot ink or a raised spot-UV line; the porcelain type is #F4F1EB. The pink thread is the site's line; the small dot is where it stops.</p>
 </div>
 </body>
 </html>
