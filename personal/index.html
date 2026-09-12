@@ -1434,9 +1434,11 @@ a.tl-link{color:var(--pink);font-weight:500}
 @media(max-width:820px){.env-head{grid-template-columns:1fr}.env-orbit{grid-template-columns:1fr}.globe{width:min(78vw,420px)}
   .env:not(.open) .env-col:first-child>div:nth-child(n+2),.env:not(.open) .env-col:last-child{display:none}}
 /* the six numbers: three columns of two, each with its own accent, white, pink-white and pink, over the same dark ground */
-#proof .metric:nth-child(3n+1){--acc:var(--porcelain)}
-#proof .metric:nth-child(3n+2){--acc:#ffb3d6}
-#proof .metric .v,#proof .metric .k{color:var(--pink)}
+#proof .metric{background:linear-gradient(180deg,color-mix(in srgb,var(--acc) var(--mix,38%),var(--carbon)),color-mix(in srgb,var(--acc) 6%,var(--carbon)) 84%)}
+#proof .metric:nth-child(3n+1){--acc:var(--porcelain);--mix:30%}
+#proof .metric:nth-child(3n+2){--acc:#ffb3d6;--mix:36%}
+#proof .metric:nth-child(3n){--mix:44%}
+#proof .metric .def{color:var(--pale)}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1668,32 +1670,32 @@ a.tl-link{color:var(--pink);font-weight:500}
     </div>
 
     <div class="metrics rv" id="proof">
-      <div class="metric" style="--acc:#FF2D8D">
+      <div class="metric" style="--acc:#F4F1EB">
         <div class="v">£26m</div><div class="k">Five-year projection</div>
         <p class="def">The multi-channel plan to 2031: eBay, Amazon, Temu, Shopify, TikTok Shop and OnBuy, with on-site servicing and B2B trade supply alongside them.</p>
         <div class="per">2026 – 2031 · eight channels · the group plan</div>
       </div>
-      <div class="metric" style="--acc:#ff5ca3">
+      <div class="metric" style="--acc:#ffb3d6">
         <div class="v">1<span class="sm">st</span> of 1,193</div><div class="k">eBay UK fire extinguisher sellers</div>
         <p class="def">Ranked by sales against every seller in the Fire Extinguishers category, GB, in eBay's own listing quality report.</p>
         <div class="per">12 months to end of July 2026 · eBay storefront</div>
       </div>
-      <div class="metric" style="--acc:#ff74b8">
+      <div class="metric" style="--acc:#FF2D8D">
         <div class="v">500,000+</div><div class="k">Products sold</div>
         <p class="def">Fire extinguishers first, then alarms, batteries, gloves and cleaning products, across every channel since the first listing.</p>
         <div class="per">December 2019 – September 2026 · all channels</div>
       </div>
-      <div class="metric" style="--acc:#FF2D8D">
+      <div class="metric" style="--acc:#F4F1EB">
         <div class="v">3</div><div class="k">Registered brands</div>
         <p class="def">FIRESTORM, FXL and SKYLINE, all registered in the company's name. 12 more in preparation.</p>
         <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
       </div>
-      <div class="metric" style="--acc:#ff5ca3">
+      <div class="metric" style="--acc:#ffb3d6">
         <div class="v">75,000+</div><div class="k">Customer reviews</div>
         <p class="def">Feedback left by customers across the marketplaces since the first storefront opened: the record behind the number-one ranking.</p>
         <div class="per">2020 – 2026 · eBay, Temu and more</div>
       </div>
-      <div class="metric" style="--acc:#ff74b8">
+      <div class="metric" style="--acc:#FF2D8D">
         <div class="v">30+</div><div class="k">Global suppliers</div>
         <p class="def">Direct relationships with manufacturers, each reviewed for certification, test reports, factory audits and batch traceability before approval.</p>
         <div class="per">2024 – 2026 · direct sourcing</div>
