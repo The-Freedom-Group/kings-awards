@@ -218,8 +218,10 @@ body.ready .thread #sp0{stroke-dashoffset:0;transition-delay:1.0s}
 body.ready .thread #sp1{stroke-dashoffset:0;transition-delay:1.15s}
 body.ready .thread #sp2{stroke-dashoffset:0;transition-delay:1.3s}
 body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
-.thread .live{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;
-  stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
+.thread .live{fill:none;stroke:var(--pink);stroke-width:1.8;vector-effect:non-scaling-stroke;stroke-linecap:round}
+/* the line's light is a second, wider stroke beneath it: a filter over a path the height of the page was too costly a frame */
+.thread .glow{fill:none;stroke:rgba(255,45,141,.2);stroke-width:7;vector-effect:non-scaling-stroke;stroke-linecap:round;transition:stroke .5s,stroke-width .5s}
+.thread.thread-ride .live{filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
 .thread .head::before,.thread .head::after{content:"";position:absolute;inset:0;
   border-radius:50%;border:1.5px solid var(--pink);opacity:0}
 .thread.landed .head::before{animation:beacon 2.6s ease-out infinite}
@@ -1280,8 +1282,8 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .card .pg::after{content:"";position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--pink);transform:scaleX(var(--p,0));transform-origin:left;transition:transform .2s linear}
 
 /* ── notes, 11 Sept (2): the lap, the glow, the signature ── */
-.thread .live{transition:filter .5s}
-.thread.lap .live{filter:drop-shadow(0 0 5px rgba(255,214,234,.7)) drop-shadow(0 0 10px rgba(255,45,141,.6))}
+.thread.lap .live{stroke:#ffcfe4}
+.thread.lap .glow{stroke:rgba(255,120,185,.42);stroke-width:12}
 .thread.lap .head{background:#ffe4f1;box-shadow:0 0 0 4px rgba(255,214,234,.3),0 0 26px 8px rgba(255,45,141,.9)}
 .thread .head{transition:opacity .4s,background .6s}
 .map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
@@ -1343,7 +1345,7 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-pic:hover img{transform:translateX(var(--px,0px)) scale(1.12)}
 .jy-card[data-when="November 2021"] .jy-pic img{transform:translateX(var(--px,0px)) scale(1.5)}         /* the college's mark sits small in its picture */
 .jy-card[data-when="November 2021"] .jy-pic:hover img{transform:translateX(var(--px,0px)) scale(1.56)}
-.jy-card[data-when="March 2026"] .jy-pic img{object-fit:contain}                                            /* five marks stacked tall: shown whole */
+.jy-card[data-when="March 2026"] .jy-pic{background:#000}.jy-card[data-when="March 2026"] .jy-pic img{object-fit:contain}   /* the five marks on black: shown whole */
 .jy-pic::after{content:"View";position:absolute;right:10px;bottom:10px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink);background:rgba(16,16,16,.75);padding:5px 8px;border-radius:2px;opacity:0;transition:opacity .3s}
 .jy-pic:hover::after{opacity:1}
 .jy-pic:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
@@ -1397,14 +1399,22 @@ a.tl-link{color:var(--pink);font-weight:500}
   .map .yrlbl{font-size:7.5px;padding:3px 7px}.rocket{width:44px}}
 /* ── the carbon planet is the section: a dark band edge to edge, the globe in the middle, the six parts either side ── */
 .env{position:relative;isolation:isolate;margin-top:clamp(56px,7vw,96px);padding:clamp(48px,6vw,84px) 0 clamp(36px,4vw,60px);border-top:0;color:var(--pale)}
-.env::before{content:"";position:absolute;top:0;bottom:-240px;left:-100vw;right:-100vw;z-index:-1;background:var(--carbon) radial-gradient(circle,rgba(244,241,235,.17) 1px,transparent 1.7px) 0 0/38px 38px}
+.env::before{content:"";position:absolute;top:0;bottom:-240px;left:-100vw;right:-100vw;z-index:-1;background:var(--carbon) radial-gradient(circle,rgba(244,241,235,.17) 1px,transparent 1.7px) 0 0/38px 38px;transition:opacity 1s ease}
+/* by day the ground is the page's own off-white; the page holds on the planet and it turns to night */
+#c06.day .env::before{opacity:0}
+.env,.env .env-h,.env .stand,.env-marks b,.env-marks span,.env .env-col h4,.env .env-col p{transition:color 1s ease}
+#c06.day .env,#c06.day .env .env-h,#c06.day .env-marks b,#c06.day .env .env-col h4{color:var(--ink)}
+#c06.day .env .stand,#c06.day .env .env-col p{color:var(--ink-2)}
+#c06.day .env-marks span{color:var(--ink-3)}
+#c06.day .env .env-col>div{border-color:rgba(16,16,16,.14);background:rgba(16,16,16,.03)}
+#c06.day .env .env-col>div:hover{border-color:var(--pink);background:rgba(255,45,141,.08)}
 .env .env-h{color:var(--porcelain)}.env .stand{color:var(--pale-2)}
 .env-head{grid-template-columns:1fr auto;align-items:end}
 .env-marks li{background:rgba(255,45,141,.09)}.env-marks b{color:var(--porcelain)}.env-marks span{color:var(--pale-3)}
 .env-orbit{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(18px,2.6vw,40px);align-items:center;margin-top:clamp(28px,4vw,56px);counter-reset:env}
 .env-col{display:grid;gap:14px}
 .globe{width:clamp(320px,34vw,540px);justify-self:center}
-.env .env-col>div{position:relative;border:1px solid rgba(255,255,255,.12);padding:22px 20px 20px;background:rgba(255,255,255,.035);counter-increment:env;transition:transform .35s,border-color .35s,background .35s}
+.env .env-col>div{position:relative;border:1px solid rgba(255,255,255,.12);padding:22px 20px 20px;background:rgba(255,255,255,.035);counter-increment:env;transition:transform .35s,border-color 1s,background 1s}
 .env .env-col>div::before{content:"0" counter(env);font-family:var(--disp);font-size:30px;line-height:1;color:var(--pink);display:block;margin-bottom:10px}
 .env .env-col>div::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--pink),rgba(255,45,141,0))}
 .env .env-col:last-child>div::after{background:linear-gradient(270deg,var(--pink),rgba(255,45,141,0))}
@@ -1605,7 +1615,7 @@ a.tl-link{color:var(--pink);font-weight:500}
           <div class="jy-copy"><span class="jy-idx">12 / 18</span><span class="jy-when">October 2025</span><b class="jy-title">T Level placements begin.</b><p>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from. The full programme is on <a class="tl-link" href="../staff/index.html">The Way In</a>.</p></div>
         </li>
         <li class="jy-card" data-when="March 2026" data-i="12">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch18-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch18-a.webp" srcset="../assets/journey/th/ch18-a.webp 400w, ../assets/journey/ch18-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/brands-five.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/brands-five.webp" srcset="../assets/journey/th/brands-five.webp 400w, ../assets/journey/brands-five.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
           <div class="jy-copy"><span class="jy-idx">13 / 18</span><span class="jy-when">March 2026</span><b class="jy-title">Three brands.</b><p>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</p></div>
         </li>
         <li class="jy-card" data-when="April 2026" data-i="13">
@@ -1986,6 +1996,8 @@ a.tl-link{color:var(--pink);font-weight:500}
   <svg id="threadSvg" preserveAspectRatio="none">
     <path class="track" id="tTrack"></path>
     <path class="track" id="tTrack2"></path>
+    <path class="glow" id="tGlow"></path>
+    <path class="glow" id="tGlow2"></path>
     <path class="live" id="tLive"></path>
     <path class="live" id="tLive2"></path>
   </svg>

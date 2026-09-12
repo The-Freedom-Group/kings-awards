@@ -387,6 +387,8 @@
       live    = $("#tLive"),
       track2  = $("#tTrack2"),
       live2   = $("#tLive2"),
+      glow    = $("#tGlow"),
+      glow2   = $("#tGlow2"),
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
   /* a second tip for the right-hand half round the end note, and the arrow shape inside each tip */
@@ -396,6 +398,7 @@
     [head, head2].forEach(function (el) { var tip = document.createElement("i"); tip.className = "tip"; el.appendChild(tip); });
   }
   var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null, tlRows = [];
+  var c06El = $("#c06"), envEl = c06El ? c06El.querySelector(".env") : null;
   /* ── The Journey: a strip of moments the wheel travels while the page holds ── */
   var jy = { el: $("#timeline"), stage: $("#jyStage"), strip: $("#jyStrip"), track: $("#jyTrack"), count: $("#jyCount"), year: $("#jyYear"), hint: $("#jyHint"),
              cards: [], n: 0, centres: [], live: false, pending: null, f: -1, lit: null, head: null, pulse: null, knots: [], yrs: [], bound: false, yr: "" };
@@ -500,7 +503,14 @@
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
   var builtH = 0, holdLock = 0, holds = [], holdActive = null, hold = { active: false };
-  function lockScrollTo(yy) { try { window.scrollTo({ top: yy, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, yy); } }
+  /* every scroll the page makes itself is remembered for a few frames, so a scroll event that reports one
+     of them late is never mistaken for the reader moving the page */
+  var vsHist = [];
+  function lockScrollTo(yy) {
+    vsHist.push(yy); if (vsHist.length > 8) vsHist.shift();
+    try { window.scrollTo({ top: yy, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, yy); }
+  }
+  function ownScroll(sy) { for (var i = 0; i < vsHist.length; i++) if (Math.abs(sy - vsHist[i]) <= 1.5) return true; return false; }
   /* a hold takes the page where the crossing notch left it, so nothing snaps; only a long overshoot eases back */
   function settle(h, y, dy) {
     h.settleAt = performance.now() + 350;
@@ -525,11 +535,14 @@
     if (e.ctrlKey) return;                                                /* pinch zoom */
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     if (holdActive) {
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       if (holdActive.phase === "hold") { holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02); holdActive.fedAt = performance.now(); }
       return;
     }
     if (!vs.on) return;
+    /* a notch the browser has already taken for itself - one delivered too late to be cancelled - is not added
+       again here: the page follows the browser's own move and the target picks up from wherever that lands */
+    if (!e.cancelable) return;
     e.preventDefault();
     vs.tgt = clamp(vs.tgt + d, 0, maxScroll());
   }, { passive: false });
@@ -537,7 +550,7 @@
   window.addEventListener("scroll", function () {
     if (!vs.on) return;
     var sy = window.pageYOffset || document.documentElement.scrollTop;
-    if (Math.abs(sy - vs.last) > 1.5) { vs.cur = vs.tgt = sy; vs.extAt = performance.now(); }
+    if (Math.abs(sy - vs.last) > 1.5 && !ownScroll(sy)) { vs.cur = vs.tgt = sy; vs.extAt = performance.now(); }
   }, { passive: true });
   var vsT = 0;
   function vsStep(now) {
@@ -547,8 +560,10 @@
     if (Math.abs(diff) < 0.2) { if (diff) vs.cur = vs.tgt; else return; }
     else vs.cur += diff * (1 - Math.exp(-dt * 10));
     var next = Math.round(vs.cur * 2) / 2;
-    if (next !== vs.last) { vs.last = next; try { window.scrollTo({ top: next, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, next); } }
+    if (next !== vs.last) { vs.last = next; lockScrollTo(next); }
   }
+  /* the page is put exactly on a lock, and the virtual scroll agrees with it */
+  function vsPin(yy) { vs.cur = vs.tgt = yy; if (vs.last !== yy) { vs.last = yy; lockScrollTo(yy); } }
   var touchY = null;
   window.addEventListener("touchstart", function (e) { touchY = e.touches[0].clientY; }, { passive: true });
   window.addEventListener("touchmove", function (e) {
@@ -577,7 +592,7 @@
     { id: "c04",  side: "R", y: 0.42 },
     { id: "c05",  side: "C", y: 0.40, core: true },
     { id: "charts", ride: true },
-    { id: "c06",  side: "R", y: 0.42 },
+    { id: "c06",  side: "R", y: 0.42, globe: true },
     { id: "c07",  side: "C", y: 0.5, ring: true }
   ];
 
@@ -718,13 +733,19 @@
           jy.cards.forEach(function (c) { cardFoot = Math.max(cardFoot, jy.strip.offsetTop + c.offsetTop + c.offsetHeight); });
           var railIn = jy.stage.clientTop + jy.stage.clientHeight - (jy.trackH || 96) + (jy.railY || 38);
           var R = Math.min(190, Math.max(96, railIn - cardFoot - 14)), lean = Math.round(R * 0.5);
-          var xBend = SIDE[p.side] + lean, xJoin = xBend + R, xExit = SIDE.R - lean - R;
+          var xExit = SIDE.R - lean - R;
+          /* the way in is the strip's own line: above the strip the descent sweeps off the page's left edge,
+             comes down out of sight, and enters the stage along the rail from its left edge, so inside the
+             strip the only line is the timeline's. The turn onto the rail happens just off the page. */
+          var r0 = 72, xOff = -(r0 + 40), knotY = pts[pts.length - 1].y, yOff = Math.max(knotY + 140, hy - 60);
+          var xJoin = xOff + r0;
           jy.x0 = xJoin - railX; jy.runIn = Math.max(0, jy.centres[0] - jy.x0); jy.runOut = Math.max(0, (xExit - railX) - jy.centres[0]);
           jy.reach = jy.centres[jy.n - 1] + jy.runOut; jy.f = -1;
           var runIn = jy.runIn, runOut = jy.runOut, jpx = Math.max(2400, jy.n * 230) + runIn + runOut;
           var jExit = { x: xExit, y: railY };
-          pts.push({ x: xBend, y: railY - R, id: "journeyBend", el: el, noKnot: true });
-          pts.push({ x: xJoin, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: xBend + R * 0.45, y: railY },
+          pts.push({ x: xOff, y: yOff, id: "journeyOff", el: el, noKnot: true });
+          pts.push({ x: xOff, y: railY - r0, id: "journeyDrop", el: el, noKnot: true });
+          pts.push({ x: xJoin, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: xOff + r0 * 0.45, y: railY },
                      loop: { id: "journey", pts: [jExit], end: jExit, yA: railY, yB: railY, lock: jLock,
                              px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, cpOut: { x: xExit + R * 0.55, y: railY } } });
           pts.push({ x: xExit + R, y: railY + R, id: "journeyOut", el: el, noKnot: true, cpIn: { x: xExit + R, y: railY + R * 0.45 } });
@@ -863,10 +884,43 @@
         pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 110, y: ridePts[0].y },
                    yS: ridePts[0].y, yE: ridePts[0].y,
                    lock: Math.max(0, Math.max(co0.y + el.offsetHeight + 56 - window.innerHeight, Math.min(co0.y - 96, co0.y + el.offsetHeight / 2 - window.innerHeight / 2))) });
-        /* off the £100m point it carries on level, rounds one quarter-ellipse onto the right-hand margin and
-           runs down it; the corner is as wide as the margin allows and taller than it is wide */
-        var last = ridePts[ridePts.length - 1], dxo = Math.max(40, SIDE.R - last.x), Ho = Math.max(dxo * 1.6, 340);
-        pts.push({ x: SIDE.R, y: last.y + Ho, id: "chartsOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: last.y + Ho - Ho * 0.5523 } });
+        /* off the £100m point the line swings out in one round turn, as wide as the room to the right of the
+           panel allows, arrives vertical out there, and eases back onto the margin as it comes down */
+        var last = ridePts[ridePts.length - 1];
+        var xR = Math.min(W - 26, Math.max(SIDE.R, last.x + 150)), Rt = Math.max(60, xR - last.x);
+        pts.push({ x: xR, y: last.y + Rt, id: "chartsTurn", el: el, noKnot: true, cpIn: { x: xR, y: last.y + Rt - Rt * 0.5523 } });
+        var Hs = Math.max(260, Math.abs(xR - SIDE.R) * 2.2);
+        pts.push({ x: SIDE.R, y: last.y + Rt + Hs, id: "chartsOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: last.y + Rt + Hs * 0.5 } });
+        return;
+      }
+      if (p.globe) {
+        /* the carbon planet: the line comes down the margin, runs left along the band between the heading and
+           the six cards, drops onto the planet's right-hand side and wraps it once, tangent on and tangent off,
+           then carries straight on down. The page holds while the wrap is drawn and the ground goes to night. */
+        var gl = document.getElementById("globe"), env = el.querySelector(".env"), orbit = el.querySelector(".env-orbit"), ehd = el.querySelector(".env-head");
+        if (gl && env && orbit && gl.offsetWidth && document.documentElement.clientWidth > 1100) {
+          /* the ring stands a little off the planet's box, in the gap before the cards, so it reads as its own orbit */
+          var ggap = parseFloat(window.getComputedStyle(orbit).columnGap) || 24;
+          var go = pageXY(gl), gw = gl.offsetWidth, gcx = go.x + gw / 2, gcy = go.y + gl.offsetHeight / 2, rg = gw / 2 + Math.min(18, Math.max(8, ggap * 0.42));
+          var oo = pageXY(orbit), eo = pageXY(env), ehB = ehd ? pageXY(ehd).y + ehd.offsetHeight : oo.y - 40;
+          var yBand = oo.y - ehB >= 24 ? (ehB + oo.y) / 2 : oo.y - 14;
+          var rb = Math.min(110, Math.max(44, (SIDE.R - (gcx + rg)) * 0.42)), rb2 = Math.min(rb, Math.max(30, (gcy - yBand) * 0.5));
+          var secBot = el.offsetTop + el.offsetHeight, vh2 = window.innerHeight;
+          var gLock = Math.max(0, Math.max(eo.y, Math.min(secBot - vh2, gcy - vh2 / 2)));
+          if (gLock < eo.y) gLock = eo.y;
+          var ring = [], NR = 96;
+          for (var gi = 1; gi <= NR; gi++) { var th = gi / NR * Math.PI * 2; ring.push({ x: gcx + rg * Math.cos(th), y: gcy + rg * Math.sin(th) }); }
+          var gIn = { x: gcx + rg, y: gcy }, gOutY = oo.y + orbit.offsetHeight + 48;
+          pts.push({ x: SIDE.R, y: yBand - rb, id: "globeBand", el: el, noKnot: true });
+          pts.push({ x: SIDE.R - rb, y: yBand, id: "globeTurn", el: el, noKnot: true, cpIn: { x: SIDE.R - rb * 0.45, y: yBand } });
+          pts.push({ x: gcx + rg + rb2, y: yBand, id: "globeLeft", el: el, noKnot: true, out: { x: gcx + rg + rb2 * 0.45, y: yBand } });
+          pts.push({ x: gcx + rg, y: yBand + rb2, id: "globeDrop", el: el, noKnot: true, cpIn: { x: gcx + rg, y: yBand + rb2 * 0.45 } });
+          pts.push({ x: gIn.x, y: gIn.y, id: p.id, el: el, noKnot: true,
+                     loop: { id: "globe", pts: ring, end: gIn, yA: gcy, yB: gcy, lock: gLock, px: 2000, cpOut: { x: gcx + rg, y: gcy + (gOutY - gcy) * 0.5 } } });
+          pts.push({ x: gcx + rg, y: gOutY, id: "globeOut", el: el, noKnot: true, cpIn: { x: gcx + rg, y: gOutY - (gOutY - gcy) * 0.5 } });
+          return;
+        }
+        pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: false });
         return;
       }
       if (p.ring) {
@@ -922,7 +976,8 @@
         dRideOut = d; rideMeta = a; from = a.rideTo[a.rideTo.length - 1];
         /* off the top of the growth chart heading right, round the corner set for it, then down the margin */
         var dxo2 = Math.max(40, b.x - from.x), slopeOut = from.c2 && from.x - from.c2.x > 0.5 ? (from.y - from.c2.y) / (from.x - from.c2.x) : 0;
-        var cOutR = { x: from.x + dxo2 * 0.5523, y: from.y + slopeOut * dxo2 * 0.5523 };   /* carries the climb on, then arches over */
+        /* the climb is carried on a little, never more than a fifth of the turn, then the line arches over */
+        var cOutR = { x: from.x + dxo2 * 0.5523, y: from.y + Math.max(-dxo2 * 0.2, slopeOut * dxo2 * 0.5523) };
         var cInR = b.cpIn || { x: b.x, y: b.y - Math.max(160, (b.y - from.y) * 0.5) };
         d += " C " + f1(cOutR.x) + " " + f1(cOutR.y) + ", " + f1(cInR.x) + " " + f1(cInR.y) + ", " + f1(b.x) + " " + f1(b.y);
         if (b.id === "chartsOut") a.dGlide = d;             /* the corner off the chart is paced by its length */
@@ -942,17 +997,20 @@
         d2 = "M " + f1(a.x) + " " + f1(a.y) + side(1);
         continue;
       }
-      var c2 = b.cpIn || { x: b.x, y: b.y - dy };
-      d += " C " + f1(a.x) + " " + f1(a.y + dy) +
+      var c1 = a.out || { x: a.x, y: a.y + dy }, c2 = b.cpIn || { x: b.x, y: b.y - dy };
+      d += " C " + f1(c1.x) + " " + f1(c1.y) +
            ", " + f1(c2.x) + " " + f1(c2.y) +
            ", " + f1(b.x) + " " + f1(b.y);
+      if (b.id === "chartsOut" && rideMeta) rideMeta.dGlide = d;   /* the whole turn off the chart is paced by its length */
     }
 
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     track.setAttribute("d", d);
     live.setAttribute("d", d);
+    if (glow) glow.setAttribute("d", d);
     if (track2 && live2) {
       track2.setAttribute("d", d2); live2.setAttribute("d", d2);
+      if (glow2) { glow2.setAttribute("d", d2); glow2.style.display = d2 ? "" : "none"; }
       track2.style.display = live2.style.display = d2 ? "" : "none";
     }
 
@@ -971,6 +1029,7 @@
     }
     live.style.strokeDasharray = totalLen;
     live.style.strokeDashoffset = totalLen;
+    if (glow) { glow.style.strokeDasharray = totalLen; glow.style.strokeDashoffset = totalLen; }
     /* where the ring opens and closes, as fractions of the main stroke; the right half is drawn in step */
     ringA = ringB = ringLen = 0;
     if (dAtB && live2) {
@@ -983,6 +1042,7 @@
       } catch (e) { ringA = ringB = ringLen = 0; }
       svg.removeChild(pr2);
       live2.style.strokeDasharray = ringLen; live2.style.strokeDashoffset = ringLen;
+      if (glow2) { glow2.style.strokeDasharray = ringLen; glow2.style.strokeDashoffset = ringLen; }
     }
 
     knots.forEach(function (k) { k.remove(); });
@@ -1025,7 +1085,7 @@
         if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
         else if (sm.l > lOut && sm.y < lp.meta.yB) sm.y = lp.meta.yB;
       }
-      if (lp.meta.id === "journey" || lp.meta.id === "map") {
+      if (lp.meta.id === "journey" || lp.meta.id === "map" || lp.meta.id === "globe") {
         var glide = 0;
         if (lp.meta.dGlide) { try { pr3.setAttribute("d", lp.meta.dGlide); svg.appendChild(pr3); glide = Math.max(0, pr3.getTotalLength() - lOut); svg.removeChild(pr3); } catch (e) { glide = 0; } }
         paceExit(samples, lOut, lp.meta.lock + window.innerHeight * 0.62, glide);
@@ -1071,7 +1131,11 @@
     var yNow = window.pageYOffset || document.documentElement.scrollTop;
     holds = holdDefs.sort(function (u, v) { return u.lock - v.lock; }).map(function (def) {
       var old = holds.filter(function (h) { return h.id === def.id; })[0];
-      if (old && old.phase === "hold" && Math.abs(yNow - def.lock) <= 320) { def.phase = "hold"; def.prog = old.prog; def.shown = old.shown; return def; }
+      /* a hold the page is holding on, or has just let go of, keeps its state: a rebuild while the page sits
+         a little below a lock must not put the hold back in front of it and pull the page up again */
+      if (old && Math.abs(yNow - def.lock) <= 320 && (old.phase === "hold" || old.phase === "after" || old.phase === "approach")) {
+        def.phase = old.phase; def.prog = old.prog; def.shown = old.shown; def.dir = old.dir; def.t0 = old.t0; return def;
+      }
       def.phase = yNow > def.lock + 40 ? "after" : "before"; def.prog = def.shown = def.phase === "after" ? 1 : 0; return def;
     });
     tlRows.forEach(function (pt) {
@@ -1180,8 +1244,12 @@
         var dy = y - h.lock, hadY = h.prevY !== undefined, down = hadY && y > h.prevY, up = hadY && y < h.prevY;
         if (vs.on) {
           if (ext) {
-            /* while something else moves the page, the holds only follow where it goes */
-            if (h.phase === "hold" || h.phase === "approach") { h.phase = dy > 0 ? "after" : "before"; h.shown = h.prog = dy > 0 ? 1 : 0; }
+            /* while something else moves the page, the holds only follow where it goes; a nudge of a few
+               pixels while the page holds - a notch the browser took for itself - is simply put back */
+            if (h.phase === "hold" || h.phase === "approach") {
+              if (Math.abs(dy) <= 60) vsPin(h.lock);
+              else { h.phase = dy > 0 ? "after" : "before"; h.shown = h.prog = dy > 0 ? 1 : 0; }
+            }
             if (h.phase === "before" && dy >= 320) h.phase = "after";
             if (h.phase === "after" && dy <= -320) h.phase = "before";
           } else if (h.phase === "before") {
@@ -1194,7 +1262,7 @@
           if (h.phase === "approach") {
             vs.tgt = h.lock;
             if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";
-            else if (Math.abs(vs.cur - h.lock) < 1.5 || performance.now() - (h.t0 || 0) > 1400) { vs.cur = vs.tgt = h.lock; h.phase = "hold"; }
+            else if (Math.abs(vs.cur - h.lock) < 1.5 || performance.now() - (h.t0 || 0) > 1400) { vsPin(h.lock); h.phase = "hold"; }
             else holdActive = h;
           }
           if (h.phase === "hold") {
@@ -1238,6 +1306,7 @@
       hold.active = !!holdActive;
     }
     live.style.strokeDashoffset = totalLen * (1 - p);
+    if (glow) glow.style.strokeDashoffset = totalLen * (1 - p);
     if (rLive && rideBox) {
       rLive.style.strokeDashoffset = totalLen * (1 - p);
       var onRide = p > rideA - 0.004 && p < rideB + 0.004;
@@ -1268,12 +1337,21 @@
     if (live2 && ringLen) {
       var p2 = ringB > ringA ? clamp((p - ringA) / (ringB - ringA), 0, 1) : 0;
       live2.style.strokeDashoffset = ringLen * (1 - p2);
+      if (glow2) glow2.style.strokeDashoffset = ringLen * (1 - p2);
     }
     /* while the page holds on the pink planet the glow runs outward: the planet, ring A, ring B, ring C, the planet */
     var mapHold = holds.filter(function (h) { return h.id === "map"; })[0];
     var lapping = !!(mapHold && mapHold.phase === "hold");
     orbitBoostTarget = lapping ? 1 : 0;
-    thread.classList.toggle("lap", lapping);
+    var gHold = holds.filter(function (h) { return h.id === "globe"; })[0];
+    thread.classList.toggle("lap", lapping || !!(gHold && gHold.phase === "hold"));
+    /* the carbon planet's chapter is off-white until the page takes hold on the planet; then it goes to night
+       and stays so on down the page. Winding the wrap back brings the day back. Without the hold - a phone,
+       reduced motion - it is night from the start. */
+    if (c06El) {
+      var night = !gHold || gHold.phase === "hold" || gHold.phase === "after" || (gHold.phase === "approach" && gHold.dir);
+      c06El.classList.toggle("day", !night);
+    }
     var jyHold = holds.filter(function (h) { return h.id === "journey"; })[0];
     if (jyHold) {
       if (jyHold.phase === "hold" && jy.pending !== null) { jyHold.prog = toProg(jyHold, jy.pending); jy.pending = null; }
@@ -1470,6 +1548,12 @@
     c05:["05","The Next Ten Years"], c06:["06","The Company"], c07:["07","Still Building"] };
   var lastCard = "";
   var lastY = -1, velY = 0;
+  /* from the carbon planet's ground down, chapter 06 is dark once it is night */
+  function nightBelow(yy) {
+    if (!c06El || !envEl || c06El.classList.contains("day")) return false;
+    var t = 0, e2 = envEl; while (e2 && e2 !== explore) { t += e2.offsetTop; e2 = e2.offsetParent; }
+    return yy >= t;
+  }
   function flowSpine(y, cur2, inFooter) {
     if (!spine.length) return;
     var si = -1, n = spine.length;
@@ -1533,7 +1617,7 @@
       chapters.forEach(function (s) {
         var top = s.offsetTop, bot = top + s.offsetHeight;
         if (mid >= top && mid < bot)
-          dark = s.classList.contains("dark") || s.classList.contains("scene");
+          dark = s.classList.contains("dark") || s.classList.contains("scene") || (s === c06El && nightBelow(mid));
         if (y + window.innerHeight * 0.42 >= top && y + window.innerHeight * 0.42 < bot) cur2 = s.id;
       });
       var exploring = document.body.dataset.view === "explore";
