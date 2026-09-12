@@ -1358,6 +1358,15 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-track .jt-yr:hover{fill:var(--pale)}
 @media(max-width:700px){.journey{--cw:86vw}.jy-stage{height:auto;min-height:0;padding-bottom:96px}.jy-strip{height:auto;padding-top:18px;padding-bottom:22px}.jy-card{grid-template-columns:1fr}.jy-year{top:36%}.jy-hint{display:none}}
 @media(prefers-reduced-motion:reduce){.jy-card,.jy-when,.jy-title,.jy-copy p,.jy-pic img{transition:none}.jy-track .jt-pulse{animation:none}}
+/* ── the facts bar on small screens: text wraps below 1180, two by two below 900, one full-width row each on phones ── */
+@media(max-width:1180px){.bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b,.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:normal}}
+.bar{overflow-x:clip}
+@media(max-width:900px){.bar .wrap{grid-template-columns:1fr 1fr}.bar>.wrap>div:nth-child(3){border-left:0}.bar>.wrap>div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}}
+@media(max-width:600px){.bar .wrap{grid-template-columns:1fr;padding-inline:16px}
+  .bar>.wrap>div{border-left:0;border-top:0;justify-content:flex-start;padding:14px 6px;min-height:0;gap:16px}
+  .bar>.wrap>div+div{border-top:1px solid rgba(255,255,255,.14)}
+  .bar .b1 img.men{height:48px;width:48px}.bar .b2 img{height:30px}.bar .b3 .lg-big{font-size:30px}.lg-ebay.xl{font-size:32px}
+  .bar .bw>b{font-size:15px}.bar em{font-size:10.5px}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1442,7 +1451,7 @@ a.tl-link{color:var(--pink);font-weight:500}
 
 <div class="bar" aria-label="Four snapshot facts">
   <div class="wrap">
-    <div class="b1"><img class="men" src="../assets/men-mono.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em>£150,000 Salboy competition · Runner-up</em></span></div>
+    <div class="b1"><img class="men" src="../assets/men-mono.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em>£150,000 Salboy competition · Runner&#8209;up</em></span></div>
     <div class="b3"><span class="lg-big" aria-hidden="true">500,000+</span><span class="bw"><small class="dt">2019 – 2026</small><b>Products sold</b><em>No.1 fire extinguishers on eBay &amp; Temu</em></span></div>
     <div class="b2"><img src="../assets/myta-mono.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
     <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>April 2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
