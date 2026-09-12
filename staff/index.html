@@ -131,6 +131,9 @@ html.js.has-gsap .chrome{opacity:0}
 /* the gate: the same shutter, but the first thing on screen, above everything, viewport-sized */
 .gate{position:fixed;inset:0;z-index:950;overflow:hidden;pointer-events:none;--hd:0px;background:var(--black)}
 html.no-gsap .gate,html.no-js .gate,.gate.done{display:none}
+/* the gate's moving parts start hidden in the stylesheet rather than in the engine: engine.js is
+   deferred, so anything it hides on its first line paints for a frame before the script runs */
+#gLogo,#gSlats,#gate .rail,#gate .housing,#gStencil1,#gStencil2{opacity:0;visibility:hidden}
 #gate .stencil{position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;padding:0 var(--gut);display:grid;justify-items:center;gap:clamp(14px,2vh,22px);z-index:1}
 #gate .glogo{width:clamp(200px,28vw,420px);height:auto;filter:drop-shadow(0 6px 30px rgba(0,0,0,.6))}
 #gate b{font-family:var(--disp);font-variation-settings:"wdth" 122,"wght" 900;text-transform:uppercase;font-size:clamp(28px,5vw,64px);letter-spacing:.06em;line-height:1;color:#fff}
@@ -549,6 +552,9 @@ footer .ff{height:104px;width:auto;margin-bottom:22px}
   .rv,.flip>*{opacity:1;transform:none;transition:none}.ch h2 .wipe{clip-path:none;transition:none}
   .shutter .slats,.shutter .stencil,.daylight,.cp,.hero .ph img,.route .lit,.sq,.tile .pres i::after,.floor::before{transition:none;animation:none}
   .hero.open .daylight{animation:none}.route .lit::after{animation:none}.hero .fm svg{animation:none}
+  /* with reduced motion the engine removes the gate outright, but it is deferred: hiding the gate here
+     too means these visitors never see it at all, rather than a black screen for the first frame */
+  .gate{display:none}
   .preloader{display:none}html.js.has-gsap .chrome,html.js.has-gsap .cpanim,html.js.has-gsap .hero .fm,html.js.has-gsap .hero .opened .k,html.js.has-gsap .hero .opened .strap,html.js.has-gsap .hero .opened .cta{opacity:1}.cpwrap{transition:none}.hero h1 .line span{transform:none!important}}
 @media print{.chrome,.prog,.route,.daylight,.shutter,.totop,.bigman,.preloader,.cur-dot,.cur-ring,.cube-fixed,.hero .foot{display:none}.hero{height:auto;min-height:0;background:#fff;color:#000}.hero .ph{position:relative;height:50vh}.hero .in{position:relative;padding:20px 0}.hero h1{color:#000}
   .ch,.ch.dark,.ch.on-red,.entrance,.intro,body,footer{background:#fff;color:#000}}
