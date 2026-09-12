@@ -1433,17 +1433,10 @@ a.tl-link{color:var(--pink);font-weight:500}
 @media(max-width:1100px){.env-orbit{grid-template-columns:1fr 1fr}.globe{grid-column:1/-1;grid-row:1;width:min(60vw,440px)}}
 @media(max-width:820px){.env-head{grid-template-columns:1fr}.env-orbit{grid-template-columns:1fr}.globe{width:min(78vw,420px)}
   .env:not(.open) .env-col:first-child>div:nth-child(n+2),.env:not(.open) .env-col:last-child{display:none}}
-/* the six numbers: three columns of two, white, pink-white and pink, left to right */
-#proof .metric:nth-child(3n+1){background:var(--porcelain)}
-#proof .metric:nth-child(3n+2){background:linear-gradient(180deg,#ffe6f1,#ffc9e0)}
-#proof .metric:nth-child(3n){background:linear-gradient(180deg,#ff4a9d,#e8157a)}
-#proof .metric:nth-child(3n+1) .v,#proof .metric:nth-child(3n+2) .v,#proof .metric:nth-child(3n+1) .k,#proof .metric:nth-child(3n+2) .k{color:var(--pink)}
-#proof .metric:nth-child(3n+1) .def,#proof .metric:nth-child(3n+2) .def{color:var(--ink-2)}
-#proof .metric:nth-child(3n+1) .per,#proof .metric:nth-child(3n+2) .per{color:var(--ink-3)}
-#proof .metric:nth-child(3n+2) .def{color:#4a2a3a}#proof .metric:nth-child(3n+2) .per{color:#8a5a70}#proof .metric:nth-child(3n+2) .v,#proof .metric:nth-child(3n+2) .k{color:#d80f6d}
-#proof .metric:nth-child(3n) .v,#proof .metric:nth-child(3n) .k{color:#fff}
-#proof .metric:nth-child(3n) .def{color:rgba(255,255,255,.9)}#proof .metric:nth-child(3n) .per{color:rgba(255,255,255,.7)}
-#proof .metric:nth-child(3n)::after{background:#fff}
+/* the six numbers: three columns of two, each with its own accent, white, pink-white and pink, over the same dark ground */
+#proof .metric:nth-child(3n+1){--acc:var(--porcelain)}
+#proof .metric:nth-child(3n+2){--acc:#ffb3d6}
+#proof .metric .v,#proof .metric .k{color:var(--pink)}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
