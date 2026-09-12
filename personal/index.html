@@ -127,10 +127,11 @@ body[data-view="record"] .card{display:none}
 
 /* ── chrome ─────────────────────────────────────────────────── */
 .chrome{position:fixed;inset:0 0 auto 0;z-index:70;border-bottom:1px solid transparent;
-  transition:background .35s,border-color .35s}
-.chrome.stuck{background:rgba(244,241,235,.9);backdrop-filter:blur(14px) saturate(160%);
-  border-bottom-color:var(--rule)}
-body.dark-chrome .chrome.stuck{background:rgba(16,16,16,.88);border-bottom-color:var(--rule-d)}
+  background:rgba(244,241,235,.82);backdrop-filter:blur(14px) saturate(160%);
+  transition:background .35s,border-color .35s}   /* the same at the top of the page as anywhere else */
+.chrome.stuck{border-bottom-color:var(--rule)}
+body.dark-chrome .chrome{background:rgba(16,16,16,.82)}
+body.dark-chrome .chrome.stuck{border-bottom-color:var(--rule-d)}
 .chrome .wrap{display:flex;align-items:center;gap:clamp(12px,3vw,44px);height:78px}
 .mono-mark{font-family:var(--serif);font-size:27px;line-height:1;flex:0 0 auto}
 .chrome nav{margin-left:auto;display:flex;gap:clamp(18px,2.6vw,40px)}
@@ -620,12 +621,12 @@ details.ev p{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--pale-3
 .map{position:relative;aspect-ratio:1.32/1;min-height:400px}
 .map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .map svg ellipse{fill:none;vector-effect:non-scaling-stroke}
-.map .tape{stroke:url(#mgp);stroke-width:2.4}
-.map .tapeGlow{stroke:url(#mgp);stroke-width:7;opacity:.26;filter:blur(3px);
+.map .tape{stroke:rgba(255,255,255,.85);stroke-width:2.2}
+.map .tapeGlow{stroke:rgba(255,255,255,.7);stroke-width:7;opacity:.12;filter:blur(3px);
   animation:tapepulse 6s ease-in-out infinite}
 @keyframes tapepulse{50%{opacity:.42}}
-.map .ringB{stroke:rgba(255,61,154,.45);stroke-width:1.2}
-.map .ringC{stroke:rgba(255,255,255,.14);stroke-width:1;stroke-dasharray:1.5 3}
+.map .ringB{stroke:rgba(255,255,255,.42);stroke-width:1.2}
+.map .ringC{stroke:rgba(255,255,255,.2);stroke-width:1;stroke-dasharray:1.5 3}
 .node{position:absolute;transform:translate3d(var(--ox,0px),var(--oy,0px),0) translate(-50%,-50%);display:flex;flex-direction:column;
   align-items:center;gap:8px;cursor:pointer;background:none;border:0;padding:6px;
   color:var(--pale);font-family:var(--disp);text-transform:uppercase;line-height:1.05;
@@ -1236,7 +1237,12 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
 .spine{isolation:isolate}
 @media(min-width:900px){.stand.one-line{white-space:nowrap;max-width:none}}
 .bd.bd-ebay .lg-ebay.bd-lg{font-size:56px;align-self:center;letter-spacing:-.06em;justify-self:start;line-height:1}
-.env-head{display:grid;grid-template-columns:1fr auto;gap:clamp(20px,3vw,48px);align-items:end}
+.env-head{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(20px,3vw,48px);align-items:center}
+/* the carbon planet: a globe drawn from the world map, turning, with the sea routes the containers take */
+.globe{width:clamp(200px,22vw,300px);aspect-ratio:1;position:relative;touch-action:pan-y;cursor:grab}
+.globe:active{cursor:grabbing}
+.globe canvas{display:block;width:100%;height:100%}
+@media(max-width:820px){.globe{margin:0 auto;width:min(72vw,300px)}}
 .env-h{font-size:clamp(28px,3.4vw,46px);line-height:.95;margin:6px 0 14px}
 .env-head .stand{margin:0}
 .env-marks{list-style:none;margin:0;padding:0;display:grid;gap:10px;min-width:220px}
@@ -1256,7 +1262,7 @@ body.dark-chrome .spine a.on::before,body.dark-chrome .spine a.done::before{back
 .next .quo.endq{margin:clamp(64px,7vw,116px) auto 0;max-width:60ch;border-left:0;padding-left:0;text-align:center}   /* room below the heading for the line to part */
 .next .quo.endq q{font-size:clamp(21px,2.6vw,32px);line-height:1.3}
 .next .quo.endq .by{margin-top:18px}
-.next .acts{margin-top:clamp(96px,10vw,140px)}
+.ft-top{flex-direction:column;align-items:center}.ft-top .acts{margin-top:clamp(30px,4vw,52px)}
 
 /* ── notes, 11 Sept: lightbox navigation, corner-card progress ── */
 .lb{grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(10px,2vw,28px);place-content:stretch;padding-inline:clamp(12px,3vw,48px)}
@@ -1288,7 +1294,8 @@ a.tl-link{color:var(--pink);font-weight:500}
 .map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
 .map.lap-core .node.core .orb,.map.lap-a .node[data-ring="A"] .orb,.map.lap-b .node[data-ring="B"] .orb,.map.lap-c .node[data-ring="C"] .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 45%,transparent),0 0 40px 12px var(--p2),0 0 90px 24px color-mix(in srgb,var(--p2) 45%,transparent);filter:brightness(1.14) saturate(1.12)}
 .map .tape,.map .ringB,.map .ringC{transition:filter .5s,stroke .5s,stroke-width .5s}
-.map.lap-a-ring .tape,.map.lap-a .tape,.map.lap-b-ring .ringB,.map.lap-b .ringB,.map.lap-c-ring .ringC,.map.lap-c .ringC{stroke:#ffd6ea;stroke-width:2.6;filter:drop-shadow(0 0 6px rgba(255,214,234,.9)) drop-shadow(0 0 14px var(--pink))}
+.map .tapeGlow{transition:stroke .5s,opacity .5s}.map.lap-a-ring .tapeGlow,.map.lap-a .tapeGlow{stroke:var(--pink);opacity:.34}
+.map.lap-a-ring .tape,.map.lap-a .tape,.map.lap-b-ring .ringB,.map.lap-b .ringB,.map.lap-c-ring .ringC,.map.lap-c .ringC{stroke:var(--pink);stroke-width:2.6;filter:drop-shadow(0 0 6px rgba(255,214,234,.9)) drop-shadow(0 0 14px var(--pink))}
 
 /* ── the line builds the charts as it rides them ── */
 .charts{position:relative}
@@ -1319,7 +1326,7 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-btn:hover{border-color:var(--pink);color:var(--pink);transform:scale(1.08)}
 .jy-btn:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
 .jy-count{font-size:11px;letter-spacing:.22em;color:var(--pale-2);font-weight:600;min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
-.jy-stage{position:relative;height:clamp(500px,68vh,680px);margin-top:18px;overflow:hidden;background:var(--carbon);border-top:1px solid var(--rule-d);border-bottom:1px solid var(--rule-d)}
+.jy-stage{position:relative;height:clamp(500px,68vh,680px);margin-top:18px;overflow:hidden;background:transparent;border-top:1px solid var(--rule-d);border-bottom:1px solid var(--rule-d)}   /* edge to edge (sized by the engine), see-through so the thread shows joining and leaving its rail */
 .jy-year{position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);font-family:var(--disp);font-size:clamp(160px,24vw,360px);line-height:1;color:var(--pale);opacity:.045;pointer-events:none;user-select:none;white-space:nowrap;letter-spacing:-.02em;transition:opacity .4s}
 .jy-strip{list-style:none;margin:0;padding:24px calc(50% - var(--cw) / 2) 0;display:flex;align-items:center;gap:clamp(40px,5vw,80px);height:calc(100% - 96px);box-sizing:border-box;position:relative;will-change:transform}
 .journey.touch .jy-strip{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;will-change:auto}
@@ -1333,6 +1340,9 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-pic{display:block;width:100%;height:auto;aspect-ratio:4/3;padding:0;border:0;background:#0d0d0d;border-radius:4px;overflow:hidden;cursor:pointer;position:relative}
 .jy-pic img{display:block;width:100%;height:100%;object-fit:cover;transform:translateX(var(--px,0px)) scale(1.06);transition:transform .6s cubic-bezier(.2,.8,.25,1)}
 .jy-pic:hover img{transform:translateX(var(--px,0px)) scale(1.12)}
+.jy-card[data-when="November 2021"] .jy-pic img{transform:translateX(var(--px,0px)) scale(1.5)}         /* the college's mark sits small in its picture */
+.jy-card[data-when="November 2021"] .jy-pic:hover img{transform:translateX(var(--px,0px)) scale(1.56)}
+.jy-card[data-when="March 2026"] .jy-pic img{object-fit:contain}                                            /* five marks stacked tall: shown whole */
 .jy-pic::after{content:"View";position:absolute;right:10px;bottom:10px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink);background:rgba(16,16,16,.75);padding:5px 8px;border-radius:2px;opacity:0;transition:opacity .3s}
 .jy-pic:hover::after{opacity:1}
 .jy-pic:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
@@ -1378,6 +1388,12 @@ a.tl-link{color:var(--pink);font-weight:500}
 /* on a phone each fact is centred as a block: marks right-aligned in one column, words in a fixed column beside them */
 @media(max-width:600px){.bar>.wrap>div{display:grid;grid-template-columns:112px minmax(0,236px);justify-content:center;align-items:center;column-gap:14px;padding-inline:0}
   .bar>.wrap>div>img,.bar>.wrap>div>.lg-big,.bar>.wrap>div>.lg-ebay{justify-self:end}}
+/* ── on a phone the system shows too, above the list: squared up, smaller marks and words, the planets still turning ── */
+@media(max-width:760px){.grp{display:grid!important;grid-template-columns:1fr;gap:22px}
+  .map{min-height:0;aspect-ratio:1/1.08}
+  .node.core{--os:64px}.node[data-s="operating"]{--os:44px}.node[data-s="planned"]{--os:36px}.node[data-s="future"]{--os:28px}
+  .node .lbl{font-size:9px}.node.core .lbl{font-size:10.5px}.node[data-s="future"] .lbl{font-size:8.5px}.node .st{font-size:7px}
+  .map .yrlbl{font-size:7.5px;padding:3px 7px}.rocket{width:44px}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1451,7 +1467,7 @@ a.tl-link{color:var(--pink);font-weight:500}
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">The managing director of Freedom Fire &amp; Safety Ltd and Freedom Group Enterprise Limited.</p></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">The managing director of Freedom Fire &amp; Safety Ltd | Freedom Group Enterprise</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
         <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
@@ -1484,7 +1500,7 @@ a.tl-link{color:var(--pink);font-weight:500}
       <div class="ph" data-yr="The future · 2027 and beyond"><div>
         <em>The future</em>
         <h3>A £100m projection.</h3>
-        <p>D2C at full scale, other national retailers, national servicing facilities and B2B businesses, and the next owned brands.</p></div></div>
+        <p>D2C at full scale: eBay, Temu and Amazon today, Shopify and OnBuy next, with the company's own brands going into national retailers and B2B trade supply, fire extinguisher servicing and installation nationwide, and the next owned brands built the same way.</p></div></div>
     </div>
     <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
   </div>
@@ -1505,12 +1521,11 @@ a.tl-link{color:var(--pink);font-weight:500}
       <div class="ch-tag">01 — The Spark</div>
       <h2>It started<br>with one rusty<br>fire extinguisher</h2>
       <em class="scr" aria-hidden="true" style="right:6%;top:-2%">one.</em>
-      <p class="stand">Bury, December 2019. A master's in architecture, a delivery round for his dad's cleaning company, and one second-hand fire extinguisher that nobody else wanted. It sold. The next one paid for the one after. That is where Freedom Fire began.</p>
     </div>
     <div class="bio-cta rv">
       <div>
         <div class="ch-tag sm">Before Freedom</div>
-        <p>“I was almost kicked out of university after a heavy loss. Then I finished runner-up in a competition that could have changed my life, and losing it gave me the drive to build an empire of my own, starting with one second-hand fire extinguisher.”</p>
+        <p>“But the story didn’t really start with a fire extinguisher. Before Freedom came university, failure, loss, near misses and a refusal to follow the path I was supposed to. Looking back, all of it led here.”</p>
       </div>
       <button class="bio-btn" type="button" id="bioOpen" data-mag data-cur-label="Read">Read Tom's biography <i>→</i></button>
     </div>
@@ -1551,7 +1566,7 @@ a.tl-link{color:var(--pink);font-weight:500}
         </li>
         <li class="jy-card" data-when="August 2024" data-i="7">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch12-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch12-a.webp" srcset="../assets/journey/th/ch12-a.webp 400w, ../assets/journey/ch12-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">08 / 18</span><span class="jy-when">August 2024</span><b class="jy-title">FIRESTORM.</b><p>The company's own brand is born: the FIRESTORM trade mark is filed in August and registered in November.</p></div>
+          <div class="jy-copy"><span class="jy-idx">08 / 18</span><span class="jy-when">August 2024</span><b class="jy-title">FIRESTORM.</b><p>The company's own brand is born: the FIRESTORM trademark is filed in August and registered in November.</p></div>
         </li>
         <li class="jy-card" data-when="October 2024" data-i="8">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch10-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch10-a.webp" srcset="../assets/journey/th/ch10-a.webp 400w, ../assets/journey/ch10-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
@@ -1606,7 +1621,7 @@ a.tl-link{color:var(--pink);font-weight:500}
     <div class="rv">
       <div class="ch-tag">02 — Proof, Not Promise</div>
       <h2>Six numbers that tell the story.</h2>
-      <p class="stand">Five are measured to date, from the marketplaces' own reports and the trade mark register. One is the plan: a five-year projection, not a result.</p>
+      <p class="stand">Five are measured to date, from the marketplaces' own reports and the trademark register. One is the plan: a five-year projection, not a result.</p>
     </div>
 
     <div class="metrics rv" id="proof">
@@ -1625,17 +1640,17 @@ a.tl-link{color:var(--pink);font-weight:500}
         <p class="def">Fire extinguishers first, then alarms, batteries, gloves and cleaning products, across every channel since the first listing.</p>
         <div class="per">December 2019 – September 2026 · all channels</div>
       </div>
-      <div class="metric" style="--acc:#e0217f">
+      <div class="metric" style="--acc:#FF2D8D">
         <div class="v">3</div><div class="k">Registered brands</div>
         <p class="def">FIRESTORM, FXL and SKYLINE, all registered in the company's name. 12 more in preparation.</p>
         <div class="per">August 2024 – March 2026 · owned by Freedom Fire &amp; Safety Ltd</div>
       </div>
-      <div class="metric" style="--acc:#c60f6e">
+      <div class="metric" style="--acc:#ff5ca3">
         <div class="v">75,000+</div><div class="k">Customer reviews</div>
         <p class="def">Feedback left by customers across the marketplaces since the first storefront opened: the record behind the number-one ranking.</p>
         <div class="per">2020 – 2026 · eBay, Temu and more</div>
       </div>
-      <div class="metric" style="--acc:#ff8fc6">
+      <div class="metric" style="--acc:#ff74b8">
         <div class="v">30+</div><div class="k">Global suppliers</div>
         <p class="def">Direct relationships with manufacturers, each reviewed for certification, test reports, factory audits and batch traceability before approval.</p>
         <div class="per">2024 – 2026 · direct sourcing</div>
@@ -1741,7 +1756,7 @@ a.tl-link{color:var(--pink);font-weight:500}
     </div>
 
     <div class="quo rv">
-      <q>Find a non-seasonal niche: a product everybody needs and nobody wants, where the competition is less. Then make this boring product sexy. Build a system around it, and repeat.</q>
+      <q>Find a non-seasonal product everybody needs and nobody wants, where the competition is less. Then make this boring product sexy. Build a system around it, and repeat.</q>
       <div class="by">Tom Letcher, Founder</div>
     </div>
   </div>
@@ -1902,6 +1917,7 @@ a.tl-link{color:var(--pink);font-weight:500}
     </div>
     <div class="env rv">
       <div class="env-head">
+        <div class="globe" id="globe" aria-hidden="true"><canvas id="globeC"></canvas></div>
         <div><div class="ch-tag">Carbon footprint</div>
         <h3 class="env-h">Longer life. Fewer miles. Less waste.</h3>
         <p class="stand">Where the footprint sits, and what is done about each part.</p></div>
@@ -1938,11 +1954,6 @@ a.tl-link{color:var(--pink);font-weight:500}
       part of you wants to stay there, then adapting and continuing, because your team believes in the future you
       promised to build.</q>
       <div class="by">Tom Letcher</div>
-    </div>
-    <div class="acts">
-      <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
-      <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
-      <a class="act" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me</a>
     </div>
   </div>
 </section>
@@ -2001,6 +2012,11 @@ a.tl-link{color:var(--pink);font-weight:500}
       <a class="totop" href="#top" id="totop" data-cur-label="Top" data-mag aria-label="Back to the start of the page">
         <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
       </a>
+      <div class="acts">
+        <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
+        <a class="act" href="mailto:tom.letcher@freedomgroup.uk?subject=Investor%20overview%20request" data-mag>Request the investor overview</a>
+        <a class="act" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me</a>
+      </div>
     </div>
     <div class="ft-grid">
       <div class="ft-brand"><img src="../assets/group-logo-white.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">

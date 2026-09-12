@@ -203,7 +203,7 @@
   var orbitBoost = 0, orbitBoostTarget = 0, orbitNodes = null;
   function orbitStep(ts) {
     if (!mapEl) return;
-    var inView = mapEl.classList.contains("in") && document.body.dataset.grp !== "list";
+    var inView = mapEl.classList.contains("in") && mapEl.offsetParent !== null;     /* on show, whichever screen */
     if (inView !== wasIn) {
       wasIn = inView; clearTimeout(goTimer);
       if (inView) goTimer = setTimeout(function () { mapEl.classList.add("go"); lastT = 0; }, 1500);
@@ -259,14 +259,20 @@
     return { el: v, html: html, tok: tok, val: val, dec: dec };
   }).filter(Boolean);
   function fmtNum(n, dec) { var f = n.toFixed(dec), parts = f.split("."); parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); return parts.join("."); }
-  function setCount(c, n) { c.el.innerHTML = c.html.replace(c.tok, fmtNum(n, c.dec)); }
+  /* a rank counts too: "1st" climbs the table from 8th, the suffix changing with it */
+  var ORD = /^(\d+)<span class="sm">(?:st|nd|rd|th)<\/span>/, ordSuffix = function (k) { return k === 1 ? "st" : k === 2 ? "nd" : k === 3 ? "rd" : "th"; };
+  function setCount(c, n, e) {
+    var out = c.html.replace(c.tok, fmtNum(n, c.dec));
+    if (ORD.test(c.html)) { var k = e == null ? 1 : Math.max(1, Math.round(8 - 7 * e)); out = out.replace(ORD, k + '<span class="sm">' + ordSuffix(k) + "</span>"); }
+    c.el.innerHTML = out;
+  }
   function countUp(c) {
     var t0 = null, dur = 1200;
     if (reduce) { setCount(c, c.val); return; }
     (function step(ts) {
       if (!t0) t0 = ts;
       var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-      setCount(c, c.val * e);
+      setCount(c, c.val * e, e);
       if (k < 1) requestAnimationFrame(step);
     })(performance.now());
   }
@@ -279,6 +285,88 @@
     }, { threshold: 0.5 });
     counters.forEach(function (c) { setCount(c, 0); ioc.observe(c.el); });
   }
+
+  /* ── the carbon planet ─────────────────────────────────────── */
+  /* a globe drawn from the world map: the land as bright dots, the sea as a faint grid, turning slowly, with
+     the sea routes the containers take drawn as arcs from Bury to the suppliers and a light running each one.
+     Drag to turn it. It draws only while it is on screen. */
+  (function () {
+    var box = $("#globe"), cv = $("#globeC"); if (!box || !cv) return;
+    var ctx = cv.getContext("2d"), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
+    var TILT = 20 * Math.PI / 180, HOME = [53.6, -2.3];
+    var ROUTES = [[22.5, 114.1], [31.2, 121.5], [29.9, 121.6], [39.9, 116.4], [23.1, 113.3], [1.35, 103.8], [41.0, 28.9], [52.4, 4.9]];
+    function vec(lat, lon) { var la = lat * Math.PI / 180, lo = lon * Math.PI / 180; return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)]; }
+    /* the globe's spin about its axis, then its tilt towards us; y up on the sphere is up on the screen */
+    function turn(v) {
+      var c = Math.cos(rot), s = Math.sin(rot), x = v[0] * c + v[2] * s, z = -v[0] * s + v[2] * c, y = v[1], ct = Math.cos(TILT), st = Math.sin(TILT);
+      return { x: x, y: -(y * ct - z * st), z: y * st + z * ct };
+    }
+    var img = new Image(); img.src = "../assets/world-white.webp";
+    img.onload = function () {
+      var w = 720, h = 360, oc = document.createElement("canvas"); oc.width = w; oc.height = h;
+      var o2 = oc.getContext("2d"); o2.drawImage(img, 0, 0, w, h);
+      var d = o2.getImageData(0, 0, w, h).data;
+      for (var lat = -80; lat <= 84; lat += 3.1) {
+        var cl = Math.cos(lat * Math.PI / 180), n = Math.max(8, Math.round(116 * cl));
+        for (var k = 0; k < n; k++) {
+          var lon = -180 + (k + 0.5) * 360 / n, px = Math.min(w - 1, Math.floor((lon + 180) / 360 * w)), py = Math.min(h - 1, Math.floor((90 - lat) / 180 * h)), i = (py * w + px) * 4;
+          dots.push({ v: vec(lat, lon), land: d[i + 3] > 90 && d[i] + d[i + 1] + d[i + 2] > 330 });
+        }
+      }
+      ready = true; kick();
+    };
+    function size() { var r = box.getBoundingClientRect(); W0 = Math.max(120, Math.round(r.width || box.offsetWidth)); dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(W0 * dpr); cv.height = cv.width; }
+    function arc(a, b, cx0, cy0, R0, t) {
+      var n = 44, prev = null, pts2 = [];
+      for (var i = 0; i <= n; i++) {
+        var k = i / n, x = a[0] * (1 - k) + b[0] * k, y = a[1] * (1 - k) + b[1] * k, z = a[2] * (1 - k) + b[2] * k, m = Math.sqrt(x * x + y * y + z * z) || 1, lift = 1 + 0.2 * Math.sin(k * Math.PI);
+        var q = turn([x / m * lift, y / m * lift, z / m * lift]), pt = { x: cx0 + q.x * R0, y: cy0 + q.y * R0, z: q.z };
+        if (prev && prev.z > -0.04 && pt.z > -0.04) {
+          ctx.strokeStyle = "rgba(255,45,141," + (0.1 + 0.5 * Math.max(0, Math.min(1, pt.z + 0.2))).toFixed(3) + ")"; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(pt.x, pt.y); ctx.stroke();
+        }
+        pts2.push(pt); prev = pt;
+      }
+      var gl = pts2[Math.round(t * n)];
+      if (gl && gl.z > 0) { ctx.fillStyle = "rgba(255,255,255,.95)"; ctx.shadowColor = "rgba(255,45,141,.9)"; ctx.shadowBlur = 8; ctx.beginPath(); ctx.arc(gl.x, gl.y, W0 * 0.007, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0; }
+    }
+    function draw() {
+      raf = null;
+      if (!W0) size();
+      var R0 = W0 * 0.45, cx0 = W0 / 2, cy0 = W0 / 2, t = performance.now() / 1000;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W0, W0);
+      /* the body of the planet, lit from the upper left, and the light on its limb */
+      var g = ctx.createRadialGradient(cx0 - R0 * 0.4, cy0 - R0 * 0.45, R0 * 0.05, cx0, cy0, R0);
+      g.addColorStop(0, "#33161f"); g.addColorStop(0.65, "#151014"); g.addColorStop(1, "#0a0a0a");
+      ctx.beginPath(); ctx.arc(cx0, cy0, R0, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+      ctx.save(); ctx.shadowColor = "rgba(255,45,141,.6)"; ctx.shadowBlur = W0 * 0.09; ctx.strokeStyle = "rgba(255,45,141,.55)"; ctx.lineWidth = 1.2; ctx.stroke(); ctx.restore();
+      if (ready) {
+        for (var i = 0; i < dots.length; i++) {
+          var q = turn(dots[i].v); if (q.z < -0.12) continue;
+          var sx = cx0 + q.x * R0, sy = cy0 + q.y * R0, f = q.z < 0 ? 0.1 : 0.22 + 0.78 * q.z;
+          if (dots[i].land) { ctx.fillStyle = "rgba(255,45,141," + (f * 0.95).toFixed(3) + ")"; ctx.beginPath(); ctx.arc(sx, sy, W0 * 0.0058 * (0.55 + 0.45 * Math.max(0, q.z)), 0, Math.PI * 2); ctx.fill(); }
+          else if (q.z > 0.05) { ctx.fillStyle = "rgba(255,255,255," + (f * 0.12).toFixed(3) + ")"; ctx.fillRect(sx - 0.5, sy - 0.5, 1, 1); }
+        }
+        var hv = vec(HOME[0], HOME[1]), home = turn(hv);
+        ROUTES.forEach(function (r, ri) { arc(hv, vec(r[0], r[1]), cx0, cy0, R0, (t * 0.09 + ri * 0.125) % 1); });
+        if (home.z > 0) {
+          var hx = cx0 + home.x * R0, hy = cy0 + home.y * R0, pu = (t % 2.4) / 2.4;
+          ctx.strokeStyle = "rgba(255,255,255," + (0.7 * (1 - pu)).toFixed(3) + ")"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(hx, hy, 2 + pu * W0 * 0.06, 0, Math.PI * 2); ctx.stroke();
+          ctx.fillStyle = "#fff"; ctx.shadowColor = "rgba(255,255,255,.9)"; ctx.shadowBlur = 8; ctx.beginPath(); ctx.arc(hx, hy, W0 * 0.012, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+        }
+      }
+      if (dragX === null && !reduce) rot += spin;
+      if (seen && !reduce) kick();
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(draw); }
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) kick(); }, { threshold: 0.05 }).observe(box);
+    else seen = true;
+    kick();
+    box.addEventListener("pointerdown", function (e) { dragX = e.clientX; try { box.setPointerCapture(e.pointerId); } catch (e2) {} });
+    box.addEventListener("pointermove", function (e) { if (dragX === null) return; rot += (e.clientX - dragX) * 0.006; dragX = e.clientX; kick(); });
+    var drop = function () { dragX = null; }; box.addEventListener("pointerup", drop); box.addEventListener("pointercancel", drop);
+    window.addEventListener("resize", function () { W0 = 0; kick(); }, { passive: true });
+  })();
 
   /* ══ THE THREAD ═══════════════════════════════════════════ */
   var explore = $("#explore"),
@@ -302,6 +390,10 @@
              cards: [], n: 0, centres: [], live: false, pending: null, f: -1, lit: null, head: null, pulse: null, knots: [], yrs: [], bound: false, yr: "" };
   function buildJourney() {
     if (!jy.el || !jy.stage || !jy.strip) return;
+    /* the stage runs from one edge of the page to the other; the rest of the chapter keeps its column */
+    var full = document.documentElement.clientWidth, jl = 0, je = jy.el;
+    while (je && je !== document.body) { jl += je.offsetLeft; je = je.offsetParent; }
+    jy.stage.style.marginLeft = (-jl) + "px"; jy.stage.style.width = full + "px";
     jy.cards = $$(".jy-card", jy.strip); jy.n = jy.cards.length; if (!jy.n) return;
     jy.el.classList.add("live"); jy.el.classList.toggle("touch", !vs.on);
     if (!vs.on && jy.hint) jy.hint.textContent = "Swipe to travel the line";
@@ -321,8 +413,8 @@
       jy.head = mk("circle", { "class": "jt-head", cx: jy.centres[0], cy: Y, r: 5.5 });
       /* the head is the page thread's own tip: it runs in along the rail from the stage's left edge to the
          first moment, travels, then runs out to the right edge, where the thread carries on down the page */
-      jy.stageW = jy.stage.clientWidth; jy.runIn = jy.centres[0]; jy.runOut = Math.max(0, jy.stageW - jy.centres[0]);
-      jy.reach = jy.centres[jy.n - 1] + jy.runOut;
+      jy.stageW = jy.stage.clientWidth; jy.x0 = 0; jy.runIn = jy.centres[0]; jy.runOut = Math.max(0, jy.stageW - jy.centres[0]);
+      jy.reach = jy.centres[jy.n - 1] + jy.runOut;           /* the page thread sets where it joins and leaves */
       jy.yrs = []; var seen = {};
       jy.cards.forEach(function (c, i2) {
         var yr = (c.getAttribute("data-when") || "").replace(/\D/g, "").slice(-4); if (!yr || seen[yr]) return; seen[yr] = true;
@@ -364,7 +456,7 @@
       jy.year.style.transform = "translate(calc(-50% + " + ((i - t) * 70).toFixed(1) + "px),-50%)";
     }
     var hp = hx == null ? cx : hx;
-    if (jy.lit) jy.lit.setAttribute("x2", hp.toFixed(1));
+    if (jy.lit) { jy.lit.setAttribute("x1", (jy.x0 - shift).toFixed(1)); jy.lit.setAttribute("x2", hp.toFixed(1)); }   /* lit from where the thread joins */
     if (jy.head) jy.head.setAttribute("cx", hp.toFixed(1));
     if (jy.halo) jy.halo.setAttribute("cx", hp.toFixed(1));
     if (jy.pulse) jy.pulse.setAttribute("cx", hp.toFixed(1));
@@ -377,7 +469,7 @@
   function toProg(h, f) { var r1 = h.r1 || 0, r2 = h.r2 == null ? 1 : h.r2; return r1 + f * (r2 - r1); }
   function railState(h, s) {
     var r1 = h.r1 || 0, r2 = h.r2 == null ? 1 : h.r2;
-    if (s <= r1) return { f: 0, hx: jy.runIn * (r1 > 0 ? s / r1 : 1) };
+    if (s <= r1) return { f: 0, hx: jy.x0 + jy.runIn * (r1 > 0 ? s / r1 : 1) };
     if (s >= r2) return { f: 1, hx: jy.centres[jy.n - 1] + jy.runOut * (r2 < 1 ? (s - r2) / (1 - r2) : 1) };
     return { f: (s - r1) / (r2 - r1), hx: null };
   }
@@ -604,13 +696,20 @@
              The rail's place comes from layout alone: the reveal moves the boxes but never the offsets. */
           var railY = so.y + jy.stage.clientTop + jy.stage.clientHeight - (jy.trackH || 96) + (jy.railY || 38);
           var railX = so.x + jy.stage.clientLeft;
-          /* the wheel runs the rail at the thread's own pace: the run-in and run-out are their own length in
-             scroll, the travel between the moments keeps its pace */
-          var runIn = jy.runIn || 0, runOut = jy.runOut || 0, jpx = Math.max(2400, jy.n * 230) + runIn + runOut;
-          var jExit = { x: railX + jy.stageW, y: railY };
-          pts.push({ x: railX, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: SIDE[p.side], y: railY },
+          /* the rail runs edge to edge; the thread comes down the margin, rounds one wide quarter-arc onto the
+             rail a radius in from it, and leaves the same way a radius short of the right-hand margin. The wheel
+             runs the rail at the thread's own pace: the run-in and run-out are their own length in scroll, the
+             travel between the moments keeps its pace */
+          var R = Math.min(200, Math.max(120, W * 0.09)), xJoin = SIDE[p.side] + R, xExit = SIDE.R - R;
+          jy.x0 = xJoin - railX; jy.runIn = Math.max(0, jy.centres[0] - jy.x0); jy.runOut = Math.max(0, (xExit - railX) - jy.centres[0]);
+          jy.reach = jy.centres[jy.n - 1] + jy.runOut; jy.f = -1;
+          var runIn = jy.runIn, runOut = jy.runOut, jpx = Math.max(2400, jy.n * 230) + runIn + runOut;
+          var jExit = { x: xExit, y: railY };
+          pts.push({ x: SIDE[p.side], y: railY - R, id: "journeyBend", el: el, noKnot: true });
+          pts.push({ x: xJoin, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: SIDE[p.side] + R * 0.45, y: railY },
                      loop: { id: "journey", pts: [jExit], end: jExit, yA: railY, yB: railY, lock: jLock,
-                             px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, cpOut: { x: SIDE.R, y: railY } } });
+                             px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, cpOut: { x: xExit + R * 0.55, y: railY } } });
+          pts.push({ x: SIDE.R, y: railY + R, id: "journeyOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: railY + R * 0.45 } });
         }
         return;
       }
@@ -725,7 +824,7 @@
         var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
         var Lr = cum[cum.length - 1] || 1;
         marks.years = yearIdx.map(function (ix) { return cum[ix] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
-        var co0 = pageXY(el), fb0 = pageXY(figB), xL = fb0.x - 40;
+        var co0 = pageXY(el), fb0 = pageXY(figB), xL = fb0.x - 120;     /* the margin beside the panel, wide enough for a big turn */
         /* out of the system to the left, level with the planet, the way it came in on the right: one smooth
            sweep round onto the margin beside the panel, arriving vertical just below the system, then down
            that margin and in through the panel's side at the axis */
@@ -736,13 +835,13 @@
           if (corePt && corePt.loop) corePt.loop.cpOut = { x: fromX - (fromX - xL) * 0.55, y: fromY };
           pts.push({ x: xL, y: turnY, id: "mapOut", el: el, noKnot: true, cpIn: { x: xL, y: turnY - Math.max(120, (turnY - fromY) * 0.55) } });
         }
-        pts.push({ x: xL, y: fb0.y + 30, id: "chartsIn", el: el, noKnot: true, cpIn: { x: xL, y: fb0.y - 110 } });
+        pts.push({ x: xL, y: fb0.y - 60, id: "chartsIn", el: el, noKnot: true, cpIn: { x: xL, y: fb0.y - 200 } });
         pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 110, y: ridePts[0].y },
                    yS: ridePts[0].y, yE: ridePts[0].y,
                    lock: Math.max(0, Math.max(co0.y + el.offsetHeight + 56 - window.innerHeight, Math.min(co0.y - 96, co0.y + el.offsetHeight / 2 - window.innerHeight / 2))) });
         /* off the £100m point it carries on level, rounds one quarter-ellipse onto the right-hand margin and
            runs down it; the corner is as wide as the margin allows and taller than it is wide */
-        var last = ridePts[ridePts.length - 1], dxo = Math.max(40, SIDE.R - last.x), Ho = Math.max(dxo, 240);
+        var last = ridePts[ridePts.length - 1], dxo = Math.max(40, SIDE.R - last.x), Ho = Math.max(dxo * 1.6, 340);
         pts.push({ x: SIDE.R, y: last.y + Ho, id: "chartsOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: last.y + Ho - Ho * 0.5523 } });
         return;
       }
@@ -1152,12 +1251,7 @@
     var jyHold = holds.filter(function (h) { return h.id === "journey"; })[0];
     if (jyHold) {
       if (jyHold.phase === "hold" && jy.pending !== null) { jyHold.prog = toProg(jyHold, jy.pending); jy.pending = null; }
-      /* once the wheel rests within the travel, the strip settles on the nearest moment */
-      var jr1 = jyHold.r1 || 0, jr2 = jyHold.r2 == null ? 1 : jyHold.r2;
-      if (jyHold.phase === "hold" && jy.n > 1 && jyHold.prog >= jr1 && jyHold.prog <= jr2 && performance.now() - (jyHold.fedAt || 0) > 140) {
-        var snapF = Math.round((jyHold.prog - jr1) / (jr2 - jr1) * (jy.n - 1)) / (jy.n - 1);
-        jyHold.prog += (toProg(jyHold, snapF) - jyHold.prog) * 0.16;
-      }
+      /* the strip eases to wherever the wheel leaves it; nothing pulls it onto a moment */
       var jst = railState(jyHold, jyHold.phase === "before" ? 0 : jyHold.phase === "after" ? 1 : clamp(jyHold.shown, 0, 1));
       setJourney(jst.f, jyHold, false, jst.hx);
       /* while the thread is on the rail, the rail's head is the thread's head */
