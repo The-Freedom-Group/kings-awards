@@ -639,12 +639,20 @@
         $$("g.seg-g", svgB).forEach(function (g) {
           var yr = (g.getAttribute("data-t") || "").split(" ")[0], r = g.querySelector("rect"); if (!yr || !r) return;
           var top = parseFloat(r.getAttribute("y")), cx = parseFloat(r.getAttribute("x")) + parseFloat(r.getAttribute("width")) / 2;
-          if (!years[yr] || top < years[yr].top) years[yr] = { top: top, cx: cx };
+          if (!years[yr] || top < years[yr].top) years[yr] = { top: top, cx: cx, x0: parseFloat(r.getAttribute("x")), x1: parseFloat(r.getAttribute("x")) + parseFloat(r.getAttribute("width")) };
         });
         var yrs = Object.keys(years).sort(), ridePts = [], marks = { years: [], yearNames: yrs, lineStart: 0, L: FL };
-        /* the line comes in at the chart's origin and rises over the bar tops on one smooth curve */
-        ridePts.push({ x: FB.ox + 58 * FB.sx, y: FB.oy + 252 * FB.sy, origin: true });
-        yrs.forEach(function (yr) { ridePts.push({ x: FB.ox + years[yr].cx * FB.sx, y: FB.oy + (years[yr].top - 7) * FB.sy, top: true }); });
+        /* the line rides the bars like a road: in through the panel's side at the first bar's height, level
+           along each bar above its label, one smooth rise to the next that is done before that bar begins,
+           so it coasts over every one as it stands up */
+        var LIFT = 26, yearIdx = [];
+        yrs.forEach(function (yr, yi) {
+          var Y = years[yr], ry = FB.oy + (Y.top - LIFT) * FB.sy;
+          if (yi === 0) ridePts.push({ x: FB.ox + 40 * FB.sx, y: ry, origin: true });
+          yearIdx.push(ridePts.length);                     /* a bar stands as the road reaches its left edge */
+          ridePts.push({ x: FB.ox + (Y.x0 - 4) * FB.sx, y: ry, rise: yi > 0, flat: yi === 0 });
+          ridePts.push({ x: FB.ox + (Y.cx + 4) * FB.sx, y: ry, flat: true });
+        });
 
         /* the growth chart's own lines become smooth curves (Catmull-Rom made cubic), and the ride uses the
            same curve, so the two coincide exactly. The points are kept on the element for later rebuilds. */
@@ -684,15 +692,15 @@
         var toDoc = function (q) { return { x: FL.ox + q.x * FL.sx, y: FL.oy + q.y * FL.sy }; };
         var act = chain(actV.pts.map(toDoc), 0), tgt = chain(tgtV.pts.map(toDoc), 2);
         var lineIdx = ridePts.length;
-        /* the bars: the line hops from top to top like a rabbit, a clean arc each time */
+        /* along a bar the road is straight; each rise is one S that leaves level and arrives level */
         for (var hi = 1; hi < ridePts.length; hi++) {
-          var a0 = ridePts[hi - 1], a1 = ridePts[hi], dxh = a1.x - a0.x, apex = Math.min(a0.y, a1.y) - Math.max(44, Math.min(120, Math.abs(dxh) * 0.55));
-          a1.c1 = { x: a0.x + dxh * 0.22, y: apex }; a1.c2 = { x: a1.x - dxh * 0.22, y: apex };
+          var a0 = ridePts[hi - 1], a1 = ridePts[hi], dxh = a1.x - a0.x;
+          if (a1.rise) { a1.c1 = { x: a0.x + dxh * 0.5, y: a0.y }; a1.c2 = { x: a1.x - dxh * 0.5, y: a1.y }; }
         }
-        /* the last hop carries it across into the growth chart and lands it on the baseline */
+        /* off the last bar it coasts on down across the gap and lands level on the growth chart's baseline */
         if (act.length) {
           var lastTop = ridePts[ridePts.length - 1], land = act[0], dxl = land.x - lastTop.x;
-          land.c1 = { x: lastTop.x + dxl * 0.25, y: Math.min(lastTop.y, land.y) - 150 }; land.c2 = { x: land.x - dxl * 0.18, y: land.y - 150 };
+          land.c1 = { x: lastTop.x + dxl * 0.5, y: lastTop.y }; land.c2 = { x: land.x - dxl * 0.5, y: land.y };
           ridePts.push(land);
           for (var ai = 1; ai < act.length; ai++) ridePts.push(act[ai]);
           if (tgt.length) { tgt[0].c1 = null; for (var ti = 1; ti < tgt.length; ti++) ridePts.push(tgt[ti]); }
@@ -701,7 +709,7 @@
         /* fractions of the ride's length for each bar and for the start of the line chart */
         var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
         var Lr = cum[cum.length - 1] || 1;
-        marks.years = yrs.map(function (_, yi) { return cum[yi + 1] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
+        marks.years = yearIdx.map(function (ix) { return cum[ix] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
         var co0 = pageXY(el), fb0 = pageXY(figB), xL = fb0.x - 40;
         /* out of the system to the left, level with the planet, the way it came in on the right: one smooth
            sweep round onto the margin beside the panel, arriving vertical just below the system, then down
@@ -717,6 +725,10 @@
         pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 110, y: ridePts[0].y },
                    yS: ridePts[0].y, yE: ridePts[0].y,
                    lock: Math.max(0, Math.max(co0.y + el.offsetHeight + 56 - window.innerHeight, Math.min(co0.y - 96, co0.y + el.offsetHeight / 2 - window.innerHeight / 2))) });
+        /* off the £100m point it carries on level, rounds one quarter-ellipse onto the right-hand margin and
+           runs down it; the corner is as wide as the margin allows and taller than it is wide */
+        var last = ridePts[ridePts.length - 1], dxo = Math.max(40, SIDE.R - last.x), Ho = Math.max(dxo, 240);
+        pts.push({ x: SIDE.R, y: last.y + Ho, id: "chartsOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: last.y + Ho - Ho * 0.5523 } });
         return;
       }
       if (p.ring) {
@@ -770,9 +782,11 @@
           d += q.c1 ? (" C " + f1(q.c1.x) + " " + f1(q.c1.y) + ", " + f1(q.c2.x) + " " + f1(q.c2.y) + ", " + f1(q.x) + " " + f1(q.y)) : (" L " + f1(q.x) + " " + f1(q.y));
         });
         dRideOut = d; rideMeta = a; from = a.rideTo[a.rideTo.length - 1];
-        /* off the top of the growth chart heading right, then down the right-hand margin */
-        var dy3 = Math.max(160, (b.y - from.y) * 0.5);
-        d += " C " + f1(from.x + 170) + " " + f1(from.y) + ", " + f1(b.x) + " " + f1(b.y - dy3) + ", " + f1(b.x) + " " + f1(b.y);
+        /* off the top of the growth chart heading right, round the corner set for it, then down the margin */
+        var dxo2 = Math.max(40, b.x - from.x), cOutR = { x: from.x + dxo2 * 0.5523, y: from.y };
+        var cInR = b.cpIn || { x: b.x, y: b.y - Math.max(160, (b.y - from.y) * 0.5) };
+        d += " C " + f1(cOutR.x) + " " + f1(cOutR.y) + ", " + f1(cInR.x) + " " + f1(cInR.y) + ", " + f1(b.x) + " " + f1(b.y);
+        if (b.id === "chartsOut") a.dGlide = d;             /* the corner off the chart is paced by its length */
         continue;
       }
       if (b.arc) {
@@ -837,7 +851,7 @@
     var SAMPLES = 1200, samples = [];
     for (var s = 0; s <= SAMPLES; s++) {
       var pt = live.getPointAtLength(totalLen * s / SAMPLES);
-      samples.push({ x: pt.x, y: pt.y, l: totalLen * s / SAMPLES });
+      samples.push({ x: pt.x, y: pt.y, ry: pt.y, l: totalLen * s / SAMPLES });   /* ry: where it really is; y: where the scroll puts it */
     }
     pts.forEach(function (p) {
       if (p.noKnot || p.id === "beyond") return;
@@ -911,7 +925,9 @@
           var smp = samples[sr];
           if (smp.l >= rIn && smp.l <= rOut) smp.y = rideMeta.yS + (rideMeta.yE - rideMeta.yS) * (smp.l - rIn) / (rOut - rIn);
         }
-        paceExit(samples, rOut, exit0);
+        var glideR = 0;
+        if (rideMeta.dGlide) { try { pr4.setAttribute("d", rideMeta.dGlide); svg.appendChild(pr4); glideR = Math.max(0, pr4.getTotalLength() - rOut); svg.removeChild(pr4); } catch (e) { glideR = 0; } }
+        paceExit(samples, rOut, exit0, glideR);
         rideA = rIn / totalLen; rideB = rOut / totalLen;
         holdDefs.push({ id: "charts", lock: rideMeta.lock, a: rideA, b: rideB, px: 2600 });
         if (chartsEl) chartsEl.classList.add("ride");
@@ -938,7 +954,7 @@
     });
     ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
-    endPt = samples[samples.length - 1]; endFrac = 0.999;
+    endPt = { x: samples[samples.length - 1].x, y: samples[samples.length - 1].ry }; endFrac = 0.999;
     /* the furthest the reader can scroll is the foot of the page; the
        scroll-to-line mapping is scaled so the tip arrives on the button
        exactly there - the burst fires only when it does */
@@ -986,8 +1002,9 @@
   function paceExit(samples, lOut, from, glide) {
     /* a glide is a stretch of line straight after the hold that runs sideways more than down - the sweep
        out of the system - and is paced by its length instead, so it takes the scroll its height would */
-    var FADE = 700, pv = from, lG = lOut + (glide || 0), y0 = null, yG = null, i, q;
-    for (i = 0; i < samples.length; i++) { q = samples[i]; if (q.l > lOut) { if (y0 === null) y0 = q.y; if (q.l >= lG) { yG = q.y; break; } } }
+    /* the real geometry is read from ry: an earlier hold's pass may already have rewritten y along here */
+    var FADE = 700, pv = from, lG = lOut + (glide || 0), y0 = null, yG = null, i, q, real = function (s) { return s.ry == null ? s.y : s.ry; };
+    for (i = 0; i < samples.length; i++) { q = samples[i]; if (q.l > lOut) { if (y0 === null) y0 = real(q); if (q.l >= lG) { yG = real(q); break; } } }
     if (y0 === null) return;
     if (yG === null) { yG = y0; lG = lOut; }
     var g = from - y0;                       /* how far the page is ahead of the line as the hold lets go */
@@ -995,7 +1012,7 @@
       var s = samples[i];
       if (s.l <= lOut) continue;
       var v = lG > lOut && s.l <= lG ? from + (s.l - lOut) / (lG - lOut) * (yG - y0)
-                                     : s.y + g * Math.max(0, 1 - (s.l - lG) / FADE);
+                                     : real(s) + g * Math.max(0, 1 - (s.l - lG) / FADE);
       if (v < pv) v = pv;
       s.y = v; pv = v;
     }
