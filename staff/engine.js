@@ -132,7 +132,9 @@
     var caret = $("#gCaret");
     /* each letter appears in turn and the caret moves to sit right after it, so it follows the typing */
     function typer(sel, step) {
-      var split = new SplitText(sel, { type: "chars" }), tl = gsap.timeline();
+      /* split into words as well as letters: letters alone are each their own element, so a narrow
+         screen breaks the line between two of them and ARRIVES is left split across the two lines */
+      var split = new SplitText(sel, { type: "words,chars" }), tl = gsap.timeline();
       gsap.set(split.chars, { autoAlpha: 0 });
       tl.call(function () { var host = $(sel); if (caret && host) host.prepend(caret); }, null, 0);
       split.chars.forEach(function (c, i) {
@@ -224,7 +226,9 @@
     /* the timeline: when its row of cards reaches the middle of the screen the page holds still and
        further scrolling moves the cards sideways; once the last card is in, the page carries on */
     var tlSec = $("#timeline"), tlOl = $("#timeline ol.spine.journey"), tlPin = $("#tlPin");
-    if (tlSec && tlOl && tlPin && window.matchMedia("(min-width: 900px)").matches) {
+    /* the hold is wanted on a phone too: the page stops and the cards travel, which is what the
+       line under them has always promised. It is the width that used to switch this off. */
+    if (tlSec && tlOl && tlPin) {
       /* one hold: the cards slide across, then the page stays put a little longer while the route
          drops down the right of them and runs back beneath them to the left */
       var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };

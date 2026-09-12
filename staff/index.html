@@ -910,6 +910,49 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 .gate-skip:hover{border-color:#fff;color:#fff}
 .gate.armed .gate-skip{opacity:1}
 .gate.opening .gate-skip,.gate.done .gate-skip{opacity:0;pointer-events:none;transition:opacity .3s}
+
+/* ══ the notes of 12 Sept ══════════════════════════════════════════════════════ */
+
+/* the footer reads down the middle: the mark, the address under it, the two lists of links
+   side by side, what is elsewhere below them, and the legal line last of all */
+.ft-brand{text-align:center;padding-top:clamp(24px,3.4vw,40px)}
+footer .ft-brand .ff{margin:0 auto 20px}
+footer .ft-brand p{margin:0}
+.ft-grid{grid-template-columns:1fr 1fr;max-width:620px;margin:0 auto;text-align:center;
+  padding-top:clamp(28px,3.6vw,44px);gap:clamp(20px,4vw,48px)}
+.ft-else{text-align:center;padding-top:clamp(24px,3.2vw,38px)}
+.ft-legal{justify-content:center;text-align:center;margin-top:clamp(28px,3.6vw,44px)}
+footer .ft-legal .ft-legal-in{margin-top:0}
+@media(max-width:560px){.ft-grid{grid-template-columns:1fr;max-width:none}}
+
+/* the title sits in the sky rather than against the roofline, on every width */
+.hero .in{align-content:center}
+
+@media(max-width:1000px){
+  /* the mark in the middle, the burger on the right */
+  .mark{position:absolute;left:50%;transform:translateX(-50%)}
+  .burger{order:9;margin-left:auto}
+}
+
+@media(max-width:820px){
+  .hero .in{align-content:start;padding-top:clamp(150px,26vh,240px)}
+  /* the photograph is cut off below the unit number: its box is made taller than the hero and the
+     hero clips it, so what shows runs from the sky down to the 19 and no further - the doorway and
+     the bins are gone. The frame is set a little right of centre to keep the lit sign in it. */
+  .hero .ph{bottom:auto;height:153%}
+  .hero .ph img{object-position:66% 0}
+  .hero .ph::after{background:linear-gradient(180deg,rgba(17,17,17,.45),rgba(17,17,17,.2) 18%,rgba(17,17,17,.45) 58%,rgba(17,17,17,.92) 65%,rgba(17,17,17,.92))}
+}
+
+@media(max-width:700px){
+  /* the first key takes the whole line, so the T Level key begins the second one */
+  .legend>span:first-child{flex:0 0 100%}
+
+  /* the steps run down a rail on a phone, so the lit line runs down it too rather than
+     disappearing with the row it used to cross */
+  .floor::before{display:block;left:-3px;right:auto;top:0;bottom:0;width:3px;height:auto;
+    transform:scaleY(var(--lp,0));transform-origin:top}
+}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -935,7 +978,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
   </div>
 </header>
 <div class="menu" id="menu" aria-hidden="true"><button class="x" id="menuX" type="button" aria-label="Close">×</button>
-  <a href="#why"><small>01</small>Why it exists</a><a href="#programme"><small>02</small>The route in</a><a href="#timeline"><small>03</small>The timeline</a><a href="#people"><small>04</small>The people</a><a href="#impact"><small>05</small>The impact</a><a href="#partners"><small>06</small>The partners</a><a href="#learn"><small>07</small>How we learn</a><a href="#next"><small>08</small>What comes next</a></div>
+  <a href="#why"><small>01</small>Why</a><a href="#programme"><small>02</small>The route</a><a href="#timeline"><small>03</small>Timeline</a><a href="#people"><small>04</small>The people</a><a href="#impact"><small>05</small>Impact</a><a href="#partners"><small>06</small>Partners</a></div>
 
 <div class="gate" id="gate" aria-hidden="true">
   <div class="slats" id="gSlats"><i class="edge" id="gateEdge"></i></div>
@@ -1052,14 +1095,14 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <li class="haspic"><img class="pic" src="../assets/people/jojo.jpg" alt="Jojo, who came in on a New Bridge College placement in 2021" style="object-position:50% 22%" loading="lazy" decoding="async"><span class="when">2021</span><span class="what"><b>The first placements.</b><span class="fx"> Learners from Newbridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch7-a.webp" alt="The team in front of the Freedom Fire sign at Unit 10" loading="lazy" decoding="async"><span class="when">April 2022</span><span class="what"><b>A front door of its own.</b><span class="fx"> Unit 10: the first premises the company could call its own, and a base for the team.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch8-a.webp" alt="Stock being racked ahead of the store launch, 2023" loading="lazy" decoding="async"><span class="when">2023</span><span class="what"><b>The year of building.</b><span class="fx"> Thousands of products researched, photographed and written up by hand before the store opened. The founder's own savings fund the stock.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/ch9-c.webp" alt="Tom on stage at the eBay for Business Awards, 2024" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>The eBay Social Impact Award.</b><span class="fx"> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards for the category of social impact, and the trip to Belfast tells the story of the young people given a way in.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ch9-c.webp" alt="Tom on stage at the eBay for Business Awards, 2024" loading="lazy" decoding="async"><span class="when">May 2024</span><span class="what"><b>eBay Social Impact Award.</b><span class="fx"> The eBay business store opens. Freedom Fire is named runner-up in the eBay UK Business Awards for the category of social impact, and the trip to Belfast tells the story of the young people given a way in.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch10-a.webp" alt="Unit 19 at night with the sign lit" loading="lazy" decoding="async"><span class="when">Nov 2024</span><span class="what"><b>Unit 19.</b><span class="fx"> An empty industrial shell turned into the headquarters over six months, with offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch13-b.webp" alt="The team in front of the first container of Firestorm stock, Christmas 2024" loading="lazy" decoding="async"><span class="when">Dec 2024</span><span class="what"><b>The team unloading one of their containers at Christmas.</b><span class="fx"> Christmas Eve 2024: the first container of Firestorm fire extinguishers, the company's own brand. What a way to celebrate: a Christmas present for the whole team.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/tlevel-trio.webp" alt="Bill, Harrison and Gabriel, the first T Level cohort" loading="lazy" decoding="async"><span class="when">Oct 2025</span><span class="what"><b>T Level placements begin.</b><span class="fx"> The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch15-a.webp" style="object-position:50% 12%" alt="Bill presenting the Freedom Group project at the weekly meeting" loading="lazy" decoding="async"><span class="when">Dec 2025</span><span class="what"><b>Bill wins the Freedom Group project.</b><span class="fx"> At the weekly meeting Bill presents the Freedom Group project and wins it: the company's new website and storefronts, built from scratch by two T Level students.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/team-races.webp" alt="The team together at the races, summer 2026" loading="lazy" decoding="async"><span class="when">June 2026</span><span class="what"><b>Three of three.</b><span class="fx"> All three of the first cohort complete their placements and move into paid summer internships, then continuing roles. The whole team marks it with a day at the races.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/number-one.webp" alt="A Firestorm Pro fire extinguisher, number one of 1,193 sellers on eBay and number one on Temu" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, and launches on Amazon and Shopify are in preparation.</span></span></li>
-      <li class="haspic"><img class="pic" src="../assets/journey/kings-2027.webp" alt="Entered for The King's Awards for Enterprise 2027, Promoting Opportunity, with The Way In as the company's initiative" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>The King's Awards for Enterprise.</b><span class="fx"> The company enters the King's Awards for Enterprise under the Promoting Opportunity category, with The Way In as the company's initiative and the founder's portfolio alongside it.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/ebay-number-one.webp" alt="Number one of 1,193 fire extinguisher sellers on eBay, August 2026" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, and launches on Amazon and Shopify are in preparation.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/kings-2027.webp" alt="Entered for The King's Awards for Enterprise 2027, Promoting Opportunity, with The Way In as the company's initiative" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>The King's Awards for Enterprise.</b><span class="fx"> The company enters the King's Awards for Enterprise under the Promoting Opportunity category, with The Way In as the company's initiative.</span></span></li>
       <li class="haspic"><img class="pic logo" src="../assets/journey/oct2026.webp" alt="Youth Guarantee, funded by UK Government, and the T Level Ambassador badge" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students will arrive, and two young people will be recruited through the Government's Jobs Guarantee, part of the Youth Guarantee, with the Growth Company. The newest ways in.</span></span></li>
     </ol></div>
     <div class="tl-hint" aria-hidden="true">Keep scrolling <i>→</i> the timeline moves sideways</div></div>
@@ -1093,7 +1136,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="harrison" data-name="Harrison" data-role="Warehouse operative" data-route="T Level industry placement" data-since="First T Level cohort" data-support="A named mentor in the warehouse and real orders from the first week" data-skills="Product knowledge, customer service, organisation" data-resp="Picking and packing orders" data-next="Paid work from 2026; moving into full-time employment" data-b="#111" data-consent="approved" data-photo="../assets/people/harrison.jpg" data-stream="dac8994822150ac8d73eec942de3984f" aria-haspopup="dialog" style="--b:#111;--a:rgba(225,6,0,.3)">
         <img class="por" src="../assets/people/harrison-sm.jpg" srcset="../assets/people/harrison-sm.jpg 525w, ../assets/people/harrison.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">H</span>
         <span class="cap"><b>Harrison</b><span>Warehouse operative</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="2021; full-time paid work since 2022" data-support="A placement shaped around additional needs, with a named person to learn from. Cycles in every day, with no sickness absence in five years" data-skills="Forklift licence, teamwork, reliability" data-resp="Packing and dispatch" data-next="Five years in; an example and a mentor for the next placement students" data-b="#C9C9C4" data-consent="approved" data-photo="../assets/people/jojo.jpg" data-stream="8083fa4205480457455b23c771acea87" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="jojo" data-name="Jojo" data-role="Warehouse operative" data-route="College placement" data-since="2021; full-time paid work since 2022" data-support="A placement shaped around additional needs, with a named person to learn from. Cycles in every day, with no sickness absence in five years" data-skills="Fork lift driving, teamwork, reliability" data-resp="Packing and dispatch" data-next="Five years in; an example and a mentor for the next placement students" data-b="#C9C9C4" data-consent="approved" data-photo="../assets/people/jojo.jpg" data-stream="8083fa4205480457455b23c771acea87" aria-haspopup="dialog" style="--b:#C9C9C4;--a:rgba(225,6,0,.4)">
         <img class="por" src="../assets/people/jojo-sm.jpg" srcset="../assets/people/jojo-sm.jpg 525w, ../assets/people/jojo.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">J</span>
         <span class="cap"><b>Jojo</b><span>Warehouse operative</span></span></button>
       <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="josh" data-name="Josh" data-role="Ecommerce assistant" data-route="Direct, inclusive recruitment" data-since="2025, part-time around university" data-support="Mentoring and responsibility, with hours built around an architecture degree at the University of Salford" data-skills="Spreadsheets, customer communication, attention to detail" data-resp="Storefront orders and customer replies" data-next="Growing with the storefronts as new channels open" data-b="#fff" data-consent="approved" data-photo="../assets/people/josh.jpg" data-hascard="1" data-doclabel="See the card from Josh's mum" data-stream="f767b8d2dd9cde79e72653d7fbae5ce7" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
@@ -1105,7 +1148,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="elliot" data-name="Elliot" data-role="Ecommerce assistant" data-route="Direct, inclusive recruitment" data-since="From 2025; four to five days a week" data-support="Hours built around his course until it finished" data-skills="Photoshop, managing marketplace platforms, efficiency" data-resp="Product images, listings and compliance across the storefronts" data-next="Growing the image work as new channels open" data-b="#fff" data-consent="approved" data-photo="../assets/people/elliot.jpg" data-stream="4d13acdf85d9654ef1af01b4b54b434a" aria-haspopup="dialog" style="--b:#fff;--a:rgba(138,138,133,.35)">
         <img class="por" src="../assets/people/elliot-sm.jpg" srcset="../assets/people/elliot-sm.jpg 525w, ../assets/people/elliot.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">E</span>
         <span class="cap"><b>Elliot</b><span>Ecommerce assistant</span></span></button>
-      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="Volunteer" data-since="2019" data-support="Access to the company's systems, with someone to check work with" data-skills="Networking, hardware troubleshooting, problem solving" data-resp="The company's IT" data-next="Helping with rehabilitation facilities, and being a role model" data-b="#8A8A85" data-consent="approved" data-photo="../assets/people/billy.jpg" data-stream="3a270ac4b7f1b68971db3ee4f468559e" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(201,201,196,.25)">
+      <button data-cur-label="Open" class="tile has-por" type="button" data-cur data-k="billy" data-name="Billy" data-role="IT technician" data-route="Volunteer" data-since="2019" data-support="Access to the company's systems, with someone to check work with" data-skills="Networking, hardware troubleshooting, problem solving" data-resp="The company's IT" data-next="Helping with rehabilitation facilities, and being a role model" data-b="#8A8A85" data-consent="approved" data-photo="../assets/people/billy.jpg" data-stream="86cd40e7cc5e0054c75a04ed53675740" aria-haspopup="dialog" style="--b:#8A8A85;--a:rgba(201,201,196,.25)">
         <img class="por" src="../assets/people/billy-sm.jpg" srcset="../assets/people/billy-sm.jpg 525w, ../assets/people/billy.jpg 1050w" sizes="(max-width:600px) 92vw, 30vw" width="525" height="700" alt="" loading="lazy" decoding="async"><span class="bg"></span><span class="grain"></span><span class="band-l"></span><span class="big">B</span>
         <span class="cap"><b>Billy</b><span>IT technician</span></span></button>
     </div>
@@ -1133,7 +1176,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         <p>Two talks and a workshop at New Bridge College, recruitment fairs, and a voice in how the Jobs Guarantee is run. Families see confidence return: one mother wrote that she had got her son back.</p></div>
         </div>
     <figure class="cardq rv">
-      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say<br>‘I got my son back’ thanks to you Tom.”</blockquote>
+      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say<br>‘I got my son back’<br>thanks to you Tom.”</blockquote>
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
         <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
     </figure>
@@ -1209,14 +1252,14 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
     </div>
     <div class="verse rv" aria-label="What comes next">
       <div class="vs"><span class="vn">01</span><b>October</b><p>The shutter goes up again. Three more T Level students from Bury College, a named supervisor for each, an induction and a brief that is theirs from the first week.</p></div>
-      <div class="vs"><span class="vn">02</span><b>The Brain</b><p>A central register of dates, attendance, support, skills, reviews and outcomes, kept in the Freedom Brain, the company's own operations hub, so the care behind a placement can be seen, not just said.</p></div>
+      <div class="vs"><span class="vn">02</span><b>The Brain</b><p>A central register of dates, attendance, support, skills, reviews and outcomes, kept in the Freedom Brain, the company's own operations hub, so the care behind a placement can be seen, not just said. The same hub gives the people on the programme an online portal, with a written training guide for every job in the company.</p></div>
       <div class="vs"><span class="vn">03</span><b>Start, middle and end</b><p>Anonymous feedback at each point of a placement, so confidence, skills and satisfaction are measured, not assumed.</p></div>
       <div class="vs"><span class="vn">04</span><b>The Jobs Guarantee</b><p>Two more come in with the Growth Company, on a guarantee that a young person deserves a chance, and a paid role wherever one exists.</p></div>
       <div class="vs"><span class="vn">05</span><b>Adjustments first</b><p>What we change before anyone starts becomes the standard, not the exception.</p></div>
       <div class="vs last"><p class="last">Everyone deserves a way in.</p></div>
     </div>
     <div class="nextcta rv">
-      <p class="lead quote">“Changing the world, one fire extinguisher at a time. We don't only look at the CV.”</p>
+      <p class="lead quote">“At Freedom Fire we care more about the person than their CV. Our aim is to get as many young people as we can back into the system. That is how we mean to change the world, one fire extinguisher at a time.”</p>
     </div>
   </div>
 </section>
@@ -1232,12 +1275,13 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 <footer id="footer">
   <div class="wrap">
     <div class="ft-top footer-item"><a class="totop" href="#top" aria-label="Back to the top" data-cur data-cur-label="Top"><span class="sq2"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="square"><path d="M15 26V6M6 15l9-9 9 9"/></svg></span><span class="lbl">Back to the top</span></a></div>
+    <div class="ft-brand footer-item"><img class="ff" src="../assets/ff_logo.png" width="800" height="293" alt="Freedom Fire &amp; Safety" loading="lazy" decoding="async"><p>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p></div>
     <div class="ft-grid">
-      <div class="footer-item"><img class="ff" src="../assets/ff_logo.png" width="800" height="293" alt="Freedom Fire &amp; Safety" loading="lazy" decoding="async"><p>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p><p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd<br>Company no. 13589467 · VAT no. GB 402 853 810</p></div>
       <div class="footer-item"><h4>Contact</h4><p><a href="mailto:info@freedom-fire.co.uk">info@freedom-fire.co.uk</a><br><a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p></div>
       <div class="footer-item"><h4>The programme</h4><p><a href="#programme">The route in</a><br><a href="#people">The people</a><br><a href="#partners">The partners</a></p></div>
-      <div class="footer-item"><h4>Elsewhere</h4><p><a href="../personal/index.html">Tom Letcher — the founder</a><br><a href="https://www.freedomgroup.uk">Freedom Group</a></p></div>
     </div>
+    <div class="ft-else footer-item"><h4>Elsewhere</h4><p><a href="../personal/index.html">Tom Letcher — the founder</a><br><a href="https://www.freedomgroup.uk">Freedom Group</a></p></div>
+    <div class="ft-legal footer-item"><p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd<br>Company no. 13589467 · VAT no. GB 402 853 810</p></div>
   </div>
 </footer>
 
