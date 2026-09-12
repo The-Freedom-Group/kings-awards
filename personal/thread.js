@@ -472,7 +472,7 @@
     { id: "c07",  side: "C", y: 0.5, ring: true }
   ];
 
-  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [];
+  var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [], corePt = null;
   var endPt = null, endFrac = 1, endNote = null;
 
   function buildPath() {
@@ -575,10 +575,13 @@
           holdLock = Math.max(0, cy + mr.h / 2 - window.innerHeight / 2);
           var ringPt = function (ring, deg) { var q = ringXY(ring, deg); return { x: cx + q.x * sx, y: cy + q.y * sy }; };
           var core = { x: cx + 50 * sx, y: cy + 38 * sy };
-          /* the line arrives from the right, level with the planet, and stops on it while the rings light up */
+          /* the line arrives from the right, level with the planet, and stops on it while the rings light up;
+             it leaves to the left the same way (the charts set the turn, once they know where they are) */
           var eIn = ringPt("C", 0);
-          pts.push({ x: core.x, y: core.y, id: p.id, el: el, noKnot: true, cpIn: { x: eIn.x + Math.min(160, mr.w * 0.12), y: core.y },
-                     loop: { id: "map", pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, lock: holdLock, px: 3400 } });
+          corePt = { x: core.x, y: core.y, id: p.id, el: el, noKnot: true, cpIn: { x: eIn.x + Math.min(160, mr.w * 0.12), y: core.y },
+                     loop: { id: "map", pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, lock: holdLock, px: 3400,
+                             cpOut: { x: core.x - Math.min(160, mr.w * 0.12), y: core.y } } };
+          pts.push(corePt);
           return;
         }
       }
@@ -699,15 +702,18 @@
         var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
         var Lr = cum[cum.length - 1] || 1;
         marks.years = yrs.map(function (_, yi) { return cum[yi + 1] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
-        var co0 = pageXY(el), fb0 = pageXY(figB);
-        /* straight down out of the system from the planet, then down the margin to the left of the panel,
-           then in through its side at the axis */
-        /* it sweeps left above the panel, arrives vertical in the margin beside it, and runs down that margin */
-        /* straight down out of the system to just below it, then one S across the gap into the margin beside the
-           panel, arriving vertical, then down that margin */
+        var co0 = pageXY(el), fb0 = pageXY(figB), xL = fb0.x - 40;
+        /* out of the system to the left, level with the planet, the way it came in on the right: one smooth
+           sweep round onto the margin beside the panel, arriving vertical just below the system, then down
+           that margin and in through the panel's side at the axis */
         var mapEl2 = document.querySelector("#c05 .map");
-        if (mapEl2) { var mo2 = pageXY(mapEl2), mb = mo2.y + mapEl2.offsetHeight; pts.push({ x: mo2.x + mapEl2.offsetWidth * 0.5, y: mb + 30, id: "mapOut", el: el, noKnot: true, cpIn: { x: mo2.x + mapEl2.offsetWidth * 0.5, y: mb - 120 } }); }
-        pts.push({ x: fb0.x - 40, y: fb0.y + 30, id: "chartsIn", el: el, noKnot: true, cpIn: { x: fb0.x - 40, y: fb0.y - 110 } });
+        if (mapEl2) {
+          var mo2 = pageXY(mapEl2), mb = mo2.y + mapEl2.offsetHeight, turnY = mb + 30;
+          var fromY = corePt ? corePt.y : mo2.y + mapEl2.offsetHeight * 0.5, fromX = corePt ? corePt.x : mo2.x + mapEl2.offsetWidth * 0.5;
+          if (corePt && corePt.loop) corePt.loop.cpOut = { x: fromX - (fromX - xL) * 0.55, y: fromY };
+          pts.push({ x: xL, y: turnY, id: "mapOut", el: el, noKnot: true, cpIn: { x: xL, y: turnY - Math.max(120, (turnY - fromY) * 0.55) } });
+        }
+        pts.push({ x: xL, y: fb0.y + 30, id: "chartsIn", el: el, noKnot: true, cpIn: { x: xL, y: fb0.y - 110 } });
         pts.push({ x: ridePts[0].x, y: ridePts[0].y, id: "charts", el: el, noKnot: true, rideTo: ridePts.slice(1), marks: marks, cpIn: { x: ridePts[0].x - 110, y: ridePts[0].y },
                    yS: ridePts[0].y, yE: ridePts[0].y,
                    lock: Math.max(0, Math.max(co0.y + el.offsetHeight + 56 - window.innerHeight, Math.min(co0.y - 96, co0.y + el.offsetHeight / 2 - window.innerHeight / 2))) });
@@ -754,6 +760,7 @@
         var dy2 = (b.y - from.y) * 0.5, cIn = b.cpIn || { x: b.x, y: b.y - dy2 };
         var cOut = a.loop.cpOut || { x: from.x, y: from.y + Math.max(200, dy2 * 1.2) };
         d += " C " + f1(cOut.x) + " " + f1(cOut.y) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
+        if (b.id === "mapOut") a.loop.dGlide = d;         /* the sweep out of the system ends here */
         continue;
       }
       if (a.rideTo) {
@@ -880,7 +887,11 @@
         if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
         else if (sm.l > lOut && sm.y < lp.meta.yB) sm.y = lp.meta.yB;
       }
-      if (lp.meta.id === "journey") paceExit(samples, lOut, lp.meta.lock + window.innerHeight * 0.62);
+      if (lp.meta.id === "journey" || lp.meta.id === "map") {
+        var glide = 0;
+        if (lp.meta.dGlide) { try { pr3.setAttribute("d", lp.meta.dGlide); svg.appendChild(pr3); glide = Math.max(0, pr3.getTotalLength() - lOut); svg.removeChild(pr3); } catch (e) { glide = 0; } }
+        paceExit(samples, lOut, lp.meta.lock + window.innerHeight * 0.62, glide);
+      }
       var fa = lA / totalLen, fb = lOut / totalLen;
       if (lp.meta.id === "map") { loopA = fa; loopB = fb; hasHold = true; }
       if (lp.meta.id === "journey" && !vs.on) return;          /* on touch the strip scrolls itself */
@@ -972,16 +983,42 @@
      than jumping; that pacing then fades over the next stretch of line until it is back in step with the page.
      It must never run ahead of the page's own geometry: when it did, the head was drawn above the window and
      the line went missing for whole chapters. */
-  function paceExit(samples, lOut, from) {
-    var gap = null, pv = from, FADE = 700;
-    for (var i = 0; i < samples.length; i++) {
+  function paceExit(samples, lOut, from, glide) {
+    /* a glide is a stretch of line straight after the hold that runs sideways more than down - the sweep
+       out of the system - and is paced by its length instead, so it takes the scroll its height would */
+    var FADE = 700, pv = from, lG = lOut + (glide || 0), y0 = null, yG = null, i, q;
+    for (i = 0; i < samples.length; i++) { q = samples[i]; if (q.l > lOut) { if (y0 === null) y0 = q.y; if (q.l >= lG) { yG = q.y; break; } } }
+    if (y0 === null) return;
+    if (yG === null) { yG = y0; lG = lOut; }
+    var g = from - y0;                       /* how far the page is ahead of the line as the hold lets go */
+    for (i = 0; i < samples.length; i++) {
       var s = samples[i];
       if (s.l <= lOut) continue;
-      if (gap === null) gap = s.y - from;
-      var v = s.y - gap * Math.max(0, 1 - (s.l - lOut) / FADE);
+      var v = lG > lOut && s.l <= lG ? from + (s.l - lOut) / (lG - lOut) * (yG - y0)
+                                     : s.y + g * Math.max(0, 1 - (s.l - lG) / FADE);
       if (v < pv) v = pv;
       s.y = v; pv = v;
     }
+  }
+  /* one lit thing at a time per channel, but the old one is let go only after the new one's transition has
+     played: a stage is a class, "" a stage with nothing lit, undefined no change, null the lap over */
+  var lapPlanets = { cur: null, timer: null, all: ["lap-core", "lap-a", "lap-b", "lap-c"] };
+  var lapRings   = { cur: null, timer: null, all: ["lap-a-ring", "lap-b-ring", "lap-c-ring"] };
+  function handOn(ch, stage, ms) {
+    if (stage === undefined || !mapEl) return;
+    if (stage === null) {
+      clearTimeout(ch.timer); ch.timer = null; ch.cur = null;
+      ch.all.forEach(function (c) { mapEl.classList.remove(c); });
+      return;
+    }
+    if (stage === ch.cur) return;
+    ch.cur = stage;
+    if (stage) mapEl.classList.add(stage);
+    clearTimeout(ch.timer);
+    ch.timer = setTimeout(function () {
+      ch.all.forEach(function (c) { if (c !== ch.cur) mapEl.classList.remove(c); });
+      ch.timer = null;
+    }, ms);
   }
   function fracAtY(ty) {
     var s = ySamples, n = s.length;
@@ -1117,12 +1154,14 @@
     if (mapEl) {
       var f = lapping ? clamp(mapHold.shown, 0, 1) : -1;
       mapEl.classList.toggle("lap", lapping);
-      /* the planet; ring A's line, then its planets; ring B; ring C; the planet again */
-      var ph = function (a, b) { return lapping && f >= a && f < b; };
-      mapEl.classList.toggle("lap-core", lapping && (f < 0.12 || f >= 0.88));
-      mapEl.classList.toggle("lap-a-ring", ph(0.12, 0.22)); mapEl.classList.toggle("lap-a", ph(0.22, 0.37));
-      mapEl.classList.toggle("lap-b-ring", ph(0.37, 0.47)); mapEl.classList.toggle("lap-b", ph(0.47, 0.62));
-      mapEl.classList.toggle("lap-c-ring", ph(0.62, 0.72)); mapEl.classList.toggle("lap-c", ph(0.72, 0.88));
+      /* the planet; ring A's line, then its planets; ring B; ring C; the planet again. The light is handed
+         on, not passed through a gap: whatever is lit stays lit while the next thing lights, and lets go
+         only once that has finished. Between a ring's line and its planets nothing changes hands. */
+      var planetsNow = !lapping ? null : f < 0.12 ? "lap-core" : f < 0.22 ? undefined : f < 0.37 ? "lap-a" : f < 0.47 ? undefined
+                     : f < 0.62 ? "lap-b" : f < 0.72 ? undefined : f < 0.88 ? "lap-c" : "lap-core";
+      var ringsNow = !lapping ? null : f < 0.12 ? "" : f < 0.37 ? "lap-a-ring" : f < 0.62 ? "lap-b-ring" : f < 0.88 ? "lap-c-ring" : "";
+      handOn(lapPlanets, planetsNow, 750);
+      handOn(lapRings, ringsNow, 550);
     }
     thread.classList.toggle("on", p > 0.004);
 
