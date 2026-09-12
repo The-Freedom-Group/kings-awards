@@ -239,6 +239,14 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread.on .head::before{animation:beacon 1.8s ease-out infinite}
 .thread.on .head::after{animation:beacon 1.8s ease-out .9s infinite}
 .thread.onrail .head{opacity:0;transition:none}   /* on The Journey's rail the rail's own head takes over */
+/* round the end note the line is two, and each tip is an arrow turned the way its half runs */
+.thread .head .tip{display:none}
+.thread .head2{opacity:0}
+.thread.split .head2{opacity:1}
+.thread.split .head{width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:0;background:transparent;box-shadow:none;animation:none;
+  transform:rotate(var(--r,0deg));filter:drop-shadow(0 0 5px rgba(255,45,141,.9)) drop-shadow(0 0 14px rgba(255,45,141,.6))}
+.thread.split .head::before,.thread.split .head::after,.thread.split .head .halo{display:none}
+.thread.split .head .tip{display:block;position:absolute;inset:0;background:var(--pink);clip-path:polygon(50% 100%,0 0,50% 34%,100% 0)}
 .thread .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
   border:1.5px solid var(--pink);background:var(--porcelain);opacity:.32;
   transition:opacity .45s,background .45s,transform .45s}

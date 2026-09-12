@@ -290,6 +290,12 @@
       live2   = $("#tLive2"),
       head    = $("#tHead");
   var ringA = 0, ringB = 0, ringLen = 0, loopA = 0, loopB = 0, loopMarks = null, hasHold = false;
+  /* a second tip for the right-hand half round the end note, and the arrow shape inside each tip */
+  var head2 = null;
+  if (head) {
+    head2 = document.createElement("i"); head2.className = "head head2"; head.parentNode.appendChild(head2);
+    [head, head2].forEach(function (el) { var tip = document.createElement("i"); tip.className = "tip"; el.appendChild(tip); });
+  }
   var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null, tlRows = [];
   /* ── The Journey: a strip of moments the wheel travels while the page holds ── */
   var jy = { el: $("#timeline"), stage: $("#jyStage"), strip: $("#jyStrip"), track: $("#jyTrack"), count: $("#jyCount"), year: $("#jyYear"), hint: $("#jyHint"),
@@ -656,15 +662,27 @@
 
         /* the growth chart's own lines become smooth curves (Catmull-Rom made cubic), and the ride uses the
            same curve, so the two coincide exactly. The points are kept on the element for later rebuilds. */
-        var chain = function (list, level) {
-          for (var i2 = 1; i2 < list.length; i2++) {
-            var p0 = list[Math.max(0, i2 - 2)], p1 = list[i2 - 1], p2 = list[i2], p3 = list[Math.min(list.length - 1, i2 + 1)];
-            p2.c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
-            p2.c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+        /* a smooth curve through the points that never overshoots them (Fritsch-Carlson): each tangent is the
+           mean of the secants either side, zero where the slope turns, level at the start; endSlope is how much
+           of the last secant's slope the curve keeps as it arrives at the end. No wobble between unevenly
+           spaced points, and it goes level of its own accord at a crest. */
+        var chain = function (list, endSlope) {
+          var n = list.length, h = [], d = [], m = [], i2;
+          if (n < 2) return list;
+          for (i2 = 0; i2 < n - 1; i2++) { h.push(Math.max(1e-6, list[i2 + 1].x - list[i2].x)); d.push((list[i2 + 1].y - list[i2].y) / h[i2]); }
+          m[0] = 0;
+          for (i2 = 1; i2 < n - 1; i2++) m[i2] = d[i2 - 1] * d[i2] <= 0 ? 0 : (d[i2 - 1] + d[i2]) / 2;
+          m[n - 1] = d[n - 2] * (endSlope || 0);
+          for (i2 = 0; i2 < n - 1; i2++) {
+            if (d[i2] === 0) { m[i2] = 0; m[i2 + 1] = 0; continue; }
+            var al = m[i2] / d[i2], be = m[i2 + 1] / d[i2], ss = al * al + be * be;
+            if (ss > 9) { var tq = 3 / Math.sqrt(ss); m[i2] = tq * al * d[i2]; m[i2 + 1] = tq * be * d[i2]; }
           }
-          if (list.length > 1) { var f0 = list[0], f1 = list[1], en = list[list.length - 1];
-            f1.c1 = { x: f0.x + (f1.x - f0.x) * 0.35, y: f0.y };                      /* leaves the baseline level */
-            en.c2 = { x: en.x - Math.abs(en.x - list[list.length - 2].x) * 0.35, y: en.y + level }; }  /* arrives level */
+          for (i2 = 1; i2 < n; i2++) {
+            var hh = h[i2 - 1];
+            list[i2].c1 = { x: list[i2 - 1].x + hh / 3, y: list[i2 - 1].y + m[i2 - 1] * hh / 3 };
+            list[i2].c2 = { x: list[i2].x - hh / 3, y: list[i2].y - m[i2] * hh / 3 };
+          }
           return list;
         };
         var toD = function (list) {
@@ -687,18 +705,17 @@
             pathEl.setAttribute("data-points", o.el.getAttribute("points"));
             o.el.parentNode.replaceChild(pathEl, o.el);
           }
-          pathEl.setAttribute("d", toD(chain(o.pts.map(function (q) { return { x: q.x, y: q.y }; }), oi ? 2 : 0)));
+          pathEl.setAttribute("d", toD(chain(o.pts.map(function (q) { return { x: q.x, y: q.y }; }), oi ? 0.35 : 0)));
         });
         var toDoc = function (q) { return { x: FL.ox + q.x * FL.sx, y: FL.oy + q.y * FL.sy }; };
-        var act = chain(actV.pts.map(toDoc), 0), tgt = chain(tgtV.pts.map(toDoc), 2);
+        /* the target path keeps a little of its climb as it reaches £100m; the line carries that on past it */
+        var act = chain(actV.pts.map(toDoc), 0), tgt = chain(tgtV.pts.map(toDoc), 0.35);
         var lineIdx = ridePts.length;
-        /* one spline through the lot, the crest held level, then on down across the gap to land level on the
-           growth chart's baseline */
+        /* one curve through the lot: level over the last bar where the slope turns, then on down across the gap
+           to land level on the growth chart's baseline */
         if (act.length) {
-          var land = act[0], crest = ridePts[ridePts.length - 1], before = ridePts[ridePts.length - 2] || ridePts[0];
+          var land = act[0];
           chain(ridePts.concat([land]), 0);
-          crest.c2 = { x: crest.x - (crest.x - before.x) * 0.35, y: crest.y };
-          land.c1 = { x: crest.x + (land.x - crest.x) * 0.35, y: crest.y };
           ridePts.push(land);
           for (var ai = 1; ai < act.length; ai++) ridePts.push(act[ai]);
           if (tgt.length) { tgt[0].c1 = null; for (var ti = 1; ti < tgt.length; ti++) ridePts.push(tgt[ti]); }
@@ -781,7 +798,8 @@
         });
         dRideOut = d; rideMeta = a; from = a.rideTo[a.rideTo.length - 1];
         /* off the top of the growth chart heading right, round the corner set for it, then down the margin */
-        var dxo2 = Math.max(40, b.x - from.x), cOutR = { x: from.x + dxo2 * 0.5523, y: from.y };
+        var dxo2 = Math.max(40, b.x - from.x), slopeOut = from.c2 && from.x - from.c2.x > 0.5 ? (from.y - from.c2.y) / (from.x - from.c2.x) : 0;
+        var cOutR = { x: from.x + dxo2 * 0.5523, y: from.y + slopeOut * dxo2 * 0.5523 };   /* carries the climb on, then arches over */
         var cInR = b.cpIn || { x: b.x, y: b.y - Math.max(160, (b.y - from.y) * 0.5) };
         d += " C " + f1(cOutR.x) + " " + f1(cOutR.y) + ", " + f1(cInR.x) + " " + f1(cInR.y) + ", " + f1(b.x) + " " + f1(b.y);
         if (b.id === "chartsOut") a.dGlide = d;             /* the corner off the chart is paced by its length */
@@ -1169,6 +1187,19 @@
       var pt = landed && endPt ? endPt : live.getPointAtLength(totalLen * p);
       head.style.left = pt.x + "px";
       head.style.top  = pt.y + "px";
+    }
+    /* round the end note the line is two: each half gets a tip shaped as an arrow, turned the way its half
+       runs; once the halves rejoin below there is one tip again, and it is a circle */
+    var split = !!(live2 && ringLen && ringB > ringA && p > ringA + 0.001 && p < ringB - 0.001);
+    thread.classList.toggle("split", split);
+    if (split) {
+      var aim = function (el, path, L) {
+        var q1 = path.getPointAtLength(L), q0 = path.getPointAtLength(Math.max(0, L - 8));
+        el.style.setProperty("--r", (Math.atan2(q1.y - q0.y, q1.x - q0.x) * 180 / Math.PI - 90).toFixed(1) + "deg");
+        return q1;
+      };
+      aim(head, live, totalLen * p);
+      if (head2) { var q2 = aim(head2, live2, ringLen * p2); head2.style.left = q2.x + "px"; head2.style.top = q2.y + "px"; }
     }
     for (var i = 0; i < knots.length; i++) {
       knots[i].classList.toggle("hit", p >= knotAt[i]);
