@@ -1016,26 +1016,6 @@
       s.y = v; pv = v;
     }
   }
-  /* one lit thing at a time per channel, but the old one is let go only after the new one's transition has
-     played: a stage is a class, "" a stage with nothing lit, undefined no change, null the lap over */
-  var lapPlanets = { cur: null, timer: null, all: ["lap-core", "lap-a", "lap-b", "lap-c"] };
-  var lapRings   = { cur: null, timer: null, all: ["lap-a-ring", "lap-b-ring", "lap-c-ring"] };
-  function handOn(ch, stage, ms) {
-    if (stage === undefined || !mapEl) return;
-    if (stage === null) {
-      clearTimeout(ch.timer); ch.timer = null; ch.cur = null;
-      ch.all.forEach(function (c) { mapEl.classList.remove(c); });
-      return;
-    }
-    if (stage === ch.cur) return;
-    ch.cur = stage;
-    if (stage) mapEl.classList.add(stage);
-    clearTimeout(ch.timer);
-    ch.timer = setTimeout(function () {
-      ch.all.forEach(function (c) { if (c !== ch.cur) mapEl.classList.remove(c); });
-      ch.timer = null;
-    }, ms);
-  }
   function fracAtY(ty) {
     var s = ySamples, n = s.length;
     if (!n) return 0;
