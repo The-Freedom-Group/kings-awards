@@ -32,7 +32,11 @@
 
   /* ── smooth scrolling ─────────────────────────────────────── */
   var smoother = null;
-  if (animate) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0.4, normalizeScroll: true, ignoreMobileResize: true, effects: true, onUpdate: function (self) { if (typeof drawRoute === "function") drawRoute(self.scrollTop()); } });
+  /* a finger scrolls the page itself: smoothing the touch and normalising the scroll both mean GSAP
+     takes the gesture over, which is what strands a phone on a section it cannot swipe out of - and
+     is why every dialog here has to switch normalising off again. The portfolio keeps its scroll
+     work to fine pointers for the same reason; only the desktop gets the smoothed scroll. */
+  if (animate) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0, normalizeScroll: fine, ignoreMobileResize: true, effects: true, onUpdate: function (self) { if (typeof drawRoute === "function") drawRoute(self.scrollTop()); } });
   window.__smoother = smoother;
   function scrollY() { return smoother ? smoother.scrollTop() : (window.pageYOffset || html.scrollTop); }
   function scrollTo(target) {
