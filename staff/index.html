@@ -913,16 +913,18 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 
 /* ══ the notes of 12 Sept ══════════════════════════════════════════════════════ */
 
-/* the footer reads down the middle: the mark, the address under it, the two lists of links
-   side by side, what is elsewhere below them, and the legal line last of all */
-.ft-brand{text-align:center;padding-top:clamp(24px,3.4vw,40px)}
-footer .ft-brand .ff{margin:0 auto 20px}
-footer .ft-brand p{margin:0}
-.ft-grid{grid-template-columns:1fr 1fr;max-width:620px;margin:0 auto;text-align:center;
-  padding-top:clamp(28px,3.6vw,44px);gap:clamp(20px,4vw,48px)}
-.ft-else{text-align:center;padding-top:clamp(24px,3.2vw,38px)}
-.ft-legal{justify-content:center;text-align:center;margin-top:clamp(28px,3.6vw,44px)}
-footer .ft-legal .ft-legal-in{margin-top:0}
+/* below the desktop the footer reads down the middle: the mark, the address under it, the two lists
+   of links side by side, what is elsewhere below them, and the legal line last of all. The desktop
+   keeps its four columns; the markup is the same, the first column is opened up into the grid. */
+@media(max-width:920px){
+  .ft-grid{grid-template-columns:1fr 1fr;max-width:620px;margin:0 auto;text-align:center;
+    padding-top:clamp(24px,3.4vw,40px);gap:clamp(20px,4vw,48px)}
+  .ft-grid>.footer-item:first-child{display:contents}
+  footer .ff{grid-column:1/-1;margin:0 auto 4px}
+  .ft-grid>.footer-item:first-child>p{grid-column:1/-1;margin:0}
+  .ft-grid>.footer-item:nth-child(4){grid-column:1/-1}
+  footer .ft-legal-in{order:99;margin-top:clamp(8px,1.6vw,16px);padding-top:18px;border-top:1px solid var(--rule-d)}
+}
 @media(max-width:560px){.ft-grid{grid-template-columns:1fr;max-width:none}}
 
 /* the title sits in the sky rather than against the roofline, on every width */
@@ -1275,13 +1277,12 @@ footer .ft-legal .ft-legal-in{margin-top:0}
 <footer id="footer">
   <div class="wrap">
     <div class="ft-top footer-item"><a class="totop" href="#top" aria-label="Back to the top" data-cur data-cur-label="Top"><span class="sq2"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="square"><path d="M15 26V6M6 15l9-9 9 9"/></svg></span><span class="lbl">Back to the top</span></a></div>
-    <div class="ft-brand footer-item"><img class="ff" src="../assets/ff_logo.png" width="800" height="293" alt="Freedom Fire &amp; Safety" loading="lazy" decoding="async"><p>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p></div>
     <div class="ft-grid">
+      <div class="footer-item"><img class="ff" src="../assets/ff_logo.png" width="800" height="293" alt="Freedom Fire &amp; Safety" loading="lazy" decoding="async"><p>Unit 19, Pilsworth Industrial Estate, Bury, BL9 8RE<br>Part of The Freedom Group</p><p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd<br>Company no. 13589467 · VAT no. GB 402 853 810</p></div>
       <div class="footer-item"><h4>Contact</h4><p><a href="mailto:info@freedom-fire.co.uk">info@freedom-fire.co.uk</a><br><a href="https://www.freedom-fire.co.uk">freedom-fire.co.uk</a></p></div>
       <div class="footer-item"><h4>The programme</h4><p><a href="#programme">The route in</a><br><a href="#people">The people</a><br><a href="#partners">The partners</a></p></div>
+      <div class="footer-item"><h4>Elsewhere</h4><p><a href="../personal/index.html">Tom Letcher — the founder</a><br><a href="https://www.freedomgroup.uk">Freedom Group</a></p></div>
     </div>
-    <div class="ft-else footer-item"><h4>Elsewhere</h4><p><a href="../personal/index.html">Tom Letcher — the founder</a><br><a href="https://www.freedomgroup.uk">Freedom Group</a></p></div>
-    <div class="ft-legal footer-item"><p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd<br>Company no. 13589467 · VAT no. GB 402 853 810</p></div>
   </div>
 </footer>
 
