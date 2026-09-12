@@ -1168,16 +1168,14 @@
       thread.classList.toggle("onrail", onRail);
     }
     if (mapEl) {
-      var f = lapping ? clamp(mapHold.shown, 0, 1) : -1;
+      /* the system lights up as the line laps it - the planet, ring A's line, its planets, ring B, ring C -
+         and what has lit stays lit, on down the rest of the page. Only winding the lap back, scrolling up
+         through it, puts the lights out again, in the order they came on. */
+      var f = !mapHold ? -1 : mapHold.phase === "after" ? 1 : mapHold.phase === "hold" ? clamp(mapHold.shown, 0, 1)
+            : mapHold.phase === "approach" && mapHold.dir ? 1 : -1;
       mapEl.classList.toggle("lap", lapping);
-      /* the planet; ring A's line, then its planets; ring B; ring C; the planet again. The light is handed
-         on, not passed through a gap: whatever is lit stays lit while the next thing lights, and lets go
-         only once that has finished. Between a ring's line and its planets nothing changes hands. */
-      var planetsNow = !lapping ? null : f < 0.12 ? "lap-core" : f < 0.22 ? undefined : f < 0.37 ? "lap-a" : f < 0.47 ? undefined
-                     : f < 0.62 ? "lap-b" : f < 0.72 ? undefined : f < 0.88 ? "lap-c" : "lap-core";
-      var ringsNow = !lapping ? null : f < 0.12 ? "" : f < 0.37 ? "lap-a-ring" : f < 0.62 ? "lap-b-ring" : f < 0.88 ? "lap-c-ring" : "";
-      handOn(lapPlanets, planetsNow, 750);
-      handOn(lapRings, ringsNow, 550);
+      [["lap-core", 0], ["lap-a-ring", 0.12], ["lap-a", 0.22], ["lap-b-ring", 0.37], ["lap-b", 0.47], ["lap-c-ring", 0.62], ["lap-c", 0.72]]
+        .forEach(function (st) { mapEl.classList.toggle(st[0], f >= st[1]); });
     }
     thread.classList.toggle("on", p > 0.004);
 
