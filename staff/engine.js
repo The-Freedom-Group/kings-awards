@@ -254,6 +254,10 @@
   /* ── the route strip, the progress line, the chapter card ── */
   var hero = $("#top"), story = $("#story"), route = $("#route"), lit = $("#routeLit");
   var chapters = $$("#story .ch, #story .hero, #story .intro");
+  /* the side line is a desktop thing; the stylesheet hides it below 900, so none of its work is done
+     there either. Read live rather than once, so a rotated tablet lands on the right answer. */
+  var routeMQ = window.matchMedia ? window.matchMedia("(max-width: 899px)") : null;
+  var noRoute = function () { return !!(routeMQ && routeMQ.matches); };
   var TITLES = { top: ["00", "The way in"], why: ["01", "Why it exists"], programme: ["02", "The route in"], timeline: ["03", "The timeline"],
     people: ["04", "The people"], impact: ["05", "The impact"], partners: ["06", "The partners"], learn: ["07", "How we learn"],
     next: ["08", "What comes next"] };
@@ -262,7 +266,7 @@
   var routeTrack = $("#routeTrack"), routeHead = $("#routeHead"), routeLbl = $("#routeLbl"), routeLblN = $("#routeLblN"), routeLblT = $("#routeLblT"), ticks = [], litP = 0, lastLit = 0, stillFrames = 99;
   function buildTicks() {
     ticks.forEach(function (t) { t.remove(); }); ticks = [];
-    if (!route) return;
+    if (!route || noRoute()) return;
     chapters.forEach(function (sec) {
       if (sec.id === "top") return;
       var t = document.createElement("i"); t.className = "tick"; t.sec = sec; route.appendChild(t); ticks.push(t);
@@ -274,7 +278,7 @@
   /* the route: down the left to the timeline, along its line to the right, straight down the right, back across to
      the left just above The People, then down the left as before. Five segments, one continuous measure of progress. */
   function drawRoute(y) {
-    if (!route || !lit || !story) return;
+    if (!route || !lit || !story || noRoute()) return;
     var pageEl = $("#smooth-content") || document.body, vh = window.innerHeight;
     var H = pageEl.offsetHeight, top = hero ? hero.offsetHeight : 0, W = story.offsetWidth, end = H - 24;
     var stripW = route.offsetWidth || 20, lx = stripW / 2, rx = W - stripW / 2;
@@ -376,7 +380,9 @@
   buildTicks();
   requestAnimationFrame(frame);
   var rebuildTimer = null;
-  function rebuild() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(function () { lastY = -1; sizeCubes(); }, 140); }
+  /* the ticks are rebuilt too, so crossing the width where the side line appears brings its chapter
+     marks with it rather than leaving a bare strip */
+  function rebuild() { clearTimeout(rebuildTimer); rebuildTimer = setTimeout(function () { lastY = -1; buildTicks(); sizeCubes(); }, 140); }
   window.addEventListener("resize", rebuild); window.addEventListener("load", rebuild);
   if ("ResizeObserver" in window && story) new ResizeObserver(rebuild).observe(story);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);

@@ -263,6 +263,10 @@ html.js.has-gsap .hero .fm{opacity:0}
 .route.moving .lbl{opacity:1}
 .route.landed .head{background:var(--red);border-color:#fff}
 @media(max-width:1199px){.route .lbl{display:none}}
+/* no side line on a phone: its whole shape exists to follow the timeline sideways, and the timeline
+   only travels sideways once it is pinned, which is desktop only. Below that it bent right, down and
+   back left around a timeline that was not moving, so it is dropped rather than straightened. */
+@media(max-width:899px){.route,.route-head{display:none}}
 @media(max-width:820px){.route{width:10px}.route .head,.route.moving .head{width:10px;height:10px;margin:-5px 0 0 -5px;border-width:2px}.route .tick{width:8px;margin-left:-4px}.route .tick.here{width:10px;margin-left:-5px}.route .track,.route .lit{width:3px;margin-left:-1.5px}}
 
 /* ══ THE WIPE: black to paper ══════════════════════════════════ */
