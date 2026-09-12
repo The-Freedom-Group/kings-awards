@@ -500,6 +500,7 @@
   if (jyPrev) jyPrev.addEventListener("click", function () { stepJourney(-1); });
   if (jyNext) jyNext.addEventListener("click", function () { stepJourney(1); });
   var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
+  var orbitThread = $("#orbitThread"), orbitSvg = $("#orbitSvg"), oLive = $("#oLive"), oGlow = $("#oGlow"), oHead = $("#oHead"), orbitBox = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
   var builtH = 0, holdLock = 0, holds = [], holdActive = null, hold = { active: false };
@@ -544,7 +545,10 @@
        again here: the page follows the browser's own move and the target picks up from wherever that lands */
     if (!e.cancelable) return;
     e.preventDefault();
-    vs.tgt = clamp(vs.tgt + d, 0, maxScroll());
+    /* in the moment after a hold lets go, a notch the other way is a wheel settling, not a change of mind */
+    if (d < 0 && performance.now() - (vs.freeAt || 0) < 1500) return;
+    /* the target never falls behind the page: a stale height must not pull the page back up */
+    vs.tgt = clamp(vs.tgt + d, 0, Math.max(maxScroll(), vs.cur));
   }, { passive: false });
   /* a scroll we did not make (the scrollbar, a key, an anchor) becomes the new position and target */
   window.addEventListener("scroll", function () {
@@ -1127,6 +1131,15 @@
         }
       }
     }
+    /* the carbon planet's copy of the line: the same stroke, framed on the ground it is drawn over */
+    orbitBox = null;
+    if (orbitSvg && oLive && envEl && envEl.offsetWidth) {
+      var eo3 = pageXY(envEl), vwx = window.innerWidth;
+      orbitBox = { x: eo3.x - vwx, y: eo3.y, w: envEl.offsetWidth + vwx * 2, h: envEl.offsetHeight + 240 };
+      orbitSvg.setAttribute("viewBox", orbitBox.x + " " + orbitBox.y + " " + orbitBox.w + " " + orbitBox.h);
+      oLive.setAttribute("d", d); oLive.style.strokeDasharray = totalLen; oLive.style.strokeDashoffset = totalLen;
+      if (oGlow) { oGlow.setAttribute("d", d); oGlow.style.strokeDasharray = totalLen; oGlow.style.strokeDashoffset = totalLen; }
+    }
     /* each hold keeps its state if the page is still at it; otherwise it starts fresh for where the page is */
     var yNow = window.pageYOffset || document.documentElement.scrollTop;
     holds = holdDefs.sort(function (u, v) { return u.lock - v.lock; }).map(function (def) {
@@ -1256,8 +1269,10 @@
             if (dy >= 320) h.phase = "after";
             else if (vs.tgt >= h.lock - 0.5) { vs.tgt = h.lock; h.phase = "approach"; h.dir = 0; h.prog = h.shown = 0; h.t0 = performance.now(); }
           } else if (h.phase === "after") {
+            /* a hold that has let go takes the page back only for a deliberate scroll up, well past its
+               lock and clear of the moment it let go; never for a stray notch or a late event */
             if (dy <= -320) h.phase = "before";
-            else if (vs.tgt < h.lock - 0.5 && y > h.lock - 320) { vs.tgt = h.lock; h.phase = "approach"; h.dir = 1; h.prog = h.shown = 1; h.t0 = performance.now(); }
+            else if (vs.tgt < h.lock - 80 && y > h.lock - 320 && performance.now() - (h.freeAt || 0) > 1500) { vs.tgt = h.lock; h.phase = "approach"; h.dir = 1; h.prog = h.shown = 1; h.t0 = performance.now(); }
           }
           if (h.phase === "approach") {
             vs.tgt = h.lock;
@@ -1268,7 +1283,7 @@
           if (h.phase === "hold") {
             vs.tgt = h.lock;
             h.shown += (h.prog - h.shown) * 0.09;
-            if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; }
+            if (h.prog > 1 && h.shown > 0.995) { h.phase = "after"; h.shown = 1; h.freeAt = performance.now(); vs.freeAt = h.freeAt; }
             else if (h.prog < 0 && h.shown < 0.005) { h.phase = "before"; h.shown = 0; vs.tgt = h.lock - 10; }
             else if (Math.abs(dy) > 320) h.phase = dy > 0 ? "after" : "before";
           }
@@ -1307,6 +1322,13 @@
     }
     live.style.strokeDashoffset = totalLen * (1 - p);
     if (glow) glow.style.strokeDashoffset = totalLen * (1 - p);
+    if (oLive && orbitBox) {
+      oLive.style.strokeDashoffset = totalLen * (1 - p);
+      if (oGlow) oGlow.style.strokeDashoffset = totalLen * (1 - p);
+      var op0 = p > 0.004 ? live.getPointAtLength(totalLen * p) : null, onOrbit = !!(op0 && op0.y >= orbitBox.y && op0.y <= orbitBox.y + orbitBox.h);
+      if (orbitThread) orbitThread.classList.toggle("on", onOrbit);
+      if (oHead && onOrbit) { oHead.style.left = (op0.x - orbitBox.x) + "px"; oHead.style.top = (op0.y - orbitBox.y) + "px"; }
+    }
     if (rLive && rideBox) {
       rLive.style.strokeDashoffset = totalLen * (1 - p);
       var onRide = p > rideA - 0.004 && p < rideB + 0.004;
@@ -1345,6 +1367,7 @@
     orbitBoostTarget = lapping ? 1 : 0;
     var gHold = holds.filter(function (h) { return h.id === "globe"; })[0];
     thread.classList.toggle("lap", lapping || !!(gHold && gHold.phase === "hold"));
+    if (orbitThread) orbitThread.classList.toggle("lap", !!(gHold && gHold.phase === "hold"));
     /* the carbon planet's chapter is off-white until the page takes hold on the planet; then it goes to night
        and stays so on down the page. Winding the wrap back brings the day back. Without the hold - a phone,
        reduced motion - it is night from the start. */

@@ -222,6 +222,13 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 /* the line's light is a second, wider stroke beneath it: a filter over a path the height of the page was too costly a frame */
 .thread .glow{fill:none;stroke:rgba(255,45,141,.2);stroke-width:7;vector-effect:non-scaling-stroke;stroke-linecap:round;transition:stroke .5s,stroke-width .5s}
 .thread.thread-ride .live{filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
+/* the carbon planet's ground is painted inside the text column, over the page's line; this copy of the line
+   sits above that ground, covering the same span as it, so the wrap round the planet is always seen */
+.thread.thread-orbit{position:absolute;left:-100vw;right:-100vw;top:0;bottom:-240px;z-index:6;pointer-events:none;overflow:visible}
+.thread.thread-orbit svg{overflow:visible}
+.thread.thread-orbit .track{display:none}
+.thread.thread-orbit .head{display:none}
+.thread.thread-orbit.on .head{display:block;opacity:1}
 .thread .head::before,.thread .head::after{content:"";position:absolute;inset:0;
   border-radius:50%;border:1.5px solid var(--pink);opacity:0}
 .thread.landed .head::before{animation:beacon 2.6s ease-out infinite}
@@ -1530,7 +1537,7 @@ a.tl-link{color:var(--pink);font-weight:500}
       <div class="ph" data-yr="The future · 2027 and beyond"><div>
         <em>The future</em>
         <h3>A £100m projection.</h3>
-        <p>D2C at full scale: eBay, Temu and Amazon today, Shopify and OnBuy next, with the company's own brands going into national retailers and B2B trade supply, fire extinguisher servicing and installation nationwide, and the next owned brands built the same way.</p></div></div>
+        <p>D2C at scale. B2B distribution. National service operations. Owned brands expanding into retail and trade. New businesses built and acquired, all powered by shared infrastructure designed to scale. One group, expanding across markets, categories and industries.</p></div></div>
     </div>
     <div class="rail3" id="rail3" aria-hidden="true"><i class="on" data-l="Start"></i><s></s><i data-l="Now"></i><s></s><i data-l="Next"></i></div>
   </div>
@@ -1627,7 +1634,7 @@ a.tl-link{color:var(--pink);font-weight:500}
           <div class="jy-copy"><span class="jy-idx">15 / 18</span><span class="jy-when">July 2026</span><b class="jy-title">The King's Awards for Enterprise.</b><p>Nominated for Promoting Opportunity by the Greater Manchester Growth Company, and entered for the Young Founder award.</p></div>
         </li>
         <li class="jy-card" data-when="August 2026" data-i="15">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ebay-one.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ebay-one.webp" srcset="../assets/journey/th/ebay-one.webp 400w, ../assets/journey/ebay-one.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ebay-ranked.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ebay-ranked.webp" srcset="../assets/journey/th/ebay-ranked.webp 400w, ../assets/journey/ebay-ranked.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
           <div class="jy-copy"><span class="jy-idx">16 / 18</span><span class="jy-when">August 2026</span><b class="jy-title">Number one.</b><p>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</p></div>
         </li>
         <li class="jy-card" data-when="September 2026" data-i="16">
@@ -1946,6 +1953,7 @@ a.tl-link{color:var(--pink);font-weight:500}
     <button class="fold-t" type="button" data-fold="cols">Read more</button>
     </div>
     <div class="env rv">
+      <div class="thread thread-orbit" id="orbitThread" aria-hidden="true"><svg id="orbitSvg" preserveAspectRatio="none"><path class="glow" id="oGlow"></path><path class="live" id="oLive"></path></svg><i class="head" id="oHead"></i></div>
       <div class="env-head">
         <div><div class="ch-tag">Carbon footprint</div>
         <h3 class="env-h">Longer life. Fewer miles. Less waste.</h3>
