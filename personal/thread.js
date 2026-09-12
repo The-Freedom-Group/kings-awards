@@ -303,6 +303,7 @@
     jy.centres = jy.cards.map(function (c) { return c.offsetLeft + sl + c.offsetWidth / 2; });
     if (jy.track) {
       var W2 = Math.max(jy.strip.scrollWidth, jy.centres[jy.n - 1] + jy.stage.clientWidth), H2 = 96, Y = 38, ns = "http://www.w3.org/2000/svg";
+      jy.railY = Y; jy.trackH = H2;       /* where the rail sits inside the track, so the page thread can meet it */
       jy.track.setAttribute("viewBox", "0 0 " + W2 + " " + H2); jy.track.style.width = W2 + "px";
       jy.track.innerHTML = "";
       var mk = function (tag, attrs, parent) { var e2 = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k2) { e2.setAttribute(k2, attrs[k2]); }); (parent || jy.track).appendChild(e2); return e2; };
@@ -564,13 +565,21 @@
       }
       if (p.journey) {
         pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: false });
-        if (jy.stage) {
+        if (jy.stage && jy.centres.length) {
           var so = pageXY(jy.stage), sh = jy.stage.offsetHeight, midY = so.y + sh * 0.5, vh = window.innerHeight;
           var headEl = jy.el.querySelector(".jy-head"), hy = headEl ? pageXY(headEl).y : so.y - 60;
           var jLock = Math.max(0, Math.max(so.y + sh + 28 - vh, Math.min(hy - 96, midY - vh / 2)));
-          var jExit = { x: so.x + jy.stage.offsetWidth + 24, y: midY };
-          pts.push({ x: so.x - 24, y: midY, id: "journeyIn", el: el, noKnot: true,
-                     loop: { id: "journey", pts: [jExit], end: jExit, yA: midY, yB: midY, lock: jLock, px: Math.max(2400, jy.n * 230) } });
+          /* the page thread and the strip's own rail are one line: the thread comes down the margin, turns
+             along the rail at the stage's left edge - where the lit rail begins - and travels it to the head,
+             which the strip holds at the stage's centre, leaving straight down from there. The crossing runs
+             behind the stage, so what shows is the descent, the rail itself, and the drop below the head.
+             The rail's place comes from layout alone: the reveal moves the boxes but never the offsets. */
+          var railY = so.y + jy.stage.clientTop + jy.stage.clientHeight - (jy.trackH || 96) + (jy.railY || 38);
+          var railX = so.x + jy.stage.clientLeft;
+          var jExit = { x: railX + jy.centres[0], y: railY };
+          pts.push({ x: railX, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: SIDE[p.side], y: railY },
+                     loop: { id: "journey", pts: [jExit], end: jExit, yA: railY, yB: railY, lock: jLock,
+                             px: Math.max(2400, jy.n * 230), lead: vh * 0.62 } });
         }
         return;
       }
@@ -826,6 +835,23 @@
       if (lOut < lIn) return;
       var lA = lIn;
       for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= lp.meta.yA) { lA = samples[si].l; break; } }
+      /* the rail sits lower in the window than the point the head is drawn at, so the last of the descent is
+         spread over the scroll that is left before the lock: the head lands on the rail exactly as the page
+         takes hold, and the two are one line for the whole of the travel rather than meeting part way in */
+      if (lp.meta.lead) {
+        var yLock = lp.meta.lock + lp.meta.lead, gap = lp.meta.yA - yLock;
+        if (gap > 0) {
+          var win = Math.max(420, gap * 6), yTop = lp.meta.yA - win, lTop = -1;
+          for (var sl = 0; sl < samples.length; sl++) { if (samples[sl].l <= lA && samples[sl].y >= yTop) { lTop = samples[sl].l; break; } }
+          if (lTop >= 0 && lA > lTop) {
+            for (var sn = 0; sn < samples.length; sn++) {
+              var sp2 = samples[sn];
+              if (sp2.l >= lTop && sp2.l <= lA) sp2.y = yTop + (yLock - yTop) * (sp2.l - lTop) / (lA - lTop);
+            }
+            lp.meta.yA = lp.meta.yB = yLock;
+          }
+        }
+      }
       for (var sj = 0; sj < samples.length; sj++) {
         var sm = samples[sj];
         if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);

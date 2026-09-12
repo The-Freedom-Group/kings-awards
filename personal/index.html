@@ -1340,7 +1340,8 @@ a.tl-link{color:var(--pink);font-weight:500}
 .journey:not(.live) .jy-when,.journey:not(.live) .jy-title,.journey:not(.live) .jy-copy p{transform:none;opacity:1}
 .jy-track{position:absolute;left:0;bottom:0;height:96px;width:100%;overflow:visible;pointer-events:none;display:block}
 .jy-track .jt-base{stroke:rgba(255,255,255,.13);stroke-width:1.5}
-.jy-track .jt-lit{stroke:var(--pink);stroke-width:2;filter:drop-shadow(0 0 6px rgba(255,45,141,.7))}
+/* the lit rail is the page thread continued, so it is drawn exactly as the thread is */
+.jy-track .jt-lit{stroke:var(--pink);stroke-width:1.8;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
 .jy-track .jt-knot{fill:var(--carbon);stroke:rgba(255,255,255,.32);stroke-width:1.5;transition:fill .3s,stroke .3s}
 .jy-track .jt-knot.on{fill:var(--pink);stroke:var(--pink)}
 .jy-track .jt-head{fill:#fff;filter:drop-shadow(0 0 10px rgba(255,45,141,.95))}
