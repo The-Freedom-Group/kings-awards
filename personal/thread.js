@@ -604,7 +604,7 @@
           var jExit = { x: railX + jy.stageW, y: railY };
           pts.push({ x: railX, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: SIDE[p.side], y: railY },
                      loop: { id: "journey", pts: [jExit], end: jExit, yA: railY, yB: railY, lock: jLock,
-                             px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, lead: vh * 0.62, cpOut: { x: SIDE.R, y: railY } } });
+                             px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, cpOut: { x: SIDE.R, y: railY } } });
         }
         return;
       }
@@ -642,16 +642,16 @@
           if (!years[yr] || top < years[yr].top) years[yr] = { top: top, cx: cx, x0: parseFloat(r.getAttribute("x")), x1: parseFloat(r.getAttribute("x")) + parseFloat(r.getAttribute("width")) };
         });
         var yrs = Object.keys(years).sort(), ridePts = [], marks = { years: [], yearNames: yrs, lineStart: 0, L: FL };
-        /* the line rides the bars like a road: in through the panel's side at the first bar's height, level
-           along each bar above its label, one smooth rise to the next that is done before that bar begins,
-           so it coasts over every one as it stands up */
-        var LIFT = 26, yearIdx = [];
+        /* the line rides the bars as one smooth road: in through the panel's side at the first bar's height,
+           then a spline through a point above each bar's left edge, clear of its label, so it is over every
+           bar by the time that bar begins and coasts across as it stands up; a level crest past the last */
+        var LIFT = 30, yearIdx = [];
         yrs.forEach(function (yr, yi) {
           var Y = years[yr], ry = FB.oy + (Y.top - LIFT) * FB.sy;
           if (yi === 0) ridePts.push({ x: FB.ox + 40 * FB.sx, y: ry, origin: true });
           yearIdx.push(ridePts.length);                     /* a bar stands as the road reaches its left edge */
-          ridePts.push({ x: FB.ox + (Y.x0 - 4) * FB.sx, y: ry, rise: yi > 0, flat: yi === 0 });
-          ridePts.push({ x: FB.ox + (Y.cx + 4) * FB.sx, y: ry, flat: true });
+          ridePts.push({ x: FB.ox + (Y.x0 - 4) * FB.sx, y: ry });
+          if (yi === yrs.length - 1) ridePts.push({ x: FB.ox + (Y.x1 + 4) * FB.sx, y: ry, crest: true });
         });
 
         /* the growth chart's own lines become smooth curves (Catmull-Rom made cubic), and the ride uses the
@@ -692,15 +692,13 @@
         var toDoc = function (q) { return { x: FL.ox + q.x * FL.sx, y: FL.oy + q.y * FL.sy }; };
         var act = chain(actV.pts.map(toDoc), 0), tgt = chain(tgtV.pts.map(toDoc), 2);
         var lineIdx = ridePts.length;
-        /* along a bar the road is straight; each rise is one S that leaves level and arrives level */
-        for (var hi = 1; hi < ridePts.length; hi++) {
-          var a0 = ridePts[hi - 1], a1 = ridePts[hi], dxh = a1.x - a0.x;
-          if (a1.rise) { a1.c1 = { x: a0.x + dxh * 0.5, y: a0.y }; a1.c2 = { x: a1.x - dxh * 0.5, y: a1.y }; }
-        }
-        /* off the last bar it coasts on down across the gap and lands level on the growth chart's baseline */
+        /* one spline through the lot, the crest held level, then on down across the gap to land level on the
+           growth chart's baseline */
         if (act.length) {
-          var lastTop = ridePts[ridePts.length - 1], land = act[0], dxl = land.x - lastTop.x;
-          land.c1 = { x: lastTop.x + dxl * 0.5, y: lastTop.y }; land.c2 = { x: land.x - dxl * 0.5, y: land.y };
+          var land = act[0], crest = ridePts[ridePts.length - 1], before = ridePts[ridePts.length - 2] || ridePts[0];
+          chain(ridePts.concat([land]), 0);
+          crest.c2 = { x: crest.x - (crest.x - before.x) * 0.35, y: crest.y };
+          land.c1 = { x: crest.x + (land.x - crest.x) * 0.35, y: crest.y };
           ridePts.push(land);
           for (var ai = 1; ai < act.length; ai++) ridePts.push(act[ai]);
           if (tgt.length) { tgt[0].c1 = null; for (var ti = 1; ti < tgt.length; ti++) ridePts.push(tgt[ti]); }
@@ -879,23 +877,8 @@
       if (lOut < lIn) return;
       var lA = lIn;
       for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= lp.meta.yA) { lA = samples[si].l; break; } }
-      /* the rail sits lower in the window than the point the head is drawn at, so the last of the descent is
-         spread over the scroll that is left before the lock: the head lands on the rail exactly as the page
-         takes hold, and the two are one line for the whole of the travel rather than meeting part way in */
-      if (lp.meta.lead) {
-        var yLock = lp.meta.lock + lp.meta.lead, gap = lp.meta.yA - yLock;
-        if (gap > 0) {
-          var win = Math.max(420, gap * 6), yTop = lp.meta.yA - win, lTop = -1;
-          for (var sl = 0; sl < samples.length; sl++) { if (samples[sl].l <= lA && samples[sl].y >= yTop) { lTop = samples[sl].l; break; } }
-          if (lTop >= 0 && lA > lTop) {
-            for (var sn = 0; sn < samples.length; sn++) {
-              var sp2 = samples[sn];
-              if (sp2.l >= lTop && sp2.l <= lA) sp2.y = yTop + (yLock - yTop) * (sp2.l - lTop) / (lA - lTop);
-            }
-            lp.meta.yA = lp.meta.yB = yLock;
-          }
-        }
-      }
+      /* the head lands on the hold's point exactly as the page takes hold: the rail, the planet */
+      if (lp.meta.lock != null) lp.meta.yA = lp.meta.yB = arriveAt(samples, lA, lp.meta.yA, lp.meta.lock + window.innerHeight * 0.62);
       for (var sj = 0; sj < samples.length; sj++) {
         var sm = samples[sj];
         if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
@@ -919,8 +902,11 @@
       try { pr4.setAttribute("d", dRideIn); rIn = pr4.getTotalLength(); pr4.setAttribute("d", dRideOut); rOut = pr4.getTotalLength(); } catch (e) { rIn = rOut = 0; }
       svg.removeChild(pr4);
       if (rOut > rIn) {
-        /* the exit is paced from where the scroll target sits when the hold lets go, so nothing jumps */
-        var exit0 = Math.max(rideMeta.yE, (rideMeta.lock || 0) + window.innerHeight * 0.62);
+        /* the head reaches the chart's edge as the page takes hold, rides while it holds, and the exit is paced
+           from where the page sits as the hold lets go: nothing waits and nothing jumps */
+        var yLockR = (rideMeta.lock || 0) + window.innerHeight * 0.62;
+        rideMeta.yS = rideMeta.yE = arriveAt(samples, rIn, rideMeta.yS, yLockR);
+        var exit0 = Math.max(rideMeta.yE, yLockR);
         for (var sr = 0; sr < samples.length; sr++) {
           var smp = samples[sr];
           if (smp.l >= rIn && smp.l <= rOut) smp.y = rideMeta.yS + (rideMeta.yE - rideMeta.yS) * (smp.l - rIn) / (rOut - rIn);
@@ -999,6 +985,19 @@
      than jumping; that pacing then fades over the next stretch of line until it is back in step with the page.
      It must never run ahead of the page's own geometry: when it did, the head was drawn above the window and
      the line went missing for whole chapters. */
+  /* the head should be on a hold's point as the page takes hold - not there early and waiting, not still on
+     its way - so the tail of the approach is fitted to the scroll that is left before the lock: spread over it
+     when the point sits above the mark, gathered into it when it sits below. Returns the height the hold then
+     sits at in the scroll's terms. */
+  function arriveAt(samples, lA, yA, yLock) {
+    var gap = yA - yLock;
+    if (Math.abs(gap) < 0.5) return yA;
+    var win = Math.min(700, Math.max(420, Math.abs(gap) * 5)), yTop = yA - win, lTop = -1, i;
+    for (i = 0; i < samples.length; i++) { if (samples[i].l <= lA && samples[i].y >= yTop) { lTop = samples[i].l; break; } }
+    if (lTop < 0 || lA <= lTop) return yA;
+    for (i = 0; i < samples.length; i++) { var s = samples[i]; if (s.l >= lTop && s.l <= lA) s.y = yTop + (yLock - yTop) * (s.l - lTop) / (lA - lTop); }
+    return yLock;
+  }
   function paceExit(samples, lOut, from, glide) {
     /* a glide is a stretch of line straight after the hold that runs sideways more than down - the sweep
        out of the system - and is paced by its length instead, so it takes the scroll its height would */
