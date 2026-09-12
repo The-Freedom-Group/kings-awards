@@ -501,6 +501,7 @@
   if (jyNext) jyNext.addEventListener("click", function () { stepJourney(1); });
   var rideThread = $("#rideThread"), rideSvg = $("#rideSvg"), rTrack = $("#rTrack"), rLive = $("#rLive"), rHead = $("#rHead"), rideBox = null;
   var orbitThread = $("#orbitThread"), orbitSvg = $("#orbitSvg"), oLive = $("#oLive"), oGlow = $("#oGlow"), oHead = $("#oHead"), orbitBox = null;
+  var oMaskAll = $("#oMaskAll"), oMaskBack = $("#oMaskBack"), orbitBack = null;
   /* the lap: the page holds still at holdLock while the wheel, a finger or the keys move the line round
      the ring; HOLD_PX is how much wheel travel one lap takes */
   var builtH = 0, holdLock = 0, holds = [], holdActive = null, hold = { active: false };
@@ -620,7 +621,7 @@
     var CX = W * 0.5;
     var SIDE = { L: LX, R: RX, C: CX };
 
-    pts = [];
+    pts = []; orbitBack = null;
 
     /* ── the hero bend, to the reference proportions ──────────
        Runs in from the left, lifts over the portrait, turns down the
@@ -912,8 +913,11 @@
           var secBot = el.offsetTop + el.offsetHeight, vh2 = window.innerHeight;
           var gLock = Math.max(0, Math.max(eo.y, Math.min(secBot - vh2, gcy - vh2 / 2)));
           if (gLock < eo.y) gLock = eo.y;
-          var ring = [], NR = 96;
-          for (var gi = 1; gi <= NR; gi++) { var th = gi / NR * Math.PI * 2; ring.push({ x: gcx + rg * Math.cos(th), y: gcy + rg * Math.sin(th) }); }
+          /* the wrap is the planet's equator seen from a little above: an ellipse round the middle of the globe,
+             its near half in front of the planet and its far half behind, where the planet hides it */
+          var ring = [], NR = 96, ry = rg * 0.34;
+          for (var gi = 1; gi <= NR; gi++) { var th = gi / NR * Math.PI * 2; ring.push({ x: gcx + rg * Math.cos(th), y: gcy + ry * Math.sin(th) }); }
+          orbitBack = { cx: gcx, cy: gcy, r: gw * 0.45 };
           var gIn = { x: gcx + rg, y: gcy }, gOutY = oo.y + orbit.offsetHeight + 48;
           pts.push({ x: SIDE.R, y: yBand - rb, id: "globeBand", el: el, noKnot: true });
           pts.push({ x: SIDE.R - rb, y: yBand, id: "globeTurn", el: el, noKnot: true, cpIn: { x: SIDE.R - rb * 0.45, y: yBand } });
@@ -1137,6 +1141,10 @@
       var eo3 = pageXY(envEl), vwx = window.innerWidth;
       orbitBox = { x: eo3.x - vwx, y: eo3.y, w: envEl.offsetWidth + vwx * 2, h: envEl.offsetHeight + 240 };
       orbitSvg.setAttribute("viewBox", orbitBox.x + " " + orbitBox.y + " " + orbitBox.w + " " + orbitBox.h);
+      /* the mask: everything shows except the upper half of the planet's disc, where the far side of the wrap passes behind it */
+      var oMask = document.getElementById("oMask");
+      [oMask, oMaskAll].forEach(function (m) { if (m) { m.setAttribute("x", orbitBox.x); m.setAttribute("y", orbitBox.y); m.setAttribute("width", orbitBox.w); m.setAttribute("height", orbitBox.h); } });
+      if (oMaskBack) oMaskBack.setAttribute("d", orbitBack ? ("M " + (orbitBack.cx - orbitBack.r).toFixed(1) + " " + orbitBack.cy.toFixed(1) + " A " + orbitBack.r.toFixed(1) + " " + orbitBack.r.toFixed(1) + " 0 0 1 " + (orbitBack.cx + orbitBack.r).toFixed(1) + " " + orbitBack.cy.toFixed(1) + " Z") : "M 0 0");
       oLive.setAttribute("d", d); oLive.style.strokeDasharray = totalLen; oLive.style.strokeDashoffset = totalLen;
       if (oGlow) { oGlow.setAttribute("d", d); oGlow.style.strokeDasharray = totalLen; oGlow.style.strokeDashoffset = totalLen; }
     }
@@ -1326,6 +1334,7 @@
       oLive.style.strokeDashoffset = totalLen * (1 - p);
       if (oGlow) oGlow.style.strokeDashoffset = totalLen * (1 - p);
       var op0 = p > 0.004 ? live.getPointAtLength(totalLen * p) : null, onOrbit = !!(op0 && op0.y >= orbitBox.y && op0.y <= orbitBox.y + orbitBox.h);
+      if (onOrbit && orbitBack && op0.y < orbitBack.cy && Math.hypot(op0.x - orbitBack.cx, op0.y - orbitBack.cy) < orbitBack.r) onOrbit = false;   /* behind the planet */
       if (orbitThread) orbitThread.classList.toggle("on", onOrbit);
       if (oHead && onOrbit) { oHead.style.left = (op0.x - orbitBox.x) + "px"; oHead.style.top = (op0.y - orbitBox.y) + "px"; }
     }
