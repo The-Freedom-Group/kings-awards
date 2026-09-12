@@ -311,7 +311,12 @@
       jy.lit = mk("line", { "class": "jt-lit", x1: 0, x2: jy.centres[0], y1: Y, y2: Y });
       jy.knots = jy.centres.map(function (cx) { return mk("circle", { "class": "jt-knot", cx: cx, cy: Y, r: 5 }); });
       jy.pulse = mk("circle", { "class": "jt-pulse", cx: jy.centres[0], cy: Y, r: 7 });
+      jy.halo = mk("circle", { "class": "jt-halo", cx: jy.centres[0], cy: Y, r: 10.5 });
       jy.head = mk("circle", { "class": "jt-head", cx: jy.centres[0], cy: Y, r: 5.5 });
+      /* the head is the page thread's own tip: it runs in along the rail from the stage's left edge to the
+         first moment, travels, then runs out to the right edge, where the thread carries on down the page */
+      jy.stageW = jy.stage.clientWidth; jy.runIn = jy.centres[0]; jy.runOut = Math.max(0, jy.stageW - jy.centres[0]);
+      jy.reach = jy.centres[jy.n - 1] + jy.runOut;
       jy.yrs = []; var seen = {};
       jy.cards.forEach(function (c, i2) {
         var yr = (c.getAttribute("data-when") || "").replace(/\D/g, "").slice(-4); if (!yr || seen[yr]) return; seen[yr] = true;
@@ -328,12 +333,15 @@
     }
     jy.live = true; var keep = jy.f; jy.f = -1; setJourney(keep >= 0 ? keep : 0, null, true);
   }
-  function setJourney(f, h, force) {
+  /* f is the strip's own fraction; hx, when given, is where the head sits on the track instead of over the
+     current moment - the run-in and run-out either side of the travel */
+  function setJourney(f, h, force, hx) {
     if (!jy.live) return;
     f = clamp(f, 0, 1);
-    if (!force && Math.abs(f - jy.f) < 0.0005) return;
-    if (jy.f >= 0 && Math.abs(f - jy.f) > 0.002) jy.el.classList.add("moved");
-    jy.f = f;
+    var hxKey = hx == null ? -1 : hx;
+    if (!force && Math.abs(f - jy.f) < 0.0005 && Math.abs(hxKey - jy.hx) < 0.05) return;
+    if (jy.f >= 0 && (Math.abs(f - jy.f) > 0.002 || (jy.hx >= 0 && Math.abs(hxKey - jy.hx) > 4))) jy.el.classList.add("moved");
+    jy.f = f; jy.hx = hxKey;
     var t = f * (jy.n - 1), i = Math.round(t), lo = Math.floor(t), hi = Math.min(jy.n - 1, lo + 1), k = t - lo;
     var cx = jy.centres[lo] + (jy.centres[hi] - jy.centres[lo]) * k;
     var shift = vs.on ? -(cx - jy.centres[0]) : -jy.strip.scrollLeft;
@@ -349,17 +357,28 @@
       if (yr2 && yr2 !== jy.yr) { jy.yr = yr2; jy.year.textContent = yr2; }
       jy.year.style.transform = "translate(calc(-50% + " + ((i - t) * 70).toFixed(1) + "px),-50%)";
     }
-    if (jy.lit) jy.lit.setAttribute("x2", cx.toFixed(1));
-    if (jy.head) jy.head.setAttribute("cx", cx.toFixed(1));
-    if (jy.pulse) jy.pulse.setAttribute("cx", cx.toFixed(1));
-    jy.knots.forEach(function (kn, idx) { kn.classList.toggle("on", jy.centres[idx] <= cx + 1); });
-    jy.yrs.forEach(function (y2) { y2.el.classList.toggle("on", y2.i <= i); });
+    var hp = hx == null ? cx : hx;
+    if (jy.lit) jy.lit.setAttribute("x2", hp.toFixed(1));
+    if (jy.head) jy.head.setAttribute("cx", hp.toFixed(1));
+    if (jy.halo) jy.halo.setAttribute("cx", hp.toFixed(1));
+    if (jy.pulse) jy.pulse.setAttribute("cx", hp.toFixed(1));
+    jy.knots.forEach(function (kn, idx) { kn.classList.toggle("on", jy.centres[idx] <= hp + 1); });
+    jy.yrs.forEach(function (y2) { y2.el.classList.toggle("on", jy.centres[y2.i] <= hp + 1); });
     if (jy.count) jy.count.textContent = (i + 1 < 10 ? "0" : "") + (i + 1) + " / " + (jy.n < 10 ? "0" : "") + jy.n;
+  }
+  /* the hold's progress runs the whole rail: a run-in, the travel between the moments, a run-out. These map
+     a moment's fraction into that progress and back, and give the strip and the head for any progress. */
+  function toProg(h, f) { var r1 = h.r1 || 0, r2 = h.r2 == null ? 1 : h.r2; return r1 + f * (r2 - r1); }
+  function railState(h, s) {
+    var r1 = h.r1 || 0, r2 = h.r2 == null ? 1 : h.r2;
+    if (s <= r1) return { f: 0, hx: jy.runIn * (r1 > 0 ? s / r1 : 1) };
+    if (s >= r2) return { f: 1, hx: jy.centres[jy.n - 1] + jy.runOut * (r2 < 1 ? (s - r2) / (1 - r2) : 1) };
+    return { f: (s - r1) / (r2 - r1), hx: null };
   }
   function jumpJourney(f) {
     var h = holds.filter(function (x) { return x.id === "journey"; })[0];
     if (!vs.on || !h) { if (jy.strip) jy.strip.scrollTo({ left: f * (jy.strip.scrollWidth - jy.strip.clientWidth), behavior: "smooth" }); return; }
-    if (h.phase === "hold") h.prog = f;
+    if (h.phase === "hold") h.prog = toProg(h, f);
     else { jy.pending = f; vs.tgt = h.phase === "after" ? h.lock - 1 : h.lock; }
   }
   function stepJourney(dir) {
@@ -576,10 +595,13 @@
              The rail's place comes from layout alone: the reveal moves the boxes but never the offsets. */
           var railY = so.y + jy.stage.clientTop + jy.stage.clientHeight - (jy.trackH || 96) + (jy.railY || 38);
           var railX = so.x + jy.stage.clientLeft;
-          var jExit = { x: railX + jy.centres[0], y: railY };
+          /* the wheel runs the rail at the thread's own pace: the run-in and run-out are their own length in
+             scroll, the travel between the moments keeps its pace */
+          var runIn = jy.runIn || 0, runOut = jy.runOut || 0, jpx = Math.max(2400, jy.n * 230) + runIn + runOut;
+          var jExit = { x: railX + jy.stageW, y: railY };
           pts.push({ x: railX, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: SIDE[p.side], y: railY },
                      loop: { id: "journey", pts: [jExit], end: jExit, yA: railY, yB: railY, lock: jLock,
-                             px: Math.max(2400, jy.n * 230), lead: vh * 0.62 } });
+                             px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, lead: vh * 0.62, cpOut: { x: SIDE.R, y: railY } } });
         }
         return;
       }
@@ -730,7 +752,8 @@
         if (a.loop.id === "map") { loopMeta = a.loop; loopMarks = a.loop.marks || null; }
         from = a.loop.end;
         var dy2 = (b.y - from.y) * 0.5, cIn = b.cpIn || { x: b.x, y: b.y - dy2 };
-        d += " C " + f1(from.x) + " " + f1(from.y + Math.max(200, dy2 * 1.2)) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
+        var cOut = a.loop.cpOut || { x: from.x, y: from.y + Math.max(200, dy2 * 1.2) };
+        d += " C " + f1(cOut.x) + " " + f1(cOut.y) + ", " + f1(cIn.x) + " " + f1(cIn.y) + ", " + f1(b.x) + " " + f1(b.y);
         continue;
       }
       if (a.rideTo) {
@@ -857,19 +880,11 @@
         if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
         else if (sm.l > lOut && sm.y < lp.meta.yB) sm.y = lp.meta.yB;
       }
-      if (lp.meta.id === "journey") {
-        /* the exit is paced from where the page sits when the hold lets go, so the head walks off the stage
-           instead of jumping down the line */
-        var ex0 = lp.meta.lock + window.innerHeight * 0.62, pv = ex0;
-        for (var sk = 0; sk < samples.length; sk++) {
-          var sq = samples[sk];
-          if (sq.l > lOut) { var pcd = Math.max(pv, sq.y, ex0 + (sq.l - lOut) * 0.85); sq.y = pcd; pv = pcd; }
-        }
-      }
+      if (lp.meta.id === "journey") paceExit(samples, lOut, lp.meta.lock + window.innerHeight * 0.62);
       var fa = lA / totalLen, fb = lOut / totalLen;
       if (lp.meta.id === "map") { loopA = fa; loopB = fb; hasHold = true; }
       if (lp.meta.id === "journey" && !vs.on) return;          /* on touch the strip scrolls itself */
-      holdDefs.push({ id: lp.meta.id, lock: lp.meta.lock, a: fa, b: fb, px: lp.meta.px || 3400 });
+      holdDefs.push({ id: lp.meta.id, lock: lp.meta.lock, a: fa, b: fb, px: lp.meta.px || 3400, r1: lp.meta.r1, r2: lp.meta.r2 });
     });
     /* the ride climbs, so its samples take a virtual height too: a window below its entry point */
     rideA = rideB = 0;
@@ -880,12 +895,12 @@
       svg.removeChild(pr4);
       if (rOut > rIn) {
         /* the exit is paced from where the scroll target sits when the hold lets go, so nothing jumps */
-        var exit0 = Math.max(rideMeta.yE, (rideMeta.lock || 0) + window.innerHeight * 0.62), prevV = exit0;
+        var exit0 = Math.max(rideMeta.yE, (rideMeta.lock || 0) + window.innerHeight * 0.62);
         for (var sr = 0; sr < samples.length; sr++) {
           var smp = samples[sr];
           if (smp.l >= rIn && smp.l <= rOut) smp.y = rideMeta.yS + (rideMeta.yE - rideMeta.yS) * (smp.l - rIn) / (rOut - rIn);
-          else if (smp.l > rOut) { var paced = Math.max(prevV, smp.y, exit0 + (smp.l - rOut) * 0.85); smp.y = paced; prevV = paced; }
         }
+        paceExit(samples, rOut, exit0);
         rideA = rIn / totalLen; rideB = rOut / totalLen;
         holdDefs.push({ id: "charts", lock: rideMeta.lock, a: rideA, b: rideB, px: 2600 });
         if (chartsEl) chartsEl.classList.add("ride");
@@ -953,6 +968,21 @@
   /* the line descends monotonically, so the point level with a given page
      height can be found by bisection over the samples; the tip is drawn to
      the point 62% down the viewport, so it is always on screen as you read */
+  /* after a hold the line is paced from where the page sits as the hold lets go, so the head walks off rather
+     than jumping; that pacing then fades over the next stretch of line until it is back in step with the page.
+     It must never run ahead of the page's own geometry: when it did, the head was drawn above the window and
+     the line went missing for whole chapters. */
+  function paceExit(samples, lOut, from) {
+    var gap = null, pv = from, FADE = 700;
+    for (var i = 0; i < samples.length; i++) {
+      var s = samples[i];
+      if (s.l <= lOut) continue;
+      if (gap === null) gap = s.y - from;
+      var v = s.y - gap * Math.max(0, 1 - (s.l - lOut) / FADE);
+      if (v < pv) v = pv;
+      s.y = v; pv = v;
+    }
+  }
   function fracAtY(ty) {
     var s = ySamples, n = s.length;
     if (!n) return 0;
@@ -1070,13 +1100,19 @@
     thread.classList.toggle("lap", lapping);
     var jyHold = holds.filter(function (h) { return h.id === "journey"; })[0];
     if (jyHold) {
-      if (jyHold.phase === "hold" && jy.pending !== null) { jyHold.prog = jy.pending; jy.pending = null; }
-      /* once the wheel rests, the strip settles on the nearest moment */
-      if (jyHold.phase === "hold" && jy.n > 1 && jyHold.prog >= 0 && jyHold.prog <= 1 && performance.now() - (jyHold.fedAt || 0) > 140) {
-        var snapF = Math.round(jyHold.prog * (jy.n - 1)) / (jy.n - 1);
-        jyHold.prog += (snapF - jyHold.prog) * 0.16;
+      if (jyHold.phase === "hold" && jy.pending !== null) { jyHold.prog = toProg(jyHold, jy.pending); jy.pending = null; }
+      /* once the wheel rests within the travel, the strip settles on the nearest moment */
+      var jr1 = jyHold.r1 || 0, jr2 = jyHold.r2 == null ? 1 : jyHold.r2;
+      if (jyHold.phase === "hold" && jy.n > 1 && jyHold.prog >= jr1 && jyHold.prog <= jr2 && performance.now() - (jyHold.fedAt || 0) > 140) {
+        var snapF = Math.round((jyHold.prog - jr1) / (jr2 - jr1) * (jy.n - 1)) / (jy.n - 1);
+        jyHold.prog += (toProg(jyHold, snapF) - jyHold.prog) * 0.16;
       }
-      setJourney(jyHold.phase === "before" ? 0 : jyHold.phase === "after" ? 1 : clamp(jyHold.shown, 0, 1), jyHold);
+      var jst = railState(jyHold, jyHold.phase === "before" ? 0 : jyHold.phase === "after" ? 1 : clamp(jyHold.shown, 0, 1));
+      setJourney(jst.f, jyHold, false, jst.hx);
+      /* while the thread is on the rail, the rail's head is the thread's head */
+      var onRail = p >= jyHold.a - 0.0002 && p <= jyHold.b + 0.0002;
+      jy.el.classList.toggle("joined", onRail);
+      thread.classList.toggle("onrail", onRail);
     }
     if (mapEl) {
       var f = lapping ? clamp(mapHold.shown, 0, 1) : -1;

@@ -238,6 +238,7 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
   50%{box-shadow:0 0 0 7px rgba(255,45,141,.28),0 0 44px 14px rgba(255,45,141,.95)}}
 .thread.on .head::before{animation:beacon 1.8s ease-out infinite}
 .thread.on .head::after{animation:beacon 1.8s ease-out .9s infinite}
+.thread.onrail .head{opacity:0;transition:none}   /* on The Journey's rail the rail's own head takes over */
 .thread .knot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
   border:1.5px solid var(--pink);background:var(--porcelain);opacity:.32;
   transition:opacity .45s,background .45s,transform .45s}
@@ -1344,7 +1345,12 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-track .jt-lit{stroke:var(--pink);stroke-width:1.8;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
 .jy-track .jt-knot{fill:var(--carbon);stroke:rgba(255,255,255,.32);stroke-width:1.5;transition:fill .3s,stroke .3s}
 .jy-track .jt-knot.on{fill:var(--pink);stroke:var(--pink)}
-.jy-track .jt-head{fill:#fff;filter:drop-shadow(0 0 10px rgba(255,45,141,.95))}
+/* the rail's head is the page thread's own tip, drawn the same: the pink dot, its soft ring, the light round it */
+.jy-track .jt-head{fill:var(--pink);filter:drop-shadow(0 0 5px rgba(255,45,141,.9)) drop-shadow(0 0 14px rgba(255,45,141,.6))}
+.jy-track .jt-halo{fill:rgba(255,45,141,.16)}
+/* on the wheel the head shows only while the thread is on the rail; the thread's own tip hides for that stretch */
+.journey.live:not(.touch) .jt-head,.journey.live:not(.touch) .jt-halo,.journey.live:not(.touch) .jt-pulse{visibility:hidden}
+.journey.live.joined .jt-head,.journey.live.joined .jt-halo,.journey.live.joined .jt-pulse{visibility:visible}
 .jy-track .jt-pulse{fill:none;stroke:var(--pink);stroke-width:1.5;opacity:0;animation:jyPulse 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
 @keyframes jyPulse{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(3.2)}}
 .jy-track .jt-yr{font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;fill:var(--pale-3);font-weight:600;cursor:pointer;pointer-events:auto;transition:fill .3s}
