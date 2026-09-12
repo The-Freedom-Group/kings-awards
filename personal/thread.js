@@ -226,6 +226,17 @@
     if (rocket) { rocketA += ROCKET_SPEED * dt; if (rocketA > 360) rocketA -= 360; placeRocket(); }
   }
 
+  /* without the thread to lap it - a phone - the system lights itself as it comes into view, in the same order,
+     and stays lit */
+  if (mapEl && window.innerWidth <= 820 && "IntersectionObserver" in window) {
+    var litOnce = false;
+    new IntersectionObserver(function (es) {
+      if (litOnce || !es[0].isIntersecting) return;
+      litOnce = true;
+      ["lap-core", "lap-a-ring", "lap-a", "lap-b-ring", "lap-b", "lap-c-ring", "lap-c"].forEach(function (c, i) { setTimeout(function () { mapEl.classList.add(c); }, 600 + i * 520); });
+    }, { threshold: 0.35 }).observe(mapEl);
+  }
+
   /* ── hero branch lines ────────────────────────────────────── */
   $$(".draw").forEach(function (p) {
     var L = 2000; try { L = p.getTotalLength(); } catch (e) {}
@@ -677,7 +688,7 @@
              it leaves to the left the same way (the charts set the turn, once they know where they are) */
           var eIn = ringPt("C", 0);
           corePt = { x: core.x, y: core.y, id: p.id, el: el, noKnot: true, cpIn: { x: eIn.x + Math.min(160, mr.w * 0.12), y: core.y },
-                     loop: { id: "map", pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, lock: holdLock, px: 3400,
+                     loop: { id: "map", pts: [], end: { x: core.x, y: core.y }, yA: core.y, yB: core.y, lock: holdLock, px: 2800,
                              cpOut: { x: core.x - Math.min(160, mr.w * 0.12), y: core.y } } };
           pts.push(corePt);
           return;
@@ -700,16 +711,23 @@
              rail a radius in from it, and leaves the same way a radius short of the right-hand margin. The wheel
              runs the rail at the thread's own pace: the run-in and run-out are their own length in scroll, the
              travel between the moments keeps its pace */
-          var R = Math.min(200, Math.max(120, W * 0.09)), xJoin = SIDE[p.side] + R, xExit = SIDE.R - R;
+          /* the bend's radius is what the room between the moments and the rail allows, so no card ever sits
+             over the turn; the descent leans in towards it over its whole height rather than dropping straight,
+             and the exit leans out the same way */
+          var cardFoot = 0;
+          jy.cards.forEach(function (c) { cardFoot = Math.max(cardFoot, jy.strip.offsetTop + c.offsetTop + c.offsetHeight); });
+          var railIn = jy.stage.clientTop + jy.stage.clientHeight - (jy.trackH || 96) + (jy.railY || 38);
+          var R = Math.min(190, Math.max(96, railIn - cardFoot - 14)), lean = Math.round(R * 0.5);
+          var xBend = SIDE[p.side] + lean, xJoin = xBend + R, xExit = SIDE.R - lean - R;
           jy.x0 = xJoin - railX; jy.runIn = Math.max(0, jy.centres[0] - jy.x0); jy.runOut = Math.max(0, (xExit - railX) - jy.centres[0]);
           jy.reach = jy.centres[jy.n - 1] + jy.runOut; jy.f = -1;
           var runIn = jy.runIn, runOut = jy.runOut, jpx = Math.max(2400, jy.n * 230) + runIn + runOut;
           var jExit = { x: xExit, y: railY };
-          pts.push({ x: SIDE[p.side], y: railY - R, id: "journeyBend", el: el, noKnot: true });
-          pts.push({ x: xJoin, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: SIDE[p.side] + R * 0.45, y: railY },
+          pts.push({ x: xBend, y: railY - R, id: "journeyBend", el: el, noKnot: true });
+          pts.push({ x: xJoin, y: railY, id: "journeyIn", el: el, noKnot: true, cpIn: { x: xBend + R * 0.45, y: railY },
                      loop: { id: "journey", pts: [jExit], end: jExit, yA: railY, yB: railY, lock: jLock,
                              px: jpx, r1: runIn / jpx, r2: 1 - runOut / jpx, cpOut: { x: xExit + R * 0.55, y: railY } } });
-          pts.push({ x: SIDE.R, y: railY + R, id: "journeyOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: railY + R * 0.45 } });
+          pts.push({ x: xExit + R, y: railY + R, id: "journeyOut", el: el, noKnot: true, cpIn: { x: xExit + R, y: railY + R * 0.45 } });
         }
         return;
       }
@@ -747,17 +765,16 @@
           if (!years[yr] || top < years[yr].top) years[yr] = { top: top, cx: cx, x0: parseFloat(r.getAttribute("x")), x1: parseFloat(r.getAttribute("x")) + parseFloat(r.getAttribute("width")) };
         });
         var yrs = Object.keys(years).sort(), ridePts = [], marks = { years: [], yearNames: yrs, lineStart: 0, L: FL };
-        /* the line rides the bars as one smooth road: in through the panel's side at the first bar's height,
-           then a spline through a point above each bar's left edge, clear of its label, so it is over every
-           bar by the time that bar begins and coasts across as it stands up; a level crest past the last */
-        var LIFT = 30, yearIdx = [];
-        yrs.forEach(function (yr, yi) {
-          var Y = years[yr], ry = FB.oy + (Y.top - LIFT) * FB.sy;
-          if (yi === 0) ridePts.push({ x: FB.ox + 40 * FB.sx, y: ry, origin: true });
-          yearIdx.push(ridePts.length);                     /* a bar stands as the road reaches its left edge */
-          ridePts.push({ x: FB.ox + (Y.x0 - 4) * FB.sx, y: ry });
-          if (yi === yrs.length - 1) ridePts.push({ x: FB.ox + (Y.x1 + 4) * FB.sx, y: ry, crest: true });
-        });
+        /* the road over the bars is one sweep: level in through the panel's side at the first bar's height, one
+           smooth rise that follows the bars' shape rather than their steps and clears every bar and its label,
+           and level again past the last bar. Each bar stands as the road passes over its left edge. */
+        var LIFT = 32, Y1 = years[yrs[0]], Yn = years[yrs[yrs.length - 1]];
+        var origin = { x: FB.ox + 40 * FB.sx, y: FB.oy + (Y1.top - LIFT) * FB.sy, origin: true };
+        var crest = { x: FB.ox + (Yn.x1 + 4) * FB.sx, y: FB.oy + (Yn.top - LIFT) * FB.sy, crest: true }, Wr = crest.x - origin.x;
+        crest.c1 = { x: origin.x + Wr * 0.5, y: origin.y }; crest.c2 = { x: crest.x - Wr * 0.38, y: crest.y };
+        ridePts.push(origin, crest);
+        var barX = yrs.map(function (yr) { return FB.ox + (years[yr].x0 - 4) * FB.sx; });
+        var cubicAt = function (a, b, t) { var u = 1 - t; return { x: u * u * u * a.x + 3 * u * u * t * b.c1.x + 3 * u * t * t * b.c2.x + t * t * t * b.x, y: u * u * u * a.y + 3 * u * u * t * b.c1.y + 3 * u * t * t * b.c2.y + t * t * t * b.y }; };
 
         /* the growth chart's own lines become smooth curves (Catmull-Rom made cubic), and the ride uses the
            same curve, so the two coincide exactly. The points are kept on the element for later rebuilds. */
@@ -810,20 +827,27 @@
         /* the target path keeps a little of its climb as it reaches £100m; the line carries that on past it */
         var act = chain(actV.pts.map(toDoc), 0), tgt = chain(tgtV.pts.map(toDoc), 0.35);
         var lineIdx = ridePts.length;
-        /* one curve through the lot: level over the last bar where the slope turns, then on down across the gap
-           to land level on the growth chart's baseline */
+        /* off the crest it sweeps on down across the gap, level at both ends, to land on the growth chart's baseline */
         if (act.length) {
-          var land = act[0];
-          chain(ridePts.concat([land]), 0);
+          var land = act[0], dxl = land.x - crest.x;
+          land.c1 = { x: crest.x + dxl * 0.5, y: crest.y }; land.c2 = { x: land.x - dxl * 0.5, y: land.y };
           ridePts.push(land);
           for (var ai = 1; ai < act.length; ai++) ridePts.push(act[ai]);
           if (tgt.length) { tgt[0].c1 = null; for (var ti = 1; ti < tgt.length; ti++) ridePts.push(tgt[ti]); }
         }
         if (ridePts.length < 3) return;
-        /* fractions of the ride's length for each bar and for the start of the line chart */
-        var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + Math.hypot(ridePts[ri].x - ridePts[ri - 1].x, ridePts[ri].y - ridePts[ri - 1].y));
-        var Lr = cum[cum.length - 1] || 1;
-        marks.years = yearIdx.map(function (ix) { return cum[ix] / Lr; }); marks.lineStart = cum[lineIdx] / Lr;
+        /* the ride's length, each curve measured as a curve; each bar's share is where the sweep passes over it */
+        var segLen = function (a, b) {
+          if (!b.c1) return Math.hypot(b.x - a.x, b.y - a.y);
+          var L = 0, q0 = a;
+          for (var si = 1; si <= 24; si++) { var q1 = cubicAt(a, b, si / 24); L += Math.hypot(q1.x - q0.x, q1.y - q0.y); q0 = q1; }
+          return L;
+        };
+        var cum = [0]; for (var ri = 1; ri < ridePts.length; ri++) cum.push(cum[ri - 1] + segLen(ridePts[ri - 1], ridePts[ri]));
+        var Lr = cum[cum.length - 1] || 1, sweep = [], acc = 0, qp = origin;
+        for (var sj = 1; sj <= 200; sj++) { var qn = cubicAt(origin, crest, sj / 200); acc += Math.hypot(qn.x - qp.x, qn.y - qp.y); qp = qn; sweep.push({ x: qn.x, l: acc }); }
+        marks.years = barX.map(function (bx) { for (var k = 0; k < sweep.length; k++) if (sweep[k].x >= bx) return sweep[k].l / Lr; return cum[1] / Lr; });
+        marks.lineStart = cum[lineIdx] / Lr;
         var co0 = pageXY(el), fb0 = pageXY(figB), xL = fb0.x - 120;     /* the margin beside the panel, wide enough for a big turn */
         /* out of the system to the left, level with the planet, the way it came in on the right: one smooth
            sweep round onto the margin beside the panel, arriving vertical just below the system, then down
@@ -1123,11 +1147,13 @@
     for (i = 0; i < samples.length; i++) { q = samples[i]; if (q.l > lOut) { if (y0 === null) y0 = real(q); if (q.l >= lG) { yG = real(q); break; } } }
     if (y0 === null) return;
     if (yG === null) { yG = y0; lG = lOut; }
-    var g = from - y0;                       /* how far the page is ahead of the line as the hold lets go */
+    /* the glide takes at least most of its own length in scroll, so the head moves at about the line's usual
+       pace through it and does not lurch as it comes off; after it, the gap left to the page fades away */
+    var span = Math.max(yG - y0, (lG - lOut) * 0.85), g = from + span - yG;
     for (i = 0; i < samples.length; i++) {
       var s = samples[i];
       if (s.l <= lOut) continue;
-      var v = lG > lOut && s.l <= lG ? from + (s.l - lOut) / (lG - lOut) * (yG - y0)
+      var v = lG > lOut && s.l <= lG ? from + (s.l - lOut) / (lG - lOut) * span
                                      : real(s) + g * Math.max(0, 1 - (s.l - lG) / FADE);
       if (v < pv) v = pv;
       s.y = v; pv = v;
@@ -1266,7 +1292,7 @@
       var f = !mapHold ? -1 : mapHold.phase === "after" ? 1 : mapHold.phase === "hold" ? clamp(mapHold.shown, 0, 1)
             : mapHold.phase === "approach" && mapHold.dir ? 1 : -1;
       mapEl.classList.toggle("lap", lapping);
-      [["lap-core", 0], ["lap-a-ring", 0.12], ["lap-a", 0.22], ["lap-b-ring", 0.37], ["lap-b", 0.47], ["lap-c-ring", 0.62], ["lap-c", 0.72]]
+      [["lap-core", 0], ["lap-a-ring", 0.14], ["lap-a", 0.28], ["lap-b-ring", 0.44], ["lap-b", 0.58], ["lap-c-ring", 0.74], ["lap-c", 0.88]]
         .forEach(function (st) { mapEl.classList.toggle(st[0], f >= st[1]); });
     }
     thread.classList.toggle("on", p > 0.004);

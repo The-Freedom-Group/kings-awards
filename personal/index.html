@@ -1283,6 +1283,7 @@ body.dark-chrome .card .pg{background:rgba(255,255,255,.14)}
 .thread .live{transition:filter .5s}
 .thread.lap .live{filter:drop-shadow(0 0 5px rgba(255,214,234,.7)) drop-shadow(0 0 10px rgba(255,45,141,.6))}
 .thread.lap .head{background:#ffe4f1;box-shadow:0 0 0 4px rgba(255,214,234,.3),0 0 26px 8px rgba(255,45,141,.9)}
+.thread .head{transition:opacity .4s,background .6s}
 .map .node .orb{transition:box-shadow .7s ease,filter .7s ease}
 .map .tape{transition:filter .7s}
 
@@ -1328,7 +1329,7 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-count{font-size:11px;letter-spacing:.22em;color:var(--pale-2);font-weight:600;min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
 .jy-stage{position:relative;height:clamp(500px,68vh,680px);margin-top:18px;overflow:hidden;background:transparent;border-top:1px solid var(--rule-d);border-bottom:1px solid var(--rule-d)}   /* edge to edge (sized by the engine), see-through so the thread shows joining and leaving its rail */
 .jy-year{position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);font-family:var(--disp);font-size:clamp(160px,24vw,360px);line-height:1;color:var(--pale);opacity:.045;pointer-events:none;user-select:none;white-space:nowrap;letter-spacing:-.02em;transition:opacity .4s}
-.jy-strip{list-style:none;margin:0;padding:24px calc(50% - var(--cw) / 2) 0;display:flex;align-items:center;gap:clamp(40px,5vw,80px);height:calc(100% - 96px);box-sizing:border-box;position:relative;will-change:transform}
+.jy-strip{list-style:none;margin:0;padding:24px calc(50% - var(--cw) / 2) 0;display:flex;align-items:center;gap:clamp(40px,5vw,80px);height:calc(100% - 170px);box-sizing:border-box;position:relative;will-change:transform}
 .journey.touch .jy-strip{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;will-change:auto}
 .journey.touch .jy-strip::-webkit-scrollbar{display:none}
 .journey.touch .jy-card{scroll-snap-align:center}
@@ -1394,6 +1395,25 @@ a.tl-link{color:var(--pink);font-weight:500}
   .node.core{--os:64px}.node[data-s="operating"]{--os:44px}.node[data-s="planned"]{--os:36px}.node[data-s="future"]{--os:28px}
   .node .lbl{font-size:9px}.node.core .lbl{font-size:10.5px}.node[data-s="future"] .lbl{font-size:8.5px}.node .st{font-size:7px}
   .map .yrlbl{font-size:7.5px;padding:3px 7px}.rocket{width:44px}}
+/* ── the carbon planet is the section: a dark band edge to edge, the globe in the middle, the six parts either side ── */
+.env{position:relative;isolation:isolate;margin-top:clamp(56px,7vw,96px);padding:clamp(48px,6vw,84px) 0 clamp(36px,4vw,60px);border-top:0;color:var(--pale)}
+.env::before{content:"";position:absolute;top:0;bottom:-240px;left:-100vw;right:-100vw;z-index:-1;background:var(--carbon) radial-gradient(circle,rgba(244,241,235,.17) 1px,transparent 1.7px) 0 0/38px 38px}
+.env .env-h{color:var(--porcelain)}.env .stand{color:var(--pale-2)}
+.env-head{grid-template-columns:1fr auto;align-items:end}
+.env-marks li{background:rgba(255,45,141,.09)}.env-marks b{color:var(--porcelain)}.env-marks span{color:var(--pale-3)}
+.env-orbit{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(18px,2.6vw,40px);align-items:center;margin-top:clamp(28px,4vw,56px);counter-reset:env}
+.env-col{display:grid;gap:14px}
+.globe{width:clamp(320px,34vw,540px);justify-self:center}
+.env .env-col>div{position:relative;border:1px solid rgba(255,255,255,.12);padding:22px 20px 20px;background:rgba(255,255,255,.035);counter-increment:env;transition:transform .35s,border-color .35s,background .35s}
+.env .env-col>div::before{content:"0" counter(env);font-family:var(--disp);font-size:30px;line-height:1;color:var(--pink);display:block;margin-bottom:10px}
+.env .env-col>div::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--pink),rgba(255,45,141,0))}
+.env .env-col:last-child>div::after{background:linear-gradient(270deg,var(--pink),rgba(255,45,141,0))}
+.env .env-col>div:hover{transform:translateY(-3px);border-color:var(--pink);background:rgba(255,45,141,.08)}
+.env .env-col h4{margin:0 0 8px;font-family:var(--disp);text-transform:uppercase;font-size:20px;font-weight:400;color:var(--porcelain)}
+.env .env-col p{margin:0;font-size:14.5px;line-height:1.6;color:var(--pale-2);font-weight:300}
+@media(max-width:1100px){.env-orbit{grid-template-columns:1fr 1fr}.globe{grid-column:1/-1;grid-row:1;width:min(60vw,440px)}}
+@media(max-width:820px){.env-head{grid-template-columns:1fr}.env-orbit{grid-template-columns:1fr}.globe{width:min(78vw,420px)}
+  .env:not(.open) .env-col:first-child>div:nth-child(n+2),.env:not(.open) .env-col:last-child{display:none}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1917,24 +1937,28 @@ a.tl-link{color:var(--pink);font-weight:500}
     </div>
     <div class="env rv">
       <div class="env-head">
-        <div class="globe" id="globe" aria-hidden="true"><canvas id="globeC"></canvas></div>
         <div><div class="ch-tag">Carbon footprint</div>
         <h3 class="env-h">Longer life. Fewer miles. Less waste.</h3>
         <p class="stand">Where the footprint sits, and what is done about each part.</p></div>
         <ul class="env-marks" aria-label="Carbon footprint, in brief"><li><b>Refurbish</b><span>before replace</span></li><li><b>Full containers</b><span>not part loads</span></li><li><b>Specialist recovery</b><span>at end of life</span></li></ul>
       </div>
-      <div class="pill env-grid">
+      <div class="env-orbit env-grid">
+        <div class="env-col">
         <div><h4>Longer life</h4><p>Inspection, servicing and compliant refurbishment extend service life instead of replacing fire extinguishers before they need it. The range is moving with the industry away from fluorinated foam.</p></div>
         <div><h4>End of life</h4><p>Expired, discharged or damaged fire extinguishers go to specialist partners, CheckFire Group and
           Jewel Fire Group, for controlled processing and metal recovery. Waste-transfer documentation gives traceability.</p></div>
         <div><h4>Freight</h4><p>Purchasing is consolidated into full sea-freight containers, planned by forecasting: fewer fragmented
           consignments, less emergency freight, less over-ordering and obsolete stock.</p></div>
+        </div>
+        <div class="globe" id="globe" aria-hidden="true"><canvas id="globeC"></canvas></div>
+        <div class="env-col">
         <div><h4>Packaging and waste</h4><p>Recyclable cardboard and right-sized protection. Incoming cartons, pallets and protective materials
           are reused where suitable; cardboard, plastic and scrap metal are separated in the warehouse. Digital records replace routine printing.</p></div>
         <div><h4>Buying decisions</h4><p>Durability, packaging volume, freight efficiency, return rates and end-of-life requirements are weighed
           alongside safety and compliance whenever suppliers and products are reviewed.</p></div>
         <div><h4>Next</h4><p>A formal carbon and energy baseline, recorded collection volumes and the weight of fire extinguishers recovered,
           measured packaging use, reduction targets, and a customer take-back route.</p></div>
+        </div>
       </div>
       <button class="fold-t" type="button" data-fold="env">All six</button>
       
