@@ -226,9 +226,7 @@
     /* the timeline: when its row of cards reaches the middle of the screen the page holds still and
        further scrolling moves the cards sideways; once the last card is in, the page carries on */
     var tlSec = $("#timeline"), tlOl = $("#timeline ol.spine.journey"), tlPin = $("#tlPin");
-    /* the hold is wanted on a phone too: the page stops and the cards travel, which is what the
-       line under them has always promised. It is the width that used to switch this off. */
-    if (tlSec && tlOl && tlPin) {
+    if (tlSec && tlOl && tlPin && window.matchMedia("(min-width: 900px)").matches) {
       /* one hold: the cards slide across, then the page stays put a little longer while the route
          drops down the right of them and runs back beneath them to the left */
       var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };
