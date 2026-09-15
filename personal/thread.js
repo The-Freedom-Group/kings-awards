@@ -214,6 +214,9 @@
       else mapEl.classList.remove("go");
     }
     if (!inView || !mapEl.classList.contains("go")) { lastT = ts; return; }
+    /* a phone holds the system still: moving nine planets by script costs it more frames than the motion
+       is worth. They still light one by one as the reader passes. */
+    if (coarse) { lastT = ts; return; }
     var dt = lastT ? Math.min(0.05, (ts - lastT) / 1000) : 0; lastT = ts;
     if (!dt) return;
     /* while the line is lapping the inner ring the whole system turns faster, easing in and out */
@@ -297,7 +300,9 @@
      Drag to turn it. It draws only while it is on screen. */
   (function () {
     var box = $("#globe"), cv = $("#globeC"); if (!box || !cv) return;
-    var ctx = cv.getContext("2d"), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
+    var ctx = cv.getContext("2d", { alpha: false }), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
+    /* a phone draws fewer dots, without the glow round each one, at half the rate: the turn is smooth */
+    var lite = coarse, lastDraw = 0, frameMs = lite ? 30 : 0;
     var TILT = 20 * Math.PI / 180, HOME = [53.6, -2.3];
     var ROUTES = [[22.5, 114.1], [31.2, 121.5], [29.9, 121.6], [39.9, 116.4], [23.1, 113.3], [1.35, 103.8], [41.0, 28.9], [52.4, 4.9]];
     function vec(lat, lon) { var la = lat * Math.PI / 180, lo = lon * Math.PI / 180; return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)]; }
@@ -311,8 +316,8 @@
       var w = 720, h = 360, oc = document.createElement("canvas"); oc.width = w; oc.height = h;
       var o2 = oc.getContext("2d"); o2.drawImage(img, 0, 0, w, h);
       var d = o2.getImageData(0, 0, w, h).data;
-      for (var lat = -80; lat <= 84; lat += 3.1) {
-        var cl = Math.cos(lat * Math.PI / 180), n = Math.max(8, Math.round(116 * cl));
+      for (var lat = -80; lat <= 84; lat += (lite ? 4.6 : 3.1)) {
+        var cl = Math.cos(lat * Math.PI / 180), n = Math.max(8, Math.round((lite ? 78 : 116) * cl));
         for (var k = 0; k < n; k++) {
           var lon = -180 + (k + 0.5) * 360 / n, px = Math.min(w - 1, Math.floor((lon + 180) / 360 * w)), py = Math.min(h - 1, Math.floor((90 - lat) / 180 * h)), i = (py * w + px) * 4;
           dots.push({ v: vec(lat, lon), land: d[i + 3] > 90 && d[i] + d[i + 1] + d[i + 2] > 330 });
@@ -320,44 +325,68 @@
       }
       ready = true; kick();
     };
-    function size() { var r = box.getBoundingClientRect(); W0 = Math.max(120, Math.round(r.width || box.offsetWidth)); dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(W0 * dpr); cv.height = cv.width; }
+    function size() { var r = box.getBoundingClientRect(); W0 = Math.max(120, Math.round(r.width || box.offsetWidth)); dpr = Math.min(lite ? 1.5 : 2, window.devicePixelRatio || 1); cv.width = Math.round(W0 * dpr); cv.height = cv.width; }
     function arc(a, b, cx0, cy0, R0, t) {
-      var n = 44, prev = null, pts2 = [];
+      var n = lite ? 18 : 44, prev = null, pts2 = [];
+      if (lite) { ctx.strokeStyle = "rgba(255,45,141,.42)"; ctx.lineWidth = 1; ctx.beginPath(); }
       for (var i = 0; i <= n; i++) {
         var k = i / n, x = a[0] * (1 - k) + b[0] * k, y = a[1] * (1 - k) + b[1] * k, z = a[2] * (1 - k) + b[2] * k, m = Math.sqrt(x * x + y * y + z * z) || 1, lift = 1 + 0.2 * Math.sin(k * Math.PI);
         var q = turn([x / m * lift, y / m * lift, z / m * lift]), pt = { x: cx0 + q.x * R0, y: cy0 + q.y * R0, z: q.z };
         if (prev && prev.z > -0.04 && pt.z > -0.04) {
-          ctx.strokeStyle = "rgba(255,45,141," + (0.1 + 0.5 * Math.max(0, Math.min(1, pt.z + 0.2))).toFixed(3) + ")"; ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(pt.x, pt.y); ctx.stroke();
+          if (lite) { ctx.moveTo(prev.x, prev.y); ctx.lineTo(pt.x, pt.y); }
+          else {
+            ctx.strokeStyle = "rgba(255,45,141," + (0.1 + 0.5 * Math.max(0, Math.min(1, pt.z + 0.2))).toFixed(3) + ")"; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(pt.x, pt.y); ctx.stroke();
+          }
         }
         pts2.push(pt); prev = pt;
       }
+      if (lite) ctx.stroke();
       var gl = pts2[Math.round(t * n)];
-      if (gl && gl.z > 0) { ctx.fillStyle = "rgba(255,255,255,.95)"; ctx.shadowColor = "rgba(255,45,141,.9)"; ctx.shadowBlur = 8; ctx.beginPath(); ctx.arc(gl.x, gl.y, W0 * 0.007, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0; }
+      if (gl && gl.z > 0) { ctx.fillStyle = "rgba(255,255,255,.95)"; if (!lite) { ctx.shadowColor = "rgba(255,45,141,.9)"; ctx.shadowBlur = 8; } ctx.beginPath(); ctx.arc(gl.x, gl.y, W0 * 0.007, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0; }
     }
-    function draw() {
+    function draw(now) {
       raf = null;
+      var tn = now || performance.now();
+      if (frameMs && tn - lastDraw < frameMs) { if (seen && !reduce) kick(); return; }
+      lastDraw = tn;
       if (!W0) size();
-      var R0 = W0 * 0.45, cx0 = W0 / 2, cy0 = W0 / 2, t = performance.now() / 1000;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W0, W0);
+      var R0 = W0 * 0.45, cx0 = W0 / 2, cy0 = W0 / 2, t = tn / 1000;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = "#0a0a0a"; ctx.fillRect(0, 0, W0, W0);
       /* the body of the planet, lit from the upper left, and the light on its limb */
       var g = ctx.createRadialGradient(cx0 - R0 * 0.4, cy0 - R0 * 0.45, R0 * 0.05, cx0, cy0, R0);
       g.addColorStop(0, "#33161f"); g.addColorStop(0.65, "#151014"); g.addColorStop(1, "#0a0a0a");
       ctx.beginPath(); ctx.arc(cx0, cy0, R0, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
-      ctx.save(); ctx.shadowColor = "rgba(255,45,141,.6)"; ctx.shadowBlur = W0 * 0.09; ctx.strokeStyle = "rgba(255,45,141,.55)"; ctx.lineWidth = 1.2; ctx.stroke(); ctx.restore();
+      ctx.save(); if (!lite) { ctx.shadowColor = "rgba(255,45,141,.6)"; ctx.shadowBlur = W0 * 0.09; } ctx.strokeStyle = "rgba(255,45,141,.55)"; ctx.lineWidth = lite ? 1.6 : 1.2; ctx.stroke(); ctx.restore();
       if (ready) {
-        for (var i = 0; i < dots.length; i++) {
+        if (lite) {
+          /* a phone paints the land in four shades: one colour set per shade instead of one per dot,
+             squares instead of circles, and no grid over the sea */
+          var band = [[], [], [], []], sq = W0 * 0.0072;
+          for (var i = 0; i < dots.length; i++) {
+            if (!dots[i].land) continue;
+            var q = turn(dots[i].v); if (q.z < 0) continue;
+            band[Math.min(3, (q.z * 4) | 0)].push(cx0 + q.x * R0, cy0 + q.y * R0);
+          }
+          for (var bi = 0; bi < 4; bi++) {
+            var xy = band[bi]; if (!xy.length) continue;
+            ctx.fillStyle = "rgba(255,45,141," + (0.3 + bi * 0.22).toFixed(2) + ")";
+            var s2 = sq * (0.62 + bi * 0.13);
+            for (var k2 = 0; k2 < xy.length; k2 += 2) ctx.fillRect(xy[k2] - s2 / 2, xy[k2 + 1] - s2 / 2, s2, s2);
+          }
+        } else for (var i = 0; i < dots.length; i++) {
           var q = turn(dots[i].v); if (q.z < -0.12) continue;
           var sx = cx0 + q.x * R0, sy = cy0 + q.y * R0, f = q.z < 0 ? 0.1 : 0.22 + 0.78 * q.z;
           if (dots[i].land) { ctx.fillStyle = "rgba(255,45,141," + (f * 0.95).toFixed(3) + ")"; ctx.beginPath(); ctx.arc(sx, sy, W0 * 0.0058 * (0.55 + 0.45 * Math.max(0, q.z)), 0, Math.PI * 2); ctx.fill(); }
           else if (q.z > 0.05) { ctx.fillStyle = "rgba(255,255,255," + (f * 0.12).toFixed(3) + ")"; ctx.fillRect(sx - 0.5, sy - 0.5, 1, 1); }
         }
         var hv = vec(HOME[0], HOME[1]), home = turn(hv);
-        ROUTES.forEach(function (r, ri) { arc(hv, vec(r[0], r[1]), cx0, cy0, R0, (t * 0.09 + ri * 0.125) % 1); });
+        ROUTES.forEach(function (r, ri) { if (lite && ri % 2) return; arc(hv, vec(r[0], r[1]), cx0, cy0, R0, (t * 0.09 + ri * 0.125) % 1); });
         if (home.z > 0) {
           var hx = cx0 + home.x * R0, hy = cy0 + home.y * R0, pu = (t % 2.4) / 2.4;
           ctx.strokeStyle = "rgba(255,255,255," + (0.7 * (1 - pu)).toFixed(3) + ")"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(hx, hy, 2 + pu * W0 * 0.06, 0, Math.PI * 2); ctx.stroke();
-          ctx.fillStyle = "#fff"; ctx.shadowColor = "rgba(255,255,255,.9)"; ctx.shadowBlur = 8; ctx.beginPath(); ctx.arc(hx, hy, W0 * 0.012, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+          ctx.fillStyle = "#fff"; if (!lite) { ctx.shadowColor = "rgba(255,255,255,.9)"; ctx.shadowBlur = 8; } ctx.beginPath(); ctx.arc(hx, hy, W0 * 0.012, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
         }
       }
       if (dragX === null && !reduce) rot += spin;
@@ -628,6 +657,29 @@
   /* on a phone the stretches a desktop holds on are spans of the page instead: the line reaches the planet
      or the globe and the rings light, or the day turns, as the reader scrolls on through the span */
   var mapSpan = null, globeSpan = null;
+  /* on a phone the line is not drawn at all (it cost more than it gave): the reader's own position lights
+     the system and turns the carbon chapter's day to night as they pass */
+  var travel = null;
+  function measureTravel() {
+    travel = null;
+    if (!phoneNow()) return;
+    var mp = $("#map"), gl = $("#globe"), t = {};
+    if (mp && mp.offsetWidth) { var mr = mp.getBoundingClientRect(); t.map = { a: mr.top + window.pageYOffset - window.innerHeight * 0.15, b: mr.bottom + window.pageYOffset + window.innerHeight * 0.1 }; }
+    if (gl && gl.offsetWidth) { var gr = gl.getBoundingClientRect(); t.globe = gr.top + window.pageYOffset - window.innerHeight * 0.12; }
+    travel = t;
+  }
+  function travelStep(y) {
+    if (!travel) return;
+    var eye = y + window.innerHeight * 0.62;
+    if (travel.map && mapEl) {
+      var fm = clamp((eye - travel.map.a) / Math.max(1, travel.map.b - travel.map.a), 0, 1), lapM = fm > 0 && fm < 1;
+      mapEl.classList.toggle("lap", lapM); orbitBoostTarget = lapM ? 1 : 0;
+      [["lap-core", 0], ["lap-a-ring", 0.14], ["lap-a", 0.28], ["lap-b-ring", 0.44], ["lap-b", 0.58], ["lap-c-ring", 0.74], ["lap-c", 0.88]]
+        .forEach(function (st) { mapEl.classList.toggle(st[0], fm > 0 && fm >= st[1]); });
+    }
+    if (travel.globe !== undefined && c06El) c06El.classList.toggle("day", eye <= travel.globe);
+  }
+  function phoneNow() { return window.innerWidth <= 820; }
 
   function buildPath() {
     if (!explore || !thread || !svg) return false;
@@ -649,6 +701,12 @@
     var SIDE = { L: LX, R: RX, C: CX };
 
     pts = []; orbitBack = null; mapSpan = globeSpan = null;
+    if (phone) {
+      /* a phone: no line. The page travels by its own colour and words instead (see the stylesheet). */
+      thread.style.display = "none"; document.documentElement.classList.add("noline");
+      totalLen = 0; holds = []; hasHold = false; ySamples = []; measureTravel();
+      return false;
+    }
 
     /* ── the hero bend, to the reference proportions ──────────
        Runs in from the left, lifts over the portrait, turns down the
@@ -1816,7 +1874,7 @@
         }
       }
 
-      if (exploring) { drawThread(y); runScene(y); }
+      if (exploring) { drawThread(y); travelStep(y); runScene(y); }
       if (jy.carry && jy.live) setJourney(clamp((y - jy.startY) / Math.max(1, jy.travel), 0, 1), null, false, null);
     }
     orbitStep(performance.now());
@@ -1838,7 +1896,7 @@
       var exploring = document.body.dataset.view === "explore";
       document.body.classList.toggle("dark-chrome", dark && exploring);
       flowSpine(y, cur2, cur2 === null && y > window.innerHeight);
-      if (exploring) drawThread(y);
+      if (exploring) { drawThread(y); travelStep(y); }
     }
     window.addEventListener("scroll", still, { passive: true });
     still();
@@ -1851,7 +1909,7 @@
   function rebuild() {
     clearTimeout(rebuildTimer);
     rebuildTimer = setTimeout(function () {
-      buildJourney(); buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
+      buildJourney(); buildPath(); measureScene(); measureMarquees(); placeOrbits(); measureTravel(); lastY = -1;
     }, 140);
   }
   var lastW = window.innerWidth;
