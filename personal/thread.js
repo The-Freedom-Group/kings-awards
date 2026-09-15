@@ -13,6 +13,8 @@
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = window.matchMedia &&
     window.matchMedia("(pointer: fine)").matches;
+  /* a phone: no per-section orbit dots and no moving grid (each costs a layout or a repaint every frame) */
+  var coarse = window.innerWidth <= 820 || (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
@@ -105,7 +107,7 @@
     var dr = document.createElement("div");
     dr.className = "drift"; dr.setAttribute("aria-hidden", "true");
     sec.insertBefore(dr, sec.firstChild);
-    if (!reduce) {
+    if (!reduce && !coarse) {
       var ob = document.createElement("div");
       ob.className = "orbits"; ob.setAttribute("aria-hidden", "true");
       var o = "";
@@ -160,9 +162,10 @@
   }
   /* planets and the rocket are placed with a translate, in pixels, so they move on the compositor
      with sub-pixel precision; left/top stay at zero. The ring labels keep percentages: they never move. */
+  var mapW = 0, mapH = 0;
+  function mapSize() { mapW = mapEl ? mapEl.offsetWidth : 0; mapH = mapEl ? mapEl.offsetHeight : 0; }
   function mapPx(p) {
-    var W0 = mapEl ? mapEl.offsetWidth : 0, H0 = mapEl ? mapEl.offsetHeight : 0;
-    return { x: p.x / 100 * W0, y: p.y / 76 * H0 };
+    return { x: p.x / 100 * mapW, y: p.y / 76 * mapH };
   }
   function putNode(nd, p) {
     var q = mapPx(p);
@@ -171,6 +174,7 @@
   }
   var rocketA = 300;
   function placeOrbits() {
+    mapSize();
     $$(".map .node, .map .yrlbl").forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       if (nd.classList.contains("yrlbl")) {
@@ -203,7 +207,7 @@
   var orbitBoost = 0, orbitBoostTarget = 0, orbitNodes = null;
   function orbitStep(ts) {
     if (!mapEl) return;
-    var inView = mapEl.classList.contains("in") && mapEl.offsetParent !== null;     /* on show, whichever screen */
+    var inView = mapEl.classList.contains("in");     /* on show, whichever screen */
     if (inView !== wasIn) {
       wasIn = inView; clearTimeout(goTimer);
       if (inView) goTimer = setTimeout(function () { mapEl.classList.add("go"); lastT = 0; }, 1500);
@@ -216,6 +220,7 @@
     orbitBoost += (orbitBoostTarget - orbitBoost) * Math.min(1, dt * 3);
     dt *= 1 + 3.2 * orbitBoost;
     if (!orbitNodes) orbitNodes = $$(".map .node[data-ring]", mapEl);
+    mapSize();                                                    /* read once, then only writes */
     orbitNodes.forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       if (ring === "0" || !RINGS[ring]) return;
@@ -452,11 +457,13 @@
        parent's content box, so padding would give it nothing to stick through */
     if (!jy.room) { jy.room = document.createElement("div"); jy.room.className = "jy-room"; jy.room.setAttribute("aria-hidden", "true"); jy.el.appendChild(jy.room); }
     jy.room.style.height = jy.travel + "px";
-    var top = 0, e2 = jy.stage; while (e2) { top += e2.offsetTop; e2 = e2.offsetParent; }
+    /* measured from the strip's heading, which never sticks: a stuck stage reports its stuck place */
+    var headEl = jy.el.querySelector(".jy-head"), top = 0, e2 = headEl || jy.stage;
+    while (e2) { top += e2.offsetTop; e2 = e2.offsetParent; }
+    if (headEl) top += headEl.offsetHeight + (parseFloat(window.getComputedStyle(jy.stage).marginTop) || 0);
     jy.startY = Math.max(0, Math.round(top - stick)); jy.endY = jy.startY + jy.travel;
     jy.el.classList.toggle("sda", jySda);
-    var maxS = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    var range = (jy.startY / maxS * 100).toFixed(4) + "% " + (jy.endY / maxS * 100).toFixed(4) + "%";
+    var range = jy.startY + "px " + jy.endY + "px";
     if (jySda) [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.setProperty("--jy-dist", (-jy.dist) + "px"); el.style.animationRange = range; el.style.transform = ""; });
   }
   /* f is the strip's own fraction; hx, when given, is where the head sits on the track instead of over the
@@ -636,8 +643,8 @@
     /* find the text column so the line can run outside it */
     var col = explore.querySelector(".ch .wrap") || explore.querySelector(".wrap");
     var cr = col ? col.getBoundingClientRect() : { left: 0, right: W };
-    var LX = Math.max(18, cr.left - 34);
-    var RX = Math.min(W - 18, cr.right + 34);
+    var LX = Math.max(phone ? 16 : 18, cr.left - 34);
+    var RX = Math.min(W - (phone ? 24 : 18), cr.right + 34);
     var CX = W * 0.5;
     var SIDE = { L: LX, R: RX, C: CX };
 
@@ -649,7 +656,13 @@
        descending trunk. One stroke; the spurs hang from it. */
     var heroEl = document.getElementById("top");
     var heroPrefix = "", heroExit = null;
-    if (heroEl && phone) pts.push({ x: LX, y: heroEl.offsetTop + heroEl.offsetHeight - 36, id: "top", el: heroEl, noKnot: true });
+    if (heroEl && phone) {
+      /* a phone: a short lead-in beside the hero's foot, drawn as the page arrives, then on down the page */
+      var hT2 = heroEl.offsetTop, hH2 = heroEl.offsetHeight, y1h = Math.min(hT2 + hH2 - 36, window.innerHeight * 0.62), y0h = Math.max(hT2 + 40, y1h - 160);
+      heroPrefix = "M " + LX.toFixed(1) + " " + y0h.toFixed(1) + " V " + y1h.toFixed(1);
+      heroExit = { x: LX, y: y1h, id: "top", el: heroEl, noKnot: true };
+      pts.push(heroExit);
+    }
     if (heroEl && !phone) {
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
       var yMain  = hT + hH * 0.81;           // the long horizontal
@@ -711,14 +724,61 @@
       while (el && el !== explore) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
       return { x: x, y: y };
     };
+    var lastSideP = "R";
+    /* the foot of a chapter's last block (its cards, its quote, its charts) in the story's own coordinates */
+    var lastBlockBottom = function (el) {
+      var bot = 0;
+      for (var ci = 0; ci < el.children.length; ci++) {
+        var ch = el.children[ci];
+        if (!ch.offsetHeight || /\b(drift|jy-room)\b/.test(ch.className || "")) continue;
+        var cs = window.getComputedStyle(ch);
+        if (cs.position === "absolute" || cs.position === "fixed") continue;
+        var cb = pageXY(ch).y + ch.offsetHeight;
+        if (cb > bot) bot = cb;
+      }
+      return bot;
+    };
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
-      if (phone && p.journey) {
-        /* on a phone The Journey is carried on its own rail while its stage stays put; the page line
-           passes behind the stage down the margin, a knot at the chapter */
-        pts.push({ x: SIDE[p.side], y: el.offsetTop + Math.min(140, el.offsetHeight * 0.12), id: p.id, el: el, noKnot: false });
+      if (phone && !p.ring) {
+        /* a phone: the text runs the full width, so the line keeps to its gutter beside every chapter's words
+           and crosses to the other gutter only behind the tail of the chapter before - its cards, its quote -
+           arriving in the gap above the next heading. The system, the charts and the globe are passed, not
+           ridden: the rings still light and the day still turns from the reader's own position. */
+        if (p.ride) return;                                       /* the charts are read, not ridden */
+        var padT = parseFloat(window.getComputedStyle(el).paddingTop) || 0, topP = el.offsetTop, hP = el.offsetHeight;
+        var sideP = (p.id === "ones" || p.core) ? "L" : p.side, xP = SIDE[sideP];
+        lastSideP = sideP;
+        /* the crossing from the chapter before lands in the gutter just above this chapter's tag */
+        var tagP = el.querySelector(".ch-tag, h2"), inY = tagP ? pageXY(tagP).y - 10 : topP + padT * 0.55;
+        pts.push({ x: xP, y: Math.max(topP + 8, inY), id: p.id + "In", el: el, noKnot: true });
+        if (p.journey) {
+          pts.push({ x: xP, y: topP + Math.min(140, hP * 0.12), id: p.id, el: el, noKnot: false });
+          pts.push({ x: xP, y: topP + hP - Math.max(120, hP * 0.12), id: "journeyFoot", el: el, noKnot: true });   /* straight on down the gutter beside the sliding moments */
+          return;
+        }
+        if (p.core) {
+          var mpP = el.querySelector(".map");
+          if (mpP && mpP.offsetWidth) { var moP = pageXY(mpP), cyP = moP.y + mpP.offsetHeight / 2; mapSpan = { a: cyP - window.innerHeight * 0.15, b: cyP + window.innerHeight * 0.4 }; }
+        }
+        if (p.globe) {
+          var glP = document.getElementById("globe");
+          if (glP && glP.offsetWidth) { var goP = pageXY(glP), nightAt = goP.y - window.innerHeight * 0.12; globeSpan = { a: nightAt, b: nightAt + 1 }; }
+        }
+        var knotY = topP + hP * (p.core ? 0.3 : p.y);
+        pts.push({ x: xP, y: knotY, id: p.id, el: el, noKnot: p.core ? true : !!p.noKnot });
+        /* the exit: below the chapter's last block, so the swing to the other gutter is made in the gap
+           between chapters and never across bare words */
+        var outY = Math.max(topP + hP - Math.max(120, hP * 0.18), lastBlockBottom(el) + 8, knotY + 60);
+        pts.push({ x: xP, y: Math.min(outY, topP + hP - 6), id: p.id + "Out", el: el, noKnot: true });
         return;
+      }
+      if (phone && p.ring) {
+        /* the end note is approached down the gutter the line is already in, past its centred heading,
+           and swings to the middle only in the room kept below the heading, where the ring opens */
+        var h2P = el.querySelector("h2"), h2PB = h2P ? pageXY(h2P).y + h2P.offsetHeight : el.offsetTop + 120;
+        pts.push({ x: SIDE[lastSideP], y: h2PB + 8, id: "ringIn", el: el, noKnot: true });
       }
       if (p.core) {
         /* the line joins the inner orbit at its left-hand point, laps it once, carries on round to the
@@ -973,7 +1033,8 @@
         var quo = el.querySelector(".quo");
         if (quo) {
           var qo = pageXY(quo), qTop = qo.y - 14, qBot = qo.y + quo.offsetHeight + 14;
-          var top0 = qTop - 70, bot0 = qBot + 64, half = Math.min(quo.offsetWidth / 2 + 70, CX - 14);
+          var h2R = el.querySelector("h2"), h2B = h2R ? pageXY(h2R).y + h2R.offsetHeight : qTop - 100;
+          var top0 = phone ? Math.max(qTop - 70, h2B + 96) : qTop - 70, bot0 = qBot + 64, half = Math.min(quo.offsetWidth / 2 + 70, CX - (phone ? 18 : 14));
           pts.push({ x: CX, y: top0, id: "ringTop", el: el, noKnot: true });
           pts.push({ x: CX, y: bot0, id: "ringBot", el: el, noKnot: true, arc: half, qTop: qTop, qBot: qBot });
           return;
@@ -1031,7 +1092,7 @@
       if (b.arc) {
         /* the end note: the line splits in two at the top, each half swings out round the words and they
            rejoin at the bottom; this stroke takes the left, the second stroke the right */
-        var half = b.arc, qT = b.qTop, qB = b.qBot, kIn = Math.max(24, (qT - a.y) * 0.9), kOut = Math.max(24, (b.y - qB) * 0.9);
+        var half = b.arc, qT = b.qTop, qB = b.qBot, kIn = Math.max(phone ? 64 : 24, (qT - a.y) * 0.9), kOut = Math.max(phone ? 90 : 24, (b.y - qB) * 0.9);
         var side = function (sgn) {
           var xs = a.x + sgn * half;
           return " C " + f1(a.x) + " " + f1(a.y + kIn) + ", " + f1(xs) + " " + f1(qT - kIn * 0.6) + ", " + f1(xs) + " " + f1(qT) +
@@ -1668,6 +1729,7 @@
     /* if the page has changed height since the line was measured (fonts, images), measure it again */
     if (builtH && explore && explore.offsetHeight !== builtH) { builtH = explore.offsetHeight; rebuild(); }
     velY = lerp(velY, moved ? y - lastY : 0, 0.12);
+    if (!moved && Math.abs(velY) < 0.05) velY = 0;                 /* still: the loop can idle */
     lastY = y;
 
     /* cursor */
@@ -1792,7 +1854,12 @@
       buildJourney(); buildPath(); measureScene(); measureMarquees(); placeOrbits(); lastY = -1;
     }, 140);
   }
-  window.addEventListener("resize", rebuild);
+  var lastW = window.innerWidth;
+  window.addEventListener("resize", function () {
+    /* a phone's toolbar coming and going only changes the height: nothing the line depends on moved */
+    if (window.innerWidth <= 820 && window.innerWidth === lastW) return;
+    lastW = window.innerWidth; rebuild();
+  });
   window.addEventListener("load", rebuild);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { rebuild(); });
   window.addEventListener("load", rebuild);

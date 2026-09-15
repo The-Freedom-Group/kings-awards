@@ -271,7 +271,7 @@ html.js.has-gsap .hero .fm{opacity:0}
 
 /* ══ THE WIPE: black to paper ══════════════════════════════════ */
 .colour-divider{height:1px}
-.intro{position:relative;padding:clamp(80px,10vw,150px) 0 clamp(80px,9vw,140px);overflow:hidden;background:var(--black);color:#fff;transition:color .5s}
+.intro{position:relative;padding:clamp(80px,10vw,150px) 0 clamp(80px,9vw,140px);overflow:hidden;overflow:clip;background:var(--black);color:#fff;transition:color .5s}
 .intro.on-white{color:var(--ink)}
 .intro .wrap{position:relative;z-index:2}
 .intro .sep{color:var(--pale-2);max-width:72%;margin-bottom:clamp(36px,5vw,72px)}.intro .sep::after{background:var(--rule-d)}
@@ -284,7 +284,7 @@ html.js.has-gsap .hero .fm{opacity:0}
 
 
 /* ══ CHAPTERS ══════════════════════════════════════════════════ */
-.ch{padding:clamp(72px,10vw,150px) 0;position:relative;overflow:hidden;background:var(--paper);color:var(--ink)}
+.ch{padding:clamp(72px,10vw,150px) 0;position:relative;overflow:hidden;overflow:clip;background:var(--paper);color:var(--ink)}   /* clip, not hidden: a hidden overflow makes the chapter the scroller the scroll-driven reveals measure against */
 .ch.light{background:var(--white)}
 .ch.dark{background:var(--black);color:var(--pale)}
 .ch.on-red{background:var(--red);color:#fff}
@@ -522,7 +522,7 @@ body.prof-open{overflow:hidden}
 @media(max-width:600px){.nextgrid{grid-template-columns:1fr}}
 .bigman{position:absolute;right:calc(var(--gut) * .5);top:6%;width:clamp(160px,20vw,300px);opacity:.07;pointer-events:none;z-index:1}
 .bigman svg{width:100%;height:auto}
-footer{background:var(--black);color:var(--pale-2);padding:clamp(36px,5vw,64px) 0 40px;font-size:14px;line-height:1.6;position:relative;z-index:6;overflow:hidden}
+footer{background:var(--black);color:var(--pale-2);padding:clamp(36px,5vw,64px) 0 40px;font-size:14px;line-height:1.6;position:relative;z-index:6;overflow:hidden;overflow:clip}
 footer .wrap{position:relative;z-index:2}
 .ft-top{display:flex;justify-content:center;padding:0 0 clamp(18px,2.4vw,30px)}
 .totop{display:inline-flex;flex-direction:column;align-items:center;gap:12px;color:var(--pale);padding:10px;border-bottom:0!important}
@@ -878,10 +878,13 @@ html.tl-phone #timeline.ch{overflow:clip}
 /* on a phone the reveals follow the scroll itself (html.sv): a heading's words come in one after another as
    the heading rises through the bottom of the screen, blocks and tiles rise as they enter */
 @supports (animation-timeline: view()){
-  html.sv h2.fi,html.sv p.fi,html.sv .fu-1,html.sv h2.sl,html.sv h2.wd{view-timeline-name:--sv;view-timeline-axis:block}
+  html.sv h2.fi,html.sv p.fi,html.sv .fu-1,html.sv h2.sl,html.sv h2.wd,html.sv h2.cta-h,html.sv .nextcta .lead.quote{view-timeline-name:--sv;view-timeline-axis:block}
   html.sv .sw{animation:swIn linear both;animation-timeline:--sv;animation-range:cover 0% cover 24%}
   html.sv .rv{opacity:1;transform:none;transition:none;animation:svRise linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
-  html.sv .rv.in{animation:svRise linear both}
+  /* the tall wrappers do not rise as one - their cards do, each as it arrives; the rail inside the held timeline and the closing block whose words already come in are left alone */
+  html.sv .plan.rv,html.sv .acts.rv,html.sv .photos.rv,html.sv .proofs.rv,html.sv .plates.rv,html.sv .cases.rv,html.sv .verse.rv,html.sv .nextcta.rv,html.sv .tl-rail.rv{animation:none;opacity:1;transform:none}
+  html.sv .flip>*{transform:none;opacity:1;transition:none}
+  html.sv #floor>.st,html.sv #activities>.ph,html.sv #activities .actgrid>.actcard,html.sv #programme .photos>figure,html.sv #impact .proofs>.proof,html.sv #partners .plates>.plate,html.sv #learn .cases>.case,html.sv #next .verse>.vs,html.sv #why a.tlink{animation:svRise linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
   html.sv .test.sl,html.sv .blur-box{animation:svSlide linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
   html.sv .tile{animation:svRise linear both;animation-timeline:view();animation-range:entry 0% cover 24%}
   html.sv .sep.with-text{animation:svSep linear both;animation-timeline:view();animation-range:entry 0% cover 30%}
@@ -892,7 +895,7 @@ html.tl-phone #timeline.ch{overflow:clip}
 @keyframes svSep{from{opacity:0;width:25%}to{opacity:1;width:100%}}
 /* the footer on a phone: each part fades up as it scrolls onto the screen, driven by the scroll itself */
 @supports (animation-timeline: view()){
-  html.ft-view .footer-item,html.ft-view footer h4,html.ft-view footer .ff{animation:ftRise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  html.ft-view .footer-item,html.ft-view footer .ff,html.ft-view .ft-grid>.footer-item:first-child>p{animation:ftRise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
   html.ft-view .ft-grid>.footer-item:first-child{animation:none}
 }
 @keyframes ftRise{from{opacity:0;transform:translateY(.8rem)}to{opacity:1;transform:none}}   /* clips as before, but does not become the sticky block's container */

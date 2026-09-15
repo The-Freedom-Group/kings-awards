@@ -42,7 +42,13 @@
     var st = new SplitText(el, { type: "words" });
     /* each word's share of the heading's rise: the first as it clears the bottom, the last as the heading
        stands a third of the way up the screen */
-    st.words.forEach(function (w, i) { w.classList.add("sw"); var a = Math.min(14, i * 1.2); w.style.animationRange = "cover " + a.toFixed(1) + "% cover " + (24 + a).toFixed(1) + "%"; });
+    var top0 = el.getBoundingClientRect().top, span = el.offsetHeight + window.innerHeight;
+    st.words.forEach(function (w, i) {
+      w.classList.add("sw");
+      /* a later line's words wait for their own line to reach the screen */
+      var a = Math.min(14, i * 1.2) + (w.getBoundingClientRect().top - top0) / span * 90;
+      w.style.animationRange = "cover " + a.toFixed(1) + "% cover " + (24 + a).toFixed(1) + "%";
+    });
   };
   var trig = function (el, start, end) { return early ? { trigger: el, start: "top 100%", end: "top 66%", scrub: 0.2 } : { trigger: el, start: start, end: end, scrub: 1 }; };
   var P1 = early ? 0 : 1, PH = early ? 0 : .5;
@@ -114,7 +120,7 @@
   if (!animate && heroSec) { heroSec.classList.add("open"); var g0 = $("#gate"); if (g0) g0.remove(); }
 
   /* ── reveal (IO, works with or without the library) ──────── */
-  var watched = sv ? $$(".flip") : $$(".rv, .flip");
+  var watched = sv ? [] : $$(".rv, .flip");
   if (!("IntersectionObserver" in window) || reduce) watched.forEach(function (e) { e.classList.add("in"); });
   else {
     var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: early ? "0px 0px 6% 0px" : "0px 0px -8% 0px", threshold: early ? 0 : 0.05 });
@@ -302,12 +308,15 @@
         });
       }
     }
-    var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
-    /* on a phone the page ends where the footer ends, so a reveal scrubbed to the footer's bottom
-       never finishes and the footer stays dark: there, the call and the footer play once as they arrive */
-    quick(gsap.timeline({ scrollTrigger: early ? { trigger: ".entrance", start: "top 130%", once: true } : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
-      .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: early ? .04 : .1 }, 0)
-      .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, early ? .3 : 1.2));
+    if (sv) {
+      /* the closing heading and the closing quote come in word by word on their own rise, like every other heading */
+      var ctaH = $(".cta-h"); if (ctaH) svWords(ctaH);
+      var leadQ = $(".nextcta .lead.quote"); if (leadQ) svWords(leadQ);
+    } else {
+      var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
+      quick(gsap.timeline({ scrollTrigger: early ? trig($(".entrance"), "top 80%", "bottom 70%") : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
+        .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: early ? .04 : .1 }, 0));
+    }
     if (early) {
       /* on a phone the footer is never hidden by the script: it is plain content, and where the browser
          can drive an animation from the scroll itself each part fades up as it comes onto the screen
@@ -606,7 +615,7 @@
   document.addEventListener("click", function (ev) {
     if (!phone()) return;
     var t = ev.target;
-    var li = t.closest && t.closest("ol.spine li"); if (li) { li.classList.toggle("open"); return; }
+    var li = t.closest && t.closest("ol.spine li"); if (li) { li.classList.toggle("open"); if (window.ScrollTrigger) ScrollTrigger.refresh(); return; }
     var k = t.closest && t.closest(".actcard .k"); if (k) { k.closest(".actcard").classList.toggle("open"); return; }
   });
   if (phone()) { var a = document.querySelector(".actcard"); if (a) a.classList.add("open"); }
