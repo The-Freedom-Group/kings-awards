@@ -869,6 +869,11 @@ body.cur-label .cur-ring::before{border-radius:50%;transform:none;background:var
 html.js.has-gsap .tl-pin ol.spine.journey{overflow:visible;scroll-snap-type:none;scrollbar-width:none;will-change:transform}
 html.js.has-gsap .tl-pin ol.spine.journey li{scroll-snap-align:none}
 html.js.has-gsap .tl-rail{overflow-x:clip}
+/* on a phone the block is held by the browser itself, inside a track tall enough for the cards' travel */
+.tl-track{position:relative}
+html.tl-phone #timeline.ch{overflow:clip}   /* clips as before, but does not become the sticky block's container */
+html.tl-phone .tl-pin{position:sticky;top:var(--stick,84px);will-change:auto}
+@media(hover:none){.rv{transition-duration:.45s,.45s}}
 ol.spine.journey{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;padding:64px 0 22px;margin:0;border-top:0;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent;-webkit-overflow-scrolling:touch}
 ol.spine.journey::before{display:none}
 ol.spine.journey li{flex:0 0 clamp(250px,22vw,300px);display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;gap:12px;padding:0 24px 0 0;margin:0 22px 0 0;border-bottom:0;scroll-snap-align:start;position:relative;align-items:start}
@@ -1091,7 +1096,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         who joined, where they worked, and what they were trusted with.</p>
       </div>
     </div>
-    <div class="tl-pin" id="tlPin"><div class="tl-rail rv"><ol class="spine journey">
+    <div class="tl-track" id="tlTrack"><div class="tl-pin" id="tlPin"><div class="tl-rail rv"><ol class="spine journey">
       <li class="haspic"><img class="pic" src="../assets/journey/ch1-a.webp" alt="A row of refurbished red extinguishers" loading="lazy" decoding="async"><span class="when">March 2019</span><span class="what"><b>One person, one listing.</b><span class="fx"> Tom Letcher sells one refurbished extinguisher from Bury through a Facebook Marketplace listing. No team, no plan, no company.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch4-a.webp" alt="The Freedom Fire team in 2020, the year the students joined" loading="lazy" decoding="async"><span class="when">June 2020</span><span class="what"><b>The first students.</b><span class="fx"> Trading as Freedom Fire from a corner of the family warehouse. University and college students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/ch6-a.webp" alt="An engineer in a hi-vis vest on a customer site" loading="lazy" decoding="async"><span class="when">Aug 2021</span><span class="what"><b>The company.</b><span class="fx"> Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install extinguishers on commercial sites alongside the online range.</span></span></li>
@@ -1108,7 +1113,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <li class="haspic"><img class="pic" src="../assets/journey/kings-2027.webp" alt="Entered for The King's Awards for Enterprise 2027, Promoting Opportunity, with The Way In as the company's initiative" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>The King's Awards for Enterprise.</b><span class="fx"> The company enters the King's Awards for Enterprise under the Promoting Opportunity category, with The Way In as the company's initiative.</span></span></li>
       <li class="haspic"><img class="pic logo" src="../assets/journey/oct2026.webp" alt="Youth Guarantee, funded by UK Government, and the T Level Ambassador badge" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students will arrive, and two young people will be recruited through the Government's Jobs Guarantee, part of the Youth Guarantee, with the Growth Company. The newest ways in.</span></span></li>
     </ol></div>
-    <div class="tl-hint" aria-hidden="true">Keep scrolling <i>→</i> the timeline moves sideways</div></div>
+    <div class="tl-hint" aria-hidden="true">Keep scrolling <i>→</i> the timeline moves sideways</div></div></div>
   </div>
 </section>
 
@@ -1179,7 +1184,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         <p>Two talks and a workshop at New Bridge College, recruitment fairs, and a voice in how the Jobs Guarantee is run. Families see confidence return: one mother wrote that she had got her son back.</p></div>
         </div>
     <figure class="cardq rv">
-      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say<br>‘I got my son back’<br>thanks to you Tom.”</blockquote>
+      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’<br>thanks to you Tom.”</blockquote>
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
         <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
     </figure>

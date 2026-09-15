@@ -29,10 +29,13 @@
     gsap.defaults({ duration: 1 });
   }
   var animate = hasGsap && !reduce;
-  /* on a phone nothing waits: every scroll-driven reveal is complete once its element is a little way
-     onto the screen, and the scrub lags less, so the words are there when the eye reaches them */
+  /* on a phone nothing is tied to the scroll: each reveal plays once, quickly, the moment its element
+     comes onto the screen, so the words are there when the eye reaches them. A desktop keeps the
+     scrubbed reveals that move with the wheel. */
   var early = !fine || window.matchMedia("(max-width: 899px)").matches;
-  var E = function (desk, phone) { return early ? phone : desk; }, SCR = early ? 0.35 : 1;
+  var trig = function (el, start, end) { return early ? { trigger: el, start: "top 92%", once: true } : { trigger: el, start: start, end: end, scrub: 1 }; };
+  var P1 = early ? 0 : 1, PH = early ? 0 : .5;
+  var quick = function (tl) { if (early) tl.timeScale(2.2); return tl; };
 
   /* ── smooth scrolling ─────────────────────────────────────── */
   var smoother = null;
@@ -40,7 +43,9 @@
      takes the gesture over, which is what strands a phone on a section it cannot swipe out of - and
      is why every dialog here has to switch normalising off again. The portfolio keeps its scroll
      work to fine pointers for the same reason; only the desktop gets the smoothed scroll. */
-  if (animate) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0, normalizeScroll: fine, ignoreMobileResize: true, effects: true, onUpdate: function (self) { if (typeof drawRoute === "function") drawRoute(self.scrollTop()); } });
+  /* on touch the smoother is not created at all: its transformed content cannot hold a sticky block, and
+     its per-frame transform is what made a pinned block shake on a phone; the page scrolls natively there */
+  if (animate && fine) smoother = ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1, smoothTouch: 0, normalizeScroll: fine, ignoreMobileResize: true, effects: true, onUpdate: function (self) { if (typeof drawRoute === "function") drawRoute(self.scrollTop()); } });
   window.__smoother = smoother;
   function scrollY() { return smoother ? smoother.scrollTop() : (window.pageYOffset || html.scrollTop); }
   function scrollTo(target) {
@@ -183,42 +188,42 @@
 
     /* separators with text: 25% → 100% */
     $$(".sep.with-text").forEach(function (el) {
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 30%", "top 55%"), scrub: SCR } })
-        .fromTo(el, { width: "25%" }, { width: "100%", duration: 2 }, 1).fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 }, 1);
+      quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 30%") })
+        .fromTo(el, { width: "25%" }, { width: "100%", duration: 2 }, P1).fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 }, P1));
     });
     /* headings, a word at a time */
     $$("h2.fi, p.fi").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 70%", "top 74%"), scrub: SCR } })
-        .fromTo(st.words, { autoAlpha: 0, y: "0.5em" }, { autoAlpha: 1, y: "0em", stagger: .1 }, 1);
+      quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 70%") })
+        .fromTo(st.words, { autoAlpha: 0, y: "0.5em" }, { autoAlpha: 1, y: "0em", stagger: .1 }, P1));
     });
     $$(".fu-1").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 70%", "top 74%"), scrub: SCR } })
-        .fromTo(st.words, { rotation: 3, autoAlpha: 0, y: "2rem" }, { rotation: 0, autoAlpha: 1, y: "0rem", stagger: .15, duration: 1.5 }, 1);
+      quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 70%") })
+        .fromTo(st.words, { rotation: 3, autoAlpha: 0, y: "2rem" }, { rotation: 0, autoAlpha: 1, y: "0rem", stagger: .15, duration: 1.5 }, P1));
     });
     $$("h2.sl").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 70%", "top 74%"), scrub: SCR } })
-        .fromTo(st.words, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, 1);
+      quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 70%") })
+        .fromTo(st.words, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, P1));
     });
     $$("h2.wd").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 95%", end: E("bottom 60%", "top 72%"), scrub: SCR } })
-        .fromTo(st.words, { autoAlpha: 0, y: "0.6em", rotation: 2 }, { autoAlpha: 1, y: "0em", rotation: 0, stagger: .12 }, 0);
+      quick(gsap.timeline({ scrollTrigger: trig(el, "top 95%", "bottom 60%") })
+        .fromTo(st.words, { autoAlpha: 0, y: "0.6em", rotation: 2 }, { autoAlpha: 1, y: "0em", rotation: 0, stagger: .12 }, 0));
     });
     $$(".test.sl").forEach(function (el) {
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 75%", "top 78%"), scrub: SCR } })
-        .fromTo(el, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em" }, 1);
+      quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 75%") })
+        .fromTo(el, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em" }, P1));
     });
     /* the tiles */
     $$(".tile").forEach(function (t) {
-      gsap.timeline({ scrollTrigger: { trigger: t, start: "top 100%", end: E("top 55%", "top 80%"), scrub: SCR } }).fromTo(t, { y: "6vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0);
+      quick(gsap.timeline({ scrollTrigger: trig(t, "top 100%", "top 55%") }).fromTo(t, { y: "6vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0));
       var big = $(".big", t); if (big) { gsap.set(big, { xPercent: -50 }); gsap.fromTo(big, { yPercent: -66 }, { yPercent: -36, ease: "none", scrollTrigger: { trigger: t, start: "top bottom", end: "bottom top", scrub: true } }); }
     });
     /* the inspection tag turns in */
     $$(".blur-box").forEach(function (b) {
-      gsap.timeline({ scrollTrigger: { trigger: b, start: "top 100%", end: E("bottom 80%", "top 76%"), scrub: SCR } }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, .5);
+      quick(gsap.timeline({ scrollTrigger: trig(b, "top 100%", "bottom 80%") }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, PH));
     });
     /* the wipe from black to paper */
     var introSec = $(".intro");
@@ -234,19 +239,37 @@
        travelled; a thumb is carried through them a little faster than a wheel, and there is no route
        on a phone, so no extra hold at the end */
     if (tlSec && tlOl && tlPin) {
-      var tlPhone = window.matchMedia("(max-width: 899px)").matches;
-      /* one hold: the cards slide across, then the page stays put a little longer while the route
-         drops down the right of them and runs back beneath them to the left */
+      var tlPhone = !fine || window.matchMedia("(max-width: 899px)").matches, tlTrack = $("#tlTrack") || tlPin.parentElement;
       var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };
-      window.__tlHold = tlPhone ? 0 : 720;
-      var tlRate = tlPhone ? 1.5 : 1;
-      var cardsX = function (st) { var total = tlDist() + window.__tlHold; return -Math.min(st.progress * total, tlDist()); };
-      window.__tlST = ScrollTrigger.create({
-        trigger: tlPin, start: tlPhone ? "top 14%" : "center center", end: function () { return "+=" + Math.round((tlDist() + window.__tlHold) / tlRate); },
-        pin: tlPin, pinSpacing: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
-        onUpdate: function (st) { gsap.set(tlOl, { x: cardsX(st) }); },
-        onRefresh: function (st) { gsap.set(tlOl, { x: cardsX(st) }); }
-      });
+      if (tlPhone && tlTrack) {
+        /* a phone: the browser holds the block itself (position: sticky, which never shakes), inside a
+           track tall enough for the cards' travel; the scroll through the track carries the cards, a
+           thumb taking them across a little faster than a wheel would */
+        html.classList.add("tl-phone");
+        var tlRate = 1.5, chromeEl = $(".chrome");
+        var stick = function () { return (chromeEl ? chromeEl.offsetHeight : 72) + 12; };
+        var sizeTrack = function () { tlPin.style.setProperty("--stick", stick() + "px"); tlTrack.style.height = Math.round(tlPin.offsetHeight + tlDist() / tlRate) + "px"; };
+        sizeTrack();
+        ScrollTrigger.addEventListener("refreshInit", sizeTrack);
+        var cardsX = function (st) { return -Math.min(st.progress * tlDist(), tlDist()); };
+        window.__tlST = ScrollTrigger.create({
+          trigger: tlTrack, start: function () { return "top " + stick() + "px"; }, end: function () { return "+=" + Math.round(tlDist() / tlRate); },
+          scrub: true, invalidateOnRefresh: true,
+          onUpdate: function (st) { gsap.set(tlOl, { x: cardsX(st) }); },
+          onRefresh: function (st) { gsap.set(tlOl, { x: cardsX(st) }); }
+        });
+      } else {
+        /* one hold: the cards slide across, then the page stays put a little longer while the route
+           drops down the right of them and runs back beneath them to the left */
+        window.__tlHold = 720;
+        var cardsXD = function (st) { var total = tlDist() + window.__tlHold; return -Math.min(st.progress * total, tlDist()); };
+        window.__tlST = ScrollTrigger.create({
+          trigger: tlPin, start: "center center", end: function () { return "+=" + (tlDist() + window.__tlHold); },
+          pin: tlPin, pinSpacing: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
+          onUpdate: function (st) { gsap.set(tlOl, { x: cardsXD(st) }); },
+          onRefresh: function (st) { gsap.set(tlOl, { x: cardsXD(st) }); }
+        });
+      }
     }
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
     gsap.timeline({ scrollTrigger: { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
