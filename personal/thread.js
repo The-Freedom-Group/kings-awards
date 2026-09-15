@@ -409,9 +409,13 @@
     while (je && je !== document.body) { jl += je.offsetLeft; je = je.offsetParent; }
     jy.stage.style.marginLeft = (-jl) + "px"; jy.stage.style.width = full + "px";
     jy.cards = $$(".jy-card", jy.strip); jy.n = jy.cards.length; if (!jy.n) return;
-    jy.el.classList.add("live"); jy.el.classList.toggle("touch", !vs.on);
+    /* a phone carries the moments the way a desktop does: the stage stays put under the header and the
+       scroll takes the strip across, the browser itself moving it where it can; a tablet keeps the swipe */
+    jy.carry = !vs.on && window.innerWidth <= 820;
+    jy.el.classList.add("live"); jy.el.classList.toggle("touch", !vs.on && !jy.carry); jy.el.classList.toggle("carry", jy.carry);
     if (!vs.on && jy.hint) jy.hint.textContent = "Swipe to travel the line";
-    var sl = vs.on ? 0 : jy.strip.scrollLeft;
+    if (jy.carry && jyPrev && jyNext && jyPrev.parentNode !== jy.stage) { jy.stage.appendChild(jyPrev); jy.stage.appendChild(jyNext); }
+    var sl = (vs.on || jy.carry) ? 0 : jy.strip.scrollLeft;
     jy.centres = jy.cards.map(function (c) { return c.offsetLeft + sl + c.offsetWidth / 2; });
     if (jy.track) {
       var W2 = Math.max(jy.strip.scrollWidth, jy.centres[jy.n - 1] + jy.stage.clientWidth), H2 = 96, Y = 38, ns = "http://www.w3.org/2000/svg";
@@ -437,13 +441,31 @@
         jy.yrs.push({ el: t2, i: i2 });
       });
     }
-    if (!vs.on && !jy.bound) {
+    if (!vs.on && !jy.carry && !jy.bound) {
       jy.bound = true;
       jy.strip.addEventListener("scroll", function () {
         var mx = jy.strip.scrollWidth - jy.strip.clientWidth; setJourney(mx > 0 ? jy.strip.scrollLeft / mx : 0, null, true);
       }, { passive: true });
     }
+    if (jy.carry) setupCarry();
     jy.live = true; var keep = jy.f; jy.f = -1; setJourney(keep >= 0 ? keep : 0, null, true);
+  }
+  /* the carry: the stage sticks below the header (CSS), the chapter is given the room the travel takes, and
+     the strip and its rail are moved by a scroll-driven animation between the two scroll positions worked
+     out here - or by the script each frame where the browser cannot drive one */
+  var jySda = !!(window.CSS && CSS.supports && CSS.supports("animation-timeline: scroll()"));
+  function setupCarry() {
+    var chromeEl = document.getElementById("chrome"), stick = (chromeEl ? chromeEl.offsetHeight : 78) + 8;
+    jy.stage.style.setProperty("--stick", stick + "px");
+    jy.dist = Math.max(0, jy.centres[jy.n - 1] - jy.centres[0]); jy.rate = 2; jy.travel = Math.round(jy.dist / jy.rate);
+    /* the room is a spacer inside the chapter block, not padding: a sticky stage may only travel within its
+       parent's content box, so padding would give it nothing to stick through */
+    if (!jy.room) { jy.room = document.createElement("div"); jy.room.className = "jy-room"; jy.room.setAttribute("aria-hidden", "true"); jy.el.appendChild(jy.room); }
+    jy.room.style.height = jy.travel + "px";
+    var top = 0, e2 = jy.stage; while (e2) { top += e2.offsetTop; e2 = e2.offsetParent; }
+    jy.startY = Math.max(0, Math.round(top - stick)); jy.endY = jy.startY + jy.travel;
+    jy.el.classList.toggle("sda", jySda);
+    if (jySda) [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.setProperty("--jy-dist", (-jy.dist) + "px"); el.style.animationRange = jy.startY + "px " + jy.endY + "px"; el.style.transform = ""; });
   }
   /* f is the strip's own fraction; hx, when given, is where the head sits on the track instead of over the
      current moment - the run-in and run-out either side of the travel */
@@ -456,13 +478,13 @@
     jy.f = f; jy.hx = hxKey;
     var t = f * (jy.n - 1), i = Math.round(t), lo = Math.floor(t), hi = Math.min(jy.n - 1, lo + 1), k = t - lo;
     var cx = jy.centres[lo] + (jy.centres[hi] - jy.centres[lo]) * k;
-    var shift = vs.on ? -(cx - jy.centres[0]) : -jy.strip.scrollLeft;
-    if (vs.on) jy.strip.style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0)";
-    if (jy.track) jy.track.style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0)";
+    var shift = (vs.on || jy.carry) ? -(cx - jy.centres[0]) : -jy.strip.scrollLeft, cssMoves = jy.carry && jySda;
+    if ((vs.on || jy.carry) && !cssMoves) jy.strip.style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0)";
+    if (jy.track && !cssMoves) jy.track.style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0)";
     jy.cards.forEach(function (c, idx) {
       c.classList.toggle("is-active", idx === i); c.classList.toggle("is-past", idx < i);
       if (!c.__img) c.__img = c.querySelector(".jy-pic img");
-      if (c.__img && Math.abs(idx - t) < 2.5) c.__img.style.setProperty("--px", ((jy.centres[idx] - cx) * 0.045).toFixed(1) + "px");
+      if (!jy.carry && c.__img && Math.abs(idx - t) < 2.5) c.__img.style.setProperty("--px", ((jy.centres[idx] - cx) * 0.045).toFixed(1) + "px");
     });
     if (jy.year) {
       var yr2 = (jy.cards[i].getAttribute("data-when") || "").replace(/\D/g, "").slice(-4);
@@ -489,6 +511,7 @@
   }
   function jumpJourney(f) {
     var h = holds.filter(function (x) { return x.id === "journey"; })[0];
+    if (jy.carry) { window.scrollTo({ top: jy.startY + f * jy.travel, left: 0, behavior: reduce ? "auto" : "smooth" }); return; }
     if (!vs.on || !h) { if (jy.strip) jy.strip.scrollTo({ left: f * (jy.strip.scrollWidth - jy.strip.clientWidth), behavior: "smooth" }); return; }
     if (h.phase === "hold") h.prog = toProg(h, f);
     else { jy.pending = f; vs.tgt = h.phase === "after" ? h.lock - 1 : h.lock; }
@@ -606,7 +629,9 @@
 
   function buildPath() {
     if (!explore || !thread || !svg) return false;
-    if (window.innerWidth <= 820) { thread.style.display = "none"; return false; }
+    /* on a phone the line is simpler: it comes out from under the hero and runs straight down the left
+       gutter, a knot at every chapter, to the button in the footer; no bends, no holds */
+    var phone = window.innerWidth <= 820, PX = 10;
     thread.style.display = "";
 
     var W = explore.offsetWidth, H = explore.offsetHeight;
@@ -629,7 +654,8 @@
        descending trunk. One stroke; the spurs hang from it. */
     var heroEl = document.getElementById("top");
     var heroPrefix = "", heroExit = null;
-    if (heroEl) {
+    if (heroEl && phone) pts.push({ x: PX, y: heroEl.offsetTop + heroEl.offsetHeight - 36, id: "top", el: heroEl, noKnot: true });
+    if (heroEl && !phone) {
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
       var yMain  = hT + hH * 0.81;           // the long horizontal
       var yTop   = hT + hH * 0.545;          // the lifted horizontal
@@ -693,6 +719,11 @@
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
+      if (phone) {
+        if (p.ride) return;                                   /* the charts are read, not ridden, on a phone */
+        pts.push({ x: PX, y: el.offsetTop + Math.min(140, el.offsetHeight * 0.12), id: p.id, el: el, noKnot: !!p.noKnot });
+        return;
+      }
       if (p.core) {
         /* the line joins the inner orbit at its left-hand point, laps it once, carries on round to the
            bottom and leaves from there; the whole ring is traced in the map's own geometry */
@@ -1395,7 +1426,7 @@
       jy.el.classList.toggle("joined", onRail);
       thread.classList.toggle("onrail", onRail);
     }
-    if (mapEl) {
+    if (mapEl && mapHold) {
       /* the system lights up as the line laps it - the planet, ring A's line, its planets, ring B, ring C -
          and what has lit stays lit, on down the rest of the page. Only winding the lap back, scrolling up
          through it, puts the lights out again, in the order they came on. */
@@ -1524,7 +1555,7 @@
     sceneRange = Math.max(1, scene.offsetHeight - window.innerHeight);
   }
   function runScene(y) {
-    if (!scene || reduce || window.innerWidth <= 820) return;
+    if (!scene || reduce) return;
     var p = clamp((y - sceneTop) / sceneRange, 0, 1);
     var idx = Math.min(phrases.length - 1, Math.floor(p * phrases.length));
     var local = p * phrases.length - idx;
@@ -1696,6 +1727,7 @@
       }
 
       if (exploring) { drawThread(y); runScene(y); }
+      if (jy.carry && jy.live) setJourney(clamp((y - jy.startY) / Math.max(1, jy.travel), 0, 1), null, false, null);
     }
     orbitStep(performance.now());
     requestAnimationFrame(frame);

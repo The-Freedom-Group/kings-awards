@@ -149,7 +149,7 @@ body.dark-chrome .mono-mark{color:var(--pale)}
 body.dark-chrome .now{color:var(--pale-3)}
 body[data-view="record"] .now{display:none}
 @media(min-width:1000px) and (max-width:1699px){.now{display:flex}}
-@media(max-width:1000px){.chrome nav{display:none}.chrome .burger{margin-left:auto}}
+@media(max-width:1000px){.chrome nav{display:none}.chrome .burger{margin-left:auto}.chrome{background:var(--porcelain);backdrop-filter:none}body.dark-chrome .chrome{background:var(--carbon)}}
 .mode{display:flex;align-items:center;border:1px solid var(--rule);border-radius:100px;padding:3px;
   flex:0 0 auto;background:rgba(255,255,255,.4)}
 body.dark-chrome .mode{border-color:var(--rule-d);background:rgba(255,255,255,.05)}
@@ -288,7 +288,7 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
   border-radius:50%;background:var(--pink)}
 .thread.landed .halo{opacity:.85;animation:spin 12s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:820px){.thread{display:none}}
+@media(max-width:820px){.thread .knot{width:8px;height:8px;margin:-4px 0 0 -4px}.scene .stick{z-index:4}}
 
 /* ── moving background: orbits with travelling dots, a drifting grid ── */
 .orbits{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -338,7 +338,9 @@ footer .wrap{position:relative;z-index:4}
   mask-image:radial-gradient(ellipse 50% 50% at 50% 46%,#000 22%,rgba(0,0,0,.45) 58%,transparent 98%)}
 @media(max-width:820px){
   .hero-shot{position:relative;right:auto;bottom:auto;width:88%;margin:10px -6% -8% auto}
-  .hero-type h1{font-size:clamp(54px,17vw,120px)}}
+  .hero-type h1{font-size:clamp(54px,17vw,120px)}
+  .hero-sub{margin-top:26px}.hero-sub .fob{font-size:clamp(18px,5.4vw,24px)}.hero-sub .fob-sub{margin-top:12px;line-height:1.7}
+  .hero-acts{display:grid;justify-items:start;gap:16px;margin-top:30px}.hero-acts .follow{margin-top:0}}
 .hero-sub{position:relative;z-index:4;margin-top:clamp(18px,3vw,34px);max-width:64ch}
 .hero-sub p{margin:0;font-size:clamp(13px,1.35vw,15.5px);letter-spacing:.13em;text-transform:uppercase;
   font-weight:500;line-height:1.75}
@@ -449,7 +451,8 @@ body.ready .hl-node{opacity:1}
 .scene .cnt{margin-top:clamp(30px,5vh,48px);font-size:11px;letter-spacing:.22em;
   text-transform:uppercase;font-weight:500;color:var(--pale-3)}
 .scene .cnt b{color:var(--pink);font-weight:600}
-@media(max-width:820px),(prefers-reduced-motion:reduce){
+@media(max-width:820px){.scene{height:300vh}.scene .stick{height:100svh}.scene .ph h3{font-size:clamp(40px,11vw,110px)}.scene .ph p{font-size:15px;max-width:34ch}.scene .rail3{width:min(320px,80vw)}}
+@media(prefers-reduced-motion:reduce){
   .scene{height:auto;padding:clamp(70px,12vw,130px) 0}
   .scene .stick{position:static;height:auto;overflow:visible}
   .scene .phs{min-height:0;min-width:0;display:grid;gap:clamp(18px,4vw,34px)}
@@ -1387,19 +1390,31 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-track .jt-yr.on{fill:var(--pink)}
 .jy-track .jt-yr:hover{fill:var(--pale)}
 @media(max-width:700px){.journey{--cw:86vw}.jy-stage{height:auto;min-height:0;padding-bottom:96px}.jy-strip{height:auto;padding-top:18px;padding-bottom:22px}.jy-card{grid-template-columns:1fr}.jy-year{top:36%}.jy-hint{display:none}}
+/* a phone carries the moments: the stage stays put under the header while the chapter's extra room scrolls by */
+@media(max-width:820px){#c01.ch{overflow:clip}}
+.journey.carry .jy-stage{position:sticky;top:var(--stick,86px)}
+.journey.carry .jy-strip{overflow:visible;scroll-snap-type:none}
+.journey.carry .jy-btn{position:absolute;top:calc(34px + 27vw);z-index:6;background:rgba(16,16,16,.72);border-color:rgba(255,255,255,.35);color:#fff;backdrop-filter:blur(4px)}
+.journey.carry #jyPrev{left:8px}.journey.carry #jyNext{right:8px}
+@supports (animation-timeline: scroll()){
+  .journey.carry.sda .jy-strip,.journey.carry.sda .jy-track{animation:jySlide linear both;animation-timeline:scroll(root block);animation-range:0px 1px}
+}
+@keyframes jySlide{from{transform:translateX(0)}to{transform:translateX(var(--jy-dist,0px))}}
 @media(prefers-reduced-motion:reduce){.jy-card,.jy-when,.jy-title,.jy-copy p,.jy-pic img{transition:none}.jy-track .jt-pulse{animation:none}}
 /* ── the facts bar on small screens: text wraps below 1180, two by two below 900, one full-width row each on phones ── */
 @media(max-width:1180px){.bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b,.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:normal}}
 .bar{overflow-x:clip}
 @media(max-width:900px){.bar .wrap{grid-template-columns:1fr 1fr}.bar>.wrap>div:nth-child(3){border-left:0}.bar>.wrap>div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}}
-@media(max-width:600px){.bar .wrap{grid-template-columns:1fr;padding-inline:16px}
-  .bar>.wrap>div{border-left:0;border-top:0;justify-content:flex-start;padding:14px 6px;min-height:0;gap:16px}
-  .bar>.wrap>div+div{border-top:1px solid rgba(255,255,255,.14)}
-  .bar .b1 img.men{height:48px;width:48px}.bar .b2 img{height:30px}.bar .b3 .lg-big{font-size:30px}.lg-ebay.xl{font-size:32px}
-  .bar .bw>b{font-size:15px}.bar em{font-size:10.5px}}
-/* on a phone each fact is centred as a block: marks right-aligned in one column, words in a fixed column beside them */
-@media(max-width:600px){.bar>.wrap>div{display:grid;grid-template-columns:112px minmax(0,236px);justify-content:center;align-items:center;column-gap:14px;padding-inline:0}
-  .bar>.wrap>div>img,.bar>.wrap>div>.lg-big,.bar>.wrap>div>.lg-ebay{justify-self:end}}
+/* on a phone the four facts sit two and two, each a centred block with its mark above fewer words */
+.bar em .brief{display:none}
+@media(max-width:600px){.bar .wrap{grid-template-columns:1fr 1fr;padding-inline:12px}
+  .bar>.wrap>div{display:grid;grid-template-columns:1fr;justify-items:center;align-content:start;text-align:center;gap:12px;padding:20px 10px 18px;min-height:0;border:0}
+  .bar>.wrap>div:nth-child(n+3){border-top:1px solid rgba(255,255,255,.14)}
+  .bar>.wrap>div:nth-child(even){border-left:1px solid rgba(255,255,255,.14)}
+  .bar .bw{justify-items:center;gap:5px}
+  .bar .b1 img.men{height:46px;width:46px}.bar .b2 img{height:28px}.bar .b3 .lg-big{font-size:30px}.lg-ebay.xl{font-size:30px}
+  .bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{white-space:normal;font-size:14px;line-height:1.1}.bar em{font-size:10.5px}
+  .bar em .full{display:none}.bar em .brief{display:inline}}
 /* ── on a phone the system shows too, above the list: squared up, smaller marks and words, the planets still turning ── */
 @media(max-width:760px){.grp{display:grid!important;grid-template-columns:1fr;gap:22px}
   .map{min-height:0;aspect-ratio:1/1.08}
@@ -1523,8 +1538,8 @@ a.tl-link{color:var(--pink);font-weight:500}
 
 <div class="bar" aria-label="Four snapshot facts">
   <div class="wrap">
-    <div class="b1"><img class="men" src="../assets/men-mono.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em>£150,000 Salboy competition&nbsp;· Runner&#8209;up</em></span></div>
-    <div class="b3"><span class="lg-big" aria-hidden="true">500,000+</span><span class="bw"><small class="dt">2019 – 2026</small><b>Products sold</b><em>No.1 fire extinguishers on eBay&nbsp;&amp; Temu</em></span></div>
+    <div class="b1"><img class="men" src="../assets/men-mono.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em><span class="full">£150,000 Salboy competition&nbsp;· Runner&#8209;up</span><span class="brief">Salboy competition · Runner-up</span></em></span></div>
+    <div class="b3"><span class="lg-big" aria-hidden="true">500,000+</span><span class="bw"><small class="dt">2019 – 2026</small><b>Products sold</b><em><span class="full">No.1 fire extinguishers on eBay&nbsp;&amp; Temu</span><span class="brief">No.1 on eBay &amp; Temu</span></em></span></div>
     <div class="b2"><img src="../assets/myta-mono.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
     <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>April 2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
   </div>

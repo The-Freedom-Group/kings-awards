@@ -281,11 +281,13 @@
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
     /* on a phone the page ends where the footer ends, so a reveal scrubbed to the footer's bottom
        never finishes and the footer stays dark: there, the call and the footer play once as they arrive */
-    quick(gsap.timeline({ scrollTrigger: early ? { trigger: ".entrance", start: "top 88%", once: true } : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
-      .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
-      .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, early ? .4 : 1.2));
-    quick(gsap.timeline({ scrollTrigger: early ? { trigger: "#footer", start: "top 92%", once: true } : { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
-      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, early ? 0 : 2));
+    quick(gsap.timeline({ scrollTrigger: early ? { trigger: ".entrance", start: "top 96%", once: true } : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
+      .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: early ? .04 : .1 }, 0)
+      .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, early ? .3 : 1.2));
+    /* the footer is there the moment its top edge shows: one quick rise, hardly staggered */
+    var ftl = gsap.timeline({ scrollTrigger: early ? { trigger: "#footer", start: "top 100%", once: true } : { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
+      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: early ? .03 : .1, duration: early ? .35 : .5 }, early ? 0 : 2);
+    if (early) ftl.timeScale(1.6);
 
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
