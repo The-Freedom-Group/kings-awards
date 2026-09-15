@@ -133,9 +133,14 @@ def build(name, cfg):
     eng_root, eng_ext = os.path.splitext(cfg["engine"])
     eng_name = "%s.%s%s" % (eng_root, hashlib.sha1(js_min.encode("utf-8")).hexdigest()[:8], eng_ext)
     html = html.replace('src="%s"' % cfg["engine"], 'src="%s" defer' % eng_name)
+    # the page carries the stamp of its build, and build.txt beside it says which build is live: a page
+    # left open in a tab compares the two when it is shown again and reloads itself if it is stale
+    build_id = hashlib.sha1((js_min + html).encode("utf-8")).hexdigest()[:10]
+    html = html.replace("</head>", '<meta name="build" content="%s">\n</head>' % build_id, 1)
     html = minify_html(html)
     open(os.path.join(pub, "index.html"), "w", encoding="utf-8").write(html)
     open(os.path.join(pub, eng_name), "w", encoding="utf-8").write(js_min)
+    open(os.path.join(pub, "build.txt"), "w", encoding="utf-8").write(build_id + "\n")
     for extra in cfg["extra"]:
         shutil.copytree(os.path.join(src, extra), os.path.join(pub, extra))
     # the data files point at the stamped asset names too
@@ -148,6 +153,7 @@ def build(name, cfg):
         "  X-Frame-Options: SAMEORIGIN\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n"
         "/index.html\n  Cache-Control: public, max-age=0, must-revalidate\n"
         "/\n  Cache-Control: public, max-age=0, must-revalidate\n"
+        "/build.txt\n  Cache-Control: no-store\n"
         "/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n"
         "/vendor/*\n  Cache-Control: public, max-age=604800\n"
         "/data/*\n  Cache-Control: public, max-age=3600\n"

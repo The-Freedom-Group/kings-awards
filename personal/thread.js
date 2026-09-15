@@ -2090,3 +2090,23 @@
     else if (ev.key === "ArrowLeft") { show(at - 1); ev.preventDefault(); }
   }, true);
 })();
+
+/* a page left open in a tab is checked against the build it came from whenever it is shown again - a
+   returned-to tab, a restored page, a window brought forward - and a newer build reloads it, so nobody
+   reviews a stale page. Only the built sites carry the stamp; a local copy has none and does nothing. */
+(function () {
+  var meta = document.querySelector('meta[name="build"]'); if (!meta || !window.fetch) return;
+  var mine = meta.getAttribute("content"), busy = false, last = -60000;
+  function check() {
+    if (busy || document.visibilityState !== "visible" || performance.now() - last < 60000) return;
+    busy = true; last = performance.now();
+    fetch("build.txt?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.text() : mine; }).then(function (t) {
+      busy = false; t = (t || "").trim();
+      var seen = null; try { seen = sessionStorage.getItem("build-reloaded"); } catch (e) {}
+      if (t && t !== mine && seen !== t) { try { sessionStorage.setItem("build-reloaded", t); } catch (e) {} location.reload(); }
+    }).catch(function () { busy = false; });
+  }
+  document.addEventListener("visibilitychange", check);
+  window.addEventListener("pageshow", function (e) { if (e.persisted) check(); });
+  window.addEventListener("focus", check);
+})();
