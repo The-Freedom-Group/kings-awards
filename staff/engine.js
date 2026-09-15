@@ -29,6 +29,10 @@
     gsap.defaults({ duration: 1 });
   }
   var animate = hasGsap && !reduce;
+  /* on a phone nothing waits: every scroll-driven reveal is complete once its element is a little way
+     onto the screen, and the scrub lags less, so the words are there when the eye reaches them */
+  var early = !fine || window.matchMedia("(max-width: 899px)").matches;
+  var E = function (desk, phone) { return early ? phone : desk; }, SCR = early ? 0.35 : 1;
 
   /* ── smooth scrolling ─────────────────────────────────────── */
   var smoother = null;
@@ -97,7 +101,7 @@
   var watched = $$(".rv, .flip");
   if (!("IntersectionObserver" in window) || reduce) watched.forEach(function (e) { e.classList.add("in"); });
   else {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: early ? "0px 0px 6% 0px" : "0px 0px -8% 0px", threshold: early ? 0 : 0.05 });
     watched.forEach(function (e) { io.observe(e); });
   }
 
@@ -179,42 +183,42 @@
 
     /* separators with text: 25% → 100% */
     $$(".sep.with-text").forEach(function (el) {
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 30%", scrub: 1 } })
+      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 30%", "top 55%"), scrub: SCR } })
         .fromTo(el, { width: "25%" }, { width: "100%", duration: 2 }, 1).fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 }, 1);
     });
     /* headings, a word at a time */
     $$("h2.fi, p.fi").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 70%", scrub: 1 } })
+      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 70%", "top 74%"), scrub: SCR } })
         .fromTo(st.words, { autoAlpha: 0, y: "0.5em" }, { autoAlpha: 1, y: "0em", stagger: .1 }, 1);
     });
     $$(".fu-1").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 70%", scrub: 1 } })
+      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 70%", "top 74%"), scrub: SCR } })
         .fromTo(st.words, { rotation: 3, autoAlpha: 0, y: "2rem" }, { rotation: 0, autoAlpha: 1, y: "0rem", stagger: .15, duration: 1.5 }, 1);
     });
     $$("h2.sl").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 70%", scrub: 1 } })
+      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 70%", "top 74%"), scrub: SCR } })
         .fromTo(st.words, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, 1);
     });
     $$("h2.wd").forEach(function (el) {
       var st = new SplitText(el, { type: "words" });
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 95%", end: "bottom 60%", scrub: 1 } })
+      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 95%", end: E("bottom 60%", "top 72%"), scrub: SCR } })
         .fromTo(st.words, { autoAlpha: 0, y: "0.6em", rotation: 2 }, { autoAlpha: 1, y: "0em", rotation: 0, stagger: .12 }, 0);
     });
     $$(".test.sl").forEach(function (el) {
-      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: "bottom 75%", scrub: 1 } })
+      gsap.timeline({ scrollTrigger: { trigger: el, start: "top 100%", end: E("bottom 75%", "top 78%"), scrub: SCR } })
         .fromTo(el, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em" }, 1);
     });
     /* the tiles */
     $$(".tile").forEach(function (t) {
-      gsap.timeline({ scrollTrigger: { trigger: t, start: "top 100%", end: "top 55%", scrub: 1 } }).fromTo(t, { y: "6vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0);
+      gsap.timeline({ scrollTrigger: { trigger: t, start: "top 100%", end: E("top 55%", "top 80%"), scrub: SCR } }).fromTo(t, { y: "6vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0);
       var big = $(".big", t); if (big) { gsap.set(big, { xPercent: -50 }); gsap.fromTo(big, { yPercent: -66 }, { yPercent: -36, ease: "none", scrollTrigger: { trigger: t, start: "top bottom", end: "bottom top", scrub: true } }); }
     });
     /* the inspection tag turns in */
     $$(".blur-box").forEach(function (b) {
-      gsap.timeline({ scrollTrigger: { trigger: b, start: "top 100%", end: "bottom 80%", scrub: 1 } }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, .5);
+      gsap.timeline({ scrollTrigger: { trigger: b, start: "top 100%", end: E("bottom 80%", "top 76%"), scrub: SCR } }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, .5);
     });
     /* the wipe from black to paper */
     var introSec = $(".intro");
@@ -226,14 +230,19 @@
     /* the timeline: when its row of cards reaches the middle of the screen the page holds still and
        further scrolling moves the cards sideways; once the last card is in, the page carries on */
     var tlSec = $("#timeline"), tlOl = $("#timeline ol.spine.journey"), tlPin = $("#tlPin");
-    if (tlSec && tlOl && tlPin && window.matchMedia("(min-width: 900px)").matches) {
+    /* on a phone as well as a desktop: the page is not allowed past the timeline until the cards have
+       travelled; a thumb is carried through them a little faster than a wheel, and there is no route
+       on a phone, so no extra hold at the end */
+    if (tlSec && tlOl && tlPin) {
+      var tlPhone = window.matchMedia("(max-width: 899px)").matches;
       /* one hold: the cards slide across, then the page stays put a little longer while the route
          drops down the right of them and runs back beneath them to the left */
       var tlDist = function () { return Math.max(0, tlOl.scrollWidth - tlOl.clientWidth); };
-      window.__tlHold = 720;
+      window.__tlHold = tlPhone ? 0 : 720;
+      var tlRate = tlPhone ? 1.5 : 1;
       var cardsX = function (st) { var total = tlDist() + window.__tlHold; return -Math.min(st.progress * total, tlDist()); };
       window.__tlST = ScrollTrigger.create({
-        trigger: tlPin, start: "center center", end: function () { return "+=" + (tlDist() + window.__tlHold); },
+        trigger: tlPin, start: tlPhone ? "top 14%" : "center center", end: function () { return "+=" + Math.round((tlDist() + window.__tlHold) / tlRate); },
         pin: tlPin, pinSpacing: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
         onUpdate: function (st) { gsap.set(tlOl, { x: cardsX(st) }); },
         onRefresh: function (st) { gsap.set(tlOl, { x: cardsX(st) }); }

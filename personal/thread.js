@@ -1786,23 +1786,25 @@
 
   /* ── the group map ────────────────────────────────────────── */
   var DATA = {
-    group:   { n: "Freedom Group", t: "Group strategy and brand architecture.",
-               b: "The operating model the trading company runs on today, and the shape the next companies would take: brands and IP held in the company's name, direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.freedomgroup.uk" },
-    global:  { n: "Freedom Fire &amp; Safety Ltd", t: "Trading since 2019. Incorporated 27 August 2021.",
-               b: "The trading company. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay, Temu and Amazon, with Shopify and OnBuy in preparation; servicing and contracted site work nationwide. Trades online as Freedom Global.",
+    /* the companies as the group sets them out at freedomgroup.uk: one holding company, one active
+       operation, two planned, four for later */
+    group:   { n: "Freedom Group Enterprise Ltd", t: "The holding company. Brands · IP · Strategy · Capital.",
+               b: "Owns the group's brands, trademarks and intellectual property, sets the strategy and holds the capital. The operating model the trading company runs on today, and the shape the next companies take: direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.freedomgroup.uk" },
+    global:  { n: "Freedom Global Ltd", t: "Active. Consumer ecommerce · D2C. Currently trading as Freedom Fire & Safety Ltd.",
+               b: "The group's established commercial engine, scaling owned brands across marketplaces, ecommerce channels and specialist online storefronts. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay, Temu and Amazon, with Shopify and OnBuy in preparation; servicing and contracted site work nationwide. Incorporated as Freedom Fire & Safety Ltd on 27 August 2021.",
                u: "https://www.freedom-fire.co.uk" },
-    fac:     { n: "Freedom Facilities", t: "Proposed, 24 to 36 months.",
-               b: "A separate operating company for compliance, servicing and facilities on recurring contracts, taking the existing servicing work out of the trading company once it justifies its own management and accounts." },
-    dist:    { n: "Freedom Distribution", t: "Proposed, 24 to 36 months.",
-               b: "A separate operating company for trade and B2B supply of the owned brands to retailers, wholesalers and distributors. Depends on the brand portfolio and direct sourcing already in place." },
-    form:    { n: "Property", t: "Long-term option. No date.",
-               b: "A commercial property platform for the group's own premises, kept open as an option in the group model." },
-    freight: { n: "Freight", t: "Long-term option. No date.",
-               b: "A logistics arm for imports and freight control. The in-house consignment tracker is the only part of this that exists today." },
-    fly:     { n: "Aerial services", t: "Long-term option. No date.",
-               b: "Surveying and inspection. An option in the group model, not a plan." },
-    fuel:    { n: "Forecourts", t: "Long-term option. No date.",
-               b: "Forecourt and convenience retail. An option in the group model, not a plan." }
+    fac:     { n: "Freedom Facilities Ltd", t: "Planned, 24 to 36 months. Compliance · Servicing · Facilities.",
+               b: "A recurring revenue operation delivering fire safety servicing, installation, compliance and facilities support, taking the existing servicing work out of the trading company once it justifies its own management and accounts." },
+    dist:    { n: "Freedom Distribution Ltd", t: "Planned, 24 to 36 months. Trade distribution · B2B.",
+               b: "A wholesale operation supplying the group's owned brands to national retailers, trade partners and commercial distributors. Depends on the brand portfolio and direct sourcing already in place." },
+    form:    { n: "Freedom Form Ltd", t: "Future, 2029. Property · Development · Design.",
+               b: "A future commercial property platform for the group's premises, acquisitions and growth." },
+    freight: { n: "Freedom Freight Ltd", t: "Future, 2029. Freight · Imports · Logistics.",
+               b: "A future logistics arm for imports, freight control and supply chain efficiency. The in-house consignment tracker is the only part of this that exists today." },
+    fly:     { n: "Freedom Fly Ltd", t: "Future, 2030 and beyond. Drone tech · Aerial services.",
+               b: "A future specialist business focused on surveying, inspection and aerial visual services." },
+    fuel:    { n: "Freedom Fuel Ltd", t: "Future, 2030 and beyond. Forecourts · Energy · Retail.",
+               b: "A long-term ambition to develop or acquire petrol stations, forecourts and convenience-retail locations." }
   };
   var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
   $$(".node").forEach(function (nd) {

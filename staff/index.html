@@ -866,8 +866,9 @@ body.cur-label .cur-ring::before{border-radius:50%;transform:none;background:var
 .tl-rail{position:relative;margin-top:clamp(28px,4vw,48px);padding-bottom:8px}
 .tl-pin{position:relative;will-change:transform;transition:none!important}
 /* while the page can pin it, the row is moved as one piece rather than scrolled, so nothing snaps or fights the scroll */
-@media(min-width:900px){html.js.has-gsap .tl-pin ol.spine.journey{overflow:visible;scroll-snap-type:none;scrollbar-width:none;will-change:transform}
-  html.js.has-gsap .tl-pin ol.spine.journey li{scroll-snap-align:none}}
+html.js.has-gsap .tl-pin ol.spine.journey{overflow:visible;scroll-snap-type:none;scrollbar-width:none;will-change:transform}
+html.js.has-gsap .tl-pin ol.spine.journey li{scroll-snap-align:none}
+html.js.has-gsap .tl-rail{overflow-x:clip}
 ol.spine.journey{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;padding:64px 0 22px;margin:0;border-top:0;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent;-webkit-overflow-scrolling:touch}
 ol.spine.journey::before{display:none}
 ol.spine.journey li{flex:0 0 clamp(250px,22vw,300px);display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;gap:12px;padding:0 24px 0 0;margin:0 22px 0 0;border-bottom:0;scroll-snap-align:start;position:relative;align-items:start}
