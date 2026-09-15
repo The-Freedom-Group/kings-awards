@@ -226,17 +226,6 @@
     if (rocket) { rocketA += ROCKET_SPEED * dt; if (rocketA > 360) rocketA -= 360; placeRocket(); }
   }
 
-  /* without the thread to lap it - a phone - the system lights itself as it comes into view, in the same order,
-     and stays lit */
-  if (mapEl && window.innerWidth <= 820 && "IntersectionObserver" in window) {
-    var litOnce = false;
-    new IntersectionObserver(function (es) {
-      if (litOnce || !es[0].isIntersecting) return;
-      litOnce = true;
-      ["lap-core", "lap-a-ring", "lap-a", "lap-b-ring", "lap-b", "lap-c-ring", "lap-c"].forEach(function (c, i) { setTimeout(function () { mapEl.classList.add(c); }, 600 + i * 520); });
-    }, { threshold: 0.35 }).observe(mapEl);
-  }
-
   /* ── hero branch lines ────────────────────────────────────── */
   $$(".draw").forEach(function (p) {
     var L = 2000; try { L = p.getTotalLength(); } catch (e) {}
@@ -415,6 +404,7 @@
     jy.el.classList.add("live"); jy.el.classList.toggle("touch", !vs.on && !jy.carry); jy.el.classList.toggle("carry", jy.carry);
     if (!vs.on && jy.hint) jy.hint.textContent = "Swipe to travel the line";
     if (jy.carry && jyPrev && jyNext && jyPrev.parentNode !== jy.stage) { jy.stage.appendChild(jyPrev); jy.stage.appendChild(jyNext); }
+    if (jy.carry) $$(".jy-pic img", jy.strip).forEach(function (im) { im.loading = "eager"; });   /* the pictures are there before the strip carries them in */
     var sl = (vs.on || jy.carry) ? 0 : jy.strip.scrollLeft;
     jy.centres = jy.cards.map(function (c) { return c.offsetLeft + sl + c.offsetWidth / 2; });
     if (jy.track) {
@@ -628,6 +618,9 @@
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [], corePt = null;
   var endPt = null, endFrac = 1, endNote = null;
+  /* on a phone the stretches a desktop holds on are spans of the page instead: the line reaches the planet
+     or the globe and the rings light, or the day turns, as the reader scrolls on through the span */
+  var mapSpan = null, globeSpan = null;
 
   function buildPath() {
     if (!explore || !thread || !svg) return false;
@@ -648,7 +641,7 @@
     var CX = W * 0.5;
     var SIDE = { L: LX, R: RX, C: CX };
 
-    pts = []; orbitBack = null;
+    pts = []; orbitBack = null; mapSpan = globeSpan = null;
 
     /* ── the hero bend, to the reference proportions ──────────
        Runs in from the left, lifts over the portrait, turns down the
@@ -957,9 +950,10 @@
             /* the globe has the width of the screen to itself: the line comes down the right and drops
                straight onto the ring's side, wraps it, and carries on down beneath it */
             pts.push({ x: gIn.x, y: go.y - 70, id: "globeDrop", el: el, noKnot: true, cpIn: { x: gIn.x, y: go.y - 170 } });
+            var gOutP = go.y + gl.offsetHeight + 70;
             pts.push({ x: gIn.x, y: gIn.y, id: p.id, el: el, noKnot: true,
-                       loop: { id: "globe", pts: ring, end: gIn, yA: gcy, yB: gcy, lock: gLock, px: 2000, cpOut: { x: gIn.x, y: gcy + (go.y + gl.offsetHeight + 40 - gcy) * 0.5 } } });
-            pts.push({ x: gIn.x, y: go.y + gl.offsetHeight + 40, id: "globeOut", el: el, noKnot: true, cpIn: { x: gIn.x, y: go.y + gl.offsetHeight - 20 } });
+                       loop: { id: "globe", pts: ring, end: gIn, yA: gcy, yB: gcy, lock: gLock, px: 2000, cpOut: { x: gIn.x, y: gcy + (gOutP - gcy) * 0.5 } } });
+            pts.push({ x: SIDE.R, y: gOutP, id: "globeOut", el: el, noKnot: true, cpIn: { x: SIDE.R, y: gOutP - (gOutP - gcy) * 0.5 } });
             return;
           }
           pts.push({ x: SIDE.R, y: yBand - rb, id: "globeBand", el: el, noKnot: true });
@@ -985,7 +979,7 @@
           return;
         }
       }
-      pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y,
+      pts.push({ x: SIDE[phone && p.id === "ones" ? "L" : p.side], y: el.offsetTop + el.offsetHeight * p.y,
                  id: p.id, el: el, noKnot: !!p.noKnot });
     });
     if (pts.length < 2) return false;
@@ -1144,7 +1138,11 @@
         paceExit(samples, lOut, lp.meta.lock + window.innerHeight * 0.62, glide);
       }
       var fa = lA / totalLen, fb = lOut / totalLen;
-      if (phone) return;
+      if (phone) {
+        if (lp.meta.id === "map") mapSpan = { a: lp.meta.yA, b: lp.meta.yB };
+        if (lp.meta.id === "globe") globeSpan = { a: lp.meta.yA, b: lp.meta.yB };
+        return;
+      }
       if (lp.meta.id === "map") { loopA = fa; loopB = fb; hasHold = true; }
       if (lp.meta.id === "journey" && !vs.on) return;          /* on touch the strip scrolls itself */
       holdDefs.push({ id: lp.meta.id, lock: lp.meta.lock, a: fa, b: fb, px: lp.meta.px || 3400, r1: lp.meta.r1, r2: lp.meta.r2 });
@@ -1477,6 +1475,20 @@
       };
       aim(head, live, totalLen * p);
       if (head2) { var q2 = aim(head2, live2, ringLen * p2); head2.style.left = q2.x + "px"; head2.style.top = q2.y + "px"; }
+    }
+    if (mapSpan || globeSpan) {
+      var eye = y + window.innerHeight * 0.62, fm = -1, fg = -1;
+      if (mapSpan) fm = eye < mapSpan.a ? -1 : clamp((eye - mapSpan.a) / Math.max(1, mapSpan.b - mapSpan.a), 0, 1);      /* nothing lit before the line arrives */
+      if (globeSpan) fg = eye < globeSpan.a ? -1 : clamp((eye - globeSpan.a) / Math.max(1, globeSpan.b - globeSpan.a), 0, 1);
+      var lapM = fm > 0 && fm < 1, lapG = fg > 0 && fg < 1;
+      if (mapEl && mapSpan) {
+        mapEl.classList.toggle("lap", lapM); orbitBoostTarget = lapM ? 1 : 0;
+        [["lap-core", 0], ["lap-a-ring", 0.14], ["lap-a", 0.28], ["lap-b-ring", 0.44], ["lap-b", 0.58], ["lap-c-ring", 0.74], ["lap-c", 0.88]]
+          .forEach(function (st) { mapEl.classList.toggle(st[0], fm >= st[1]); });
+      }
+      thread.classList.toggle("lap", lapM || lapG);
+      if (orbitThread) orbitThread.classList.toggle("lap", lapG);
+      if (c06El && globeSpan) c06El.classList.toggle("day", fg <= 0);
     }
     for (var i = 0; i < knots.length; i++) {
       knots[i].classList.toggle("hit", p >= knotAt[i]);

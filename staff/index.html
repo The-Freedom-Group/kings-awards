@@ -701,6 +701,7 @@ body.card-open{overflow:hidden}
 .popover::before{content:"";position:absolute;left:var(--ax,20px);top:-8px;width:12px;height:12px;background:var(--white);border-left:2px solid var(--black);border-top:2px solid var(--black);transform:rotate(45deg)}
 .popover.above::before{top:auto;bottom:-8px;transform:rotate(225deg)}
 @media(prefers-reduced-motion:reduce){.popover,.more summary{transition:none}}
+@media(hover:none){.popover{transition:opacity .12s,transform .14s}}   /* on a touch screen the panel is simply there */
 
 /* ── touch: larger targets and legible labels on phones and tablets ── */
 @media(pointer:coarse){

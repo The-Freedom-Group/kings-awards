@@ -44,7 +44,7 @@
        stands a third of the way up the screen */
     st.words.forEach(function (w, i) { w.classList.add("sw"); var a = Math.min(14, i * 1.2); w.style.animationRange = "cover " + a.toFixed(1) + "% cover " + (24 + a).toFixed(1) + "%"; });
   };
-  var trig = function (el, start, end) { return early ? { trigger: el, start: "top 90%", once: true } : { trigger: el, start: start, end: end, scrub: 1 }; };
+  var trig = function (el, start, end) { return early ? { trigger: el, start: "top 100%", end: "top 66%", scrub: 0.2 } : { trigger: el, start: start, end: end, scrub: 1 }; };
   var P1 = early ? 0 : 1, PH = early ? 0 : .5;
   var quick = function (tl) { if (early) tl.timeScale(1.6); return tl; };
 
@@ -264,6 +264,7 @@
            track tall enough for the cards' travel; the scroll through the track carries the cards, a
            thumb taking them across a little faster than a wheel would */
         html.classList.add("tl-phone");
+        $$("img", tlOl).forEach(function (im) { im.loading = "eager"; });   /* the pictures are there before the cards slide in */
         /* where the browser can drive an animation from the scroll itself, the cards' travel is one: the
            compositor moves them in step with the finger, frame-perfect, with no script on the scroll path.
            The trigger only works out where the travel starts and ends. Elsewhere the script eases them. */
