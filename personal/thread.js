@@ -1857,7 +1857,12 @@
   var lastW = window.innerWidth;
   window.addEventListener("resize", function () {
     /* a phone's toolbar coming and going only changes the height: nothing the line depends on moved */
-    if (window.innerWidth <= 820 && window.innerWidth === lastW) return;
+    if (window.innerWidth <= 820 && window.innerWidth === lastW) {
+      /* the Safari engine can keep painting a scroll-driven strip where it was after a resize: the
+         animation is taken off and put back, and it picks up at the scroll */
+      if (jy.carry && jySda) [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.animationName = "none"; void el.offsetWidth; el.style.animationName = ""; });
+      return;
+    }
     lastW = window.innerWidth; rebuild();
   });
   window.addEventListener("load", rebuild);

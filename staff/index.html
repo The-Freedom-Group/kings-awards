@@ -793,6 +793,7 @@ ol.spine.journey li:not(.haspic) .what{grid-column:2 / -1}
 #gate .stencil.two{top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;padding:0 6vw;letter-spacing:0}
 .hero .cta .tlink.down i{display:inline-block;animation:nudgeDown 2.2s ease-in-out infinite}
 @keyframes nudgeDown{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.hero.away .cta .tlink.down i{animation-play-state:paused}   /* the arrow rests while the hero is off screen */
 .plate .badge img.pl{width:auto;height:100px;max-width:100%;margin:0 0 4px}
 .plate .badge img.jcp{border-radius:14px;height:72px}
 .photos img{filter:none}
@@ -993,6 +994,9 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
   .floor::before{display:block;left:-3px;right:auto;top:0;bottom:0;width:3px;height:auto;
     transform:scaleY(var(--lp,0));transform-origin:top}
 }
+/* a phone: the heaviest paint on the page made light (the tiles' grain blend, live filters and deep shadow) */
+@media(max-width:820px){.tile .grain{display:none}.tile .por{filter:none;opacity:.76}.tile{box-shadow:0 8px 22px rgba(0,0,0,.35)}
+  ol.spine.journey .pic{filter:none}}
 </style>
 <script>document.documentElement.className=document.documentElement.className.replace('no-js','')+' js';</script>
 </head>
@@ -1333,8 +1337,8 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
     <div class="cbhead"><span class="k">Unsolicited feedback · reproduced with permission</span><h3>A card from Josh's mum</h3>
       <p>Handwritten by Molly shortly after Josh started with the company. Nothing in it has been changed.</p></div>
     <div class="cbpages">
-      <figure><img src="../assets/docs/josh-card-front.webp" width="1152" height="1536" alt="The front of a thank-you card with hand-drawn flowers" loading="lazy" decoding="async"><figcaption>The front</figcaption></figure>
-      <figure><img src="../assets/docs/josh-card-inside.webp" width="1152" height="1536" alt="The inside of the card, handwritten by Molly, thanking Tom for the opportunity given to her son" loading="lazy" decoding="async"><figcaption>The inside</figcaption></figure>
+      <figure><img src="../assets/docs/josh-card-front.webp" width="1152" height="1536" alt="The front of a thank-you card with hand-drawn flowers" decoding="async"><figcaption>The front</figcaption></figure>
+      <figure><img src="../assets/docs/josh-card-inside.webp" width="1152" height="1536" alt="The inside of the card, handwritten by Molly, thanking Tom for the opportunity given to her son" decoding="async"><figcaption>The inside</figcaption></figure>
     </div>
     <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’ thanks to you Tom.”<cite>Molly, Josh's mother</cite></blockquote>
   </div>

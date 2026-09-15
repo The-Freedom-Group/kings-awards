@@ -283,11 +283,19 @@
         ScrollTrigger.addEventListener("refreshInit", sizeTrack);
         var cardsX = function (st) { return -Math.min(st.progress * tlDist(), tlDist()); };
         var setRange = function (st) {
-          /* the range as a share of the page's scroll: the plainest form, which every browser with
-             scroll-driven animations takes */
-          var maxS = Math.max(1, html.scrollHeight - window.innerHeight);
-          tlOl.style.setProperty("--tl-dist", (-tlDist()) + "px"); tlOl.style.animationRange = (st.start / maxS * 100).toFixed(4) + "% " + (st.end / maxS * 100).toFixed(4) + "%";
+          /* the range in scroll pixels: the start and end do not depend on the viewport's height, so a
+             phone's toolbar coming and going moves nothing */
+          tlOl.style.setProperty("--tl-dist", (-tlDist()) + "px"); tlOl.style.animationRange = Math.round(st.start) + "px " + Math.round(st.end) + "px";
         };
+        var resync = function () {
+          /* after a resize the Safari engine can keep painting the row where it was while the computed
+             transform moves on: the animation is taken off and put back, and it picks up at the scroll */
+          if (!sda || !window.__tlST) return;
+          tlOl.style.animationName = "none"; void tlOl.offsetWidth; tlOl.style.animationName = "";
+          setRange(window.__tlST);
+        };
+        window.addEventListener("resize", resync);
+        if (window.visualViewport) window.visualViewport.addEventListener("resize", resync);
         window.__tlST = ScrollTrigger.create({
           trigger: tlTrack, start: function () { return "top " + stick() + "px"; }, end: function () { return "+=" + Math.round(tlDist() / tlRate); },
           scrub: sda ? false : 0.3, invalidateOnRefresh: true,
@@ -328,6 +336,8 @@
     }
 
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+    var heroEl = $("#top");
+    if (heroEl && "IntersectionObserver" in window) new IntersectionObserver(function (en) { heroEl.classList.toggle("away", !en[0].isIntersecting); }).observe(heroEl);
     /* the page's height settles late on a phone (pictures, the timeline's room): every settle is a refresh */
     if ("ResizeObserver" in window) { var rfT = null; new ResizeObserver(function () { clearTimeout(rfT); rfT = setTimeout(function () { ScrollTrigger.refresh(); }, 180); }).observe(document.body); }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
