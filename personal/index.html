@@ -149,7 +149,12 @@ body.dark-chrome .mono-mark{color:var(--pale)}
 body.dark-chrome .now{color:var(--pale-3)}
 body[data-view="record"] .now{display:none}
 @media(min-width:1000px) and (max-width:1699px){.now{display:flex}}
-@media(max-width:1000px){.chrome nav{display:none}.chrome .burger{margin-left:auto}.chrome{background:var(--porcelain);backdrop-filter:none}body.dark-chrome .chrome{background:var(--carbon)}}
+@media(max-width:1000px){.chrome nav{display:none}.chrome .burger{margin-left:auto}
+  /* the banner reaches the very top of the screen: the page is drawn under the status bar (viewport-fit=cover),
+     so the header carries that strip as padding and its own colour fills it */
+  .chrome{background:var(--porcelain);backdrop-filter:none;padding-top:env(safe-area-inset-top,0px)}
+  body.dark-chrome .chrome{background:var(--carbon)}
+  .prog{top:env(safe-area-inset-top,0px)}}
 .mode{display:flex;align-items:center;border:1px solid var(--rule);border-radius:100px;padding:3px;
   flex:0 0 auto;background:rgba(255,255,255,.4)}
 body.dark-chrome .mode{border-color:var(--rule-d);background:rgba(255,255,255,.05)}
