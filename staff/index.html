@@ -873,7 +873,13 @@ html.js.has-gsap .tl-pin ol.spine.journey li{scroll-snap-align:none}
 html.js.has-gsap .tl-rail{overflow-x:clip}
 /* on a phone the block is held by the browser itself, inside a track tall enough for the cards' travel */
 .tl-track{position:relative}
-html.tl-phone #timeline.ch{overflow:clip}   /* clips as before, but does not become the sticky block's container */
+html.tl-phone #timeline.ch{overflow:clip}
+/* the footer on a phone: each part fades up as it scrolls onto the screen, driven by the scroll itself */
+@supports (animation-timeline: view()){
+  html.ft-view .footer-item,html.ft-view footer h4,html.ft-view footer .ff{animation:ftRise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  html.ft-view .ft-grid>.footer-item:first-child{animation:none}
+}
+@keyframes ftRise{from{opacity:0;transform:translateY(.8rem)}to{opacity:1;transform:none}}   /* clips as before, but does not become the sticky block's container */
 html.tl-phone .tl-pin{position:sticky;top:var(--stick,84px);will-change:auto}
 /* the cards' travel, driven by the scroll itself where the browser can: the range is set by the script */
 @supports (animation-timeline: scroll()){

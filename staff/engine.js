@@ -290,15 +290,10 @@
       .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: early ? .04 : .1 }, 0)
       .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, early ? .3 : 1.2));
     if (early) {
-      /* on a phone the footer is up before it is reached: it rises as soon as it comes within a screen
-         and a half of the bottom, judged from the layout itself, so no cached position can hold it back */
-      var ftItems = $$(".footer-item, footer h4, footer .ff"), ftEl = $("#footer");
-      gsap.set(ftItems, { autoAlpha: 0, y: "1rem" });
-      var ftShow = function () { gsap.to(ftItems, { autoAlpha: 1, y: 0, rotationZ: 0, duration: .4, stagger: .03, overwrite: true }); };
-      if ("IntersectionObserver" in window && ftEl) {
-        var fio = new IntersectionObserver(function (es) { if (es.some(function (x) { return x.isIntersecting; })) { ftShow(); fio.disconnect(); } }, { rootMargin: "0px 0px 150% 0px", threshold: 0 });
-        fio.observe(ftEl);
-      } else ftShow();
+      /* on a phone the footer is never hidden by the script: it is plain content, and where the browser
+         can drive an animation from the scroll itself each part fades up as it comes onto the screen
+         (html.ft-view, in the stylesheet); elsewhere it is simply there */
+      html.classList.add("ft-view");
     } else {
       gsap.timeline({ scrollTrigger: { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
         .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2);
