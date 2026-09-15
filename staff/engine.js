@@ -33,9 +33,20 @@
      comes onto the screen, so the words are there when the eye reaches them. A desktop keeps the
      scrubbed reveals that move with the wheel. */
   var early = !fine || window.matchMedia("(max-width: 899px)").matches;
-  var trig = function (el, start, end) { return early ? { trigger: el, start: "top 92%", once: true } : { trigger: el, start: start, end: end, scrub: 1 }; };
+  /* where a phone's browser can drive an animation from the scroll itself, every reveal is one: the words
+     come in word by word as their heading rises through the bottom third of the screen, blocks rise as
+     they enter - seen, fluid, never late, and never waiting on a script (html.sv, in the stylesheet) */
+  var sv = early && !!(window.CSS && CSS.supports && CSS.supports("animation-timeline: view()"));
+  if (sv) html.classList.add("sv");
+  var svWords = function (el) {
+    var st = new SplitText(el, { type: "words" });
+    /* each word's share of the heading's rise: the first as it clears the bottom, the last as the heading
+       stands a third of the way up the screen */
+    st.words.forEach(function (w, i) { w.classList.add("sw"); var a = Math.min(14, i * 1.2); w.style.animationRange = "cover " + a.toFixed(1) + "% cover " + (24 + a).toFixed(1) + "%"; });
+  };
+  var trig = function (el, start, end) { return early ? { trigger: el, start: "top 90%", once: true } : { trigger: el, start: start, end: end, scrub: 1 }; };
   var P1 = early ? 0 : 1, PH = early ? 0 : .5;
-  var quick = function (tl) { if (early) tl.timeScale(2.2); return tl; };
+  var quick = function (tl) { if (early) tl.timeScale(1.6); return tl; };
 
   /* ── smooth scrolling ─────────────────────────────────────── */
   var smoother = null;
@@ -103,7 +114,7 @@
   if (!animate && heroSec) { heroSec.classList.add("open"); var g0 = $("#gate"); if (g0) g0.remove(); }
 
   /* ── reveal (IO, works with or without the library) ──────── */
-  var watched = $$(".rv, .flip");
+  var watched = sv ? $$(".flip") : $$(".rv, .flip");
   if (!("IntersectionObserver" in window) || reduce) watched.forEach(function (e) { e.classList.add("in"); });
   else {
     var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { rootMargin: early ? "0px 0px 6% 0px" : "0px 0px -8% 0px", threshold: early ? 0 : 0.05 });
@@ -188,41 +199,48 @@
 
     /* separators with text: 25% → 100% */
     $$(".sep.with-text").forEach(function (el) {
+      if (sv) return;
       quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 30%") })
         .fromTo(el, { width: "25%" }, { width: "100%", duration: 2 }, P1).fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 }, P1));
     });
     /* headings, a word at a time */
     $$("h2.fi, p.fi").forEach(function (el) {
+      if (sv) return svWords(el);
       var st = new SplitText(el, { type: "words" });
       quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 70%") })
         .fromTo(st.words, { autoAlpha: 0, y: "0.5em" }, { autoAlpha: 1, y: "0em", stagger: .1 }, P1));
     });
     $$(".fu-1").forEach(function (el) {
+      if (sv) return svWords(el);
       var st = new SplitText(el, { type: "words" });
       quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 70%") })
         .fromTo(st.words, { rotation: 3, autoAlpha: 0, y: "2rem" }, { rotation: 0, autoAlpha: 1, y: "0rem", stagger: .15, duration: 1.5 }, P1));
     });
     $$("h2.sl").forEach(function (el) {
+      if (sv) return svWords(el);
       var st = new SplitText(el, { type: "words" });
       quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 70%") })
         .fromTo(st.words, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em", stagger: .1 }, P1));
     });
     $$("h2.wd").forEach(function (el) {
+      if (sv) return svWords(el);
       var st = new SplitText(el, { type: "words" });
       quick(gsap.timeline({ scrollTrigger: trig(el, "top 95%", "bottom 60%") })
         .fromTo(st.words, { autoAlpha: 0, y: "0.6em", rotation: 2 }, { autoAlpha: 1, y: "0em", rotation: 0, stagger: .12 }, 0));
     });
     $$(".test.sl").forEach(function (el) {
+      if (sv) return;
       quick(gsap.timeline({ scrollTrigger: trig(el, "top 100%", "bottom 75%") })
         .fromTo(el, { autoAlpha: 0, x: "1em" }, { autoAlpha: 1, x: "0em" }, P1));
     });
     /* the tiles */
     $$(".tile").forEach(function (t) {
-      quick(gsap.timeline({ scrollTrigger: trig(t, "top 100%", "top 55%") }).fromTo(t, { y: "6vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0));
+      if (!sv) quick(gsap.timeline({ scrollTrigger: trig(t, "top 100%", "top 55%") }).fromTo(t, { y: "6vh", autoAlpha: 0 }, { y: "0vh", autoAlpha: 1 }, 0));
       var big = $(".big", t); if (big) { gsap.set(big, { xPercent: -50 }); gsap.fromTo(big, { yPercent: -66 }, { yPercent: -36, ease: "none", scrollTrigger: { trigger: t, start: "top bottom", end: "bottom top", scrub: true } }); }
     });
     /* the inspection tag turns in */
     $$(".blur-box").forEach(function (b) {
+      if (sv) return;
       quick(gsap.timeline({ scrollTrigger: trig(b, "top 100%", "bottom 80%") }).fromTo(b, { rotationZ: 2.5, autoAlpha: 0, x: "2.5vw" }, { rotationZ: 0, autoAlpha: 1, x: "0vw" }, PH));
     });
     /* the wipe from black to paper */

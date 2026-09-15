@@ -627,45 +627,18 @@
   ];
 
   var pts = [], knots = [], totalLen = 0, knotAt = [], heroFrac = 0, heroIn = 0, pScale = 1, ySamples = [], corePt = null;
-  /* on a phone the line is two plain elements - a track and the lit part that grows down it - and knots;
-     a page-tall SVG path is what a phone browser is least reliable at */
-  var mline = null, mlit = null, mY0 = 0;
-  function buildLineMobile() {
-    var heroEl = document.getElementById("top"), H0 = explore.offsetHeight;
-    var y0 = heroEl ? heroEl.offsetTop + heroEl.offsetHeight - 36 : 0, y1 = H0 - 24, L = Math.max(1, y1 - y0);
-    if (!mline) { mline = document.createElement("i"); mline.className = "mline"; mlit = document.createElement("i"); mline.appendChild(mlit); thread.appendChild(mline); }
-    mline.style.top = y0 + "px"; mline.style.height = L + "px"; mlit.style.height = "0px";
-    svg.style.display = "none";
-    knots.forEach(function (k) { k.remove(); }); knots = []; knotAt = [];
-    PLAN.forEach(function (p) {
-      var el = document.getElementById(p.id); if (!el || p.noKnot || p.ride) return;
-      var ky = el.offsetTop + Math.min(140, el.offsetHeight * 0.12);
-      var k = document.createElement("i"); k.className = "knot" + (el.classList.contains("dark") ? " dk" : "");
-      k.style.left = "10px"; k.style.top = ky + "px"; thread.appendChild(k);
-      knots.push(k); knotAt.push(clamp((ky - y0) / L, 0, 1));
-    });
-    knots.forEach(function (k, i) { k.style.setProperty("--i", knots.length - 1 - i); });
-    totalLen = L; ySamples = [{ x: 10, y: y0, ry: y0, l: 0 }, { x: 10, y: y1, ry: y1, l: L }]; mY0 = y0;
-    holds = []; holdActive = null; hold.active = false; rideMeta = null; rideA = rideB = 0; loopA = loopB = 0; hasHold = false; ringA = ringB = ringLen = 0; tlRows = []; heroFrac = 0; orbitBox = null;
-    endPt = { x: 10, y: y1 }; endFrac = 0.999;
-    if (head && !head.querySelector(".halo")) { var halo = document.createElement("i"); halo.className = "halo"; head.appendChild(halo); }
-    return true;
-  }
   var endPt = null, endFrac = 1, endNote = null;
 
   function buildPath() {
     if (!explore || !thread || !svg) return false;
-    /* on a phone the line is simpler: it comes out from under the hero and runs straight down the left
-       gutter, a knot at every chapter, to the button in the footer; no bends, no holds */
-    var phone = window.innerWidth <= 820, PX = 10;
+    /* on a phone the line runs the same plan as on a desktop - the margins, the planet, the charts, the
+       globe, the end note - drawn by the scroll alone: nothing holds the page under a finger */
+    var phone = window.innerWidth <= 820;
     thread.style.display = "";
 
     var W = explore.offsetWidth, H = explore.offsetHeight;
     if (!W || !H) return false;
     builtH = H;
-    if (phone) return buildLineMobile();
-    if (mline) { mline.remove(); mline = null; mlit = null; }
-    svg.style.display = "";
 
     /* find the text column so the line can run outside it */
     var col = explore.querySelector(".ch .wrap") || explore.querySelector(".wrap");
@@ -683,7 +656,7 @@
        descending trunk. One stroke; the spurs hang from it. */
     var heroEl = document.getElementById("top");
     var heroPrefix = "", heroExit = null;
-    if (heroEl && phone) pts.push({ x: PX, y: heroEl.offsetTop + heroEl.offsetHeight - 36, id: "top", el: heroEl, noKnot: true });
+    if (heroEl && phone) pts.push({ x: LX, y: heroEl.offsetTop + heroEl.offsetHeight - 36, id: "top", el: heroEl, noKnot: true });
     if (heroEl && !phone) {
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
       var yMain  = hT + hH * 0.81;           // the long horizontal
@@ -748,9 +721,10 @@
     PLAN.forEach(function (p) {
       var el = document.getElementById(p.id);
       if (!el) return;
-      if (phone) {
-        if (p.ride) return;                                   /* the charts are read, not ridden, on a phone */
-        pts.push({ x: PX, y: el.offsetTop + Math.min(140, el.offsetHeight * 0.12), id: p.id, el: el, noKnot: !!p.noKnot });
+      if (phone && p.journey) {
+        /* on a phone The Journey is carried on its own rail while its stage stays put; the page line
+           passes behind the stage down the margin, a knot at the chapter */
+        pts.push({ x: SIDE[p.side], y: el.offsetTop + Math.min(140, el.offsetHeight * 0.12), id: p.id, el: el, noKnot: false });
         return;
       }
       if (p.core) {
@@ -934,7 +908,7 @@
         for (var sj = 1; sj <= 200; sj++) { var qn = cubicAt(origin, crest, sj / 200); acc += Math.hypot(qn.x - qp.x, qn.y - qp.y); qp = qn; sweep.push({ x: qn.x, l: acc }); }
         marks.years = barX.map(function (bx) { for (var k = 0; k < sweep.length; k++) if (sweep[k].x >= bx) return sweep[k].l / Lr; return cum[1] / Lr; });
         marks.lineStart = cum[lineIdx] / Lr;
-        var co0 = pageXY(el), fb0 = pageXY(figB), xL = fb0.x - 120;     /* the margin beside the panel, wide enough for a big turn */
+        var co0 = pageXY(el), fb0 = pageXY(figB), xL = phone ? LX : fb0.x - 120;     /* the margin beside the panel, wide enough for a big turn */
         /* out of the system to the left, level with the planet, the way it came in on the right: one smooth
            sweep round onto the margin beside the panel, arriving vertical just below the system, then down
            that margin and in through the panel's side at the axis */
@@ -963,7 +937,7 @@
            the six cards, drops onto the planet's right-hand side and wraps it once, tangent on and tangent off,
            then carries straight on down. The page holds while the wrap is drawn and the ground goes to night. */
         var gl = document.getElementById("globe"), env = el.querySelector(".env"), orbit = el.querySelector(".env-orbit"), ehd = el.querySelector(".env-head");
-        if (gl && env && orbit && gl.offsetWidth && document.documentElement.clientWidth > 1100) {
+        if (gl && env && orbit && gl.offsetWidth && (phone || document.documentElement.clientWidth > 1100)) {
           /* the ring stands a little off the planet's box, in the gap before the cards, so it reads as its own orbit */
           var ggap = parseFloat(window.getComputedStyle(orbit).columnGap) || 24;
           var go = pageXY(gl), gw = gl.offsetWidth, gcx = go.x + gw / 2, gcy = go.y + gl.offsetHeight / 2, rg = gw / 2 + Math.min(18, Math.max(8, ggap * 0.42));
@@ -979,6 +953,15 @@
           for (var gi = 1; gi <= NR; gi++) { var th = gi / NR * Math.PI * 2; ring.push({ x: gcx + rg * Math.cos(th), y: gcy + ry * Math.sin(th) }); }
           orbitBack = { cx: gcx, cy: gcy, r: gw * 0.45 };
           var gIn = { x: gcx + rg, y: gcy }, gOutY = oo.y + orbit.offsetHeight + 48;
+          if (phone) {
+            /* the globe has the width of the screen to itself: the line comes down the right and drops
+               straight onto the ring's side, wraps it, and carries on down beneath it */
+            pts.push({ x: gIn.x, y: go.y - 70, id: "globeDrop", el: el, noKnot: true, cpIn: { x: gIn.x, y: go.y - 170 } });
+            pts.push({ x: gIn.x, y: gIn.y, id: p.id, el: el, noKnot: true,
+                       loop: { id: "globe", pts: ring, end: gIn, yA: gcy, yB: gcy, lock: gLock, px: 2000, cpOut: { x: gIn.x, y: gcy + (go.y + gl.offsetHeight + 40 - gcy) * 0.5 } } });
+            pts.push({ x: gIn.x, y: go.y + gl.offsetHeight + 40, id: "globeOut", el: el, noKnot: true, cpIn: { x: gIn.x, y: go.y + gl.offsetHeight - 20 } });
+            return;
+          }
           pts.push({ x: SIDE.R, y: yBand - rb, id: "globeBand", el: el, noKnot: true });
           pts.push({ x: SIDE.R - rb, y: yBand, id: "globeTurn", el: el, noKnot: true, cpIn: { x: SIDE.R - rb * 0.45, y: yBand } });
           pts.push({ x: gcx + rg + rb2, y: yBand, id: "globeLeft", el: el, noKnot: true, out: { x: gcx + rg + rb2 * 0.45, y: yBand } });
@@ -996,7 +979,7 @@
         var quo = el.querySelector(".quo");
         if (quo) {
           var qo = pageXY(quo), qTop = qo.y - 14, qBot = qo.y + quo.offsetHeight + 14;
-          var top0 = qTop - 70, bot0 = qBot + 64, half = quo.offsetWidth / 2 + 70;
+          var top0 = qTop - 70, bot0 = qBot + 64, half = Math.min(quo.offsetWidth / 2 + 70, CX - 14);
           pts.push({ x: CX, y: top0, id: "ringTop", el: el, noKnot: true });
           pts.push({ x: CX, y: bot0, id: "ringBot", el: el, noKnot: true, arc: half, qTop: qTop, qBot: qBot });
           return;
@@ -1146,19 +1129,22 @@
       if (lOut < lIn) return;
       var lA = lIn;
       for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= lp.meta.yA) { lA = samples[si].l; break; } }
-      /* the head lands on the hold's point exactly as the page takes hold: the rail, the planet */
-      if (lp.meta.lock != null) lp.meta.yA = lp.meta.yB = arriveAt(samples, lA, lp.meta.yA, lp.meta.lock + window.innerHeight * 0.62);
+      /* the head lands on the hold's point exactly as the page takes hold: the rail, the planet. On a phone
+         nothing holds: the stretch is drawn over a little more than half a screen of scrolling instead */
+      if (phone) lp.meta.yB = lp.meta.yA + window.innerHeight * 0.55;
+      else if (lp.meta.lock != null) lp.meta.yA = lp.meta.yB = arriveAt(samples, lA, lp.meta.yA, lp.meta.lock + window.innerHeight * 0.62);
       for (var sj = 0; sj < samples.length; sj++) {
         var sm = samples[sj];
         if (sm.l >= lA && sm.l <= lOut) sm.y = lp.meta.yA + (lp.meta.yB - lp.meta.yA) * (sm.l - lA) / Math.max(1, lOut - lA);
         else if (sm.l > lOut && sm.y < lp.meta.yB) sm.y = lp.meta.yB;
       }
-      if (lp.meta.id === "journey" || lp.meta.id === "map" || lp.meta.id === "globe") {
+      if (!phone && (lp.meta.id === "journey" || lp.meta.id === "map" || lp.meta.id === "globe")) {
         var glide = 0;
         if (lp.meta.dGlide) { try { pr3.setAttribute("d", lp.meta.dGlide); svg.appendChild(pr3); glide = Math.max(0, pr3.getTotalLength() - lOut); svg.removeChild(pr3); } catch (e) { glide = 0; } }
         paceExit(samples, lOut, lp.meta.lock + window.innerHeight * 0.62, glide);
       }
       var fa = lA / totalLen, fb = lOut / totalLen;
+      if (phone) return;
       if (lp.meta.id === "map") { loopA = fa; loopB = fb; hasHold = true; }
       if (lp.meta.id === "journey" && !vs.on) return;          /* on touch the strip scrolls itself */
       holdDefs.push({ id: lp.meta.id, lock: lp.meta.lock, a: fa, b: fb, px: lp.meta.px || 3400, r1: lp.meta.r1, r2: lp.meta.r2 });
@@ -1174,7 +1160,8 @@
         /* the head reaches the chart's edge as the page takes hold, rides while it holds, and the exit is paced
            from where the page sits as the hold lets go: nothing waits and nothing jumps */
         var yLockR = (rideMeta.lock || 0) + window.innerHeight * 0.62;
-        rideMeta.yS = rideMeta.yE = arriveAt(samples, rIn, rideMeta.yS, yLockR);
+        if (phone) rideMeta.yE = rideMeta.yS + Math.max(300, chartsEl.offsetHeight * 0.85);   /* drawn as the charts scroll by */
+        else rideMeta.yS = rideMeta.yE = arriveAt(samples, rIn, rideMeta.yS, yLockR);
         var exit0 = Math.max(rideMeta.yE, yLockR);
         for (var sr = 0; sr < samples.length; sr++) {
           var smp = samples[sr];
@@ -1182,9 +1169,9 @@
         }
         var glideR = 0;
         if (rideMeta.dGlide) { try { pr4.setAttribute("d", rideMeta.dGlide); svg.appendChild(pr4); glideR = Math.max(0, pr4.getTotalLength() - rOut); svg.removeChild(pr4); } catch (e) { glideR = 0; } }
-        paceExit(samples, rOut, exit0, glideR);
+        if (!phone) paceExit(samples, rOut, exit0, glideR);
         rideA = rIn / totalLen; rideB = rOut / totalLen;
-        holdDefs.push({ id: "charts", lock: rideMeta.lock, a: rideA, b: rideB, px: 2600 });
+        if (!phone) holdDefs.push({ id: "charts", lock: rideMeta.lock, a: rideA, b: rideB, px: 2600 });
         if (chartsEl) chartsEl.classList.add("ride");
         if (lineClipRect) lineClipRect.setAttribute("width", "0");
         if (rideSvg && rTrack && rLive && chartsEl) {
@@ -1318,18 +1305,6 @@
     if (!totalLen || thread.style.display === "none") return;
     var p = clamp(fracAtY(y + window.innerHeight * 0.62), 0, 1);
     p = Math.max(p, heroFrac * heroIn);
-    if (mline) {
-      /* the phone line: the lit part grows to the point level with the reader, the knots light as it passes */
-      mlit.style.height = Math.round(p * totalLen) + "px";
-      thread.classList.toggle("on", p > 0.004);
-      var landedM = p >= endFrac - 0.002;
-      thread.classList.toggle("landed", landedM); document.body.classList.toggle("landed", landedM);
-      if (landedM && !wasLanded) burst(endPt); wasLanded = landedM;
-      if (p > 0.004) { head.style.left = "10px"; head.style.top = Math.round(mY0 + p * totalLen) + "px"; }
-      for (var km = 0; km < knots.length; km++) knots[km].classList.toggle("hit", p >= knotAt[km]);
-      if (c06El) c06El.classList.remove("day");
-      return;
-    }
     if (holds.length && !reduce) {
       holdActive = null;
       var ext = vs.on && performance.now() - vs.extAt < 200;                /* an anchor or the scrollbar is moving the page */

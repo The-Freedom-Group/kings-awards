@@ -874,6 +874,21 @@ html.js.has-gsap .tl-rail{overflow-x:clip}
 /* on a phone the block is held by the browser itself, inside a track tall enough for the cards' travel */
 .tl-track{position:relative}
 html.tl-phone #timeline.ch{overflow:clip}
+/* on a phone the reveals follow the scroll itself (html.sv): a heading's words come in one after another as
+   the heading rises through the bottom of the screen, blocks and tiles rise as they enter */
+@supports (animation-timeline: view()){
+  html.sv h2.fi,html.sv p.fi,html.sv .fu-1,html.sv h2.sl,html.sv h2.wd{view-timeline-name:--sv;view-timeline-axis:block}
+  html.sv .sw{animation:swIn linear both;animation-timeline:--sv;animation-range:cover 0% cover 24%}
+  html.sv .rv{opacity:1;transform:none;transition:none;animation:svRise linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
+  html.sv .rv.in{animation:svRise linear both}
+  html.sv .test.sl,html.sv .blur-box{animation:svSlide linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
+  html.sv .tile{animation:svRise linear both;animation-timeline:view();animation-range:entry 0% cover 24%}
+  html.sv .sep.with-text{animation:svSep linear both;animation-timeline:view();animation-range:entry 0% cover 30%}
+}
+@keyframes swIn{from{opacity:0;transform:translateY(.45em)}to{opacity:1;transform:none}}
+@keyframes svRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes svSlide{from{opacity:0;transform:translateX(1em)}to{opacity:1;transform:none}}
+@keyframes svSep{from{opacity:0;width:25%}to{opacity:1;width:100%}}
 /* the footer on a phone: each part fades up as it scrolls onto the screen, driven by the scroll itself */
 @supports (animation-timeline: view()){
   html.ft-view .footer-item,html.ft-view footer h4,html.ft-view footer .ff{animation:ftRise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
