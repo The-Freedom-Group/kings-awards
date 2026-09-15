@@ -300,7 +300,7 @@
      Drag to turn it. It draws only while it is on screen. */
   (function () {
     var box = $("#globe"), cv = $("#globeC"); if (!box || !cv) return;
-    var ctx = cv.getContext("2d", { alpha: false }), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
+    var ctx = cv.getContext("2d"), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
     /* a phone draws fewer dots, without the glow round each one, at half the rate: the turn is smooth */
     var lite = coarse, lastDraw = 0, frameMs = lite ? 30 : 0;
     var TILT = 20 * Math.PI / 180, HOME = [53.6, -2.3];
@@ -352,8 +352,7 @@
       lastDraw = tn;
       if (!W0) size();
       var R0 = W0 * 0.45, cx0 = W0 / 2, cy0 = W0 / 2, t = tn / 1000;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = "#0a0a0a"; ctx.fillRect(0, 0, W0, W0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W0, W0);
       /* the body of the planet, lit from the upper left, and the light on its limb */
       var g = ctx.createRadialGradient(cx0 - R0 * 0.4, cy0 - R0 * 0.45, R0 * 0.05, cx0, cy0, R0);
       g.addColorStop(0, "#33161f"); g.addColorStop(0.65, "#151014"); g.addColorStop(1, "#0a0a0a");
