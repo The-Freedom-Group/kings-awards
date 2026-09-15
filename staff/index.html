@@ -515,7 +515,7 @@ body.prof-open{overflow:hidden}
 .pf-list{list-style:none;margin:2px 0 0;padding:0}
 .pf-list li{position:relative;padding-left:14px;margin:0 0 3px;font-weight:inherit}
 .pf-list li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;background:var(--red)}
-.nextcta .lead.quote{margin:0 auto;max-width:26ch;font-family:var(--serif);font-style:italic;font-size:clamp(24px,3vw,40px);line-height:1.2;color:#fff}
+.nextcta .lead.quote{margin:0 auto;max-width:44ch;font-family:var(--serif);font-style:italic;font-size:clamp(24px,3vw,40px);line-height:1.2;color:#fff;text-align:center;text-wrap:balance}
 .nextcta .go{justify-content:center}
 .nextcta .lead.quote.sub{font-size:clamp(18px,2vw,26px);margin-top:14px;color:var(--pale-2,#bbb)}
 @media(max-width:1000px){.nextgrid{grid-template-columns:1fr 1fr}}
@@ -604,6 +604,8 @@ footer .ff{height:104px;width:auto;margin-bottom:22px}
 .cardq{margin:clamp(26px,4vw,48px) 0 0;background:var(--white);color:var(--ink);border:2px solid var(--black);border-left:8px solid var(--red);border-radius:4px;
   padding:clamp(22px,3vw,40px) clamp(22px,3.4vw,44px);display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(18px,3vw,40px);align-items:center}
 .cardq blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.6vw,36px);line-height:1.25;color:var(--ink)}
+/* on a phone the card reads as four lines, each kept whole, the type sized so the longest fits */
+@media(max-width:600px){.cardq blockquote{font-size:clamp(14px,4.55vw,22px)}.cardq blockquote .ql{display:block;white-space:nowrap}.cardq blockquote br{display:none}}
 .cardq figcaption{font-size:14px;line-height:1.55;color:var(--ink-2)}
 .cardq figcaption b{color:var(--ink)}
 .cardq figcaption a,.cardq figcaption .cardopen{background:none;border:0;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:500}
@@ -873,6 +875,11 @@ html.js.has-gsap .tl-rail{overflow-x:clip}
 .tl-track{position:relative}
 html.tl-phone #timeline.ch{overflow:clip}   /* clips as before, but does not become the sticky block's container */
 html.tl-phone .tl-pin{position:sticky;top:var(--stick,84px);will-change:auto}
+/* the cards' travel, driven by the scroll itself where the browser can: the range is set by the script */
+@supports (animation-timeline: scroll()){
+  html.tl-phone.tl-sda .tl-pin ol.spine.journey{animation:tlSlide linear both;animation-timeline:scroll(root block);animation-range:0px 1px}
+}
+@keyframes tlSlide{from{transform:translateX(0)}to{transform:translateX(var(--tl-dist,0px))}}
 @media(hover:none){.rv{transition-duration:.45s,.45s}}
 ol.spine.journey{display:flex;gap:0;overflow-x:auto;overflow-y:hidden;padding:64px 0 22px;margin:0;border-top:0;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--red) transparent;-webkit-overflow-scrolling:touch}
 ol.spine.journey::before{display:none}
@@ -1184,7 +1191,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         <p>Two talks and a workshop at New Bridge College, recruitment fairs, and a voice in how the Jobs Guarantee is run. Families see confidence return: one mother wrote that she had got her son back.</p></div>
         </div>
     <figure class="cardq rv">
-      <blockquote>“Everything seemed to have changed when he got an opportunity in your company. I can finally say ‘I got my son back’<br>thanks to you Tom.”</blockquote>
+      <blockquote><span class="ql">“Everything seemed to have changed when</span> <span class="ql">he got an opportunity in your company. I</span> <span class="ql">can finally say ‘I got my son back’</span><br><span class="ql">thanks to you Tom.”</span></blockquote>
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
         <button type="button" class="cardopen" data-cur data-card data-cur-label="See">See the card <i>→</i></button></figcaption>
     </figure>

@@ -246,18 +246,25 @@
            track tall enough for the cards' travel; the scroll through the track carries the cards, a
            thumb taking them across a little faster than a wheel would */
         html.classList.add("tl-phone");
-        var tlRate = 1.5, chromeEl = $(".chrome");
+        /* where the browser can drive an animation from the scroll itself, the cards' travel is one: the
+           compositor moves them in step with the finger, frame-perfect, with no script on the scroll path.
+           The trigger only works out where the travel starts and ends. Elsewhere the script eases them. */
+        var sda = !!(window.CSS && CSS.supports && CSS.supports("animation-timeline: scroll()"));
+        if (sda) html.classList.add("tl-sda");
+        var tlRate = 1.8, chromeEl = $(".chrome");
         var stick = function () { return (chromeEl ? chromeEl.offsetHeight : 72) + 12; };
         var sizeTrack = function () { tlPin.style.setProperty("--stick", stick() + "px"); tlTrack.style.height = Math.round(tlPin.offsetHeight + tlDist() / tlRate) + "px"; };
         sizeTrack();
         ScrollTrigger.addEventListener("refreshInit", sizeTrack);
         var cardsX = function (st) { return -Math.min(st.progress * tlDist(), tlDist()); };
+        var setRange = function (st) { tlOl.style.setProperty("--tl-dist", (-tlDist()) + "px"); tlOl.style.animationRange = Math.round(st.start) + "px " + Math.round(st.end) + "px"; };
         window.__tlST = ScrollTrigger.create({
           trigger: tlTrack, start: function () { return "top " + stick() + "px"; }, end: function () { return "+=" + Math.round(tlDist() / tlRate); },
-          scrub: true, invalidateOnRefresh: true,
-          onUpdate: function (st) { gsap.set(tlOl, { x: cardsX(st) }); },
-          onRefresh: function (st) { gsap.set(tlOl, { x: cardsX(st) }); }
+          scrub: sda ? false : 0.3, invalidateOnRefresh: true,
+          onUpdate: function (st) { if (!sda) gsap.set(tlOl, { x: cardsX(st) }); },
+          onRefresh: function (st) { if (sda) setRange(st); else gsap.set(tlOl, { x: cardsX(st) }); }
         });
+        if (sda) setRange(window.__tlST);
       } else {
         /* one hold: the cards slide across, then the page stays put a little longer while the route
            drops down the right of them and runs back beneath them to the left */
@@ -272,11 +279,13 @@
       }
     }
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
-    gsap.timeline({ scrollTrigger: { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
+    /* on a phone the page ends where the footer ends, so a reveal scrubbed to the footer's bottom
+       never finishes and the footer stays dark: there, the call and the footer play once as they arrive */
+    quick(gsap.timeline({ scrollTrigger: early ? { trigger: ".entrance", start: "top 88%", once: true } : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
       .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: .1 }, 0)
-      .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, 1.2);
-    gsap.timeline({ scrollTrigger: { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
-      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2);
+      .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, early ? .4 : 1.2));
+    quick(gsap.timeline({ scrollTrigger: early ? { trigger: "#footer", start: "top 92%", once: true } : { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
+      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, early ? 0 : 2));
 
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
