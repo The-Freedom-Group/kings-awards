@@ -257,7 +257,12 @@
         sizeTrack();
         ScrollTrigger.addEventListener("refreshInit", sizeTrack);
         var cardsX = function (st) { return -Math.min(st.progress * tlDist(), tlDist()); };
-        var setRange = function (st) { tlOl.style.setProperty("--tl-dist", (-tlDist()) + "px"); tlOl.style.animationRange = Math.round(st.start) + "px " + Math.round(st.end) + "px"; };
+        var setRange = function (st) {
+          /* the range as a share of the page's scroll: the plainest form, which every browser with
+             scroll-driven animations takes */
+          var maxS = Math.max(1, html.scrollHeight - window.innerHeight);
+          tlOl.style.setProperty("--tl-dist", (-tlDist()) + "px"); tlOl.style.animationRange = (st.start / maxS * 100).toFixed(4) + "% " + (st.end / maxS * 100).toFixed(4) + "%";
+        };
         window.__tlST = ScrollTrigger.create({
           trigger: tlTrack, start: function () { return "top " + stick() + "px"; }, end: function () { return "+=" + Math.round(tlDist() / tlRate); },
           scrub: sda ? false : 0.3, invalidateOnRefresh: true,
@@ -281,15 +286,27 @@
     var ctaSplit = new SplitText(".cta-h", { type: "chars,words" });
     /* on a phone the page ends where the footer ends, so a reveal scrubbed to the footer's bottom
        never finishes and the footer stays dark: there, the call and the footer play once as they arrive */
-    quick(gsap.timeline({ scrollTrigger: early ? { trigger: ".entrance", start: "top 96%", once: true } : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
+    quick(gsap.timeline({ scrollTrigger: early ? { trigger: ".entrance", start: "top 130%", once: true } : { trigger: ".entrance", start: "top 80%", end: "bottom 70%", scrub: 2 } })
       .fromTo(ctaSplit.chars, { rotationZ: 3, autoAlpha: 0, x: "0.25em" }, { rotationZ: 0, autoAlpha: 1, x: "0em", stagger: early ? .04 : .1 }, 0)
       .fromTo(".entrance .go .btn", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, stagger: .2 }, early ? .3 : 1.2));
-    /* the footer is there the moment its top edge shows: one quick rise, hardly staggered */
-    var ftl = gsap.timeline({ scrollTrigger: early ? { trigger: "#footer", start: "top 100%", once: true } : { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
-      .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: early ? .03 : .1, duration: early ? .35 : .5 }, early ? 0 : 2);
-    if (early) ftl.timeScale(1.6);
+    if (early) {
+      /* on a phone the footer is up before it is reached: it rises as soon as it comes within a screen
+         and a half of the bottom, judged from the layout itself, so no cached position can hold it back */
+      var ftItems = $$(".footer-item, footer h4, footer .ff"), ftEl = $("#footer");
+      gsap.set(ftItems, { autoAlpha: 0, y: "1rem" });
+      var ftShow = function () { gsap.to(ftItems, { autoAlpha: 1, y: 0, rotationZ: 0, duration: .4, stagger: .03, overwrite: true }); };
+      if ("IntersectionObserver" in window && ftEl) {
+        var fio = new IntersectionObserver(function (es) { if (es.some(function (x) { return x.isIntersecting; })) { ftShow(); fio.disconnect(); } }, { rootMargin: "0px 0px 150% 0px", threshold: 0 });
+        fio.observe(ftEl);
+      } else ftShow();
+    } else {
+      gsap.timeline({ scrollTrigger: { trigger: "#footer", start: "top 90%", end: "bottom 95%", scrub: 2 } })
+        .fromTo(".footer-item, footer h4, footer .ff", { rotationZ: 3, autoAlpha: 0, y: "1.5rem" }, { rotationZ: 0, autoAlpha: 1, y: "0rem", stagger: .1 }, 2);
+    }
 
     window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+    /* the page's height settles late on a phone (pictures, the timeline's room): every settle is a refresh */
+    if ("ResizeObserver" in window) { var rfT = null; new ResizeObserver(function () { clearTimeout(rfT); rfT = setTimeout(function () { ScrollTrigger.refresh(); }, 180); }).observe(document.body); }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
   } else if (hasGsap) {
     gsap.set(["#chrome", "#fm", "#fr a", "#fl"], { autoAlpha: 1 });
