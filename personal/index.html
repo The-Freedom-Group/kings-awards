@@ -1549,14 +1549,8 @@ a.tl-link{color:var(--pink);font-weight:500}
   .jy-head .jy-count{display:none}          /* the moment's own 01 / 18 sits under its picture */
   .journey.carry .jy-btn{top:calc(24px + 27vw)}
 
-  /* ── and the line under the moments runs to its end with them ── */
+  /* no line under the moments on a phone: the moments carry themselves */
   .journey.carry .jy-track{display:none}
-  .jy-rail{display:none}
-  .journey.carry.sda .jy-rail{display:block;position:absolute;left:26px;right:26px;bottom:30px;height:2px;background:rgba(255,255,255,.13);z-index:5;pointer-events:none}
-  .journey.carry.sda .jy-rail i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--pink);border-radius:2px;
-    animation:jyRail linear both;animation-timeline:scroll(root block);animation-range:0px 1px}
-  .journey.carry.sda .jy-rail i::after{content:"";position:absolute;right:-4px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px rgba(255,45,141,.7)}
-  @keyframes jyRail{from{width:0}to{width:100%}}
 
   /* ── the line beneath the name holds both companies: the first ends the top line ── */
   .hero-sub .fob-sub{font-size:min(10.5px,2.62vw);letter-spacing:.055em;white-space:nowrap}
