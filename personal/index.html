@@ -1535,30 +1535,30 @@ a.tl-link{color:var(--pink);font-weight:500}
   @keyframes chartIn{0%{opacity:0;transform:translateY(38px) scale(.98)}70%{opacity:1}100%{opacity:1;transform:none}}
   /* the stacked bars grow column by column, each one settling with a small lift */
   html.noline #chBars g.seg-g{transform-box:view-box;transform-origin:0 252px;
-    animation:segUp linear both;animation-timeline:--chv;animation-range:entry 34% cover 40%}
-  html.noline #chBars g.seg-g:nth-of-type(n+9){animation-range:entry 40% cover 46%}
-  html.noline #chBars g.seg-g:nth-of-type(n+17){animation-range:entry 46% cover 52%}
-  html.noline #chBars g.seg-g:nth-of-type(n+25){animation-range:entry 52% cover 58%}
-  html.noline #chBars g.seg-g:nth-of-type(n+33){animation-range:entry 58% cover 64%}
-  html.noline #chBars g.seg-g:nth-of-type(n+41){animation-range:entry 64% cover 70%}
+    animation:segUp linear both;animation-timeline:--chv;animation-range:entry 18% entry 46%}
+  html.noline #chBars g.seg-g:nth-of-type(n+9){animation-range:entry 30% entry 58%}
+  html.noline #chBars g.seg-g:nth-of-type(n+17){animation-range:entry 40% entry 68%}
+  html.noline #chBars g.seg-g:nth-of-type(n+25){animation-range:entry 50% entry 78%}
+  html.noline #chBars g.seg-g:nth-of-type(n+33){animation-range:entry 58% entry 86%}
+  html.noline #chBars g.seg-g:nth-of-type(n+41){animation-range:entry 66% entry 94%}
   @keyframes segUp{0%{transform:scaleY(.02);opacity:.25}
     30%{transform:scaleY(.42);opacity:.75}
     62%{transform:scaleY(.88);opacity:1}
     84%{transform:scaleY(1.035)}
     100%{transform:scaleY(1);opacity:1}}
   /* the year totals follow their column up */
-  html.noline #chBars .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:entry 46% cover 56%}
+  html.noline #chBars .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:entry 60% entry 96%}
   @keyframes markIn{0%{opacity:0;transform:translateY(7px)}100%{opacity:1;transform:none}}
   html.noline #chBars .vl{transform-box:fill-box}
   /* the ten-year line draws itself, then its points land one after the other */
-  html.noline #lineClipRect{animation:lineDraw linear both;animation-timeline:--chv;animation-range:entry 26% cover 56%}
+  html.noline #lineClipRect{animation:lineDraw linear both;animation-timeline:--chv;animation-range:entry 10% entry 100%}
   @keyframes lineDraw{from{width:2px}to{width:640px}}
-  html.noline #chLine .dot-g{transform-box:fill-box;transform-origin:50% 50%;animation:dotPop linear both;animation-timeline:--chv;animation-range:entry 34% cover 42%}
-  html.noline #chLine .dot-g:nth-of-type(n+5){animation-range:entry 42% cover 50%}
-  html.noline #chLine .dot-g:nth-of-type(n+9){animation-range:entry 50% cover 58%}
-  html.noline #chLine .dot-g:nth-of-type(n+13){animation-range:entry 58% cover 66%}
+  html.noline #chLine .dot-g{transform-box:fill-box;transform-origin:50% 50%;animation:dotPop linear both;animation-timeline:--chv;animation-range:entry 30% entry 62%}
+  html.noline #chLine .dot-g:nth-of-type(n+5){animation-range:entry 44% entry 74%}
+  html.noline #chLine .dot-g:nth-of-type(n+9){animation-range:entry 58% entry 86%}
+  html.noline #chLine .dot-g:nth-of-type(n+13){animation-range:entry 72% entry 98%}
   @keyframes dotPop{0%{opacity:0;transform:scale(.35)}64%{opacity:1;transform:scale(1.18)}100%{opacity:1;transform:scale(1)}}
-  html.noline #chLine .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:entry 52% cover 62%;transform-box:fill-box}
+  html.noline #chLine .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:entry 60% entry 92%;transform-box:fill-box}
   @supports not (animation-timeline:view()){html.noline #chBars,html.noline #chLine,html.noline #chBars g.seg-g,html.noline #chBars .vl,html.noline #chLine .vl,html.noline #chLine .dot-g{animation:none;opacity:1;transform:none}
     html.noline #lineClipRect{animation:none;width:640px}}
 
