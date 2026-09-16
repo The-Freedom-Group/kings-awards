@@ -491,8 +491,13 @@
     if (headEl) top += headEl.offsetHeight + (parseFloat(window.getComputedStyle(jy.stage).marginTop) || 0);
     jy.startY = Math.max(0, Math.round(top - stick)); jy.endY = jy.startY + jy.travel;
     jy.el.classList.toggle("sda", jySda);
+    /* the line under the moments: it fills as they travel and reaches its end with the last of them */
+    if (!jy.rail && jy.stage) { jy.rail = document.createElement("i"); jy.rail.className = "jy-rail"; jy.rail.setAttribute("aria-hidden", "true"); jy.rail.appendChild(document.createElement("i")); jy.stage.appendChild(jy.rail); }
     var range = jy.startY + "px " + jy.endY + "px";
-    if (jySda) [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.setProperty("--jy-dist", (-jy.dist) + "px"); el.style.animationRange = range; el.style.transform = ""; });
+    if (jySda) {
+      [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.setProperty("--jy-dist", (-jy.dist) + "px"); el.style.animationRange = range; el.style.transform = ""; });
+      if (jy.rail) jy.rail.firstChild.style.animationRange = range;
+    }
   }
   /* f is the strip's own fraction; hx, when given, is where the head sits on the track instead of over the
      current moment - the run-in and run-out either side of the travel */
@@ -1917,7 +1922,7 @@
     if (window.innerWidth <= 820 && window.innerWidth === lastW) {
       /* the Safari engine can keep painting a scroll-driven strip where it was after a resize: the
          animation is taken off and put back, and it picks up at the scroll */
-      if (jy.carry && jySda) [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.animationName = "none"; void el.offsetWidth; el.style.animationName = ""; });
+      if (jy.carry && jySda) [jy.strip, jy.track, jy.rail && jy.rail.firstChild].forEach(function (el) { if (!el) return; el.style.animationName = "none"; void el.offsetWidth; el.style.animationName = ""; });
       return;
     }
     lastW = window.innerWidth; rebuild();

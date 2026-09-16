@@ -1481,6 +1481,45 @@ a.tl-link{color:var(--pink);font-weight:500}
   .journey.rv{opacity:1;transform:none;filter:none}
   .ch{padding:64px 0 88px;overflow:hidden;overflow:clip}   /* clip, not hidden: hidden would make every chapter its own scroll box and the reveals would never run */
   .next .quo.endq{margin-top:84px;padding:0 20px}
+
+  /* ── the hero: the name, the line beneath it and the link sit as one block ── */
+  .mbr{display:inline}
+  .hero-sub{margin-top:18px}
+  .hero-sub .fob-sub{margin-top:8px;line-height:1.55}
+  .hero-acts{margin-top:18px;gap:12px}
+
+  /* ── the same air under every chapter label, wherever it stands ── */
+  .ch-tag{margin-bottom:14px}
+  .scene .yr{margin-bottom:14px}
+  .ch h2{margin-bottom:14px}
+  .jy-head{margin-bottom:0}
+
+  /* ── the four facts: one mark size, so the dates, the headings and the notes line up across all four ── */
+  .bar>.wrap>div{padding:18px 12px 20px;gap:10px;align-content:start}
+  .bar>.wrap>div>img,.bar>.wrap>div>.lg-big,.bar>.wrap>div>.lg-ebay{height:46px;display:flex;align-items:center;justify-content:center;align-self:center;justify-self:center;margin:0 auto}
+  .bar .b1 img,.bar .b2 img,.bar img{height:46px;width:auto;object-fit:contain}
+  .bar .b3 .lg-big{font-size:34px;line-height:46px}
+  .lg-ebay.xl{font-size:38px;line-height:46px}
+  .bar .bw{gap:5px}
+  .bar small,.bar .b3 small.dt{font-size:10px;line-height:1.2;min-height:1.2em}
+  .bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{font-size:12.5px;line-height:1.2;min-height:2.4em;display:flex;align-items:center;justify-content:center;text-align:center}
+  .bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{font-size:10px;line-height:1.35;min-height:2.7em;display:flex;align-items:flex-start;justify-content:center;text-align:center}
+
+  /* ── the moments: the label belongs to the timeline, in its colour, under the rule ── */
+  .jy-head{border-top:1px solid var(--rule-d);padding-top:14px;margin-top:6px}
+  .journey .yhead{color:var(--pink)}
+  .jy-stage{border-top:0;margin-top:10px}
+  .jy-head .jy-count{display:none}          /* the moment's own 01 / 18 sits under its picture */
+  .journey.carry .jy-btn{top:calc(24px + 27vw)}
+
+  /* ── and the line under the moments runs to its end with them ── */
+  .journey.carry .jy-track{display:none}
+  .jy-rail{display:none}
+  .journey.carry.sda .jy-rail{display:block;position:absolute;left:26px;right:26px;bottom:30px;height:2px;background:rgba(255,255,255,.13);z-index:5;pointer-events:none}
+  .journey.carry.sda .jy-rail i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--pink);border-radius:2px;
+    animation:jyRail linear both;animation-timeline:scroll(root block);animation-range:0px 1px}
+  .journey.carry.sda .jy-rail i::after{content:"";position:absolute;right:-4px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px rgba(255,45,141,.7)}
+  @keyframes jyRail{from{width:0}to{width:100%}}
 }
 
 /* ── a phone travels the page by its colour and its words, not by a drawn line ──
@@ -1491,14 +1530,9 @@ a.tl-link{color:var(--pink);font-weight:500}
   html.noline #threadSvg,html.noline .thread .head,html.noline .thread .knot{display:none}
   .prog{height:3px;background:linear-gradient(90deg,var(--pink),#ff7ab4 45%,#ffd36e);
     background-size:100vw 100%;box-shadow:0 0 14px rgba(255,45,141,.55)}
-  /* the colour travels where it costs nothing to paint: the hairline at the top runs from pink through
-     violet to gold as the page goes by, and each chapter's number and rule arrive in the colour it has
-     reached. Nothing is laid over the page. */
-  .prog{background:linear-gradient(90deg,var(--pink),#9a5cff 52%,#ffc456);background-size:100vw 100%}
-  html.noline .ch-tag{animation:flowThrough linear both,tagHue linear both;
-    animation-timeline:view(),scroll(root);
-    animation-range:cover 0% cover 100%,0% 100%}
-  @keyframes tagHue{0%{color:var(--pink)}46%{color:#b06bff}74%{color:#ff7ab4}100%{color:#ffc456}}
+  /* the hairline at the top keeps showing how far along the page you are */
+  .prog{background:var(--pink)}
+  html.noline .ch-tag{animation:flowThrough linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
   /* the system lights up without the deep glows: a phone repaints them on every frame of the scroll */
   .map .node .orb{box-shadow:none!important}
   .map.lap-core .node.core .orb,.map.lap-a .node[data-ring="A"] .orb,.map.lap-b .node[data-ring="B"] .orb,.map.lap-c .node[data-ring="C"] .orb{box-shadow:0 0 0 2px color-mix(in srgb,var(--p1) 55%,transparent),0 0 12px 2px var(--p2)!important}
@@ -1592,7 +1626,7 @@ a.tl-link{color:var(--pink);font-weight:500}
              width="682" height="897" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
-      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Managing director of Freedom Fire &amp; Safety Ltd | Freedom Group Enterprise Ltd</p></div>
+      <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Managing director of Freedom Fire &amp; Safety Ltd |<br class="mbr"> Freedom Group Enterprise Ltd</p></div>
       <div class="hero-acts">
         <a class="follow" href="#film" data-mag>Watch the two-minute story <i>↓</i></a>
         <a class="follow alt" href="mailto:tom.letcher@freedomgroup.uk" data-mag>Contact me <i>→</i></a>
