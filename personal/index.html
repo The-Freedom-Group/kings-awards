@@ -1520,7 +1520,37 @@ a.tl-link{color:var(--pink);font-weight:500}
     animation:jyRail linear both;animation-timeline:scroll(root block);animation-range:0px 1px}
   .journey.carry.sda .jy-rail i::after{content:"";position:absolute;right:-4px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px rgba(255,45,141,.7)}
   @keyframes jyRail{from{width:0}to{width:100%}}
+
+  /* ── the line beneath the name holds both companies: the first ends the top line ── */
+  .hero-sub .fob-sub{font-size:min(10.5px,2.62vw);letter-spacing:.055em;white-space:nowrap}
+
+  /* ── a heading's lines never touch ── */
+  .ch h2,.hero-type h1,.scene .ph h3,h2,h3{line-height:1.04}
+  .ch h2{margin-bottom:16px}
+
+  /* ── the charts build as the reader comes to them ── */
+  #chBars,#chLine{view-timeline-name:--chv;view-timeline-axis:block}
+  html.noline #chBars g.seg-g{transform-box:view-box;transform-origin:0 252px;
+    animation:segUp .8s linear both;animation-timeline:--chv;animation-range:entry 30% cover 34%}
+  html.noline #chBars g.seg-g:nth-of-type(n+9){animation-range:entry 36% cover 40%}
+  html.noline #chBars g.seg-g:nth-of-type(n+17){animation-range:entry 42% cover 46%}
+  html.noline #chBars g.seg-g:nth-of-type(n+25){animation-range:entry 48% cover 52%}
+  html.noline #chBars g.seg-g:nth-of-type(n+33){animation-range:entry 54% cover 58%}
+  html.noline #chBars g.seg-g:nth-of-type(n+41){animation-range:entry 60% cover 64%}
+  @keyframes segUp{from{transform:scaleY(.02)}to{transform:none}}
+  html.noline #chBars .vl,html.noline #chLine .vl{animation:fadeUp .6s linear both;animation-timeline:--chv;animation-range:entry 62% cover 70%}
+  html.noline #chLine .dot-g{animation:fadeUp .6s linear both;animation-timeline:--chv;animation-range:entry 34% cover 40%}
+  html.noline #chLine .dot-g:nth-of-type(n+5){animation-range:entry 42% cover 48%}
+  html.noline #chLine .dot-g:nth-of-type(n+9){animation-range:entry 50% cover 56%}
+  html.noline #chLine .dot-g:nth-of-type(n+13){animation-range:entry 58% cover 64%}
+  @keyframes fadeUp{from{opacity:0}to{opacity:1}}
+  @supports not (animation-timeline:view()){html.noline #chBars g.seg-g,html.noline #chBars .vl,html.noline #chLine .vl,html.noline #chLine .dot-g{animation:none;opacity:1;transform:none}}
+
+  /* ── the foot: the logo, then the way to reach him, then where to find him ── */
+  .ft-brand .ft-addr{display:none}
+  .ft-grid .ft-addr-m{display:block;margin-top:14px;font-size:12px;line-height:1.6;color:var(--pale-3);letter-spacing:.04em}
 }
+.ft-addr-m{display:none}
 
 /* ── a phone travels the page by its colour and its words, not by a drawn line ──
    The line was costing more than it gave on a small screen, so it is not drawn at all; instead each
@@ -2191,7 +2221,7 @@ a.tl-link{color:var(--pink);font-weight:500}
 </div>
       <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
       <div><h4>The story</h4><p><a href="#c01">Story</a><br><a href="#c02">Proof</a><br><a href="#c03">Method</a><br><a href="#c05">Future</a><br><a href="#c07">Next</a></p></div>
-      <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p></div>
+      <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p><p class="ft-addr-m">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p></div>
       <div class="ft-bot">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</div>
     </div>
   </div>
