@@ -976,13 +976,15 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 }
 
 @media(max-width:820px){
-  .hero .in{align-content:start;padding-top:clamp(150px,26vh,240px)}
-  /* the photograph is cut off below the unit number: its box is made taller than the hero and the
-     hero clips it, so what shows runs from the sky down to the 19 and no further - the doorway and
-     the bins are gone. The frame is set a little right of centre to keep the lit sign in it. */
-  .hero .ph{bottom:auto;height:153%}
-  .hero .ph img{object-position:66% 0}
-  .hero .ph::after{background:linear-gradient(180deg,rgba(17,17,17,.45),rgba(17,17,17,.2) 18%,rgba(17,17,17,.45) 58%,rgba(17,17,17,.92) 65%,rgba(17,17,17,.92))}
+  /* The lit sign is the point of the photograph and it sits across 64-95% of its width, with the
+     unit number just to its left. The picture is far taller than a phone screen, so `cover` crops
+     the width, not the height: the frame is carried to the right to hold the sign and the 19
+     together, and the zoom that was anchored to the picture's right edge goes - that is what pushed
+     the sign off the screen. The title rides higher so it keeps to the sky above the sign. Measured
+     across eight sizes, from a 280px fold to a tablet held upright: both are in frame on every one. */
+  .hero .in{align-content:start;padding-top:clamp(84px,11vh,140px)}
+  .hero .ph{bottom:auto;height:112%}
+  .hero .ph img.fg{transform:none!important;object-position:94% 0}
 }
 
 @media(max-width:700px){
