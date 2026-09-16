@@ -893,6 +893,7 @@
              strip the only line is the timeline's. The turn onto the rail happens just off the page. */
           var r0 = 72, xOff = -(r0 + 40), knotY = pts[pts.length - 1].y, yOff = Math.max(knotY + 140, hy - 60);
           var xJoin = xOff + r0;
+          jy.railX = railX; jy.railYPos = railY;
           jy.x0 = xJoin - railX; jy.runIn = Math.max(0, jy.centres[0] - jy.x0); jy.runOut = Math.max(0, (xExit - railX) - jy.centres[0]);
           jy.reach = jy.centres[jy.n - 1] + jy.runOut; jy.f = -1;
           var runIn = jy.runIn, runOut = jy.runOut, jpx = Math.max(2400, jy.n * 230) + runIn + runOut;
@@ -1585,6 +1586,18 @@
       var pt = landed && endPt ? endPt : live.getPointAtLength(totalLen * p);
       head.style.left = pt.x + "px";
       head.style.top  = pt.y + "px";
+      /* on The Journey's rail the thread's tip and the rail's own head are the same point: the lit rail
+         stops where the stroke stops, so the circle always sits on the end of the line and never behind it */
+      if (jy.el && jy.el.classList.contains("joined") && jy.railX != null && jy.lit) {
+        var shiftNow = jy.strip ? (new DOMMatrix(window.getComputedStyle(jy.strip).transform)).m41 : 0;
+        var tipX = pt.x - jy.railX - shiftNow;
+        jy.lit.setAttribute("x2", tipX.toFixed(1));
+        if (jy.head) jy.head.setAttribute("cx", tipX.toFixed(1));
+        if (jy.halo) jy.halo.setAttribute("cx", tipX.toFixed(1));
+        if (jy.pulse) jy.pulse.setAttribute("cx", tipX.toFixed(1));
+        jy.knots.forEach(function (kn, idx) { kn.classList.toggle("on", jy.centres[idx] <= tipX + 1); });
+        jy.yrs.forEach(function (y2) { y2.el.classList.toggle("on", jy.centres[y2.i] <= tipX + 1); });
+      }
     }
     /* round the end note the line is two: each half gets a tip shaped as an arrow, turned the way its half
        runs; once the halves rejoin below there is one tip again, and it is a circle */
