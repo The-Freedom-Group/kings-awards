@@ -1190,36 +1190,43 @@ body.bio-open{overflow:hidden}
 .bio-dates dt{font-family:var(--disp);text-transform:uppercase;font-size:16px;line-height:1.1;color:var(--pink);white-space:nowrap;padding-top:3px}
 .bio-dates dd{margin:0;color:var(--pale-2);font-weight:300;border-bottom:1px solid var(--rule-d);padding-bottom:12px}
 .bio-dates dd b{color:var(--pale);font-weight:600}
-/* ── the photographs in the biography: him at each age, set into the story where that
-      age is told. They stand in the column with the words above and below them, never
-      behind them, and each one comes into colour on its own as it crosses the screen. ── */
-.bio-fig{margin:clamp(30px,4vw,52px) 0;padding:0}
-.bio-fig img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 26px 64px rgba(0,0,0,.5);
-  filter:grayscale(1) contrast(1.05) brightness(.9);opacity:.72;
+/* ── the photographs in the biography: him at each age, set into the story where that age
+      is told. They keep the floating look - no frame, edges faded into the page, a slight
+      turn, a slow drift - but they stand in the column with the words above and below
+      them, so nothing is ever printed over them or behind them. Each comes into its own
+      colour as the reader reaches it and goes back to grey as it leaves. ── */
+.bio-fig{margin:clamp(40px,6vw,88px) 0;padding:0}
+.bio-fig img{display:block;width:100%;height:auto;
+  -webkit-mask-image:radial-gradient(closest-side at 50% 46%,#000 56%,rgba(0,0,0,.5) 80%,transparent 100%);
+  mask-image:radial-gradient(closest-side at 50% 46%,#000 56%,rgba(0,0,0,.5) 80%,transparent 100%);
+  filter:grayscale(1) contrast(1.05) brightness(.9);opacity:.62;
+  transform:rotate(var(--rot,0deg));
   transition:filter .7s ease,opacity .7s ease,transform .7s ease}
-.bio-fig.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.6vw,22px);align-items:stretch}
+.bio-fig.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4px,1vw,18px);align-items:center}
 .bio-fig.two img{aspect-ratio:4/5;object-fit:cover;object-position:50% 30%}
-.bio-fig.one{max-width:min(64%,420px)}
+.bio-fig.two img:first-child{--rot:-3.5deg}
+.bio-fig.two img:last-child{--rot:4deg}
+.bio-fig.one{max-width:min(62%,400px)}
 .bio-fig.one.right{margin-inline-start:auto}
+.bio-fig.one.right img{--rot:3deg}
 .bio-fig.one.left{margin-inline-end:auto}
+.bio-fig.one.left img{--rot:-4deg}
 @supports (animation-timeline:view()){
   .bio-fig img{animation:bioColour linear both;animation-timeline:view(block);animation-range:entry 12% exit 88%}
-  /* grey as it arrives, its own colour while the reader is with it, grey again as it goes */
   @keyframes bioColour{
-    0%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.5;transform:translateY(16px) scale(.985)}
-    30%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:none}
-    70%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:none}
-    100%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.5;transform:translateY(-16px) scale(.985)}}
-  /* the two childhood pictures develop one after the other, not together */
-  .bio-fig.two img:nth-child(2){animation-range:entry 34% exit 66%}   /* the second develops a moment after the first */
+    0%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.24;transform:translateY(20px) rotate(var(--rot,0deg)) scale(.975)}
+    32%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:rotate(var(--rot,0deg))}
+    68%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:rotate(var(--rot,0deg))}
+    100%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.24;transform:translateY(-20px) rotate(var(--rot,0deg)) scale(.975)}}
+  .bio-fig.two img:last-child{animation-range:entry 34% exit 66%}   /* the second develops a moment after the first */
 }
 @media(max-width:920px){
-  .bio-fig{margin:clamp(24px,7vw,40px) 0}
-  .bio-fig.one{max-width:100%}
-  .bio-fig.two{gap:10px}
+  .bio-fig{margin:clamp(34px,9vw,58px) 0}
+  .bio-fig.one{max-width:82%}
+  .bio-fig.one.left{margin-inline-start:0}
+  .bio-fig.two{gap:2px}
 }
-@media(prefers-reduced-motion:reduce){.bio-fig img{animation:none;filter:none;opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.bio-fig img{animation:none;filter:none;opacity:1;transform:rotate(var(--rot,0deg))}}
 .bio-next{margin:22px 0 0;font-size:14.5px;color:var(--pale-2);line-height:1.6}
 .bio-next a{color:var(--pink);font-weight:500;white-space:nowrap}
 .bio-next a i{font-style:normal}
