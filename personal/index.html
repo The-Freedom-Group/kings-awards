@@ -1190,36 +1190,36 @@ body.bio-open{overflow:hidden}
 .bio-dates dt{font-family:var(--disp);text-transform:uppercase;font-size:16px;line-height:1.1;color:var(--pink);white-space:nowrap;padding-top:3px}
 .bio-dates dd{margin:0;color:var(--pale-2);font-weight:300;border-bottom:1px solid var(--rule-d);padding-bottom:12px}
 .bio-dates dd b{color:var(--pale);font-weight:600}
-/* ── the photographs behind the biography: him at each age, in the order he grew up.
-      They drift up the page as it scrolls, their edges faded so they sit in the paper
-      rather than on it, and they come up to colour under a cursor. ── */
-.bio-in{position:relative}
-.bio-ph{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;overflow:clip}
-.bio-ph img{position:absolute;width:clamp(150px,19vw,290px);height:auto;
-  opacity:.26;filter:grayscale(1) contrast(1.04) brightness(.95);
-  -webkit-mask-image:radial-gradient(closest-side at 50% 46%,#000 58%,rgba(0,0,0,.45) 82%,transparent 100%);
-  mask-image:radial-gradient(closest-side at 50% 46%,#000 58%,rgba(0,0,0,.45) 82%,transparent 100%);
-  transform:rotate(var(--rot,0deg));transition:opacity .6s ease,filter .6s ease}
-.bio-ph .p1{top:2%;right:0;--rot:-4deg}
-.bio-ph .p2{top:26%;left:0;--rot:5deg}
-.bio-ph .p3{top:52%;right:1%;--rot:3deg}
-.bio-ph .p4{top:76%;left:1%;--rot:-5deg}
-@media(hover:hover){.bio.on .bio-ph{pointer-events:auto}
-  .bio.on .bio-ph img:hover{opacity:.72;filter:none}}
+/* ── the photographs in the biography: him at each age, set into the story where that
+      age is told. They stand in the column with the words above and below them, never
+      behind them, and each one comes into colour on its own as it crosses the screen. ── */
+.bio-fig{margin:clamp(30px,4vw,52px) 0;padding:0}
+.bio-fig img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 26px 64px rgba(0,0,0,.5);
+  filter:grayscale(1) contrast(1.05) brightness(.9);opacity:.72;
+  transition:filter .7s ease,opacity .7s ease,transform .7s ease}
+.bio-fig.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.6vw,22px);align-items:stretch}
+.bio-fig.two img{aspect-ratio:4/5;object-fit:cover;object-position:50% 30%}
+.bio-fig.one{max-width:min(64%,420px)}
+.bio-fig.one.right{margin-inline-start:auto}
+.bio-fig.one.left{margin-inline-end:auto}
 @supports (animation-timeline:view()){
-  .bio-ph img{animation:bioDrift linear both;animation-timeline:view(block);animation-range:entry 0% exit 100%;will-change:transform}
-  @keyframes bioDrift{0%{transform:translateY(34px) rotate(var(--rot,0deg)) scale(.96);opacity:0}
-    14%{opacity:.26}
-    86%{opacity:.26}
-    100%{transform:translateY(-34px) rotate(var(--rot,0deg)) scale(1.03);opacity:0}}
+  .bio-fig img{animation:bioColour linear both;animation-timeline:view(block);animation-range:entry 12% exit 88%}
+  /* grey as it arrives, its own colour while the reader is with it, grey again as it goes */
+  @keyframes bioColour{
+    0%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.5;transform:translateY(16px) scale(.985)}
+    30%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:none}
+    70%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:none}
+    100%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.5;transform:translateY(-16px) scale(.985)}}
+  /* the two childhood pictures develop one after the other, not together */
+  .bio-fig.two img:nth-child(2){animation-range:entry 34% exit 66%}   /* the second develops a moment after the first */
 }
-.bio-head,.bio-grid,.bio-next{position:relative;z-index:1}
-@media(max-width:920px){.bio-ph img{width:clamp(130px,36vw,210px);opacity:.2}
-  .bio-ph .p1{top:3%;right:0}.bio-ph .p2{top:27%;left:0}.bio-ph .p3{top:53%;right:0}.bio-ph .p4{top:78%;left:0}
-  @supports (animation-timeline:view()){
-    @keyframes bioDrift{0%{transform:translateY(22px) rotate(var(--rot,0deg));opacity:0}
-      12%{opacity:.2}88%{opacity:.2}100%{transform:translateY(-22px) rotate(var(--rot,0deg));opacity:0}}}}
-@media(prefers-reduced-motion:reduce){.bio-ph img{animation:none;opacity:.2}}
+@media(max-width:920px){
+  .bio-fig{margin:clamp(24px,7vw,40px) 0}
+  .bio-fig.one{max-width:100%}
+  .bio-fig.two{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){.bio-fig img{animation:none;filter:none;opacity:1;transform:none}}
 .bio-next{margin:22px 0 0;font-size:14.5px;color:var(--pale-2);line-height:1.6}
 .bio-next a{color:var(--pink);font-weight:500;white-space:nowrap}
 .bio-next a i{font-style:normal}
@@ -2221,12 +2221,6 @@ a.tl-link{color:var(--pink);font-weight:500}
 <div class="bio" id="bio" role="dialog" aria-modal="true" aria-labelledby="bioTitle" aria-hidden="true">
   <button class="bio-x" id="bioClose" type="button" data-cur-label="Close" aria-label="Close the biography">Close</button>
   <div class="bio-in">
-    <div class="bio-ph" aria-hidden="true">
-      <img class="p1" src="../assets/bio-ph-1.webp" width="439" height="620" alt="" loading="lazy" decoding="async">
-      <img class="p2" src="../assets/bio-ph-2.webp" width="463" height="620" alt="" loading="lazy" decoding="async">
-      <img class="p3" src="../assets/bio-ph-3.webp" width="481" height="620" alt="" loading="lazy" decoding="async">
-      <img class="p4" src="../assets/bio-ph-4.webp" width="383" height="620" alt="" loading="lazy" decoding="async">
-    </div>
     <header class="bio-head">
       <div class="ch-tag">Tom's biography</div>
       <h2 id="bioTitle">Before<br>Freedom</h2>
@@ -2235,8 +2229,17 @@ a.tl-link{color:var(--pink);font-weight:500}
     <div class="bio-grid">
       <article class="bio-prose">
         <p>My dad loaned me the money to buy that first batch of chocolate and drinks. It was the first business loan I ever had, arranged without paperwork, credit checks or interest. It gave me my first lesson in business: somebody may help you begin, but what happens next is your responsibility.</p>
-        <p>From August 2005, throughout childhood and into university, I kept starting small ventures: selling at school, cleaning neighbours' cars for money, car boot sales growing up, and side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
-        <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In March 2012, when I was 15, I lost my mum, Michele, to breast cancer. I left school that July and carried the loss into adulthood, and in September 2014 into the University of Salford, where I began studying architecture.</p>
+        
+      <figure class="bio-fig two">
+        <img src="../assets/bio-ph-1.webp" width="439" height="620" alt="Tom as a baby, sitting up and laughing" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-2.webp" width="463" height="620" alt="Tom as a small boy in a Manchester City shirt" loading="lazy" decoding="async">
+      </figure>
+      <p>From August 2005, throughout childhood and into university, I kept starting small ventures: selling at school, cleaning neighbours' cars for money, car boot sales growing up, and side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
+        
+      <figure class="bio-fig one right">
+        <img src="../assets/bio-ph-3.webp" width="481" height="620" alt="Tom's school portrait, in blazer and tie" loading="lazy" decoding="async">
+      </figure>
+      <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In March 2012, when I was 15, I lost my mum, Michele, to breast cancer. I left school that July and carried the loss into adulthood, and in September 2014 into the University of Salford, where I began studying architecture.</p>
         <p>Architecture taught me far more than how to design buildings. It trained me to respect detail, understand how systems connect and transform an empty space into a workable vision. It taught me research, presentation, problem solving and the discipline of revising an idea repeatedly until every element served a purpose.</p>
         <p>In July 2015, at 19, my best friend died in a motorbike accident. Grief derailed my second year and I came close to losing my place at university. But I recovered, graduated in July 2017 and continued directly into a two-year Master's.</p>
         <p>During my Master's, I explored how design could create opportunity for young people who felt disconnected from education and society. In July 2019, the month I graduated from the Master's, that journey took me to a summer placement at Harvard University and MIT, an experience that felt almost impossible considering how close I had come to leaving university altogether.</p>
@@ -2247,7 +2250,11 @@ a.tl-link{color:var(--pink);font-weight:500}
         <p>Instead, I went to work for his cleaning company as a delivery driver. On paper, it looked like a dramatic step backwards: from architecture, a Master's degree and Harvard to loading cleaning products into a van. There was no impressive title, carefully designed studio or obvious career path. But sometimes the route towards your future looks nothing like progress while you are travelling through it.</p>
         <p>In December 2019, during one ordinary delivery, I came across a second-hand fire extinguisher.</p>
         <p class="bio-close-line">To anybody else, it was an old piece of equipment.<br><em>To me, it looked like the beginning of something.</em></p>
-        <p class="bio-after">From that point I built Freedom Fire as a sole trader, and on 27 August 2021 it became a limited company. Over the years that followed we went on to establish rapid ecommerce growth, becoming number one for fire extinguishers on eBay and number one on Temu.</p>
+        
+      <figure class="bio-fig one left">
+        <img src="../assets/bio-ph-4.webp" width="383" height="620" alt="Tom today" loading="lazy" decoding="async">
+      </figure>
+      <p class="bio-after">From that point I built Freedom Fire as a sole trader, and on 27 August 2021 it became a limited company. Over the years that followed we went on to establish rapid ecommerce growth, becoming number one for fire extinguishers on eBay and number one on Temu.</p>
         <p class="bio-after">We endured more loss along the way: another close friend when I was 27, and my sister-in-law when I was 28. Through the hardship, even when the chips were down, we carried on, and became the start of what we like to call a £100 million enterprise.</p>
         <p class="bio-next">That moment closes the story before the business and begins the Freedom timeline. <a href="#timeline" id="bioToTimeline">See the timeline <i>→</i></a></p>
       </article>
