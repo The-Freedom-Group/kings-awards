@@ -1166,7 +1166,7 @@ footer{padding-bottom:clamp(36px,5vw,64px)}
 .bio-btn i{font-style:normal}
 .bio-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(255,45,141,.35)}
 @media(max-width:760px){.bio-cta{grid-template-columns:1fr}.bio-btn{justify-self:start}}
-.bio{position:fixed;inset:0;z-index:240;background:var(--carbon);color:var(--pale);overflow:auto;overscroll-behavior:contain;
+.bio{position:fixed;inset:0;z-index:240;background:var(--carbon);color:var(--pale);overflow-y:auto;overflow-x:clip;overscroll-behavior:contain;
   opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s ease}
 .bio.on{opacity:1;visibility:visible}
 body.bio-open{overflow:hidden}
@@ -1190,6 +1190,36 @@ body.bio-open{overflow:hidden}
 .bio-dates dt{font-family:var(--disp);text-transform:uppercase;font-size:16px;line-height:1.1;color:var(--pink);white-space:nowrap;padding-top:3px}
 .bio-dates dd{margin:0;color:var(--pale-2);font-weight:300;border-bottom:1px solid var(--rule-d);padding-bottom:12px}
 .bio-dates dd b{color:var(--pale);font-weight:600}
+/* ── the photographs behind the biography: him at each age, in the order he grew up.
+      They drift up the page as it scrolls, their edges faded so they sit in the paper
+      rather than on it, and they come up to colour under a cursor. ── */
+.bio-in{position:relative}
+.bio-ph{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;overflow:clip}
+.bio-ph img{position:absolute;width:clamp(150px,19vw,290px);height:auto;
+  opacity:.26;filter:grayscale(1) contrast(1.04) brightness(.95);
+  -webkit-mask-image:radial-gradient(closest-side at 50% 46%,#000 58%,rgba(0,0,0,.45) 82%,transparent 100%);
+  mask-image:radial-gradient(closest-side at 50% 46%,#000 58%,rgba(0,0,0,.45) 82%,transparent 100%);
+  transform:rotate(var(--rot,0deg));transition:opacity .6s ease,filter .6s ease}
+.bio-ph .p1{top:2%;right:0;--rot:-4deg}
+.bio-ph .p2{top:26%;left:0;--rot:5deg}
+.bio-ph .p3{top:52%;right:1%;--rot:3deg}
+.bio-ph .p4{top:76%;left:1%;--rot:-5deg}
+@media(hover:hover){.bio.on .bio-ph{pointer-events:auto}
+  .bio.on .bio-ph img:hover{opacity:.72;filter:none}}
+@supports (animation-timeline:view()){
+  .bio-ph img{animation:bioDrift linear both;animation-timeline:view(block);animation-range:entry 0% exit 100%;will-change:transform}
+  @keyframes bioDrift{0%{transform:translateY(34px) rotate(var(--rot,0deg)) scale(.96);opacity:0}
+    14%{opacity:.26}
+    86%{opacity:.26}
+    100%{transform:translateY(-34px) rotate(var(--rot,0deg)) scale(1.03);opacity:0}}
+}
+.bio-head,.bio-grid,.bio-next{position:relative;z-index:1}
+@media(max-width:920px){.bio-ph img{width:clamp(130px,36vw,210px);opacity:.2}
+  .bio-ph .p1{top:3%;right:0}.bio-ph .p2{top:27%;left:0}.bio-ph .p3{top:53%;right:0}.bio-ph .p4{top:78%;left:0}
+  @supports (animation-timeline:view()){
+    @keyframes bioDrift{0%{transform:translateY(22px) rotate(var(--rot,0deg));opacity:0}
+      12%{opacity:.2}88%{opacity:.2}100%{transform:translateY(-22px) rotate(var(--rot,0deg));opacity:0}}}}
+@media(prefers-reduced-motion:reduce){.bio-ph img{animation:none;opacity:.2}}
 .bio-next{margin:22px 0 0;font-size:14.5px;color:var(--pale-2);line-height:1.6}
 .bio-next a{color:var(--pink);font-weight:500;white-space:nowrap}
 .bio-next a i{font-style:normal}
@@ -2191,6 +2221,12 @@ a.tl-link{color:var(--pink);font-weight:500}
 <div class="bio" id="bio" role="dialog" aria-modal="true" aria-labelledby="bioTitle" aria-hidden="true">
   <button class="bio-x" id="bioClose" type="button" data-cur-label="Close" aria-label="Close the biography">Close</button>
   <div class="bio-in">
+    <div class="bio-ph" aria-hidden="true">
+      <img class="p1" src="../assets/bio-ph-1.webp" width="439" height="620" alt="" loading="lazy" decoding="async">
+      <img class="p2" src="../assets/bio-ph-2.webp" width="463" height="620" alt="" loading="lazy" decoding="async">
+      <img class="p3" src="../assets/bio-ph-3.webp" width="481" height="620" alt="" loading="lazy" decoding="async">
+      <img class="p4" src="../assets/bio-ph-4.webp" width="383" height="620" alt="" loading="lazy" decoding="async">
+    </div>
     <header class="bio-head">
       <div class="ch-tag">Tom's biography</div>
       <h2 id="bioTitle">Before<br>Freedom</h2>
