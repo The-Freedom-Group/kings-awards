@@ -1201,10 +1201,6 @@ body.bio-open{overflow:hidden}
   filter:grayscale(1) contrast(1.05) brightness(.9);opacity:.62;
   transform:rotate(var(--rot,0deg));
   transition:filter .7s ease,opacity .7s ease,transform .7s ease}
-.bio-fig.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4px,1vw,18px);align-items:center}
-.bio-fig.two img{aspect-ratio:4/5;object-fit:cover;object-position:50% 30%}
-.bio-fig.two img:first-child{--rot:-3.5deg}
-.bio-fig.two img:last-child{--rot:4deg}
 .bio-fig.one{max-width:min(62%,400px)}
 .bio-fig.one.right{margin-inline-start:auto}
 .bio-fig.one.right img{--rot:3deg}
@@ -1217,13 +1213,16 @@ body.bio-open{overflow:hidden}
     32%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:rotate(var(--rot,0deg))}
     68%{filter:grayscale(0) contrast(1) brightness(1);opacity:1;transform:rotate(var(--rot,0deg))}
     100%{filter:grayscale(1) contrast(1.05) brightness(.82);opacity:.24;transform:translateY(-20px) rotate(var(--rot,0deg)) scale(.975)}}
-  .bio-fig.two img:last-child{animation-range:entry 34% exit 66%}   /* the second develops a moment after the first */
 }
 @media(max-width:920px){
-  .bio-fig{margin:clamp(34px,9vw,58px) 0}
-  .bio-fig.one{max-width:82%}
-  .bio-fig.one.left{margin-inline-start:0}
-  .bio-fig.two{gap:2px}
+  /* the biography reads as a newspaper article: every picture the same square, hard edged and
+     square on the page, one to a passage as the years pass. The soft mask and the tilt are the
+     two things that made them look pasted in, so both go; they still come into colour. */
+  .bio-fig{margin:clamp(30px,7vw,48px) 0}
+  .bio-fig.one,.bio-fig.one.left,.bio-fig.one.right{max-width:none;margin-inline-start:0;margin-inline-end:0}
+  .bio-fig img,.bio-fig.one.left img,.bio-fig.one.right img{--rot:0deg}
+  .bio-fig img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;
+    -webkit-mask-image:none;mask-image:none}
 }
 @media(prefers-reduced-motion:reduce){.bio-fig img{animation:none;filter:none;opacity:1;transform:rotate(var(--rot,0deg))}}
 .bio-next{margin:22px 0 0;font-size:14.5px;color:var(--pale-2);line-height:1.6}
@@ -1522,7 +1521,10 @@ a.tl-link{color:var(--pink);font-weight:500}
   .mbr{display:inline}
   .hero-sub{margin-top:18px}
   .hero-sub .fob-sub{margin-top:8px;line-height:1.55}
-  .hero-acts{margin-top:18px;gap:12px}
+  /* the two calls sit as a pair: the space above them and the space between them read the same,
+     once the 24px each link carries at wider sizes is taken off */
+  .hero-acts{margin-top:22px;gap:14px}
+  .hero-acts .follow{margin-top:0}
 
   /* ── the same air under every chapter label, wherever it stands ── */
   .ch-tag{margin-bottom:14px}
@@ -1561,34 +1563,37 @@ a.tl-link{color:var(--pink);font-weight:500}
   /* ── the charts arrive and build as the reader comes to them ── */
   .charts{margin-top:24px;gap:24px}          /* the same air above the first panel as between them */
   #chBars,#chLine{view-timeline-name:--chv;view-timeline-axis:block}
-  html.noline #chBars,html.noline #chLine{animation:chartIn linear both;animation-timeline:view();animation-range:entry 4% entry 92%}
+  html.noline #chBars,html.noline #chLine{animation:chartIn linear both;animation-timeline:view();animation-range:cover 8% cover 30%}
   @keyframes chartIn{0%{opacity:0;transform:translateY(38px) scale(.98)}70%{opacity:1}100%{opacity:1;transform:none}}
-  /* the stacked bars grow column by column, each one settling with a small lift */
+  /* The build is paced against `cover`, the whole time a chart is on the screen, not `entry`,
+     which lasts only as long as the chart's own height: on a phone that was 340px of scroll for
+     all forty-eight bars, finished before the chart had properly arrived. Now it runs while the
+     chart is in front of the reader. The stacked bars grow column by column, each with a lift. */
   html.noline #chBars g.seg-g{transform-box:view-box;transform-origin:0 252px;
-    animation:segUp linear both;animation-timeline:--chv;animation-range:entry 18% entry 46%}
-  html.noline #chBars g.seg-g:nth-of-type(n+9){animation-range:entry 30% entry 58%}
-  html.noline #chBars g.seg-g:nth-of-type(n+17){animation-range:entry 40% entry 68%}
-  html.noline #chBars g.seg-g:nth-of-type(n+25){animation-range:entry 50% entry 78%}
-  html.noline #chBars g.seg-g:nth-of-type(n+33){animation-range:entry 58% entry 86%}
-  html.noline #chBars g.seg-g:nth-of-type(n+41){animation-range:entry 66% entry 94%}
+    animation:segUp linear both;animation-timeline:--chv;animation-range:cover 24% cover 41%}
+  html.noline #chBars g.seg-g:nth-of-type(n+9){animation-range:cover 31% cover 48%}
+  html.noline #chBars g.seg-g:nth-of-type(n+17){animation-range:cover 37% cover 54%}
+  html.noline #chBars g.seg-g:nth-of-type(n+25){animation-range:cover 43% cover 60%}
+  html.noline #chBars g.seg-g:nth-of-type(n+33){animation-range:cover 48% cover 65%}
+  html.noline #chBars g.seg-g:nth-of-type(n+41){animation-range:cover 53% cover 70%}
   @keyframes segUp{0%{transform:scaleY(.02);opacity:.25}
     30%{transform:scaleY(.42);opacity:.75}
     62%{transform:scaleY(.88);opacity:1}
     84%{transform:scaleY(1.035)}
     100%{transform:scaleY(1);opacity:1}}
   /* the year totals follow their column up */
-  html.noline #chBars .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:entry 60% entry 96%}
+  html.noline #chBars .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:cover 49% cover 71%}
   @keyframes markIn{0%{opacity:0;transform:translateY(7px)}100%{opacity:1;transform:none}}
   html.noline #chBars .vl{transform-box:fill-box}
   /* the ten-year line draws itself, then its points land one after the other */
-  html.noline #lineClipRect{animation:lineDraw linear both;animation-timeline:--chv;animation-range:entry 10% entry 100%}
+  html.noline #lineClipRect{animation:lineDraw linear both;animation-timeline:--chv;animation-range:cover 19% cover 74%}
   @keyframes lineDraw{from{width:2px}to{width:640px}}
-  html.noline #chLine .dot-g{transform-box:fill-box;transform-origin:50% 50%;animation:dotPop linear both;animation-timeline:--chv;animation-range:entry 30% entry 62%}
-  html.noline #chLine .dot-g:nth-of-type(n+5){animation-range:entry 44% entry 74%}
-  html.noline #chLine .dot-g:nth-of-type(n+9){animation-range:entry 58% entry 86%}
-  html.noline #chLine .dot-g:nth-of-type(n+13){animation-range:entry 72% entry 98%}
+  html.noline #chLine .dot-g{transform-box:fill-box;transform-origin:50% 50%;animation:dotPop linear both;animation-timeline:--chv;animation-range:cover 31% cover 51%}
+  html.noline #chLine .dot-g:nth-of-type(n+5){animation-range:cover 40% cover 58%}
+  html.noline #chLine .dot-g:nth-of-type(n+9){animation-range:cover 48% cover 65%}
+  html.noline #chLine .dot-g:nth-of-type(n+13){animation-range:cover 57% cover 72%}
   @keyframes dotPop{0%{opacity:0;transform:scale(.35)}64%{opacity:1;transform:scale(1.18)}100%{opacity:1;transform:scale(1)}}
-  html.noline #chLine .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:entry 60% entry 92%;transform-box:fill-box}
+  html.noline #chLine .vl{animation:markIn linear both;animation-timeline:--chv;animation-range:cover 49% cover 69%;transform-box:fill-box}
   @supports not (animation-timeline:view()){html.noline #chBars,html.noline #chLine,html.noline #chBars g.seg-g,html.noline #chBars .vl,html.noline #chLine .vl,html.noline #chLine .dot-g{animation:none;opacity:1;transform:none}
     html.noline #lineClipRect{animation:none;width:640px}}
 
@@ -2229,17 +2234,19 @@ a.tl-link{color:var(--pink);font-weight:500}
     <div class="bio-grid">
       <article class="bio-prose">
         <p>My dad loaned me the money to buy that first batch of chocolate and drinks. It was the first business loan I ever had, arranged without paperwork, credit checks or interest. It gave me my first lesson in business: somebody may help you begin, but what happens next is your responsibility.</p>
-        
-      <figure class="bio-fig two">
-        <img src="../assets/bio-ph-1.webp" width="439" height="620" alt="Tom as a baby, sitting up and laughing" loading="lazy" decoding="async">
-        <img src="../assets/bio-ph-2.webp" width="463" height="620" alt="Tom as a small boy in a Manchester City shirt" loading="lazy" decoding="async">
+      <figure class="bio-fig one left">
+        <img src="../assets/bio-ph-2.webp" width="463" height="620" style="object-position:50% 20%" alt="Tom as a small boy in a Manchester City shirt" loading="lazy" decoding="async">
       </figure>
       <p>From August 2005, throughout childhood and into university, I kept starting small ventures: selling at school, cleaning neighbours' cars for money, car boot sales growing up, and side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
         
       <figure class="bio-fig one right">
-        <img src="../assets/bio-ph-3.webp" width="481" height="620" alt="Tom's school portrait, in blazer and tie" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-3.webp" width="481" height="620" style="object-position:50% 18%" alt="Tom's school portrait, in blazer and tie" loading="lazy" decoding="async">
       </figure>
       <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In March 2012, when I was 15, I lost my mum, Michele, to breast cancer. I left school that July and carried the loss into adulthood, and in September 2014 into the University of Salford, where I began studying architecture.</p>
+
+      <figure class="bio-fig one left">
+        <img src="../assets/bio-ph-mum.webp" width="1015" height="742" style="object-position:40% 42%" alt="Tom as a boy with his mum, Michele" loading="lazy" decoding="async">
+      </figure>
         <p>Architecture taught me far more than how to design buildings. It trained me to respect detail, understand how systems connect and transform an empty space into a workable vision. It taught me research, presentation, problem solving and the discipline of revising an idea repeatedly until every element served a purpose.</p>
         <p>In July 2015, at 19, my best friend died in a motorbike accident. Grief derailed my second year and I came close to losing my place at university. But I recovered, graduated in July 2017 and continued directly into a two-year Master's.</p>
         <p>During my Master's, I explored how design could create opportunity for young people who felt disconnected from education and society. In July 2019, the month I graduated from the Master's, that journey took me to a summer placement at Harvard University and MIT, an experience that felt almost impossible considering how close I had come to leaving university altogether.</p>
@@ -2252,7 +2259,7 @@ a.tl-link{color:var(--pink);font-weight:500}
         <p class="bio-close-line">To anybody else, it was an old piece of equipment.<br><em>To me, it looked like the beginning of something.</em></p>
         
       <figure class="bio-fig one left">
-        <img src="../assets/bio-ph-4.webp" width="383" height="620" alt="Tom today" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-4.webp" width="383" height="620" style="object-position:50% 12%" alt="Tom today" loading="lazy" decoding="async">
       </figure>
       <p class="bio-after">From that point I built Freedom Fire as a sole trader, and on 27 August 2021 it became a limited company. Over the years that followed we went on to establish rapid ecommerce growth, becoming number one for fire extinguishers on eBay and number one on Temu.</p>
         <p class="bio-after">We endured more loss along the way: another close friend when I was 27, and my sister-in-law when I was 28. Through the hardship, even when the chips were down, we carried on, and became the start of what we like to call a £100 million enterprise.</p>
