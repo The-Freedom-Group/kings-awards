@@ -12,7 +12,10 @@ public/ is hand-edited; rerun this script after any change and commit the result
 import os, re, shutil, sys, json, hashlib, subprocess, tempfile
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-TOM = "https://tomletcher.co.uk/"
+TOM = "https://www.tomletcher.co.uk/"
+# The Way In keeps its bare host until www.thewayin.freedom-fire.co.uk has a DNS record:
+# this address is the site's own canonical, the portfolio's link across and the gateway's
+# redirect stub, so pointing it at a host that does not resolve would break all three.
 WAY = "https://thewayin.freedom-fire.co.uk/"
 AWARDS = "https://awards.freedomgroup.uk/"
 COMPAT = "2026-09-01"

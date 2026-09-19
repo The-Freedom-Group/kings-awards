@@ -15,7 +15,9 @@ import requests
 
 ACCOUNT = "68de5f992b8ea058b068d6a32c4cf6a1"
 API = "https://api.cloudflare.com/client/v4/accounts/%s/stream" % ACCOUNT
-ORIGINS = "thewayin.freedom-fire.co.uk,tomletcher.co.uk,localhost,127.0.0.1,localhost:8080,127.0.0.1:8080"
+ORIGINS = ("thewayin.freedom-fire.co.uk,www.thewayin.freedom-fire.co.uk,"
+           "tomletcher.co.uk,www.tomletcher.co.uk,"
+           "localhost,127.0.0.1,localhost:8080,127.0.0.1:8080")
 CHUNK = 16 * 1024 * 1024          # a multiple of 256 KiB, as tus on Stream requires
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
