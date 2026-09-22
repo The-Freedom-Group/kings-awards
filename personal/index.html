@@ -1523,8 +1523,9 @@ a.tl-link{color:var(--pink);font-weight:500}
   .hero-sub .fob-sub{margin-top:8px;line-height:1.55}
   /* the two calls sit as a pair: the space above them and the space between them read the same,
      once the 24px each link carries at wider sizes is taken off */
-  .hero-acts{margin-top:22px;gap:14px}
-  .hero-acts .follow{margin-top:0}
+  .hero-acts{margin-top:14px;gap:0}
+  /* each call keeps a 40px tap area, so the words sit 40px apart: the contact line right under the film */
+  .hero-acts .follow{margin-top:0;min-height:40px;padding:6px 0}
 
   /* ── the same air under every chapter label, wherever it stands ── */
   .ch-tag{margin-bottom:14px}
@@ -1555,6 +1556,9 @@ a.tl-link{color:var(--pink);font-weight:500}
 
   /* ── the line beneath the name holds both companies: the first ends the top line ── */
   .hero-sub .fob-sub{font-size:min(10.5px,2.62vw);letter-spacing:.055em;white-space:nowrap}
+  /* no dots behind the managing director line: the grid is cleared from behind it, feathered at the edge */
+  .hero-sub .fob-sub{position:relative;width:max-content;max-width:100%;background:var(--porcelain);
+    box-shadow:0 0 10px 12px var(--porcelain)}
 
   /* ── a heading's lines never touch ── */
   .ch h2,.hero-type h1,.scene .ph h3,h2,h3{line-height:1.04}
@@ -1633,6 +1637,21 @@ a.tl-link{color:var(--pink);font-weight:500}
     76%{opacity:1;transform:none}
     100%{opacity:0;transform:translateY(-28px)}}
   @supports not (animation-timeline:view()){html.noline .ch-tag,html.noline .ch h2,html.noline .ch .stand,html.noline .quo,html.noline .jy-head h2,html.noline .env-head h3{animation:none;opacity:1;transform:none}}
+}
+/* ── the system on a phone: each planet and its name stand clear of every other and inside the screen.
+   Whether a company is active, planned or for later is said in the panel a tap opens, so the small
+   status words under each name go; the rings keep their own time labels. ── */
+@media(max-width:760px){
+  .map .node .st{display:none}
+  .map .node{gap:5px}
+  .map .node .lbl{text-shadow:0 0 4px var(--carbon),0 0 8px var(--carbon),0 0 12px var(--carbon)}
+}
+/* ── the globe on a phone holds while the scroll turns it (thread.js makes the track), and the chapter
+   stays at night: no day ground behind it ── */
+@media(max-width:820px){
+  .globe-track{grid-column:1/-1;grid-row:1;position:relative}
+  .globe-track>.globe{position:sticky;top:var(--g-top,90px);margin:0 auto}
+  #c06.day .env::before{opacity:1}
 }
 @media(max-width:820px) and (prefers-reduced-motion:reduce){
   html.noline .ch-tag,html.noline .ch h2,html.noline .ch .stand,html.noline .quo,html.noline .jy-head h2,html.noline .env-head h3{animation:none;opacity:1;transform:none}
@@ -2072,31 +2091,31 @@ a.tl-link{color:var(--pink);font-weight:500}
             <circle class="rk-nozGlow" cx="-25.4" cy="0" r="2.1"/>
             <circle class="rk-strobe" cx="28.5" cy="-1.2" r="1.05"/>
           </g></svg></span>
-        <span class="yrlbl" data-ring="A" data-ang="128">Now</span>
-        <span class="yrlbl" data-ring="B" data-ang="95">24 – 36 months</span>
-        <span class="yrlbl" data-ring="C" data-ang="232">2029 onwards</span>
+        <span class="yrlbl" data-ring="A" data-ang="128" data-mang="6">Now</span>
+        <span class="yrlbl" data-ring="B" data-ang="95" data-mang="268">24 – 36 months</span>
+        <span class="yrlbl" data-ring="C" data-ang="232" data-mang="68">2029 onwards</span>
         <button data-cur-label="Select" class="node core sel" data-k="group" data-s="core" data-ring="0" data-ang="0" aria-pressed="true">
           <span class="orb"></span><span class="lbl">Freedom Group Enterprise Ltd</span>
           <span class="st">Holding</span></button>
-        <button data-cur-label="Select" class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335">
+        <button data-cur-label="Select" class="node" data-k="global" data-s="operating" data-ring="A" data-ang="335" data-mang="216">
           <span class="orb"></span><span class="lbl">Freedom Global Ltd</span>
           <span class="st">Active</span></button>
-        <button data-cur-label="Select" class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200">
+        <button data-cur-label="Select" class="node" data-k="fac" data-s="planned" data-ring="B" data-ang="200" data-mang="313">
           <span class="orb"></span><span class="lbl">Freedom Facilities Ltd</span>
           <span class="st">Planned</span></button>
-        <button data-cur-label="Select" class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="20">
+        <button data-cur-label="Select" class="node" data-k="dist" data-s="planned" data-ring="B" data-ang="20" data-mang="133">
           <span class="orb"></span><span class="lbl">Freedom Distribution Ltd</span>
           <span class="st">Planned</span></button>
-        <button data-cur-label="Select" class="node" data-k="form" data-s="future" data-ring="C" data-ang="260">
+        <button data-cur-label="Select" class="node" data-k="form" data-s="future" data-ring="C" data-ang="260" data-mang="40">
           <span class="orb"></span><span class="lbl">Freedom Form Ltd</span>
           <span class="st">Future · 2029</span></button>
-        <button data-cur-label="Select" class="node" data-k="freight" data-s="future" data-ring="C" data-ang="350">
+        <button data-cur-label="Select" class="node" data-k="freight" data-s="future" data-ring="C" data-ang="350" data-mang="161">
           <span class="orb"></span><span class="lbl">Freedom Freight Ltd</span>
           <span class="st">Future · 2029</span></button>
-        <button data-cur-label="Select" class="node" data-k="fly" data-s="future" data-ring="C" data-ang="80">
+        <button data-cur-label="Select" class="node" data-k="fly" data-s="future" data-ring="C" data-ang="80" data-mang="101">
           <span class="orb"></span><span class="lbl">Freedom Fly Ltd</span>
           <span class="st">Future · 2030+</span></button>
-        <button data-cur-label="Select" class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="170">
+        <button data-cur-label="Select" class="node" data-k="fuel" data-s="future" data-ring="C" data-ang="170" data-mang="341">
           <span class="orb"></span><span class="lbl">Freedom Fuel Ltd</span>
           <span class="st">Future · 2030+</span></button>
       </div>

@@ -173,18 +173,21 @@
     nd.style.setProperty("--oy", q.y.toFixed(2) + "px");
   }
   var rocketA = 300;
+  /* a phone's system has its own places (data-mang), found so that no planet, name or ring label touches
+     another and none runs off the screen; the phone holds them still */
+  function mapAng(nd) { return +((window.innerWidth <= 760 && nd.getAttribute("data-mang")) || nd.getAttribute("data-ang")) || 0; }
   function placeOrbits() {
     mapSize();
     $$(".map .node, .map .yrlbl").forEach(function (nd) {
       var ring = nd.getAttribute("data-ring");
       if (nd.classList.contains("yrlbl")) {
-        var lp = ringXY(ring, +nd.getAttribute("data-ang") || 0);
+        var lp = ringXY(ring, mapAng(nd));
         nd.style.left = lp.x + "%"; nd.style.top = (lp.y / 76 * 100) + "%";
         return;
       }
       nd.style.left = "0"; nd.style.top = "0";
       if (ring === "0" || !RINGS[ring]) { putNode(nd, { x: MCX, y: MCY }); return; }
-      if (nd.dataset.a === undefined) nd.dataset.a = nd.getAttribute("data-ang") || "0";
+      if (nd.dataset.a === undefined || coarse) nd.dataset.a = mapAng(nd);
       putNode(nd, ringXY(ring, +nd.dataset.a));
     });
     if (rocket) placeRocket();
@@ -301,6 +304,33 @@
   (function () {
     var box = $("#globe"), cv = $("#globeC"); if (!box || !cv) return;
     var ctx = cv.getContext("2d"), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
+    /* a phone: the globe holds on the screen while the reader scrolls on, and the scroll turns it, once
+       round, before the page moves on. It sits in a taller track (the travel) and is sticky inside it. */
+    var gTrack = null, gTravel = 0, gTop = 0, gTurn = 0, gW = -1;
+    function pinGlobe() {
+      var want = window.innerWidth <= 820 && !reduce;
+      if (want && !gTrack) {
+        gTrack = document.createElement("div"); gTrack.className = "globe-track";
+        box.parentNode.insertBefore(gTrack, box); gTrack.appendChild(box);
+        document.documentElement.classList.add("globe-pin");
+      } else if (!want && gTrack) {
+        gTrack.parentNode.insertBefore(box, gTrack); gTrack.parentNode.removeChild(gTrack); gTrack = null;
+        document.documentElement.classList.remove("globe-pin"); gW = -1; return;
+      }
+      if (!gTrack || window.innerWidth === gW) return;    /* the toolbar coming and going changes only the height: keep the travel */
+      gW = window.innerWidth;
+      var vh = window.innerHeight, ch = document.getElementById("chrome"), cH = ch ? ch.offsetHeight : 0, gh = box.offsetWidth;
+      gTop = Math.max(cH + 12, Math.round(cH + (vh - cH - gh) / 2));
+      gTravel = Math.round(vh * 1.1);
+      gTrack.style.setProperty("--g-top", gTop + "px");
+      gTrack.style.height = (gh + gTravel) + "px";
+    }
+    function scrollTurn() {
+      if (!gTrack) return 0;
+      var t = gTrack.getBoundingClientRect().top, f = Math.max(0, Math.min(1, (gTop - t) / Math.max(1, gTravel)));
+      return f * Math.PI * 2;
+    }
+    pinGlobe();
     /* a phone draws fewer dots, without the glow round each one, at half the rate: the turn is smooth */
     var lite = coarse, lastDraw = 0, frameMs = lite ? 30 : 0;
     var TILT = 20 * Math.PI / 180, HOME = [53.6, -2.3];
@@ -389,6 +419,7 @@
         }
       }
       if (dragX === null && !reduce) rot += spin;
+      if (gTrack) { var tt = scrollTurn(), dT = (tt - gTurn) * 0.3; gTurn += dT; rot += dT; }   /* the scroll's own turn, eased */
       if (seen && !reduce) kick();
     }
     function kick() { if (!raf) raf = requestAnimationFrame(draw); }
@@ -398,7 +429,8 @@
     box.addEventListener("pointerdown", function (e) { dragX = e.clientX; try { box.setPointerCapture(e.pointerId); } catch (e2) {} });
     box.addEventListener("pointermove", function (e) { if (dragX === null) return; rot += (e.clientX - dragX) * 0.006; dragX = e.clientX; kick(); });
     var drop = function () { dragX = null; }; box.addEventListener("pointerup", drop); box.addEventListener("pointercancel", drop);
-    window.addEventListener("resize", function () { W0 = 0; kick(); }, { passive: true });
+    window.addEventListener("resize", function () { W0 = 0; pinGlobe(); kick(); }, { passive: true });
+    window.addEventListener("scroll", function () { if (gTrack && seen) kick(); }, { passive: true });
   })();
 
   /* ══ THE THREAD ═══════════════════════════════════════════ */
@@ -678,7 +710,10 @@
       [["lap-core", 0], ["lap-a-ring", 0.14], ["lap-a", 0.28], ["lap-b-ring", 0.44], ["lap-b", 0.58], ["lap-c-ring", 0.74], ["lap-c", 0.88]]
         .forEach(function (st) { mapEl.classList.toggle(st[0], fm > 0 && fm >= st[1]); });
     }
-    if (travel.globe !== undefined && c06El) c06El.classList.toggle("day", eye <= travel.globe);
+    /* a phone keeps the carbon planet's chapter at night throughout: a turn from day that lands late
+       (a quick flick, a jump from the menu, a page that has grown since it was measured) left the
+       ground off-white above chapter 07 */
+    if (c06El) c06El.classList.remove("day");
   }
   function phoneNow() { return window.innerWidth <= 820; }
 
