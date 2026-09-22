@@ -1652,6 +1652,14 @@ a.tl-link{color:var(--pink);font-weight:500}
   .globe-track{grid-column:1/-1;grid-row:1;position:relative}
   .globe-track>.globe{position:sticky;top:var(--g-top,90px);margin:0 auto}
   #c06.day .env::before{opacity:1}
+  /* the ground is carbon in the chapter's own background from the carbon block down, and the ground's
+     layer is only as wide as the screen (it was three screens wide) and never fades */
+  #c06{background:linear-gradient(to bottom,var(--porcelain) 0,var(--porcelain) var(--env-y,100%),var(--carbon) var(--env-y,100%))}
+  .env::before{left:calc(-1 * var(--gut));right:calc(-1 * var(--gut));transition:none}
+  .env,.env *{transition-property:none}
+  /* the dot grids carry their faintness in their colour, not as a see-through layer the height of a chapter */
+  .drift{opacity:1;color:rgba(16,16,16,.24)}
+  .dark .drift,.scene .drift,.slab .drift,.mq .drift,footer .drift{opacity:1;color:rgba(244,241,235,.22)}
 }
 @media(max-width:820px) and (prefers-reduced-motion:reduce){
   html.noline .ch-tag,html.noline .ch h2,html.noline .ch .stand,html.noline .quo,html.noline .jy-head h2,html.noline .env-head h3{animation:none;opacity:1;transform:none}

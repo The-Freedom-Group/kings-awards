@@ -453,6 +453,19 @@
   }
   var rideMeta = null, rideA = 0, rideB = 0, chartsEl = $("#charts"), lineClipRect = $("#lineClipRect"), chartParts = null, tlRows = [];
   var c06El = $("#c06"), envEl = c06El ? c06El.querySelector(".env") : null;
+  /* a phone paints the carbon ground into the chapter's own background too, from the top of the carbon
+     block down (--env-y), so if the phone ever drops the ground's layer mid-scroll there is carbon under
+     it, not the chapter's off-white: that drop was the white flash between chapters 06 and 07 */
+  if (c06El && envEl) {
+    var setEnvY = function () {                 /* layout offsets, so the reveal's lift does not move it */
+      var y = 0, e = envEl; while (e && e !== c06El) { y += e.offsetTop; e = e.offsetParent; }
+      if (e !== c06El) y = envEl.offsetTop - c06El.offsetTop;
+      c06El.style.setProperty("--env-y", Math.round(y) + "px");
+    };
+    setEnvY();
+    if ("ResizeObserver" in window) new ResizeObserver(setEnvY).observe(c06El);
+    window.addEventListener("load", setEnvY);
+  }
   /* ── The Journey: a strip of moments the wheel travels while the page holds ── */
   var jy = { el: $("#timeline"), stage: $("#jyStage"), strip: $("#jyStrip"), track: $("#jyTrack"), count: $("#jyCount"), year: $("#jyYear"), hint: $("#jyHint"),
              cards: [], n: 0, centres: [], live: false, pending: null, f: -1, lit: null, head: null, pulse: null, knots: [], yrs: [], bound: false, yr: "" };
@@ -713,7 +726,7 @@
     /* a phone keeps the carbon planet's chapter at night throughout: a turn from day that lands late
        (a quick flick, a jump from the menu, a page that has grown since it was measured) left the
        ground off-white above chapter 07 */
-    if (c06El) c06El.classList.remove("day");
+    if (c06El && c06El.classList.contains("day")) c06El.classList.remove("day");
   }
   function phoneNow() { return window.innerWidth <= 820; }
 
