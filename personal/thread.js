@@ -249,7 +249,14 @@
     watched.forEach(function (e) { e.classList.add("in"); });
   } else {
     io = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
+      es.forEach(function (en) {
+        /* a phone reveals a block once and leaves it: taking it away again as it left the top of the screen
+           fought the words' own scroll fade, and at the foot of the page - the toolbar coming and going, the
+           page settling after its bounce - chapter 07 flicked out and in beside "Back to the start".
+           The system keeps its switch: it is what pauses the planets while they are off the screen. */
+        if (!en.isIntersecting && window.innerWidth <= 820 && en.target.classList.contains("rv")) return;
+        en.target.classList.toggle("in", en.isIntersecting);
+      });
     }, { rootMargin: "-4% 0px -10% 0px", threshold: 0.06 });
     watched.forEach(function (e) { io.observe(e); });
   }
@@ -714,7 +721,15 @@
     if (gl && gl.offsetWidth) { var gr = gl.getBoundingClientRect(); t.globe = gr.top + window.pageYOffset - window.innerHeight * 0.12; }
     travel = t;
   }
+  var jyStale = false, ihAt = 0;
+  /* the journey strip's repaint after a toolbar change is done only when the strip is near the screen */
+  function jyRefresh() {
+    [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.animationName = "none"; void el.offsetWidth; el.style.animationName = ""; });
+    jyStale = false;
+  }
+  function jyNear() { var r = jy.el ? jy.el.getBoundingClientRect() : null; return !!r && r.bottom > -window.innerHeight && r.top < window.innerHeight * 2; }
   function travelStep(y) {
+    if (jyStale && jyNear()) jyRefresh();
     if (!travel) return;
     var eye = y + window.innerHeight * 0.62;
     if (travel.map && mapEl) {
@@ -1847,7 +1862,11 @@
     var y = window.pageYOffset || document.documentElement.scrollTop;
     var moved = y !== lastY;
     /* if the page has changed height since the line was measured (fonts, images), measure it again */
-    if (builtH && explore && explore.offsetHeight !== builtH) { builtH = explore.offsetHeight; rebuild(); }
+    if (builtH && explore && explore.offsetHeight !== builtH) {
+      builtH = explore.offsetHeight;
+      /* on a phone, a change that came with the toolbar waits for the scroll to rest (see idleRebuild) */
+      if (window.innerWidth <= 820 && performance.now() - ihAt < 700) idleRebuild(); else rebuild();
+    }
     velY = lerp(velY, moved ? y - lastY : 0, 0.12);
     if (!moved && Math.abs(velY) < 0.05) velY = 0;                 /* still: the loop can idle */
     lastY = y;
@@ -1980,7 +1999,8 @@
     if (window.innerWidth <= 820 && window.innerWidth === lastW) {
       /* the Safari engine can keep painting a scroll-driven strip where it was after a resize: the
          animation is taken off and put back, and it picks up at the scroll */
-      if (jy.carry && jySda) [jy.strip, jy.track].forEach(function (el) { if (!el) return; el.style.animationName = "none"; void el.offsetWidth; el.style.animationName = ""; });
+      ihAt = performance.now();
+      if (jy.carry && jySda) { if (jyNear()) jyRefresh(); else jyStale = true; }
       return;
     }
     lastW = window.innerWidth; rebuild();
@@ -1988,7 +2008,22 @@
   window.addEventListener("load", rebuild);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { rebuild(); });
   window.addEventListener("load", rebuild);
-  if ("ResizeObserver" in window && explore) new ResizeObserver(rebuild).observe(explore);
+  /* a toolbar change that only moves the height is not a reason to rebuild the page on a phone: at the foot
+     of the page the toolbar comes back and the whole journey strip was being rebuilt under "Back to the start" */
+  var exH = explore ? explore.offsetHeight : 0, idleT = null, lastScrollAt = 0;
+  window.addEventListener("scroll", function () { lastScrollAt = performance.now(); }, { passive: true });
+  function idleRebuild() {                 /* wait for the scroll to rest, then rebuild once */
+    clearTimeout(idleT);
+    idleT = setTimeout(function () { if (performance.now() - lastScrollAt < 800) idleRebuild(); else rebuild(); }, 900);
+  }
+  if ("ResizeObserver" in window && explore) new ResizeObserver(function () {
+    var h = explore.offsetHeight, same = Math.abs(h - exH) < 2; exH = h;
+    if (window.innerWidth <= 820 && window.innerWidth === lastW && performance.now() - ihAt < 700) {
+      if (!same) idleRebuild();              /* a browser whose vh follows the toolbar: rebuild, but not mid-scroll */
+      return;
+    }
+    rebuild();
+  }).observe(explore);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
   buildJourney(); buildPath(); measureScene(); measureMarquees();
 
