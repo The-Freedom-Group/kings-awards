@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Freedom × OpenAI DevDay · Tom Letcher</title>
+<meta name="description" content="We're using AI to reinvent how a traditional fire-safety business operates, built by a young team in Manchester. The Freedom Command Centre, our tools, and what we are building next.">
+<link rel="canonical" href="https://www.tomletcher.co.uk/openai/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.tomletcher.co.uk/openai/">
+<meta property="og:title" content="Freedom × OpenAI DevDay">
+<meta property="og:description" content="Using AI to reinvent how a traditional fire-safety business operates, built by a young team in Manchester.">
+<meta property="og:image" content="https://www.tomletcher.co.uk/openai/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="img/group-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a; --bg-2: #111112; --bg-3: #18181a; --line: rgba(255,255,255,.09); --line-2: rgba(255,255,255,.16);
+  --tx: #f4f1eb; --tx-2: #a8a6a1; --tx-3: #8f8c86;
+  --pink: #ff2d8d; --pink-2: #ff74b8; --pink-bg: rgba(255,45,141,.1); --pink-line: rgba(255,45,141,.4);
+  --disp: "Anton", Impact, "Arial Narrow Bold", sans-serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --wrap: 1240px; --gut: clamp(16px, 4vw, 48px);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--tx); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gut); }
+.nowrap { white-space: nowrap; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ------------------------------------------------------------ top --- */
+.bar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; transition: background .25s, border-color .25s; border-bottom: 1px solid transparent; }
+.bar.on { background: rgba(10,10,10,.88); border-color: var(--line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.bar .wrap { display: flex; align-items: center; gap: 16px; height: 68px; }
+.mark { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.mark img { width: 40px; height: 40px; }
+.mark span { font: 500 11px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tx-2); }
+.mark span b { display: block; color: var(--tx); font-weight: 500; }
+.bar nav { margin-left: auto; display: flex; gap: 26px; font-size: 13px; }
+.bar nav a { text-decoration: none; color: var(--tx-2); }
+.bar nav a:hover { color: var(--tx); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--line-2); background: transparent; color: var(--tx); font: 600 14px/1 var(--sans); letter-spacing: .01em; text-decoration: none; white-space: nowrap; cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
+.btn:hover { border-color: var(--tx-2); }
+.btn:active { transform: translateY(1px); }
+.btn.pink { background: var(--pink); border-color: var(--pink); color: #fff; }
+.btn.pink:hover { background: #ff4a9e; border-color: #ff4a9e; }
+.btn.sm { height: 38px; padding: 0 16px; font-size: 13px; }
+.btn .i { width: 16px; height: 16px; }
+
+/* ----------------------------------------------------------- hero --- */
+.hero { position: relative; padding: 150px 0 80px; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.09) 1px, transparent 1.2px); background-size: 26px 26px; -webkit-mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, #000 20%, transparent 75%); pointer-events: none; }
+.orbit { position: absolute; right: -180px; top: 40px; width: 720px; height: 720px; pointer-events: none; opacity: .9; }
+.kick { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--pink-2); }
+.kick::before { content: ""; width: 26px; height: 1px; background: var(--pink); }
+.hero h1 { position: relative; margin: 26px 0 0; max-width: 15ch; font: 400 clamp(46px, 7.6vw, 112px)/.95 var(--disp); text-transform: uppercase; letter-spacing: .003em; }
+.hero h1 .ai { color: var(--pink); }
+.hero .tag { position: relative; margin: 22px 0 0; font: italic 400 clamp(28px, 3.6vw, 46px)/1.05 var(--serif); color: var(--tx); }
+.hero .tag em { color: var(--pink); }
+.hero .lede { position: relative; max-width: 60ch; margin: 28px 0 0; color: var(--tx-2); font-size: 17px; }
+.hero .ctas { position: relative; display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.stats { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 74px; border-top: 1px solid var(--line); }
+.stat { padding: 22px 22px 0 0; }
+.stat + .stat { padding-left: 22px; border-left: 1px solid var(--line); }
+.stat b { display: block; font: 400 clamp(30px, 3.4vw, 46px)/1 var(--disp); letter-spacing: .01em; }
+.stat span { display: block; margin-top: 10px; font-size: 13px; color: var(--tx-3); }
+
+/* -------------------------------------------------------- sections --- */
+section.s { padding: 110px 0; border-top: 1px solid var(--line); }
+.s-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: end; margin-bottom: 48px; }
+.s-num { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--pink-2); }
+.s-head h2 { margin: 16px 0 0; font: 400 clamp(40px, 5.6vw, 80px)/.95 var(--disp); text-transform: uppercase; }
+.s-head h2 em { font: italic 400 1.05em/1 var(--serif); text-transform: none; color: var(--pink); }
+.s-head p { margin: 0; color: var(--tx-2); font-size: 17px; max-width: 52ch; }
+
+/* --------------------------------------------- command centre hero --- */
+.screen { position: relative; border-radius: 18px; border: 1px solid var(--line-2); background: #09090a; overflow: hidden; box-shadow: 0 40px 120px -40px rgba(255,45,141,.28), 0 0 0 6px rgba(255,255,255,.02); }
+.screen-bar { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-bottom: 1px solid var(--line); background: #0e0e10; font: 500 11.5px/1 var(--mono); color: var(--tx-3); }
+.screen-bar i { width: 10px; height: 10px; border-radius: 50%; background: #2a2a2e; }
+.screen-bar span { margin-left: 10px; }
+.screen-bar .live { margin-left: auto; color: var(--pink-2); letter-spacing: .12em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+.screen-bar .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+.viewport { position: relative; overflow: hidden; background: #09090a; }
+.viewport iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; pointer-events: none; }
+.viewport img.still { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+.screen-go { position: absolute; inset: 38px 0 0; display: flex; align-items: flex-end; justify-content: center; padding: 26px; text-decoration: none; background: linear-gradient(180deg, transparent 55%, rgba(9,9,10,.85)); opacity: 0; transition: opacity .25s; }
+.screen:hover .screen-go, .screen-go:focus-visible { opacity: 1; }
+.flows { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+.flow { position: relative; display: flex; flex-direction: column; padding: 26px 24px 24px; border-radius: 16px; border: 1px solid var(--line); background: var(--bg-2); }
+.flow .n { font: 500 11.5px/1 var(--mono); color: var(--tx-3); letter-spacing: .12em; }
+.flow h3 { margin: 18px 0 4px; font: 400 30px/1 var(--disp); text-transform: uppercase; letter-spacing: .01em; }
+.flow .q { margin: 0 0 14px; font: italic 400 21px/1.2 var(--serif); color: var(--pink-2); }
+.flow p { margin: 0; color: var(--tx-2); font-size: 14.5px; }
+.flow ul { list-style: none; margin: 16px 0 22px; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.flow li { display: flex; gap: 10px; }
+.flow li::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: 9px; border-radius: 50%; background: var(--pink); }
+.flow .btn { margin-top: auto; align-self: flex-start; }
+.ask-inline { margin-top: auto; }
+.ask-inline form { display: flex; gap: 6px; padding: 5px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--bg); }
+.ask-inline form:focus-within { border-color: var(--pink); }
+.ask-inline input { flex: 1; min-width: 0; height: 38px; padding: 0 12px; border: 0; background: none; color: var(--tx); font: 16px var(--sans); outline: none; }
+.ask-inline input::placeholder { color: var(--tx-3); font-size: 14px; }
+.ask-inline button { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--pink); color: #fff; display: grid; place-items: center; cursor: pointer; }
+.ask-inline .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ask-inline .chips a { font-size: 12.5px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); color: var(--tx-2); text-decoration: none; }
+.ask-inline .chips a:hover { color: var(--tx); border-color: var(--pink-line); }
+.script { display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 16px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.script > div { padding: 18px 22px; font-size: 14px; color: var(--tx-2); }
+.script > div + div { border-left: 1px solid var(--line); }
+.script b { display: block; font: 500 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tx); margin-bottom: 8px; }
+.script .lbl { display: flex; align-items: center; background: var(--pink-bg); color: var(--pink-2); font: 500 12px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.real { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 26px; font-size: 13.5px; color: var(--tx-2); }
+.real span { display: inline-flex; align-items: center; gap: 8px; }
+.real span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #3ddc97; }
+.note { margin-top: 14px; font-size: 13px; color: var(--tx-3); }
+
+/* ---------------------------------------------------------- builds --- */
+.build { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; padding: 64px 0; }
+.build + .build { border-top: 1px solid var(--line); }
+.build.flip .media { order: 2; }
+.media { position: relative; }
+.shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--line-2); background: var(--bg-3); }
+.shot img { width: 100%; height: auto; }
+.media .pip { position: absolute; width: 38%; right: -18px; bottom: -34px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-2); box-shadow: 0 24px 60px -20px rgba(0,0,0,.8); }
+.build.flip .media .pip { right: auto; left: -18px; }
+.media .pip img { width: 100%; height: auto; }
+.b-tag { display: inline-flex; align-items: center; gap: 8px; font: 500 11.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tx-3); }
+.b-tag i { width: 7px; height: 7px; border-radius: 50%; background: #3ddc97; }
+.b-tag.soon i { background: #ffb547; }
+.build h3 { margin: 16px 0 14px; font: 400 clamp(36px, 4.4vw, 58px)/.95 var(--disp); text-transform: uppercase; }
+.build p { margin: 0 0 14px; color: var(--tx-2); font-size: 16.5px; }
+.build ul { list-style: none; margin: 18px 0 28px; padding: 0; display: grid; gap: 9px; font-size: 14.5px; }
+.build li { display: flex; gap: 12px; }
+.build li::before { content: "→"; color: var(--pink); font-family: var(--mono); }
+.b-links { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.b-links small { font-size: 12.5px; color: var(--tx-3); }
+
+/* ------------------------------------------------------------ next --- */
+.next { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line-2); }
+.nx { padding: 28px 22px 8px 0; }
+.nx + .nx { padding-left: 22px; border-left: 1px solid var(--line); }
+.nx .n { font: 500 11.5px/1 var(--mono); color: var(--pink-2); letter-spacing: .12em; }
+.nx h3 { margin: 18px 0 2px; font: 400 30px/1 var(--disp); text-transform: uppercase; }
+.nx .k { margin: 0 0 14px; font: italic 400 19px/1.2 var(--serif); color: var(--tx); }
+.nx p { margin: 0; font-size: 14px; color: var(--tx-2); }
+
+/* ---------------------------------------------------------- finale --- */
+.finale { padding: 120px 0 90px; border-top: 1px solid var(--line); position: relative; overflow: hidden; }
+.finale h2 { margin: 18px 0 0; font: 400 clamp(52px, 9vw, 132px)/.9 var(--disp); text-transform: uppercase; }
+.finale h2 em { display: block; font: italic 400 1.02em/1 var(--serif); color: var(--pink); text-transform: none; }
+.card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 34px; align-items: center; margin-top: 56px; padding: 30px; border-radius: 22px; border: 1px solid var(--line-2); background: var(--bg-2); }
+.tom { display: flex; gap: 18px; align-items: center; }
+.tom img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; object-position: 50% 22%; filter: grayscale(1); border: 1px solid var(--line-2); }
+.tom b { display: block; font: 400 30px/1 var(--disp); text-transform: uppercase; }
+.tom span { display: block; margin-top: 6px; font-size: 13.5px; color: var(--tx-2); }
+.links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.links a { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); text-decoration: none; font-size: 14px; color: var(--tx); background: var(--bg); transition: border-color .2s; min-width: 0; }
+.links a:hover { border-color: var(--pink-line); }
+.links a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.links a small { display: block; font-size: 11.5px; color: var(--tx-3); }
+.links .i { color: var(--pink-2); }
+.qr { text-align: center; }
+.qr img { width: 168px; height: 168px; border-radius: 14px; background: #fff; padding: 10px; }
+.qr span { display: block; margin-top: 10px; font: 500 11.5px/1.3 var(--mono); color: var(--tx-2); letter-spacing: .04em; }
+.foot { padding: 34px 0 44px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--tx-3); }
+.foot .wrap { display: flex; flex-wrap: wrap; gap: 10px 26px; justify-content: space-between; }
+.foot a { color: var(--tx-2); text-decoration: none; }
+
+/* --------------------------------------------------------- reveal --- */
+.js .rv { opacity: 0; transform: translateY(18px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.js .rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .rv { opacity: 1; transform: none; transition: none; }
+  .screen-bar .live::before { animation: none; }
+}
+
+/* ----------------------------------------------------- responsive --- */
+@media (max-width: 1080px) {
+  .flows { grid-template-columns: minmax(0, 1fr); }
+  .script { grid-template-columns: minmax(0, 1fr); }
+  .script > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .next { grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 0; }
+  .nx, .nx + .nx { padding: 24px 0; border-left: 0; border-top: 1px solid var(--line); }
+  .nx:nth-child(even) { padding-left: 22px; border-left: 1px solid var(--line); }
+  .card { grid-template-columns: minmax(0, 1fr) auto; }
+  .links { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 860px) {
+  .bar nav { display: none; }
+  .bar .btn { margin-left: auto; }
+  .s-head { grid-template-columns: minmax(0, 1fr); gap: 18px; margin-bottom: 32px; }
+  .build, .build.flip { grid-template-columns: minmax(0, 1fr); gap: 34px; padding: 48px 0; }
+  .build.flip .media { order: 0; }
+  .media .pip { width: 42%; right: -6px; bottom: -22px; }
+  .build.flip .media .pip { left: auto; right: -6px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 54px; }
+  .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+  .stat:nth-child(n+3) { padding-top: 22px; margin-top: 22px; border-top: 1px solid var(--line); }
+}
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  .bar .wrap { height: 60px; }
+  .mark img { width: 34px; height: 34px; }
+  .mark span { display: none; }
+  .hero { padding: 108px 0 56px; }
+  .hide-s { display: none; }
+  .screen-bar span { display: none; }
+  .orbit { width: 420px; height: 420px; right: -200px; top: 60px; opacity: .55; }
+  .hero h1 { font-size: clamp(40px, 12.4vw, 60px); }
+  .hero .tag { font-size: 28px; }
+  .hero .lede { font-size: 15.5px; }
+  .hero .ctas .btn { flex: 1 1 100%; }
+  section.s { padding: 72px 0; }
+  .s-head p { font-size: 15.5px; }
+  .flow { padding: 22px 18px 20px; }
+  .next { grid-template-columns: minmax(0, 1fr); }
+  .nx:nth-child(even) { padding-left: 0; border-left: 0; }
+  .finale { padding: 80px 0 64px; }
+  .card { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; gap: 26px; }
+  .qr { order: -1; }
+  .qr img { width: 200px; height: 200px; margin: 0 auto; }
+  .links { grid-template-columns: minmax(0, 1fr); grid-row: auto; }
+  .tom img { width: 72px; height: 72px; }
+  .build p { font-size: 15.5px; }
+  .b-links .btn { flex: 1 1 100%; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="arr" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></symbol>
+  <symbol id="spark" viewBox="0 0 24 24"><path d="M12 3l1.8 4.9L19 9.7l-5.2 1.8L12 16.4l-1.8-4.9L5 9.7l5.2-1.8z"/></symbol>
+  <symbol id="mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></symbol>
+  <symbol id="in" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 10v6M8 7.5v.5M12 16v-3.5a2 2 0 014 0V16M12 10v6"/></symbol>
+  <symbol id="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></symbol>
+  <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></symbol>
+  <symbol id="door" viewBox="0 0 24 24"><path d="M5 21V4h11v17M16 21h3M12 12v.5"/></symbol>
+  <symbol id="fire" viewBox="0 0 24 24"><path d="M12 3c1 3 4 4.5 4 9a4 4 0 01-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/></symbol>
+  <symbol id="card" viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M15 10h3M15 13h3"/></symbol>
+</svg>
+
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Freedom Group, back to the top">
+      <img src="img/group-logo.png" alt="" width="40" height="40">
+      <span><b>Freedom Group</b>OpenAI DevDay · 3 Nov 2026</span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#command-centre">Command Centre</a>
+      <a href="#built">What we've built</a>
+      <a href="#next">What's next</a>
+      <a href="#ask-tom">Ask Tom</a>
+    </nav>
+    <a class="btn pink sm" href="command-centre/">Live demo<svg class="i"><use href="#arr"/></svg></a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="orbit" viewBox="0 0 720 720" aria-hidden="true">
+      <defs><linearGradient id="og" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#ff2d8d" stop-opacity="0"/><stop offset=".45" stop-color="#ff2d8d" stop-opacity=".75"/><stop offset="1" stop-color="#ff74b8" stop-opacity=".2"/></linearGradient></defs>
+      <ellipse cx="360" cy="360" rx="300" ry="150" transform="rotate(-38 360 360)" fill="none" stroke="url(#og)" stroke-width="1.6"/>
+      <ellipse cx="360" cy="360" rx="230" ry="96" transform="rotate(-38 360 360)" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      <circle cx="555" cy="180" r="9" fill="#3ddc97"/><circle cx="168" cy="548" r="7" fill="#6cb4ff"/><circle cx="260" cy="302" r="4" fill="#ff2d8d"/>
+    </svg>
+    <div class="wrap">
+      <span class="kick"><span><span class="hide-s">Prepared for </span>OpenAI DevDay · 3 November 2026</span></span>
+      <h1>We're using <span class="ai">AI</span> to reinvent how a traditional fire-safety business operates</h1>
+      <p class="tag">built by a young team <em>in Manchester.</em></p>
+      <p class="lede">Freedom Fire &amp; Safety sells extinguishers, blankets, signs and safety kit across the UK, on eBay, Amazon, Temu, TikTok Shop and our own store. We build our own software rather than buying more of it: one system that runs the warehouse, answers questions about the business, and puts what needs attention in front of the right person.</p>
+      <div class="ctas">
+        <a class="btn pink" href="command-centre/">Open the live demo<svg class="i"><use href="#arr"/></svg></a>
+        <a class="btn" href="#built">See what we've built</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>£3m</b><span>Revenue to date</span></div>
+        <div class="stat"><b>75,000+</b><span>Customer reviews</span></div>
+        <div class="stat"><b>782</b><span>Products run through our own system</span></div>
+        <div class="stat"><b>2019</b><span>First listing, at 23</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="command-centre">
+    <div class="wrap">
+      <div class="s-head rv">
+        <div><span class="s-num">01 · The centrepiece</span><h2>Freedom Command <em>Centre</em></h2></div>
+        <p>One screen for the whole operation. It reads our Linnworks feeds (open orders every five minutes, stock hourly, sales daily), runs the rest of the day forward minute by minute, and shows each person what matters now. Three workflows, built to work properly rather than twenty half-built ones.</p>
+      </div>
+
+      <div class="screen rv" id="screen">
+        <div class="screen-bar"><i></i><i></i><i></i><span>command-centre · founder view · sample data</span><b class="live">Live demo</b></div>
+        <div class="viewport" id="viewport">
+          <img class="still" src="img/cc-founder.webp" alt="The Freedom Command Centre founder dashboard: vans at risk, decisions waiting, sales and stock." width="1600" height="1000" id="still">
+        </div>
+        <a class="screen-go" href="command-centre/" aria-label="Open the live demo"><span class="btn pink">Open the live demo<svg class="i"><use href="#ext"/></svg></span></a>
+      </div>
+
+      <div class="flows">
+        <article class="flow rv">
+          <span class="n">01 · FOUNDER DASHBOARD</span>
+          <h3>Founder Dashboard</h3>
+          <p class="q">What needs me today?</p>
+          <p>Priorities, approvals and blockers on one page, most urgent first. Every decision arrives as a prepared case with the numbers behind it.</p>
+          <ul>
+            <li>Each carrier's van forecast to the minute</li>
+            <li>Purchases, prices and refunds: approve or decline in one tap</li>
+            <li>Sales, stock cover and the next container at a glance</li>
+          </ul>
+          <a class="btn sm" href="command-centre/#founder">Open the founder view<svg class="i"><use href="#arr"/></svg></a>
+        </article>
+        <article class="flow rv">
+          <span class="n">02 · STAFF COMMAND VIEW</span>
+          <h3>Staff Command View</h3>
+          <p class="q">Who is doing what?</p>
+          <p>Every person's day plan, workday sheet, orders packed and points. When a collection is at risk it works out who to move, and the forecast updates the moment you move them.</p>
+          <ul>
+            <li>Live day plan for the whole floor</li>
+            <li>Sheets, late jobs and photo proof to sign off</li>
+            <li>A suggested fix, tried against the whole day first</li>
+          </ul>
+          <a class="btn sm" href="command-centre/#team">Open the staff view<svg class="i"><use href="#arr"/></svg></a>
+        </article>
+        <article class="flow rv">
+          <span class="n">03 · AI / BUSINESS INTELLIGENCE</span>
+          <h3>Ask the Business</h3>
+          <p class="q">Questions in, answers out.</p>
+          <p>Plain-English questions about orders, stock, products, channels and the team, answered from the data with the working and the sources shown. In the demo a rule-based engine answers from sample data; in the live Hub our assistant uses a language model on the real records.</p>
+          <div class="ask-inline">
+            <form action="command-centre/" method="get" id="askInline">
+              <label class="sr" for="aq">Ask the business</label>
+              <input id="aq" name="q" maxlength="200" placeholder="What is about to run out?">
+              <button type="submit" aria-label="Ask"><svg class="i"><use href="#spark"/></svg></button>
+            </form>
+            <div class="chips">
+              <a href="command-centre/?q=Will%20we%20get%20everything%20out%20today%3F">Will we get everything out today?</a>
+              <a href="command-centre/?q=Which%20channel%20is%20growing%20fastest%3F">Fastest-growing channel</a>
+              <a href="command-centre/?q=Why%20are%20products%20coming%20back%3F">Why are products coming back?</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="script rv" aria-label="A one-minute demo">
+        <div class="lbl">The one-minute demo</div>
+        <div><b>1 · Founder</b>A late container and a Temu promotion put the 16:30 Evri van at risk. The dashboard flags it with a fix already worked out.</div>
+        <div><b>2 · Team</b>Tap <em>Move Leah</em>. The whole day is re-run, and every van goes back on track.</div>
+        <div><b>3 · Ask</b>"Will we get everything out today?" The answer now agrees, and shows its working.</div>
+      </div>
+
+      <div class="real rv">
+        <span>Live in our warehouse since September 2026</span>
+        <span>Linnworks open orders every 5 minutes, stock hourly, sales daily</span>
+        <span>Workday sheets, points and order views in daily use</span>
+      </div>
+      <p class="note">The demo runs on sample data with invented names, shaped exactly like ours, so it can be shown anywhere. Ask Tom to see the real one.</p>
+    </div>
+  </section>
+
+  <section class="s" id="built">
+    <div class="wrap">
+      <div class="s-head rv">
+        <div><span class="s-num">02 · Built and live</span><h2>What we've <em>built</em></h2></div>
+        <p>Everything here was designed and built in-house, most of it by people who joined us through placements and T Levels.</p>
+      </div>
+
+      <article class="build rv">
+        <div class="media">
+          <div class="shot"><img src="img/calculator.webp" alt="The Fire Cover Calculator: a quick and a full calculator shown on laptop, tablet and phone." width="1600" height="1000" loading="lazy"></div>
+        </div>
+        <div>
+          <span class="b-tag soon"><i></i>Live tool · launches with the store</span>
+          <h3>Fire Cover Calculator</h3>
+          <p>Tell it the premises, how big it is, how many storeys, and what could burn there. It applies the British Standard for extinguisher cover (BS 5306-8), picks the right type and number for every floor, shows its working, and prices the kit.</p>
+          <ul>
+            <li>Quick in about two minutes, or full depth with a floor-area map tool</li>
+            <li>Every quantity explained, not just stated</li>
+            <li>A priced, printable specification at the end</li>
+          </ul>
+          <div class="b-links">
+            <a class="btn pink" href="https://www.freedom-fire.co.uk/pages/build-your-kit" target="_blank" rel="noopener" id="calcLink">Open the live tool<svg class="i"><use href="#ext"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="build flip rv">
+        <div class="media">
+          <div class="shot"><img src="img/freight-terminal.webp" alt="Freedom Freight: a container being craned aboard at the export terminal." width="1600" height="1000" loading="lazy"></div>
+          <div class="pip"><img src="img/freight-hq.webp" alt="Freedom Freight: containers delivered and checked in at Freedom Fire HQ." width="1600" height="1000" loading="lazy"></div>
+        </div>
+        <div>
+          <span class="b-tag"><i></i>Live</span>
+          <h3>Freedom Freight</h3>
+          <p>Our own tracker for the containers we ship from China. Every order is followed from the factory, through the Chinese port, across the water and through UK customs to our warehouse in Bury, about 100 days door to door.</p>
+          <ul>
+            <li>Every container, its stage and its days, on one journey</li>
+            <li>Feeds stock cover in the Command Centre: what lands before what runs out</li>
+            <li>A public version for partners; costs stay internal</li>
+          </ul>
+          <div class="b-links"><a class="btn pink" href="https://freedomfreight.co.uk/" target="_blank" rel="noopener">Open Freedom Freight<svg class="i"><use href="#ext"/></svg></a></div>
+        </div>
+      </article>
+
+      <article class="build rv">
+        <div class="media">
+          <div class="shot"><img src="img/store-hero.webp" alt="The new Freedom Fire store: free next-day delivery banner with the black Freedom van." width="1600" height="749" loading="lazy"></div>
+        </div>
+        <div>
+          <span class="b-tag soon"><i></i>Launching November 2026</span>
+          <h3>The Freedom Fire Store</h3>
+          <p>Our new Shopify store, designed and built in-house rather than off a template, with much of it built by our young and T Level team.</p>
+          <ul>
+            <li>Kit builder and BS 5306 calculator in the store itself</li>
+            <li>Trade accounts with their own pricing, and quick order</li>
+            <li>Servicing bookings, delivery checker, returns and our own policy pages</li>
+          </ul>
+          <div class="b-links"><a class="btn pink" href="https://www.freedom-fire.co.uk/" target="_blank" rel="noopener">Visit freedom-fire.co.uk<svg class="i"><use href="#ext"/></svg></a></div>
+        </div>
+      </article>
+
+      <article class="build flip rv">
+        <div class="media">
+          <div class="shot"><img src="img/wayin.webp" alt="The Way In: Not everyone arrives by the same route. The Freedom sign on Unit 19 at night." width="1600" height="1000" loading="lazy"></div>
+          <div class="pip"><img src="img/team-container.webp" alt="The team standing together inside an emptied shipping container." width="900" height="1200" loading="lazy" style="aspect-ratio:4/3;object-fit:cover;object-position:50% 45%"></div>
+        </div>
+        <div>
+          <span class="b-tag"><i></i>Live</span>
+          <h3>The Way In</h3>
+          <p>Not everyone arrives by the same route. The story of our young team: placements, T Levels with Bury College and supported routes from the Jobcentre, leading to real, paid roles in the business.</p>
+          <ul>
+            <li>Six stages, the same whichever way someone arrives</li>
+            <li>A named person at each stage</li>
+            <li>The people who built most of what is on this page</li>
+          </ul>
+          <div class="b-links"><a class="btn pink" href="https://thewayin.freedom-fire.co.uk/" target="_blank" rel="noopener">Open The Way In<svg class="i"><use href="#ext"/></svg></a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="s" id="next">
+    <div class="wrap">
+      <div class="s-head rv">
+        <div><span class="s-num">03 · Next</span><h2>What we're <em>building next</em></h2></div>
+        <p>The Command Centre is the start. This is where it goes: one company brain, agents that do the preparation, and our own tools in place of rented ones.</p>
+      </div>
+      <div class="next">
+        <div class="nx rv"><span class="n">01</span><h3>The Brain</h3><p class="k">Company knowledge layer</p><p>Everything the business knows in one place every tool can ask: guides, decisions, product facts and history.</p></div>
+        <div class="nx rv"><span class="n">02</span><h3>Command Centre</h3><p class="k">Operational control system</p><p>From three workflows to the whole operation: rota, stock, returns, carrier claims and site visits.</p></div>
+        <div class="nx rv"><span class="n">03</span><h3>AI Agents</h3><p class="k">Work, prepared</p><p>Customer service, product data, compliance, purchasing and workflows. Agents draft and check; a person signs off.</p></div>
+        <div class="nx rv"><span class="n">04</span><h3>Marketplace Intelligence</h3><p class="k">Every channel, one view</p><p>eBay, Amazon and Shopify optimisation: pricing, listings and stock across every channel.</p></div>
+        <div class="nx rv"><span class="n">05</span><h3>Internal Tools</h3><p class="k">Built, not bought</p><p>Building our own systems instead of constantly buying SaaS, shaped to how we actually work.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="finale" id="ask-tom">
+    <div class="wrap">
+      <span class="kick">04 · Ask Tom</span>
+      <h2 class="rv">Want to see the live build? <em>Ask Tom.</em></h2>
+      <div class="card rv">
+        <div class="tom">
+          <img src="img/tom.webp" alt="Tom Letcher" width="440" height="579">
+          <div><b>Tom Letcher</b><span>Founder &amp; Managing Director<br>The Freedom Group</span></div>
+        </div>
+        <div class="links">
+          <a id="linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Tom%20Letcher%20Freedom" target="_blank" rel="noopener"><svg class="i"><use href="#in"/></svg><span>LinkedIn<small>Tom Letcher</small></span></a>
+          <a href="mailto:tom.letcher@freedomgroup.uk?subject=OpenAI%20DevDay"><svg class="i"><use href="#mail"/></svg><span>Email<small>tom.letcher@freedomgroup.uk</small></span></a>
+          <a href="#" id="vcard" download="Tom-Letcher.vcf"><svg class="i"><use href="#card"/></svg><span>Save contact<small>Add Tom to your phone</small></span></a>
+          <a href="https://www.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#fire"/></svg><span>Freedom Fire<small>freedom-fire.co.uk</small></span></a>
+          <a href="https://thewayin.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#door"/></svg><span>The Way In<small>The young team's story</small></span></a>
+          <a href="https://www.tomletcher.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#user"/></svg><span>Founder portfolio<small>tomletcher.co.uk</small></span></a>
+        </div>
+        <div class="qr">
+          <img src="img/qr.svg" alt="QR code linking to tomletcher.co.uk/openai" width="168" height="168">
+          <span>tomletcher.co.uk/openai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>The Freedom Group · Bury, Greater Manchester</span>
+    <span>Command Centre demo uses sample data. <a href="https://www.tomletcher.co.uk/">tomletcher.co.uk</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  document.documentElement.classList.add('js');
+
+  // header goes solid once the page moves
+  var bar = document.getElementById('bar');
+  function onScroll() { bar.classList.toggle('on', window.scrollY > 20); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // reveal on scroll; everything is visible without JavaScript
+  var rv = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    rv.forEach(function (el) { io.observe(el); });
+  } else rv.forEach(function (el) { el.classList.add('in'); });
+
+  // The screen shows the real demo, running, once it is near the viewport:
+  // the desktop layout on wide screens, the phone layout on phones. The
+  // still image stays underneath until the demo has loaded.
+  var vp = document.getElementById('viewport'), frame = null, mode = null;
+  function size() {
+    var w = vp.clientWidth, phone = w < 560;
+    var iw = phone ? 390 : 1440, ih = phone ? 760 : 900, s = w / iw;
+    vp.style.height = Math.round(ih * s) + 'px';
+    if (frame) {
+      if (mode !== phone) { frame.remove(); frame = null; load(); return; }
+      frame.style.width = iw + 'px'; frame.style.height = ih + 'px'; frame.style.transform = 'scale(' + s + ')';
+    }
+  }
+  function load() {
+    var phone = vp.clientWidth < 560;
+    mode = phone;
+    frame = document.createElement('iframe');
+    frame.title = 'Freedom Command Centre live demo';
+    frame.setAttribute('tabindex', '-1');
+    frame.setAttribute('aria-hidden', 'true');
+    frame.src = 'command-centre/?embed=1#founder';
+    frame.style.opacity = '0';
+    frame.addEventListener('load', function () { frame.style.transition = 'opacity .6s'; frame.style.opacity = '1'; });
+    vp.appendChild(frame);
+    size();
+  }
+  size();
+  window.addEventListener('resize', size);
+  if ('IntersectionObserver' in window) {
+    var io2 = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { load(); io2.disconnect(); } }, { rootMargin: '400px' });
+    io2.observe(vp);
+  } else load();
+
+  // the inline ask box opens the demo on the Ask view with the question
+  document.getElementById('askInline').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var q = document.getElementById('aq').value.trim();
+    location.href = 'command-centre/' + (q ? '?q=' + encodeURIComponent(q) : '') + '#ask';
+  });
+
+  // Save contact: a vCard made on the spot, so it works offline in a hall
+  var vc = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Letcher;Tom;;;', 'FN:Tom Letcher', 'ORG:The Freedom Group', 'TITLE:Founder & Managing Director',
+    'EMAIL;TYPE=WORK:tom.letcher@freedomgroup.uk', 'URL:https://www.tomletcher.co.uk/', 'URL:https://www.freedom-fire.co.uk/',
+    'ADR;TYPE=WORK:;;;Bury;Greater Manchester;;United Kingdom', 'NOTE:Met at OpenAI DevDay, 3 November 2026', 'END:VCARD'].join('\r\n');
+  document.getElementById('vcard').href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vc);
+})();
+</script>
+</body>
+</html>

@@ -23,6 +23,8 @@ COMPAT = "2026-09-01"
 SITES = {
     "tomletcher": {
         "src": "personal", "page": "index.html", "engine": "thread.js", "extra": ["data"],
+        # openai/ = the OpenAI DevDay page at /openai/ and its Command Centre demo
+        "pages": ["openai"],
         "self": TOM, "other": WAY, "other_rel": "../staff/index.html",
         "og_image": "https://awards.freedomgroup.uk/assets/tom-mono.jpg",
         "redirects": "/personal /  301\n/personal/* /  301\n",
@@ -81,6 +83,28 @@ def fingerprint(path):
     h = hashlib.sha1(open(path, "rb").read()).hexdigest()[:8]
     root, ext = os.path.splitext(path)
     return "%s.%s%s" % (root, h, ext)
+
+def copy_pages(src, dst):
+    """Copy a self-contained page folder (e.g. openai/, served at /openai/) as it is,
+    except that every local script and stylesheet a page loads gets ?v=<hash of its
+    content>. The site's _headers cache *.js for a year as immutable, so without the
+    stamp a changed script would never reach a browser that had the old one."""
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns("_*", "*.py"))
+    for dp, _, fs in os.walk(dst):
+        for fn in fs:
+            if not fn.endswith(".html"):
+                continue
+            p = os.path.join(dp, fn)
+            text = open(p, encoding="utf-8").read()
+            def stamp(m):
+                ref = m.group(2)
+                f = os.path.join(dp, ref)
+                if "//" in ref or not os.path.isfile(f):
+                    return m.group(0)
+                h = hashlib.sha1(open(f, "rb").read()).hexdigest()[:8]
+                return '%s="%s?v=%s"' % (m.group(1), ref, h)
+            text = re.sub(r'\b(src|href)="([^"?#]+\.(?:js|css))"', stamp, text)
+            open(p, "w", encoding="utf-8").write(text)
 
 def build(name, cfg):
     src = os.path.join(ROOT, cfg["src"])
@@ -146,6 +170,8 @@ def build(name, cfg):
     open(os.path.join(pub, "build.txt"), "w", encoding="utf-8").write(build_id + "\n")
     for extra in cfg["extra"]:
         shutil.copytree(os.path.join(src, extra), os.path.join(pub, extra))
+    for folder in cfg.get("pages", []):
+        copy_pages(os.path.join(ROOT, folder), os.path.join(pub, folder))
     # the data files point at the stamped asset names too
     for relpath, text in data_texts.items():
         text = DATA_RE.sub(lambda m: "assets/" + named.get(m.group(1), m.group(1)), text)
