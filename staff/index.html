@@ -838,6 +838,8 @@ footer .ft-legal-in{margin-top:16px;font-family:var(--mono);font-size:10.5px;let
 .plate .badge{min-height:0;grid-template-rows:100px auto;align-items:end;align-content:start;justify-items:start;gap:12px}
 .plate .badge img,.plate .badge img.tl,.plate .badge img.pl,.plate .badge img.nbc,.plate .badge img.jcp{width:auto;height:100px;max-width:100%;object-fit:contain;object-position:left bottom;margin:0;border-radius:0;align-self:end}
 .plate .badge img.jcp{border-radius:10px}
+/* an odd plate out at the foot of two columns takes the full row */
+@media(min-width:821px){.plates:not(.one)>.plate:last-child:nth-child(odd){grid-column:1/-1}}
 ol.spine.journey li{grid-template-columns:150px 1fr 220px}
 ol.spine.journey .pic{width:220px;height:150px;max-height:none;aspect-ratio:auto;object-fit:cover;background:#0d0d0d}
 ol.spine.journey .pic.logo{object-fit:contain;background:#fff;padding:14px}
@@ -1075,7 +1077,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 <section class="intro" id="why" data-n="01">
   <div class="wrap">
     <h2 class="fi">We're Freedom Fire, a fire safety business in Bury. Hiring by CV <em class="s">kept missing people who could do the work.</em></h2>
-    <p class="fu-1">The way in has never been one route. The first were university students at the back of a rundown warehouse. Then came supported placements from New Bridge College in 2021, then Jobcentre referrals and direct, inclusive recruitment, and <span class="nw">since October 2025 the T Level</span> industry placements with Bury College. Every route ends in the same place: a real role in the warehouse, on the web team, in ecommerce or in IT, a named person to learn from, and a long-term job where the work justifies it. We assess attitude, reliability, interests and potential, not a polished CV.</p>
+    <p class="fu-1">The way in has never been one route. The first were university students at the back of a rundown warehouse. Then came supported placements from New Bridge College in 2021, then Jobcentre referrals and direct, inclusive recruitment, <span class="nw">since October 2025 the T Level</span> industry placements with Bury College, and now work experience, placements and T Levels with The Manchester College. Every route ends in the same place: a real role in the warehouse, on the web team, in ecommerce or in IT, a named person to learn from, and a long-term job where the work justifies it. We assess attitude, reliability, interests and potential, not a polished CV.</p>
     <a class="tlink" href="#programme" data-cur>The route in <i>→</i></a>
   </div>
 </section>
@@ -1087,12 +1089,12 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <div>
         <div class="ch-tag"><span class="num">02</span>The route in</div>
         <h2 class="wd">Every route in. <em class="s">Six stages.</em></h2>
-        <p class="stand">The same six stages whether someone arrives through a T Level, a supported college placement, the Jobcentre or the Jobs Guarantee, with a named person at each.</p>
+        <p class="stand">The same six stages whether someone arrives through a T Level, work experience, a supported college placement, the Jobcentre or the Jobs Guarantee, with a named person at each.</p>
       </div>
     </div>
     <div class="plan rv">
       <div class="floor" id="floor">
-        <div class="st"><div class="no">Stage 1</div><h3>Four ways in</h3><ul class="ways"><li>T Level placement with Bury College</li><li>Supported placement with New Bridge College</li><li>Jobcentre Plus referral</li><li>The Government's Jobs Guarantee, with the Growth Company</li></ul></div>
+        <div class="st"><div class="no">Stage 1</div><h3>Five ways in</h3><ul class="ways"><li>T Level placement with Bury College</li><li>Work experience, placement or T Level with The Manchester College</li><li>Supported placement with New Bridge College</li><li>Jobcentre Plus referral</li><li>The Government's Jobs Guarantee, with the Growth Company</li></ul></div>
         <div class="st"><div class="no">Stage 2</div><h3>Supported start</h3><p>A named person to learn from. Adjustments written in.</p></div>
         <div class="st"><div class="no">Stage 3</div><h3>Workplace skills</h3><p>Warehouse, web and ecommerce, IT.</p></div>
         <div class="st"><div class="no">Stage 4</div><h3>Responsibility</h3><p>Something the person owns.</p></div>
@@ -1104,7 +1106,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <div class="ph">What every placement includes, whether it starts at college, through the Jobcentre or on a T Level: two commitments, from day one</div>
       <div class="actgrid">
         <div class="actcard"><div class="k"><span class="num">a</span>College placement and work experience</div>
-          <dl><dt>Since</dt><dd>Supported college placements with New Bridge College since 2021; Jobcentre Plus referrals; T Level industry placements with Bury College since October 2025.</dd>
+          <dl><dt>Since</dt><dd>Supported college placements with New Bridge College since 2021; Jobcentre Plus referrals; T Level industry placements with Bury College since October 2025; work experience, placements and T Levels with The Manchester College.</dd>
           <dt>Volume</dt><dd>Three T Level students in the first cohort, three more from October 2026, alongside college placements, Jobcentre referrals and two Jobs Guarantee roles.</dd>
           <dt>Outcome</dt><dd>All three T Level students progressed into paid work: summer internships, then continuing roles. Earlier college and Jobcentre starters are in long-term jobs.</dd></dl>
 </div>
@@ -1252,6 +1254,9 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <div class="plate"><div class="badge"><img class="pl nbc" src="../assets/new-bridge-college-t.png" width="479" height="182" alt="New Bridge College" loading="lazy" decoding="async"><small>Placement provider since 2021</small></div><span class="k">Placement provider</span>
         <h3>New Bridge College</h3>
         <p>Supported placements since 2021 for young people with additional needs. One of the earliest, Jojo, has been full-time since 2022. Tom has been back twice to speak, and once more with a professional boxer for a workshop on resilience and ambition.</p></div>
+      <div class="plate"><div class="badge"><img class="pl tmc" src="../assets/manchester-college-t.png" width="500" height="200" alt="The Manchester College" loading="lazy" decoding="async"><small>Work experience · placements · T Levels</small></div><span class="k">College partner</span>
+        <h3>The Manchester College</h3>
+        <p>The newest college route in, alongside New Bridge College and Bury College: work experience, placements and T Level industry placements.</p></div>
       <div class="plate"><div class="badge"><img class="pl jcp" src="../assets/jobcentre-plus.png" width="640" height="219" alt="Jobcentre Plus" loading="lazy" decoding="async"><small>Government employment service · the Jobs Guarantee</small></div><span class="k">A Government initiative · with the Growth Company · 2026</span>
         <h3>Jobcentre &amp; the Jobs Guarantee</h3>
         <p>Jobcentre Plus is the Government's employment service and one of the routes in. The Jobs Guarantee is a Government initiative delivered locally by the Growth Company: two funded six-month jobs of up to 25 hours a week, for 18 to 21 year olds who have been looking for work for 18 months or more, are being recruited now.</p></div>
