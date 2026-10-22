@@ -1398,6 +1398,17 @@
       samples.forEach(function (sp) { var dd = (sp.x - pt.x) * (sp.x - pt.x) + (sp.y - pt.y) * (sp.y - pt.y); if (dd < bd) { bd = dd; best = sp; } });
       pt.frac = best.l / totalLen;
     });
+    /* round the end note the halves swing out sideways at the top and back in at the foot: paced by height,
+       40px of scroll threw each tip 360px across and then left it creeping down the sides. Paced by length
+       over the same scroll, the two tips go round at one even speed. */
+    if (ringB > ringA) {
+      var lRA = ringA * totalLen, lRB = ringB * totalLen, sRA = null, sRB = null;
+      samples.forEach(function (s) { if (s.l >= lRA && s.l <= lRB) { if (!sRA) sRA = s; sRB = s; } });
+      if (sRA && sRB && sRB.l > sRA.l && sRB.y > sRA.y) {
+        var yRA = sRA.y, yRB = sRB.y;
+        samples.forEach(function (s) { if (s.l > sRA.l && s.l < sRB.l) s.y = yRA + (yRB - yRA) * (s.l - sRA.l) / (sRB.l - sRA.l); });
+      }
+    }
     ySamples = samples;
     /* where the head lands: the very end of the line, on the button */
     endPt = { x: samples[samples.length - 1].x, y: samples[samples.length - 1].ry }; endFrac = 0.999;
