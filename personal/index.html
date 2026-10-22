@@ -227,8 +227,9 @@ body.ready .thread #sp3{stroke-dashoffset:0;transition-delay:1.45s}
 .thread .glow{fill:none;stroke:rgba(255,45,141,.2);stroke-width:7;vector-effect:non-scaling-stroke;stroke-linecap:round;transition:stroke .5s,stroke-width .5s}
 .thread.thread-ride .live{filter:drop-shadow(0 0 6px rgba(255,45,141,.45))}
 /* the carbon planet's ground is painted inside the text column, over the page's line; this copy of the line
-   sits above that ground, covering the same span as it, so the wrap round the planet is always seen */
-.thread.thread-orbit{position:absolute;left:-100vw;right:-100vw;top:0;bottom:-240px;z-index:6;pointer-events:none;overflow:visible}
+   sits above that ground, covering the same span as it, so the wrap round the planet is always seen. Both are
+   one screen wide, edge to edge: three screens wide, they cost a long frame to draw as 07 came into view */
+.thread.thread-orbit{position:absolute;left:calc(50% - 50vw);right:calc(50% - 50vw);top:0;bottom:-240px;z-index:6;pointer-events:none;overflow:visible}
 .thread.thread-orbit svg{overflow:visible}
 .thread.thread-orbit .track{display:none}
 .thread.thread-orbit .head{display:none}
@@ -1474,7 +1475,7 @@ a.tl-link{color:var(--pink);font-weight:500}
   .map .yrlbl{font-size:7.5px;padding:3px 7px}.rocket{width:44px}}
 /* ── the carbon planet is the section: a dark band edge to edge, the globe in the middle, the six parts either side ── */
 .env{position:relative;isolation:isolate;margin-top:clamp(56px,7vw,96px);padding:clamp(48px,6vw,84px) 0 clamp(36px,4vw,60px);border-top:0;color:var(--pale)}
-.env::before{content:"";position:absolute;top:0;bottom:-240px;left:-100vw;right:-100vw;z-index:-1;background:var(--carbon) radial-gradient(circle,rgba(244,241,235,.17) 1px,transparent 1.7px) 0 0/38px 38px;transition:opacity 1s ease}
+.env::before{content:"";position:absolute;top:0;bottom:-240px;left:calc(50% - 50vw);right:calc(50% - 50vw);z-index:-1;background:var(--carbon) radial-gradient(circle,rgba(244,241,235,.17) 1px,transparent 1.7px) 0 0/38px 38px;transition:opacity 1s ease}
 /* by day the ground is the page's own off-white; the page holds on the planet and it turns to night */
 #c06.day .env::before{opacity:0}
 .env,.env .env-h,.env .stand,.env-marks b,.env-marks span,.env .env-col h4,.env .env-col p{transition:color 1s ease}
@@ -2015,7 +2016,7 @@ a.tl-link{color:var(--pink);font-weight:500}
             <dt>Decision</dt><dd>Hire on potential, not pedigree. Recruit through college placements, Jobcentre Plus and word of mouth,
             and give people real responsibility early.</dd>
             <dt>Implementation</dt><dd>Placements hosted since 2021 with New Bridge College, T Level placements with Bury College from
-            October 2025, Jobcentre Plus referrals, and Disability Confident Committed status. Adjustments are offered before the
+            October 2025, work experience, placements and T Levels with The Manchester College, Jobcentre Plus referrals, and Disability Confident Committed status. Adjustments are offered before the
             interview, and every placement starts with a live brief the person owns.</dd>
             <dt>Result</dt><dd>Roles in web development, warehouse and fulfilment, IT, ecommerce and servicing filled by people who came
             in this way. All three T Level students in the first cohort moved into paid work in 2026. Two of them built the company's

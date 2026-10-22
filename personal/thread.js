@@ -255,6 +255,11 @@
            page settling after its bounce - chapter 07 flicked out and in beside "Back to the start".
            The system keeps its switch: it is what pauses the planets while they are off the screen. */
         if (!en.isIntersecting && window.innerWidth <= 820 && en.target.classList.contains("rv")) return;
+        /* the carbon block is the night ground under the end of 06 and the top of 07: taken away as it left
+           the top, it faded and blurred out while its ground still filled the screen, the off-white showed
+           through, and its own shrink brought it back in - the break between 06 and 07. It stays once seen
+           from above; it still goes when it leaves by the foot of the screen, scrolling back up. */
+        if (!en.isIntersecting && en.target.classList.contains("env") && en.boundingClientRect.top < 0) return;
         en.target.classList.toggle("in", en.isIntersecting);
       });
     }, { rootMargin: "-4% 0px -10% 0px", threshold: 0.06 });
@@ -1367,8 +1372,8 @@
     /* the carbon planet's copy of the line: the same stroke, framed on the ground it is drawn over */
     orbitBox = null;
     if (orbitSvg && oLive && envEl && envEl.offsetWidth) {
-      var eo3 = pageXY(envEl), vwx = window.innerWidth;
-      orbitBox = { x: eo3.x - vwx, y: eo3.y, w: envEl.offsetWidth + vwx * 2, h: envEl.offsetHeight + 240 };
+      var eo3 = pageXY(envEl), ot3 = pageXY(orbitThread);
+      orbitBox = { x: ot3.x, y: eo3.y, w: orbitThread.offsetWidth, h: envEl.offsetHeight + 240 };
       orbitSvg.setAttribute("viewBox", orbitBox.x + " " + orbitBox.y + " " + orbitBox.w + " " + orbitBox.h);
       /* the mask: everything shows except the upper half of the planet's disc, where the far side of the wrap passes behind it */
       var oMask = document.getElementById("oMask");
@@ -1500,10 +1505,12 @@
               if (Math.abs(dy) <= 60) vsPin(h.lock);
               else { h.phase = dy > 0 ? "after" : "before"; h.shown = h.prog = dy > 0 ? 1 : 0; }
             }
-            if (h.phase === "before" && dy >= 320) h.phase = "after";
+            /* a page already carried below a lock the hold never caught - trackpad momentum the browser
+               scrolled itself, the scrollbar, a key - is past it: the next notch down must not pull it back up */
+            if (h.phase === "before" && dy > 40) h.phase = "after";
             if (h.phase === "after" && dy <= -320) h.phase = "before";
           } else if (h.phase === "before") {
-            if (dy >= 320) h.phase = "after";
+            if (dy > 40) h.phase = "after";
             else if (vs.tgt >= h.lock - 0.5) { vs.tgt = h.lock; h.phase = "approach"; h.dir = 0; h.prog = h.shown = 0; h.t0 = performance.now(); }
           } else if (h.phase === "after") {
             /* a hold that has let go takes the page back only for a deliberate scroll up, well past its
