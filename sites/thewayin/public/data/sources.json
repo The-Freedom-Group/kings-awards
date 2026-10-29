@@ -1,0 +1,45 @@
+{
+  "_note": "Public sources carry a URL. Private sources are described, never linked, and are supplied through the application route or on request. No confidential file and no personal data beyond approved public fields is in this build.",
+  "CH-13589467": {
+    "kind": "public",
+    "name": "Companies House register, Freedom Fire & Safety Ltd (13589467)",
+    "url": "https://find-and-update.company-information.service.gov.uk/company/13589467"
+  },
+  "GOVUK-KAE": {
+    "kind": "public",
+    "name": "King's Awards for Enterprise, eligibility",
+    "url": "https://www.gov.uk/kings-awards-for-enterprise/eligibility"
+  },
+  "REGISTER": {
+    "kind": "private",
+    "name": "Participant register with anonymous IDs: route, activity, start date, hours, outcome"
+  },
+  "PLACEMENTS": {
+    "kind": "private",
+    "name": "Placement agreements and college correspondence (Newbridge College; Growth Company T Level paperwork)"
+  },
+  "REFERRALS": {
+    "kind": "private",
+    "name": "Jobcentre Plus referral and offer records"
+  },
+  "CONTRACTS": {
+    "kind": "private",
+    "name": "Employment contracts and payroll (FTE definition), confidential"
+  },
+  "MENTOR-LOG": {
+    "kind": "private",
+    "name": "Mentor-hour log and 3/6/12-month follow-up records, from September 2026"
+  },
+  "DC-L1": {
+    "kind": "private",
+    "name": "Disability Confident Level 1 (Committed) confirmation"
+  },
+  "TLA": {
+    "kind": "private",
+    "name": "T Level Ambassador Network listing or confirmation email"
+  },
+  "CONSENT": {
+    "kind": "private",
+    "name": "Signed, purpose-specific consent for each named person: name, image, quote, and any detail they chose"
+  }
+}

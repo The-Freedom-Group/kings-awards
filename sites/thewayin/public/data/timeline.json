@@ -1,0 +1,50 @@
+[
+  {
+    "date": "2021-08-27",
+    "label": "27 August 2021",
+    "title": "Freedom Fire & Safety Ltd incorporated",
+    "entity": "FFSL",
+    "ev": "PO-CO-01",
+    "status": "verified"
+  },
+  {
+    "date": "2021",
+    "label": "2021",
+    "title": "First Newbridge College placements",
+    "entity": "FFSL",
+    "ev": "PO-TL-01",
+    "status": "management"
+  },
+  {
+    "date": "2021-2024",
+    "label": "2021 to 2024",
+    "title": "An early placement progresses to a long-term role; placements continue",
+    "entity": "FFSL",
+    "ev": "PO-TL-02",
+    "status": "management"
+  },
+  {
+    "date": "2025-09",
+    "label": "September 2025",
+    "title": "T Level industry placements begin: three students",
+    "entity": "FFSL",
+    "ev": "PO-TL-03",
+    "status": "management"
+  },
+  {
+    "date": "2026-06",
+    "label": "June 2026",
+    "title": "All three offered long-term roles",
+    "entity": "FFSL",
+    "ev": "PO-TL-04",
+    "status": "management"
+  },
+  {
+    "date": "2026-09",
+    "label": "September 2026",
+    "title": "Mentor logging and follow-up begin; next cohort in preparation",
+    "entity": "FFSL",
+    "ev": "PO-TL-05",
+    "status": "target"
+  }
+]
