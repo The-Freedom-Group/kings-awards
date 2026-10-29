@@ -303,9 +303,9 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       </div>
 
       <div class="screen rv" id="screen">
-        <div class="screen-bar"><i></i><i></i><i></i><span>command-centre · founder view · sample data</span><b class="live">Live demo</b></div>
+        <div class="screen-bar"><i></i><i></i><i></i><span>freedom.hub · Tom's overview · sample data</span><b class="live">Live demo</b></div>
         <div class="viewport" id="viewport">
-          <img class="still" src="img/cc-founder.webp" alt="The Freedom Command Centre founder dashboard: vans at risk, decisions waiting, sales and stock." width="1600" height="1000" id="still">
+          <img class="still" src="img/hub-overview.webp" alt="The Freedom Hub, Tom's overview: orders open, sales, who is in today, and the decisions waiting for him." width="1600" height="1000" id="still">
         </div>
         <a class="screen-go" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener" aria-label="Open the live demo"><span class="btn pink">Open the live demo<svg class="i"><use href="#ext"/></svg></span></a>
       </div>
@@ -321,7 +321,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
             <li>Purchases, prices and refunds: approve or decline in one tap</li>
             <li>Sales, stock cover and the next container at a glance</li>
           </ul>
-          <a class="btn sm" href="command-centre/#founder">Open the founder view<svg class="i"><use href="#arr"/></svg></a>
+          <a class="btn sm" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener">Open the founder view<svg class="i"><use href="#ext"/></svg></a>
         </article>
         <article class="flow rv">
           <span class="n">02 · STAFF COMMAND VIEW</span>
@@ -333,7 +333,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
             <li>Sheets, late jobs and photo proof to sign off</li>
             <li>A suggested fix, tried against the whole day first</li>
           </ul>
-          <a class="btn sm" href="command-centre/#team">Open the staff view<svg class="i"><use href="#arr"/></svg></a>
+          <a class="btn sm" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener">Open the staff view<svg class="i"><use href="#ext"/></svg></a>
         </article>
         <article class="flow rv">
           <span class="n">03 · AI / BUSINESS INTELLIGENCE</span>
@@ -548,10 +548,9 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   }
   size();
   window.addEventListener('resize', size);
-  if ('IntersectionObserver' in window) {
-    var io2 = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { load(); io2.disconnect(); } }, { rootMargin: '400px' });
-    io2.observe(vp);
-  } else load();
+  // The screen shows the real Hub (a screenshot of the live demo); the
+  // simulated demo is no longer loaded over it. load() is kept for reference.
+  void load;
 
   // the inline ask box opens the demo on the Ask view with the question
   document.getElementById('askInline').addEventListener('submit', function (e) {
