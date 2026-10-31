@@ -1008,9 +1008,9 @@ details.story summary:hover .st{color:var(--pink)}
 .bd small{font-size:10.5px;letter-spacing:.06em;line-height:1.45;color:var(--ink-3)}
 .bd.txt b{font-family:var(--disp);text-transform:uppercase;font-size:18px;line-height:1;color:var(--ink);font-weight:400;padding-top:4px}
 .bd.txt small{color:var(--pink);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px}
-.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(24px,4vw,56px);padding-top:clamp(28px,3.6vw,44px)}
+.ft-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);padding-top:clamp(28px,3.6vw,44px)}
 .ft-grid h4{margin:0 0 10px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--pink)}
-.ft-grid p{margin:0;font-size:13.5px;line-height:1.7;color:var(--pale-2)}
+.ft-grid p{margin:0;font-size:13.5px;line-height:1.7;color:var(--pale-2);overflow-wrap:anywhere}
 .ft-grid a{color:var(--pale)}.ft-grid a:hover{color:var(--pink)}
 .ft-brand img{height:84px;width:auto;margin-bottom:16px;display:block}
 @media(max-width:820px){.ft-grid{grid-template-columns:1fr 1fr;gap:26px}.badges{grid-template-columns:1fr 1fr}}
@@ -1443,7 +1443,7 @@ a.tl-link{color:var(--pink);font-weight:500}
 .jy-track .jt-yr:hover{fill:var(--pale)}
 @media(max-width:700px){.journey{--cw:86vw}.jy-stage{height:auto;min-height:0;padding-bottom:96px}.jy-strip{height:auto;padding-top:18px;padding-bottom:22px}.jy-card{grid-template-columns:1fr}.jy-year{top:36%}.jy-hint{display:none}}
 /* a phone carries the moments: the stage stays put under the header while the chapter's extra room scrolls by */
-@media(max-width:820px){#c01.ch{overflow:clip}}
+@media(max-width:820px),(pointer:coarse) and (max-width:1100px){#c01.ch{overflow:clip}}
 .journey.carry .jy-stage{position:sticky;top:var(--stick,86px)}
 .journey.carry .jy-strip{overflow:visible;scroll-snap-type:none}
 .journey.carry .jy-btn{position:absolute;top:calc(34px + 27vw);z-index:6;background:rgba(16,16,16,.72);border-color:rgba(255,255,255,.35);color:#fff;backdrop-filter:blur(4px)}
@@ -1664,6 +1664,13 @@ a.tl-link{color:var(--pink);font-weight:500}
 }
 @media(max-width:820px) and (prefers-reduced-motion:reduce){
   html.noline .ch-tag,html.noline .ch h2,html.noline .ch .stand,html.noline .quo,html.noline .jy-head h2,html.noline .env-head h3{animation:none;opacity:1;transform:none}
+}
+/* ── phones: every planet on the map is at least a 44px target (the hit area grows, the drawing does not),
+   and the smallest caps labels read at 11px ── */
+@media(max-width:760px){
+  .map .node::before{content:"";position:absolute;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%)}
+  .bar small,.bar .b3 small.dt,.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{font-size:11px}
+  .ch-tag.sm,.jy-idx{font-size:11px}
 }
 </style>
 </head>
