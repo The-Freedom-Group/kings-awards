@@ -665,3 +665,129 @@
   window.addEventListener("pageshow", function (e) { if (e.persisted) check(); });
   window.addEventListener("focus", check);
 })();
+
+/* ── Bury College's story, live: their real page in a browser window on this one ──
+   The window in the page is a picture of the story (a live frame there would swallow the wheel,
+   and the college's cookie notice would sit on it for good); pressing it, or any link to the
+   story, opens the live page itself: in a small window in the corner that stays put while the
+   page scrolls and can be dragged, or in the full-size reader. */
+(function () {
+  var slot = document.getElementById("pressSlot"), fl = document.getElementById("bwFloat"), veil = document.getElementById("bwVeil");
+  if (!slot || !fl || !veil) return;
+  var dock = slot.querySelector(".bw"), fFrame = fl.querySelector("iframe");
+  var SRC = fFrame.getAttribute("data-src");
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var mode = null, prev = null, pos = null, lastFocus = null;
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+
+  function start(fr, win) {
+    if (fr.getAttribute("src")) return;
+    fr.addEventListener("load", function () { win.classList.add("ready"); });
+    fr.setAttribute("src", SRC);
+  }
+  /* the frame is drawn at a real browser width and scaled to the window, so the page lays itself
+     out as it would on a phone (the small window) or as wide as the reader is */
+  function fit(win, fr, render) {
+    var v = win.querySelector(".bw-view"), w = v.clientWidth, h = v.clientHeight; if (!w || !h) return;
+    var r = render === "fill" ? w : (w < 560 && render > 520 ? 520 : render), s = Math.min(1, w / r);
+    fr.style.width = r + "px"; fr.style.height = Math.ceil(h / s) + "px"; fr.style.transform = s < 1 ? "scale(" + s + ")" : "none";
+    var p = win.querySelector(".bw-poster");
+    if (p) { var want = p.getAttribute(r < 700 ? "data-m" : "data-d"); if (want && p.getAttribute("src") !== want) p.setAttribute("src", want); }
+  }
+
+  window.addEventListener("resize", function () { if (mode) place(); });
+
+  /* the page's own scrolling stops while the reader is open, as it does for every dialog here */
+  function hold(on) {
+    var sm = window.__smoother; if (sm) sm.paused(on);
+    var n = window.ScrollTrigger && ScrollTrigger.normalizeScroll && ScrollTrigger.normalizeScroll(); if (n) { if (on) n.disable(); else n.enable(); }
+  }
+  function set(x, y, w, h) { fl.style.left = x + "px"; fl.style.top = y + "px"; fl.style.width = w + "px"; fl.style.height = h + "px"; }
+  function place() {
+    var W = window.innerWidth, H = window.innerHeight, phone = W < 600;
+    if (mode === "max") {
+      var w = phone ? W : Math.min(1240, W - 48), h = phone ? H : Math.min(920, H - 48);
+      set(Math.round((W - w) / 2), Math.round((H - h) / 2), w, h);
+      fit(fl, fFrame, "fill");
+    } else {
+      var pw = Math.min(420, W - 20), ph = phone ? Math.round(H * 0.56) : Math.min(540, Math.round(H * 0.72));
+      var x = pos ? pos.x : W - pw - 20, y = pos ? pos.y : H - ph - 20;
+      set(clamp(x, 10, W - pw - 10), clamp(y, 10, H - ph - 10), pw, ph);
+      fit(fl, fFrame, 520);
+    }
+  }
+  function flip(from) {
+    if (reduce || !from || !from.width || !fl.animate) return;
+    var to = fl.getBoundingClientRect(); if (!to.width) return;
+    fl.animate([
+      { transformOrigin: "0 0", transform: "translate(" + (from.left - to.left) + "px," + (from.top - to.top) + "px) scale(" + (from.width / to.width) + "," + (from.height / to.height) + ")", opacity: 0.4 },
+      { transformOrigin: "0 0", transform: "none", opacity: 1 }
+    ], { duration: 440, easing: "cubic-bezier(.2,.75,.2,1)" });
+  }
+  function open(m, from) {
+    var was = mode, rect = was ? fl.getBoundingClientRect() : (from || dock).getBoundingClientRect();
+    if (!was) lastFocus = document.activeElement;
+    if (m === "max" && was !== "max") prev = was;
+    mode = m; fl.hidden = false; fl.setAttribute("data-mode", m);
+    slot.classList.add("out");
+    veil.hidden = m !== "max";
+    if (m === "max" && was !== "max") hold(true);
+    if (m !== "max" && was === "max") hold(false);
+    start(fFrame, fl); place(); flip(rect);
+    var f = fl.querySelector(m === "max" ? '[data-bw="close"]' : '[data-bw="max"]');
+    if (f && f.focus) { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }
+  }
+  function close() {
+    if (!mode) return;
+    if (mode === "max") hold(false);
+    var from = fl.getBoundingClientRect(), to = dock.getBoundingClientRect();
+    mode = null; prev = null; veil.hidden = true; slot.classList.remove("out");
+    var done = function () { fl.hidden = true; document.body.classList.remove("bw-hover"); };
+    var seen = to.bottom > 0 && to.top < window.innerHeight;
+    if (!reduce && fl.animate && from.width) {
+      var end = seen ? "translate(" + (to.left - from.left) + "px," + (to.top - from.top) + "px) scale(" + (to.width / from.width) + "," + (to.height / from.height) + ")" : "translateY(24px) scale(.96)";
+      fl.animate([{ transformOrigin: "0 0", transform: "none", opacity: 1 }, { transformOrigin: "0 0", transform: end, opacity: 0 }], { duration: 320, easing: "cubic-bezier(.4,0,.2,1)" }).onfinish = done;
+    } else done();
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  function back() { if (mode === "max" && prev) open(prev); else close(); }
+
+  /* links to the story and the windows' buttons; a link pressed with a modifier key still opens a tab */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-bw]");
+    if (b && (dock.contains(b) || fl.contains(b))) {
+      e.preventDefault();
+      var k = b.getAttribute("data-bw");
+      if (k === "close") close(); else open(k, dock);
+      return;
+    }
+    var a = e.target.closest && e.target.closest("[data-press]");
+    if (!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    open(mode === "max" ? "max" : (a.getAttribute("data-press") || "pip"), a);
+  });
+  veil.addEventListener("click", back);
+  window.addEventListener("keydown", function (e) { if (e.key === "Escape" && mode) { back(); e.stopImmediatePropagation(); } }, true);
+
+  /* the small window is dragged by its bar, and stays where it is put */
+  var bar = fl.querySelector(".bw-bar"), drag = null;
+  bar.addEventListener("pointerdown", function (e) {
+    if (mode !== "pip" || e.button || (e.target.closest && e.target.closest("button, a"))) return;
+    var r = fl.getBoundingClientRect(); drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, id: e.pointerId };
+    fl.classList.add("drag"); try { bar.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault();
+  });
+  bar.addEventListener("pointermove", function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var W = window.innerWidth, H = window.innerHeight, r = fl.getBoundingClientRect();
+    pos = { x: clamp(e.clientX - drag.dx, 10, W - r.width - 10), y: clamp(e.clientY - drag.dy, 10, H - r.height - 10) };
+    fl.style.left = pos.x + "px"; fl.style.top = pos.y + "px";
+  });
+  var drop = function () { if (!drag) return; drag = null; fl.classList.remove("drag"); };
+  bar.addEventListener("pointerup", drop); bar.addEventListener("pointercancel", drop);
+
+  /* the page's own cursor cannot follow the mouse into another site's page: it steps aside there */
+  [dock, fl].forEach(function (w) {
+    w.addEventListener("mouseenter", function () { document.body.classList.add("bw-hover"); });
+    w.addEventListener("mouseleave", function () { document.body.classList.remove("bw-hover"); });
+  });
+})();

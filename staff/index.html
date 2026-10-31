@@ -608,6 +608,58 @@ footer .ff{height:104px;width:auto;margin-bottom:22px}
 @media(max-width:600px){.cardq blockquote{font-size:clamp(14px,4.55vw,22px)}.cardq blockquote .ql{display:block;white-space:nowrap}.cardq blockquote br{display:none}}
 .cardq figcaption{font-size:14px;line-height:1.55;color:var(--ink-2)}
 .cardq figcaption b{color:var(--ink)}
+
+/* ── Bury College's story: the real page, live, in a browser window on this one ── */
+.press{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.24fr);gap:clamp(24px,3.6vw,56px);align-items:center;margin-top:clamp(34px,5vw,70px)}
+@media(max-width:900px){.press{grid-template-columns:minmax(0,1fr)}}
+.press-copy,.press-slot{min-width:0}
+.press-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+.press-h{font-size:clamp(32px,3.8vw,58px);line-height:.98;margin:12px 0 16px;color:#fff}
+.press-copy p{margin:0 0 20px;font-size:15px;line-height:1.6;color:var(--pale-2);max-width:56ch}
+.press-q{margin:0 0 24px;padding-left:18px;border-left:4px solid var(--red);font-family:var(--serif);font-style:italic;font-size:clamp(19px,1.75vw,24px);line-height:1.3;color:#fff}
+.press-q cite{display:block;margin-top:10px;font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--pale-3)}
+.press-acts{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+.press-acts .btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}.press-acts .btn svg .f{fill:currentColor;stroke:none}
+.press-ext{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff;text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:3px}
+.press-ext:hover{color:var(--red)}
+.bury-link{color:inherit;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px;font-weight:700}
+.bury-link i{font-style:normal;font-size:.85em;margin-left:3px;color:var(--red)}
+.bury-link:hover{color:var(--red)}
+.bw{background:#fff;border:2px solid var(--black);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 34px 90px -34px rgba(0,0,0,.85)}
+.ch.dark .bw-dock{border-color:#fff}
+.bw-bar{display:flex;align-items:center;gap:10px;height:42px;padding:0 6px 0 12px;background:var(--black);color:#fff;flex:none}
+.bw-dots{display:flex;gap:6px;flex:none}.bw-dots i{width:10px;height:10px;border-radius:50%;background:#3b3b3b}.bw-dots i:first-child{background:var(--red)}
+.bw-url{flex:1;min-width:0;display:flex;align-items:center;gap:7px;height:27px;padding:0 11px;border-radius:14px;background:#262626;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:#9d9d97;white-space:nowrap;overflow:hidden}
+.bw-url b{color:#fff;font-weight:500}.bw-url span{overflow:hidden;text-overflow:ellipsis}
+.bw-url svg{width:12px;height:12px;flex:none;fill:none;stroke:#fff;stroke-width:2}
+.bw-btns{display:flex;gap:2px;flex:none}
+.bw-btns button,.bw-btns a{display:grid;place-content:center;width:34px;height:34px;padding:0;border:0;border-radius:6px;background:transparent;color:#fff;cursor:pointer;transition:background .2s}
+.bw-btns button:hover,.bw-btns a:hover,.bw-btns button:focus-visible,.bw-btns a:focus-visible{background:var(--red);outline:0}
+.bw-btns svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2}.bw-btns svg .f{fill:currentColor;stroke:none}
+.bw-view{position:relative;flex:1;min-height:0;overflow:hidden;background:#fff}
+.bw-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 0;display:block}
+.bw[hidden],.bw-veil[hidden]{display:none}
+.bw-view iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#fff;opacity:0;transition:opacity .45s}
+.bw.ready .bw-view iframe{opacity:1}
+.bw-dock .bw-view{flex:none;aspect-ratio:1100/720}
+.bw-read{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding:0 0 22px;border:0;background:linear-gradient(to top,rgba(17,17,17,.45),transparent 38%);cursor:pointer}
+.bw-read span{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:3px;background:var(--black);color:#fff;font-family:var(--sans);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,transform .25s}
+.bw-read:hover span,.bw-read:focus-visible span{background:var(--red);transform:translateY(-2px)}
+.bw-read:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+.bw-out{position:absolute;inset:0;z-index:3;display:none;place-content:center;background:rgba(17,17,17,.74);color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.press-slot.out .bw-out{display:grid}.press-slot.out .bw-read{display:none}
+.bw-float{position:fixed;z-index:240;left:0;top:0;width:420px;height:520px;border-color:var(--black)}
+.bw-float[data-mode="pip"] .bw-bar{cursor:grab;touch-action:none}
+.bw-float.drag .bw-bar{cursor:grabbing}.bw-float.drag iframe{pointer-events:none}
+.bw-float[data-mode="pip"] [data-bw="pip"],.bw-float[data-mode="max"] [data-bw="max"]{display:none}
+.bw-float[data-mode="pip"] .bw-url span{display:none}
+.bw-float[data-mode="max"]{z-index:900;border-radius:10px}
+.bw-veil{position:fixed;inset:0;z-index:899;background:rgba(10,10,10,.72)}
+@media(max-width:600px){.bw-float[data-mode="max"]{border-radius:0;border:0}.bw-dots{display:none}}
+.bw,.bw *{cursor:auto}
+html.js.has-gsap .bw button,html.js.has-gsap .bw a,html.js.has-gsap .bw-read{cursor:pointer}
+html.js.has-gsap .bw-float[data-mode="pip"] .bw-bar{cursor:grab}
+body.bw-hover .cur-dot,body.bw-hover .cur-ring{opacity:0!important}
 .cardq figcaption a,.cardq figcaption .cardopen{background:none;border:0;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:500}
 .cardq figcaption a i,.cardq figcaption .cardopen i{font-style:normal;transition:transform .25s}
 .cardq figcaption a:hover i,.cardq figcaption .cardopen:hover i{transform:translateX(4px)}
@@ -1108,7 +1160,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         <div class="actcard"><div class="k"><span class="num">a</span>College placement and work experience</div>
           <dl><dt>Since</dt><dd>Supported college placements with New Bridge College since 2021; Jobcentre Plus referrals; T Level industry placements with Bury College since October 2025; work experience, the T Level programme and the apprenticeship scheme with The Manchester College.</dd>
           <dt>Volume</dt><dd>Three T Level students in the first cohort, three more from October 2026, alongside college placements, Jobcentre referrals and two Jobs Guarantee roles, both already filled.</dd>
-          <dt>Outcome</dt><dd>All three T Level students progressed into paid work: summer internships, then continuing roles. Earlier college and Jobcentre starters are in long-term jobs.</dd></dl>
+          <dt>Outcome</dt><dd>All three T Level students progressed into paid work: summer internships, then continuing roles (<a class="bury-link" href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" data-press="pip" data-cur-label="Read">Bury College's story<i aria-hidden="true">↗</i></a>). Earlier college and Jobcentre starters are in long-term jobs.</dd></dl>
 </div>
         <div class="actcard"><div class="k"><span class="num">b</span>Mentoring and workplace training</div>
           <dl><dt>Since</dt><dd>Every placement, from the first day.</dd>
@@ -1154,6 +1206,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <li class="haspic"><img class="pic" src="../assets/journey/ebay-number-one.webp" alt="eBay: ranked number one out of 1,193 UK fire extinguisher sellers, August 2026" loading="lazy" decoding="async"><span class="when">Aug 2026</span><span class="what"><b>A million-pound year.</b><span class="fx"> Combined sales pass £1 million. Containers arrive back to back, the company is number one for extinguishers on eBay and Temu, and launches on Amazon and Shopify are in preparation.</span></span></li>
       <li class="haspic"><img class="pic" src="../assets/journey/kings-2027.webp" alt="Entered for The King's Awards for Enterprise 2027, Promoting Opportunity, with The Way In as the company's initiative" loading="lazy" decoding="async"><span class="when">Sept 2026</span><span class="what"><b>The King's Awards for Enterprise.</b><span class="fx"> The company enters the King's Awards for Enterprise under the Promoting Opportunity category, with The Way In as the company's initiative.</span></span></li>
       <li class="haspic"><img class="pic logo" src="../assets/journey/oct2026.webp" alt="Youth Guarantee, funded by UK Government, and the T Level Ambassador badge" loading="lazy" decoding="async"><span class="when">Oct 2026</span><span class="what"><b>The second cohort, and the Jobs Guarantee.</b><span class="fx"> Three more Bury College T Level students will arrive, and two young people have already got their places through the Government's Jobs Guarantee, part of the Youth Guarantee, with the Growth Company. The newest ways in.</span></span></li>
+      <li class="haspic"><img class="pic" src="../assets/journey/bury-news.webp" alt="Bury College's news page: T Level students turn industry placements into careers at Freedom Fire" loading="lazy" decoding="async"><span class="when">22 Oct 2026</span><span class="what"><b>Bury College tells the story.</b><span class="fx"> The college publishes the first cohort's story: Bill and Gabriel's website and storefronts, Harrison's warehouse, and all three in permanent paid roles. <a class="bury-link" href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" data-press="pip" data-cur-label="Read">Read it<i aria-hidden="true">↗</i></a></span></span></li>
     </ol></div>
     <div class="tl-hint" aria-hidden="true">Keep scrolling <i>→</i> the timeline moves sideways</div></div></div>
   </div>
@@ -1217,7 +1270,7 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
     </div>
     <div class="proofs rv" aria-label="The four groups">
       <div class="proof"><div class="no">01</div><h3>The people supported</h3>
-        <p><b>Nine</b> people supported in 2026, seven of them from disadvantaged backgrounds. <b>Seven</b> in paid work. <b>All three</b> Bury College T Level students progressed into paid roles.</p></div>
+        <p><b>Nine</b> people supported in 2026, seven of them from disadvantaged backgrounds. <b>Seven</b> in paid work. <b>All three</b> Bury College T Level students progressed into paid roles, as <a class="bury-link" href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" data-press="pip" data-cur-label="Read">Bury College reported<i aria-hidden="true">↗</i></a>.</p></div>
       <div class="proof"><div class="no">02</div><h3>The organisation</h3>
         <p>Roles filled across warehouse, IT, web and ecommerce. The website, quoted at about <b>£40,000</b> by an agency, was built over six months by two T Level students who arrived on placements.</p></div>
       <div class="proof"><div class="no">03</div><h3>The employees</h3>
@@ -1225,6 +1278,26 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
       <div class="proof"><div class="no">04</div><h3>The wider community</h3>
         <p>Two talks and a workshop at New Bridge College, recruitment fairs, and a voice in how the Jobs Guarantee is run. Families see confidence return: one mother wrote that she had got her son back.</p></div>
         </div>
+    <div class="press rv" id="press">
+      <div class="press-copy">
+        <span class="press-k">In the news · Bury College · 22 October 2026</span>
+        <h3 class="press-h">Bury College <em class="s">told the story.</em></h3>
+        <p>The college's own news story on its first T Level cohort at Freedom Fire. Bill and Gabriel came from Digital Software Development and built the new website and storefronts. Harrison came from Management and Administration, learned the warehouse from the inside and took on supporting his colleagues. All three hold permanent paid roles, and three more students are to come this academic year.</p>
+        <blockquote class="press-q">“The people who are quiet, the people who are sat at the back of the room, the ones who are nervous and might be struggling to come out of their shell are the guys that, I've found, end up doing very well.”<cite>Tom Letcher, speaking to Bury College</cite></blockquote>
+        <div class="press-acts">
+          <button type="button" class="btn" data-press="pip" data-cur-label="Pop out">Pop it out <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><rect x="12" y="12" width="6" height="4.5" rx=".8" class="f"/></svg></button>
+          <a class="press-ext" href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" data-cur-label="Open">burycollege.ac.uk <i aria-hidden="true">↗</i></a>
+        </div>
+      </div>
+      <div class="press-slot" id="pressSlot">
+        <div class="bw bw-dock" aria-label="Bury College's news page, live">
+          <div class="bw-bar"><span class="bw-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="bw-url"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><b>burycollege.ac.uk</b><span>/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire</span></span><span class="bw-btns"><button type="button" data-bw="pip" aria-label="Pop out" title="Pop out" data-cur-label="Pop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><rect x="12" y="12" width="6" height="4.5" rx=".8" class="f"/></svg></button><button type="button" data-bw="max" aria-label="Full size" title="Full size" data-cur-label="Full"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><a href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" aria-label="Open on burycollege.ac.uk" title="Open on burycollege.ac.uk" data-cur-label="Open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg></a></span></div>
+          <div class="bw-view"><img class="bw-poster" src="../assets/bury-news-poster.webp" alt="Bury College's news page: Bury College T Level students turn industry placements into careers at Freedom Fire" decoding="async" loading="lazy">
+            <button type="button" class="bw-read" data-bw="max" data-cur-label="Read"><span>Read it here</span></button>
+            <span class="bw-out" aria-hidden="true">Open in its own window</span></div>
+        </div>
+      </div>
+    </div>
     <figure class="cardq rv">
       <blockquote><span class="ql">“Everything seemed to have changed when</span> <span class="ql">he got an opportunity in your company. I</span> <span class="ql">can finally say ‘I got my son back’</span><br><span class="ql">thanks to you Tom.”</span></blockquote>
       <figcaption><b>Molly, Josh's mother</b>, in a handwritten card sent unprompted shortly after Josh started, reproduced with Molly's and Josh's permission.
@@ -1256,7 +1329,8 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
         <p>Supported placements since 2021 for young people with additional needs. One of the earliest, Jojo, has been full-time since 2022. Tom has been back twice to speak, and once more with a professional boxer for a workshop on resilience and ambition.</p></div>
       <div class="plate"><div class="badge"><img class="pl bury" src="../assets/bury-college-t.png" width="224" height="300" alt="Bury College" loading="lazy" decoding="async"><small>T Level industry placements · since October 2025</small></div><span class="k">College partner</span>
         <h3>Bury College</h3>
-        <p>T Level industry placements since October 2025. All three students in the first cohort progressed into paid roles, and three more start from October 2026.</p></div>
+        <p>T Level industry placements since October 2025. All three students in the first cohort progressed into paid roles, and three more start from October 2026.</p>
+        <p><a class="bury-link" href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" data-press="pip" data-cur-label="Read">Read Bury College's story<i aria-hidden="true">↗</i></a></p></div>
       <div class="plate"><div class="badge"><img class="pl tmc" src="../assets/manchester-college-t.png" width="500" height="200" alt="The Manchester College" loading="lazy" decoding="async"><small>Work experience · T Level programme · apprenticeships</small></div><span class="k">College partner</span>
         <h3>The Manchester College</h3>
         <p>The newest college route in, alongside New Bridge College and Bury College: work experience, the T Level programme and the apprenticeship scheme.</p></div>
@@ -1345,6 +1419,12 @@ ol.spine.journey .what{grid-column:1;grid-row:3;font-size:13.5px;line-height:1.5
 
 </div><!-- /smooth-content -->
 </div><!-- /smooth-wrapper -->
+
+<div class="bw bw-float" id="bwFloat" role="dialog" aria-label="Bury College's news page" data-mode="pip" hidden>
+  <div class="bw-bar"><span class="bw-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="bw-url"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><b>burycollege.ac.uk</b><span>/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire</span></span><span class="bw-btns"><button type="button" data-bw="pip" aria-label="Small window" title="Small window" data-cur-label="Small"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><rect x="12" y="12" width="6" height="4.5" rx=".8" class="f"/></svg></button><button type="button" data-bw="max" aria-label="Full size" title="Full size" data-cur-label="Full"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><button type="button" data-bw="close" aria-label="Close" title="Close" data-cur-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><a href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener" aria-label="Open on burycollege.ac.uk" title="Open on burycollege.ac.uk" data-cur-label="Open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg></a></span></div>
+  <div class="bw-view"><img class="bw-poster" src="../assets/bury-news-poster.webp" data-d="../assets/bury-news-poster.webp" data-m="../assets/bury-news-poster-m.webp" alt="" decoding="async" loading="lazy"><iframe data-src="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" title="Bury College news: Bury College T Level students turn industry placements into careers at Freedom Fire" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+</div>
+<div class="bw-veil" id="bwVeil" hidden></div>
 
 <div class="cardbox" id="cardbox" role="dialog" aria-modal="true" aria-label="The card from Josh's mum" hidden>
   <div class="cardbox-in">
