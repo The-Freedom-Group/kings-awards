@@ -157,6 +157,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 .nx p { margin: 0; font-size: 14px; color: var(--tx-2); }
 
 /* ---------------------------------------------------------- finale --- */
+.finale .wrap { position: relative; }
 .finale { padding: 120px 0 90px; border-top: 1px solid var(--line); position: relative; overflow: hidden; }
 .finale h2 { margin: 18px 0 0; font: 400 clamp(52px, 9vw, 132px)/.9 var(--disp); text-transform: uppercase; }
 .finale h2 em { display: block; font: italic 400 1.02em/1 var(--serif); color: var(--pink); text-transform: none; }
@@ -187,6 +188,112 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   .screen-bar .live::before { animation: none; }
 }
 
+/* ------------------------------------------------- upgrade 31 Oct --- */
+/* reading progress + the section you are in */
+.prog { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--pink); transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; }
+.bar nav a { position: relative; padding: 8px 0; transition: color .2s; }
+.bar nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: var(--pink); transform: scaleX(0); transform-origin: 0 50%; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.bar nav a.cur { color: var(--tx); }
+.bar nav a.cur::after { transform: none; }
+
+/* orbit: the same drawing, its planets now travel round it */
+.orbit circle { will-change: transform; }
+.finale .orbit { right: -200px; top: -60px; width: 640px; height: 640px; opacity: .5; }
+.cue:hover { color: var(--tx); }
+
+/* headline arrives word by word */
+.js .hero h1 .w { display: inline-block; opacity: 0; transform: translateY(.45em); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.js .hero.go h1 .w { opacity: 1; transform: none; }
+.js .hero .tag, .js .hero .lede, .js .hero .ctas, .js .hero .kick { opacity: 0; transform: translateY(12px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.js .hero.go .kick { opacity: 1; transform: none; }
+.js .hero.go .tag { opacity: 1; transform: none; transition-delay: .55s; }
+.js .hero.go .lede { opacity: 1; transform: none; transition-delay: .7s; }
+.js .hero.go .ctas { opacity: 1; transform: none; transition-delay: .82s; }
+.stat b { font-variant-numeric: tabular-nums; }
+
+/* scroll hint under the hero */
+.cue { position: relative; display: inline-flex; text-decoration: none; align-items: center; gap: 12px; margin-top: 44px; font: 500 11.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--tx-3); }
+.cue i { position: relative; width: 1px; height: 34px; background: var(--line-2); overflow: hidden; }
+.cue i::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--pink); animation: cue 2.2s cubic-bezier(.6,0,.4,1) infinite; }
+@keyframes cue { to { top: 100%; } }
+
+/* the screen leans back and settles as it comes up */
+.stage { perspective: 1800px; }
+.screen { transform-origin: 50% 0; will-change: transform; }
+.canvas { position: relative; }
+.viewport .screen-go { inset: 0; }
+.viewport img.still { height: auto; }
+.swipe { display: none; }
+.screen-bar .url { margin-left: 10px; display: flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.04); color: var(--tx-2); }
+.screen-bar .url::before { content: ""; width: 8px; height: 8px; border-radius: 2px; border: 1.5px solid var(--tx-3); border-bottom-width: 3px; }
+
+/* numbered notes on the screenshot */
+.pins { position: absolute; inset: 0; pointer-events: none; }
+.pin { position: absolute; transform: translate(-50%, -50%); pointer-events: auto; width: 30px; height: 30px; padding: 0; border-radius: 50%; border: 0; background: var(--pink); color: #fff; font: 600 13px/1 var(--mono); display: grid; place-items: center; cursor: pointer; transition: transform .25s cubic-bezier(.2,.7,.2,1), background .2s; }
+.pin::before { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1.5px solid var(--pink); opacity: 0; transform: scale(.7); transition: opacity .3s, transform .3s; }
+.pin::after { content: ""; position: absolute; inset: -9px; }
+.pin:hover { transform: translate(-50%, -50%) scale(1.08); }
+.pin[aria-pressed="true"] { background: #fff; color: #0a0a0a; }
+.pin[aria-pressed="true"]::before { opacity: 1; transform: none; border-color: #fff; animation: ring 1.8s ease-out infinite; }
+@keyframes ring { 0% { transform: scale(.9); opacity: .9; } 100% { transform: scale(1.6); opacity: 0; } }
+.notes { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 16px 20px; border-top: 1px solid var(--line); background: #0e0e10; min-height: 82px; }
+.notes .nn { font: 400 34px/1 var(--disp); color: var(--pink); min-width: 1.4ch; }
+.notes .nt b { display: block; font-weight: 600; font-size: 15px; }
+.notes .nt span { display: block; margin-top: 2px; color: var(--tx-2); font-size: 14px; }
+.notes .nt { animation: noteIn .45s cubic-bezier(.2,.7,.2,1); }
+@keyframes noteIn { from { opacity: 0; transform: translateY(6px); } }
+.notes .step { display: flex; gap: 6px; }
+.notes .step button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-2); background: transparent; color: var(--tx); display: grid; place-items: center; cursor: pointer; }
+.notes .step button:hover { border-color: var(--tx-2); }
+.notes .step .back svg { transform: scaleX(-1); }
+
+/* workflow cards answer the pointer */
+.flow { transition: border-color .3s, transform .4s cubic-bezier(.2,.7,.2,1), background .3s; }
+.flow::before { content: ""; position: absolute; left: 24px; right: 24px; top: -1px; height: 2px; background: var(--pink); transform: scaleX(0); transform-origin: 0 50%; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.flow:hover { border-color: var(--line-2); transform: translateY(-4px); }
+.flow:hover::before, .flow:focus-within::before { transform: none; }
+.flow:hover .n { color: var(--pink-2); }
+
+/* the one-minute demo plays itself */
+.script > div:not(.lbl) { position: relative; transition: opacity .4s, background .4s; cursor: pointer; }
+.script > div:not(.lbl)::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--line); }
+.script > div:not(.lbl)::after { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--pink); transform: scaleX(var(--p, 0)); transform-origin: 0 50%; }
+.script.playing > div:not(.lbl) { opacity: .45; }
+.script.playing > div.on { opacity: 1; background: rgba(255,255,255,.025); }
+.script .lbl small { display: block; margin-top: 8px; color: var(--tx-3); letter-spacing: .06em; text-transform: none; font-size: 11.5px; }
+
+/* builds: numbered, with a little depth */
+.b-count { font: 500 11.5px/1 var(--mono); letter-spacing: .12em; color: var(--tx-3); margin-right: 14px; }
+.b-count b { color: var(--pink-2); font-weight: 500; }
+.shot { transition: border-color .3s; }
+.shot img { transition: transform 1.1s cubic-bezier(.2,.7,.2,1); }
+.media:hover .shot img { transform: scale(1.025); }
+.media:hover .shot { border-color: rgba(255,255,255,.26); }
+.media .pip { will-change: transform; }
+
+/* what's next: the line draws as you go */
+.next { position: relative; border-top-color: var(--line); }
+.next .line { position: absolute; left: 0; top: -1px; height: 2px; width: 100%; background: var(--pink); transform-origin: 0 50%; transform: scaleX(var(--d, 0)); }
+.nx { position: relative; }
+.nx .dot { position: absolute; top: -6px; left: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line-2); transition: background .4s, border-color .4s; }
+.nx + .nx .dot { left: 22px; }
+.nx.lit .dot { background: var(--pink); border-color: var(--pink); }
+.nx h3 { transition: color .4s; }
+.nx:not(.lit) h3 { color: var(--tx-2); }
+
+/* ask Tom card */
+.links a { transition: border-color .2s, transform .25s cubic-bezier(.2,.7,.2,1), background .2s; }
+.links a:hover { transform: translateY(-2px); background: var(--bg-3); }
+.links a .go { margin-left: auto; width: 14px; height: 14px; color: var(--tx-3); transition: transform .25s, color .2s; }
+.links a:hover .go { transform: translate(2px, -2px); color: var(--pink-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .hero h1 .w, .js .hero .tag, .js .hero .lede, .js .hero .ctas, .js .hero .kick { opacity: 1; transform: none; transition: none; }
+  .cue i::after, .pin[aria-pressed="true"]::before, .notes .nt { animation: none; }
+  .flow, .flow:hover, .links a:hover, .media:hover .shot img { transform: none; }
+  .next .line { transform: none; }
+}
+
 /* ----------------------------------------------------- responsive --- */
 @media (max-width: 1080px) {
   .flows { grid-template-columns: minmax(0, 1fr); }
@@ -197,8 +304,12 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   .nx:nth-child(even) { padding-left: 22px; border-left: 1px solid var(--line); }
   .card { grid-template-columns: minmax(0, 1fr) auto; }
   .links { grid-column: 1 / -1; grid-row: 2; }
+  .next .line { display: none; }
+  .nx .dot, .nx + .nx .dot { left: 0; }
+  .nx:nth-child(even) .dot { left: 22px; }
 }
 @media (max-width: 860px) {
+  .finale .orbit { top: auto; bottom: -200px; opacity: .35; }
   .bar nav { display: none; }
   .bar .btn { margin-left: auto; }
   .s-head { grid-template-columns: minmax(0, 1fr); gap: 18px; margin-bottom: 32px; }
@@ -236,6 +347,25 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   .tom img { width: 72px; height: 72px; }
   .build p { font-size: 15.5px; }
   .b-links .btn { flex: 1 1 100%; }
+  .nx:nth-child(even) .dot { left: 0; }
+  .finale .orbit { display: none; }
+  .cue { margin-top: 34px; }
+  .screen-bar .url { display: none; }
+  .viewport { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-behavior: smooth; }
+  .viewport::-webkit-scrollbar { display: none; }
+  .canvas { width: 820px; }
+  .viewport .screen-go { display: none; }
+  .swipe { display: flex; align-items: center; gap: 8px; position: absolute; right: 10px; top: 48px; z-index: 2; padding: 6px 10px; border-radius: 999px; background: rgba(10,10,10,.82); border: 1px solid var(--line-2); font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx); pointer-events: none; transition: opacity .4s; }
+  .swipe.gone { opacity: 0; }
+  .pin { width: 28px; height: 28px; font-size: 12px; }
+  .notes { grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; padding: 14px 16px; }
+  .notes .nn { font-size: 30px; }
+  .notes .step { grid-column: 1 / -1; justify-content: flex-end; margin-top: 6px; }
+  .notes .nt b { font-size: 14.5px; }
+  .notes .nt span { font-size: 13.5px; }
+}
+@media (pointer: coarse) {
+  .flow:hover, .links a:hover { transform: none; }
 }
 </style>
 </head>
@@ -267,6 +397,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     </nav>
     <a class="btn pink sm" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener">Live demo<svg class="i"><use href="#ext"/></svg></a>
   </div>
+  <span class="prog" id="prog" aria-hidden="true"></span>
 </header>
 
 <main id="top">
@@ -287,11 +418,12 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <a class="btn" href="#built">See what we've built</a>
       </div>
       <div class="stats">
-        <div class="stat"><b>£3m</b><span>Revenue to date</span></div>
-        <div class="stat"><b>75,000+</b><span>Customer reviews</span></div>
-        <div class="stat"><b>782</b><span>Products run through our own system</span></div>
+        <div class="stat"><b data-to="3" data-pre="£" data-post="m">£3m</b><span>Revenue to date</span></div>
+        <div class="stat"><b data-to="75000" data-post="+">75,000+</b><span>Customer reviews</span></div>
+        <div class="stat"><b data-to="782">782</b><span>Products run through our own system</span></div>
         <div class="stat"><b>2019</b><span>First listing, at 23</span></div>
       </div>
+      <a class="cue" href="#command-centre"><i></i>Start with the Command Centre</a>
     </div>
   </section>
 
@@ -302,12 +434,30 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <p>One screen for the whole operation. It reads our Linnworks feeds (open orders every five minutes, stock hourly, sales daily), runs the rest of the day forward minute by minute, and shows each person what matters now. Three workflows, built to work properly rather than twenty half-built ones.</p>
       </div>
 
-      <div class="screen rv" id="screen">
-        <div class="screen-bar"><i></i><i></i><i></i><span>freedom.hub · Tom's overview · sample data</span><b class="live">Live demo</b></div>
+      <div class="stage rv">
+      <div class="screen" id="screen">
+        <div class="screen-bar"><i></i><i></i><i></i><span class="url">hub-demo.freedom-fire.co.uk · Tom's overview</span><b class="live">Live demo</b></div>
         <div class="viewport" id="viewport">
+          <div class="canvas" id="canvas">
           <img class="still" src="img/hub-overview.webp" alt="The Freedom Hub, Tom's overview: orders open, sales, who is in today, and the decisions waiting for him." width="1600" height="1000" id="still">
+          <a class="screen-go" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener" aria-label="Open the live demo"><span class="btn pink">Open the live demo<svg class="i"><use href="#ext"/></svg></span></a>
+          <div class="pins" id="pins" role="group" aria-label="What is on this screen">
+            <button class="pin" type="button" style="left:12%;top:13.2%" aria-pressed="false" data-t="One menu, one button per area" data-d="Workday, orders, alerts, stock, rota and the rest. Each area keeps its pages as tabs inside it.">1</button>
+            <button class="pin" type="button" style="left:19.6%;top:29.1%" aria-pressed="false" data-t="The day in one sentence" data-d="What needs Tom's call, orders still to go, yesterday's sales and who is in, worked out as the page opens.">2</button>
+            <button class="pin" type="button" style="left:24.5%;top:38.4%" aria-pressed="false" data-t="Orders from Linnworks" data-d="Open orders are read every five minutes, so the count and the van forecasts stay current.">3</button>
+            <button class="pin" type="button" style="left:82%;top:38.4%" aria-pressed="false" data-t="Your call" data-d="Decisions arrive prepared, with the numbers behind them, ready for a yes or a no.">4</button>
+            <button class="pin" type="button" style="left:26.5%;top:55.2%" aria-pressed="false" data-t="Needs you, most urgent first" data-d="Reviews, approvals, coverage risks and courier problems, each one a tap from the case.">5</button>
+            <button class="pin" type="button" style="left:84%;top:55.2%" aria-pressed="false" data-t="Founder OS" data-d="Tom's own three things for today, ideas captured to sort later, and what is waiting on others.">6</button>
+          </div>
+          </div>
         </div>
-        <a class="screen-go" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener" aria-label="Open the live demo"><span class="btn pink">Open the live demo<svg class="i"><use href="#ext"/></svg></span></a>
+        <span class="swipe" id="swipe" aria-hidden="true">Swipe the screen<svg class="i" style="width:14px;height:14px"><use href="#arr"/></svg></span>
+        <div class="notes" id="notes" aria-live="polite">
+          <span class="nn" id="nn">1</span>
+          <div class="nt" id="nt"><b>One menu, one button per area</b><span>Workday, orders, alerts, stock, rota and the rest. Each area keeps its pages as tabs inside it.</span></div>
+          <div class="step"><button type="button" class="back" id="nPrev" aria-label="Previous note"><svg class="i"><use href="#arr"/></svg></button><button type="button" id="nNext" aria-label="Next note"><svg class="i"><use href="#arr"/></svg></button></div>
+        </div>
+      </div>
       </div>
 
       <div class="flows">
@@ -356,7 +506,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       </div>
 
       <div class="script rv" aria-label="A one-minute demo">
-        <div class="lbl">The one-minute demo</div>
+        <div class="lbl"><span>The one-minute demo<small>Plays in order. Tap a step to hold it.</small></span></div>
         <div><b>1 · Founder</b>A late container and a Temu promotion put the 16:30 Evri van at risk. The dashboard flags it with a fix already worked out.</div>
         <div><b>2 · Team</b>Tap <em>Move Leah</em>. The whole day is re-run, and every van goes back on track.</div>
         <div><b>3 · Ask</b>"Will we get everything out today?" The answer now agrees, and shows its working.</div>
@@ -476,17 +626,24 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <div><span class="s-num">03 · Next</span><h2>What we're <em>building next</em></h2></div>
         <p>The Command Centre is the start. This is where it goes: one company brain, agents that do the preparation, and our own tools in place of rented ones.</p>
       </div>
-      <div class="next">
-        <div class="nx rv"><span class="n">01</span><h3>The Brain</h3><p class="k">Company knowledge layer</p><p>Everything the business knows in one place every tool can ask: guides, decisions, product facts and history.</p></div>
-        <div class="nx rv"><span class="n">02</span><h3>Command Centre</h3><p class="k">Operational control system</p><p>From three workflows to the whole operation: rota, stock, returns, carrier claims and site visits.</p></div>
-        <div class="nx rv"><span class="n">03</span><h3>AI Agents</h3><p class="k">Work, prepared</p><p>Customer service, product data, compliance, purchasing and workflows. Agents draft and check; a person signs off.</p></div>
-        <div class="nx rv"><span class="n">04</span><h3>Marketplace Intelligence</h3><p class="k">Every channel, one view</p><p>eBay, Amazon and Shopify optimisation: pricing, listings and stock across every channel.</p></div>
-        <div class="nx rv"><span class="n">05</span><h3>Internal Tools</h3><p class="k">Built, not bought</p><p>Building our own systems instead of constantly buying SaaS, shaped to how we actually work.</p></div>
+      <div class="next" id="nextLine">
+        <span class="line" aria-hidden="true"></span>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">01</span><h3>The Brain</h3><p class="k">Company knowledge layer</p><p>Everything the business knows in one place every tool can ask: guides, decisions, product facts and history.</p></div>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">02</span><h3>Command Centre</h3><p class="k">Operational control system</p><p>From three workflows to the whole operation: rota, stock, returns, carrier claims and site visits.</p></div>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">03</span><h3>AI Agents</h3><p class="k">Work, prepared</p><p>Customer service, product data, compliance, purchasing and workflows. Agents draft and check; a person signs off.</p></div>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">04</span><h3>Marketplace Intelligence</h3><p class="k">Every channel, one view</p><p>eBay, Amazon and Shopify optimisation: pricing, listings and stock across every channel.</p></div>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">05</span><h3>Internal Tools</h3><p class="k">Built, not bought</p><p>Building our own systems instead of constantly buying SaaS, shaped to how we actually work.</p></div>
       </div>
     </div>
   </section>
 
   <section class="finale" id="ask-tom">
+    <svg class="orbit" viewBox="0 0 720 720" aria-hidden="true">
+      <defs><linearGradient id="og2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#ff2d8d" stop-opacity="0"/><stop offset=".45" stop-color="#ff2d8d" stop-opacity=".75"/><stop offset="1" stop-color="#ff74b8" stop-opacity=".2"/></linearGradient></defs>
+      <ellipse cx="360" cy="360" rx="300" ry="150" transform="rotate(-38 360 360)" fill="none" stroke="url(#og2)" stroke-width="1.6"/>
+      <ellipse cx="360" cy="360" rx="230" ry="96" transform="rotate(-38 360 360)" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      <circle cx="555" cy="180" r="9" fill="#3ddc97"/><circle cx="168" cy="548" r="7" fill="#6cb4ff"/><circle cx="260" cy="302" r="4" fill="#ff2d8d"/>
+    </svg>
     <div class="wrap">
       <span class="kick">04 · Ask Tom</span>
       <h2 class="rv">Want to see the live build? <em>Ask Tom.</em></h2>
@@ -496,12 +653,12 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
           <div><b>Tom Letcher</b><span>Founder &amp; Managing Director<br>The Freedom Group</span></div>
         </div>
         <div class="links">
-          <a id="linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Tom%20Letcher%20Freedom" target="_blank" rel="noopener"><svg class="i"><use href="#in"/></svg><span>LinkedIn<small>Tom Letcher</small></span></a>
-          <a href="mailto:tom.letcher@freedomgroup.uk?subject=OpenAI%20DevDay"><svg class="i"><use href="#mail"/></svg><span>Email<small>tom.letcher@freedomgroup.uk</small></span></a>
-          <a href="#" id="vcard" download="Tom-Letcher.vcf"><svg class="i"><use href="#card"/></svg><span>Save contact<small>Add Tom to your phone</small></span></a>
-          <a href="https://www.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#fire"/></svg><span>Freedom Fire<small>freedom-fire.co.uk</small></span></a>
-          <a href="https://thewayin.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#door"/></svg><span>The Way In<small>The young team's story</small></span></a>
-          <a href="https://www.tomletcher.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#user"/></svg><span>Founder portfolio<small>tomletcher.co.uk</small></span></a>
+          <a id="linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Tom%20Letcher%20Freedom" target="_blank" rel="noopener"><svg class="i"><use href="#in"/></svg><span>LinkedIn<small>Tom Letcher</small></span><svg class="i go"><use href="#arr"/></svg></a>
+          <a href="mailto:tom.letcher@freedomgroup.uk?subject=OpenAI%20DevDay"><svg class="i"><use href="#mail"/></svg><span>Email<small>tom.letcher@freedomgroup.uk</small></span><svg class="i go"><use href="#arr"/></svg></a>
+          <a href="#" id="vcard" download="Tom-Letcher.vcf"><svg class="i"><use href="#card"/></svg><span>Save contact<small>Add Tom to your phone</small></span><svg class="i go"><use href="#arr"/></svg></a>
+          <a href="https://www.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#fire"/></svg><span>Freedom Fire<small>freedom-fire.co.uk</small></span><svg class="i go"><use href="#arr"/></svg></a>
+          <a href="https://thewayin.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#door"/></svg><span>The Way In<small>The young team's story</small></span><svg class="i go"><use href="#arr"/></svg></a>
+          <a href="https://www.tomletcher.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#user"/></svg><span>Founder portfolio<small>tomletcher.co.uk</small></span><svg class="i go"><use href="#arr"/></svg></a>
         </div>
         <div class="qr">
           <img src="img/qr.svg" alt="QR code linking to tomletcher.co.uk/openai" width="168" height="168">
@@ -538,37 +695,174 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     rv.forEach(function (el) { io.observe(el); });
   } else rv.forEach(function (el) { el.classList.add('in'); });
 
-  // The screen shows the real demo, running, once it is near the viewport:
-  // the desktop layout on wide screens, the phone layout on phones. The
-  // still image stays underneath until the demo has loaded.
-  var vp = document.getElementById('viewport'), frame = null, mode = null;
-  function size() {
-    var w = vp.clientWidth, phone = w < 560;
-    var iw = phone ? 390 : 1440, ih = phone ? 760 : 900, s = w / iw;
-    vp.style.height = Math.round(ih * s) + 'px';
-    if (frame) {
-      if (mode !== phone) { frame.remove(); frame = null; load(); return; }
-      frame.style.width = iw + 'px'; frame.style.height = ih + 'px'; frame.style.transform = 'scale(' + s + ')';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hero = document.querySelector('.hero');
+
+  // ---- headline arrives word by word (the words stay real text)
+  var h1 = hero.querySelector('h1'), wi = 0;
+  (function split(node) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        // a hyphenated word may still break after its hyphen, as before
+        n.textContent.replace(/-(?=\S)/g, '-\u0001').split(/(\s+|\u0001)/).forEach(function (part) {
+          if (!part || part === '\u0001') return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          var s = document.createElement('span'); s.className = 'w'; s.textContent = part;
+          s.style.transitionDelay = (0.05 + wi++ * 0.045) + 's'; frag.appendChild(s);
+        });
+        node.replaceChild(frag, n);
+      } else if (n.nodeType === 1) split(n);
+    });
+  })(h1);
+  requestAnimationFrame(function () { requestAnimationFrame(function () { hero.classList.add('go'); }); });
+
+  // ---- the orbit: same drawing, the planets travel round it.
+  // Each planet starts where it is drawn and follows an ellipse the same
+  // shape and tilt as the rings, through that point.
+  function orbit(svg) {
+    var C = 360, RX = 300, RY = 150, A = -38 * Math.PI / 180, ca = Math.cos(A), sa = Math.sin(A);
+    var ps = Array.prototype.map.call(svg.querySelectorAll('circle'), function (c) {
+      var x0 = +c.getAttribute('cx'), y0 = +c.getAttribute('cy'), dx = x0 - C, dy = y0 - C;
+      var u = dx * ca + dy * sa, v = -dx * sa + dy * ca;
+      var k = Math.sqrt(u * u / (RX * RX) + v * v / (RY * RY));
+      return { el: c, x0: x0, y0: y0, k: k, t0: Math.atan2(v / (RY * k), u / (RX * k)), w: 0.13 / Math.pow(k, 1.5) };
+    });
+    var on = false, t = 0, last = 0;
+    function frame(now) {
+      if (!on) return;
+      t += Math.min(64, now - (last || now)) / 1000; last = now;
+      ps.forEach(function (p) {
+        var th = p.t0 + t * p.w, u = RX * p.k * Math.cos(th), v = RY * p.k * Math.sin(th);
+        var x = C + u * ca - v * sa, y = C + u * sa + v * ca;
+        p.el.setAttribute('transform', 'translate(' + (x - p.x0).toFixed(2) + ' ' + (y - p.y0).toFixed(2) + ')');
+      });
+      requestAnimationFrame(frame);
+    }
+    function run(v) { if (v === on) return; on = v; last = 0; if (on) requestAnimationFrame(frame); }
+    if (reduce) return;
+    var seen = true;
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; run(seen && !document.hidden); }).observe(svg);
+    document.addEventListener('visibilitychange', function () { run(seen && !document.hidden); });
+    run(true);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('svg.orbit'), orbit);
+
+  // ---- figures count up the first time they are seen
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  var nums = document.querySelectorAll('.stat b[data-to]');
+  function count(el) {
+    var to = +el.getAttribute('data-to'), pre = el.getAttribute('data-pre') || '', post = el.getAttribute('data-post') || '', t0 = 0;
+    el.setAttribute('aria-label', el.textContent);
+    function step(now) {
+      t0 = t0 || now; var p = Math.min(1, (now - t0) / 1400), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + fmt(Math.round(to * e)) + post;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { count(e.target); cio.unobserve(e.target); } }); }, { threshold: 0.6 });
+    Array.prototype.forEach.call(nums, function (el) { cio.observe(el); });
+  }
+
+  // ---- reading progress, the section you are in, and scroll-linked motion
+  var prog = document.getElementById('prog');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.bar nav a'));
+  var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var stage = document.querySelector('.stage'), screen = document.getElementById('screen');
+  var pips = Array.prototype.slice.call(document.querySelectorAll('.media .pip'));
+  var next = document.getElementById('nextLine'), nxs = Array.prototype.slice.call(next.querySelectorAll('.nx'));
+  var ticking = false;
+  function paint() {
+    ticking = false;
+    var H = window.innerHeight, max = document.documentElement.scrollHeight - H;
+    prog.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+    var cur = -1;
+    secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < H * 0.4) cur = i; });
+    links.forEach(function (a, i) { a.classList.toggle('cur', i === cur); });
+    if (reduce) return;
+    // the screen leans back and settles as it comes up (wide screens only)
+    if (window.innerWidth > 860) {
+      var r = stage.getBoundingClientRect(), p = Math.max(0, Math.min(1, (H - r.top) / (H * 0.75)));
+      screen.style.transform = 'rotateX(' + ((1 - p) * 16).toFixed(2) + 'deg) scale(' + (0.94 + p * 0.06).toFixed(3) + ')';
+    } else screen.style.transform = '';
+    // the small pictures drift a little against the big ones
+    pips.forEach(function (el) {
+      var r = el.parentNode.getBoundingClientRect(), c = (r.top + r.height / 2 - H / 2) / H;
+      el.style.transform = 'translateY(' + (c * -36).toFixed(1) + 'px)';
+    });
+    // the line under "what's next" draws as you read along it
+    var nr = next.getBoundingClientRect(), d = Math.max(0, Math.min(1, (H * 0.85 - nr.top) / (H * 0.5)));
+    next.style.setProperty('--d', d.toFixed(3));
+    nxs.forEach(function (n, i) { n.classList.toggle('lit', window.innerWidth > 1080 ? d >= (i + 0.2) / nxs.length : n.getBoundingClientRect().top < H * 0.8); });
+  }
+  function onMove() { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }
+  window.addEventListener('scroll', onMove, { passive: true });
+  window.addEventListener('resize', onMove);
+  paint();
+  if (reduce) nxs.forEach(function (n) { n.classList.add('lit'); });
+
+  // ---- notes on the screenshot: they step through by themselves until you pick one
+  var pins = Array.prototype.slice.call(document.querySelectorAll('.pin'));
+  var nn = document.getElementById('nn'), nt = document.getElementById('nt'), vp = document.getElementById('viewport'), swipe = document.getElementById('swipe');
+  var at = -1, held = false, timer = null, inView = false;
+  function show(i, user) {
+    at = (i + pins.length) % pins.length;
+    pins.forEach(function (p, j) { p.setAttribute('aria-pressed', j === at ? 'true' : 'false'); });
+    var p = pins[at];
+    nn.textContent = at + 1;
+    var fresh = nt.cloneNode(false);
+    fresh.innerHTML = '<b></b><span></span>';
+    fresh.firstChild.textContent = p.getAttribute('data-t'); fresh.lastChild.textContent = p.getAttribute('data-d');
+    nt.parentNode.replaceChild(fresh, nt); nt = fresh;
+    // on a phone the screenshot is wider than the screen: bring the note into view
+    if (vp.scrollWidth > vp.clientWidth + 2 && (user || inView)) {
+      var x = p.offsetLeft - vp.clientWidth / 2;
+      vp.scrollTo({ left: Math.max(0, x), behavior: reduce ? 'auto' : 'smooth' });
     }
   }
-  function load() {
-    var phone = vp.clientWidth < 560;
-    mode = phone;
-    frame = document.createElement('iframe');
-    frame.title = 'Freedom Command Centre live demo';
-    frame.setAttribute('tabindex', '-1');
-    frame.setAttribute('aria-hidden', 'true');
-    frame.src = 'command-centre/?embed=1#founder';
-    frame.style.opacity = '0';
-    frame.addEventListener('load', function () { frame.style.transition = 'opacity .6s'; frame.style.opacity = '1'; });
-    vp.appendChild(frame);
-    size();
+  function tick() { clearTimeout(timer); if (held || reduce || !inView) return; timer = setTimeout(function () { show(at + 1); tick(); }, 4200); }
+  function pick(i) { held = true; clearTimeout(timer); show(i, true); }
+  pins.forEach(function (p, i) { p.addEventListener('click', function () { pick(i); }); });
+  document.getElementById('nPrev').addEventListener('click', function () { pick(at - 1); });
+  document.getElementById('nNext').addEventListener('click', function () { pick(at + 1); });
+  vp.addEventListener('scroll', function () { if (vp.scrollLeft > 20) swipe.classList.add('gone'); }, { passive: true });
+  show(0);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { inView = es[0].isIntersecting; tick(); }, { threshold: 0.35 }).observe(screen);
+
+  // ---- the one-minute demo plays itself, step by step
+  var script = document.querySelector('.script'), steps = Array.prototype.slice.call(script.querySelectorAll('div:not(.lbl)'));
+  var si = 0, sHeld = false, sT0 = 0, sOn = false, STEP = 5200;
+  function setStep(i) { si = i; steps.forEach(function (s, j) { s.classList.toggle('on', j === i); s.style.setProperty('--p', j < i ? 1 : 0); }); }
+  function sFrame(now) {
+    if (!sOn || sHeld) return;
+    sT0 = sT0 || now; var p = (now - sT0) / STEP;
+    if (p >= 1) { sT0 = now; p = 0; setStep((si + 1) % steps.length); }
+    steps[si].style.setProperty('--p', p.toFixed(3));
+    requestAnimationFrame(sFrame);
   }
-  size();
-  window.addEventListener('resize', size);
-  // The screen shows the real Hub (a screenshot of the live demo); the
-  // simulated demo is no longer loaded over it. load() is kept for reference.
-  void load;
+  steps.forEach(function (s, i) {
+    s.setAttribute('tabindex', '0'); s.setAttribute('role', 'button');
+    function hold() { sHeld = true; setStep(i); s.style.setProperty('--p', 1); script.classList.add('playing'); }
+    s.addEventListener('click', hold);
+    s.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hold(); } });
+  });
+  if (!reduce && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      var was = sOn; sOn = es[0].isIntersecting;
+      if (sOn && !was && !sHeld) { script.classList.add('playing'); if (!steps.some(function (s) { return s.classList.contains('on'); })) setStep(0); sT0 = 0; requestAnimationFrame(sFrame); }
+    }, { threshold: 0.5 }).observe(script);
+  }
+
+  // ---- builds are numbered
+  var builds = document.querySelectorAll('.build');
+  Array.prototype.forEach.call(builds, function (b, i) {
+    var tag = b.querySelector('.b-tag'); if (!tag) return;
+    var c = document.createElement('span'); c.className = 'b-count'; c.setAttribute('aria-hidden', 'true');
+    c.innerHTML = '<b>0' + (i + 1) + '</b> / 0' + builds.length;
+    tag.parentNode.insertBefore(c, tag);
+  });
 
   // the inline ask box opens the demo on the Ask view with the question
   document.getElementById('askInline').addEventListener('submit', function (e) {
