@@ -133,8 +133,10 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 .gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
 .gal figure { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-2); background: var(--bg-3); }
 .gal img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.hub-gal { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 18px 0 8px; }
+.gal figcaption { padding: 8px 10px; font: 500 11px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-2); border-top: 1px solid var(--line); }
 .gal figure:hover img { transform: scale(1.04); }
-@media (max-width: 860px) { .grow { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; } }
+@media (max-width: 860px) { .hub-gal { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grow { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; } }
 .real { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 26px; font-size: 13.5px; color: var(--tx-2); }
 .real span { display: inline-flex; align-items: center; gap: 8px; }
 .real span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #3ddc97; }
@@ -472,6 +474,13 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
           <div class="step"><button type="button" class="back" id="nPrev" aria-label="Previous note"><svg class="i"><use href="#arr"/></svg></button><button type="button" id="nNext" aria-label="Next note"><svg class="i"><use href="#arr"/></svg></button></div>
         </div>
       </div>
+      </div>
+
+      <div class="gal hub-gal rv">
+        <figure><img src="img/h-warehouse.webp" alt="The war room's warehouse view: racking, packing benches and the team at work in 3D." width="1600" height="1000" loading="lazy"><figcaption>War room · warehouse</figcaption></figure>
+        <figure><img src="img/hub-overview.webp" alt="Tom's overview: orders open, sales, who is in today, and the decisions waiting for him." width="1600" height="1000" loading="lazy"><figcaption>Tom's overview</figcaption></figure>
+        <figure><img src="img/h-workday.webp" alt="Workday sheets: open orders, who is behind, and every carrier's collections today." width="1600" height="1000" loading="lazy"><figcaption>Workday sheets</figcaption></figure>
+        <figure><img src="img/h-orders.webp" alt="All orders from Linnworks: what to pick, check and send, by carrier and channel." width="1600" height="1000" loading="lazy"><figcaption>All orders</figcaption></figure>
       </div>
 
       <div class="flows">
