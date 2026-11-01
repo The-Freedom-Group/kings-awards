@@ -134,6 +134,13 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 .gal figure { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-2); background: var(--bg-3); }
 .gal img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
 .hub-gal { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 18px 0 8px; }
+.lb { position: fixed; inset: 0; z-index: 200; display: none; place-items: center; padding: 56px 16px 16px; background: rgba(5,5,7,.92); }
+.lb.on { display: grid; }
+.lb img { max-width: min(1600px, 100%); max-height: calc(100vh - 110px); width: auto; height: auto; border-radius: 12px; border: 1px solid var(--line-2); }
+.lb p { margin: 12px 0 0; text-align: center; font: 500 12px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-2); }
+.lb button { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--bg-3); color: var(--tx); font-size: 22px; line-height: 1; cursor: pointer; }
+.hub-gal figure { cursor: zoom-in; }
+.hub-gal figure:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
 .gal figcaption { padding: 8px 10px; font: 500 11px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-2); border-top: 1px solid var(--line); }
 .gal figure:hover img { transform: scale(1.04); }
 @media (max-width: 860px) { .hub-gal { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grow { grid-template-columns: minmax(0, 1fr); padding: 22px 18px; } }
@@ -858,6 +865,21 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     'EMAIL;TYPE=WORK:tom.letcher@freedomgroup.uk', 'URL:https://www.tomletcher.co.uk/', 'URL:https://www.freedom-fire.co.uk/',
     'ADR;TYPE=WORK:;;;Bury;Greater Manchester;;United Kingdom', 'NOTE:Met at OpenAI DevDay, 3 November 2026', 'END:VCARD'].join('\r\n');
   document.getElementById('vcard').href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vc);
+})();
+</script>
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Picture"><button type="button" id="lbX" aria-label="Close">&times;</button><div><img id="lbImg" alt=""><p id="lbCap"></p></div></div>
+<script>
+(function () {
+  var lb = document.getElementById('lb'), im = document.getElementById('lbImg'), cap = document.getElementById('lbCap'), last = null;
+  function close() { lb.classList.remove('on'); document.body.style.overflow = ''; if (last) last.focus(); }
+  Array.prototype.forEach.call(document.querySelectorAll('.hub-gal figure'), function (f) {
+    f.tabIndex = 0; f.setAttribute('role', 'button');
+    function open() { var i = f.querySelector('img'); last = f; im.src = i.currentSrc || i.src; im.alt = i.alt; cap.textContent = (f.querySelector('figcaption') || {}).textContent || ''; lb.classList.add('on'); document.body.style.overflow = 'hidden'; document.getElementById('lbX').focus(); }
+    f.addEventListener('click', open);
+    f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  lb.addEventListener('click', function (e) { if (e.target !== im) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('on')) close(); });
 })();
 </script>
 </body>
