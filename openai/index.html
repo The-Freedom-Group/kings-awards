@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Freedom × OpenAI DevDay · Tom Letcher</title>
-<meta name="description" content="We're using AI to reinvent how a traditional fire-safety business operates, built by a young team in Manchester. The Freedom Command Centre, our tools, and what we are building next.">
+<title>The Freedom Group · Tom Letcher</title>
+<meta name="description" content="We're using AI to reinvent how an e-commerce business operates, built by a young team in Manchester. The Freedom Hub, our tools, and what we are building next.">
 <link rel="canonical" href="https://www.tomletcher.co.uk/openai/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.tomletcher.co.uk/openai/">
-<meta property="og:title" content="Freedom × OpenAI DevDay">
-<meta property="og:description" content="Using AI to reinvent how a traditional fire-safety business operates, built by a young team in Manchester.">
+<meta property="og:title" content="The Freedom Group">
+<meta property="og:description" content="Using AI to reinvent how an e-commerce business operates, built by a young team in Manchester.">
 <meta property="og:image" content="https://www.tomletcher.co.uk/openai/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0a0a0a">
@@ -374,13 +374,14 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   .finale .orbit { display: none; }
   .cue { margin-top: 34px; }
   .screen-bar .url { display: none; }
-  .viewport { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-behavior: smooth; }
-  .viewport::-webkit-scrollbar { display: none; }
-  .canvas { width: 820px; }
+  .canvas { width: 100%; }
   .viewport .screen-go { display: none; }
-  .swipe { display: flex; align-items: center; gap: 8px; position: absolute; right: 10px; top: 48px; z-index: 2; padding: 6px 10px; border-radius: 999px; background: rgba(10,10,10,.82); border: 1px solid var(--line-2); font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx); pointer-events: none; transition: opacity .4s; }
+  .viewport img.still { cursor: zoom-in; }
+  .swipe { display: none !important; align-items: center; gap: 8px; position: absolute; right: 10px; top: 48px; z-index: 2; padding: 6px 10px; border-radius: 999px; background: rgba(10,10,10,.82); border: 1px solid var(--line-2); font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx); pointer-events: none; transition: opacity .4s; }
   .swipe.gone { opacity: 0; }
-  .pin { width: 28px; height: 28px; font-size: 12px; }
+  .pin { width: 22px; height: 22px; font-size: 11px; }
+  .pin::after { inset: -11px; }
+  .hub-gal { gap: 8px; }
   .notes { grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; padding: 14px 16px; }
   .notes .nn { font-size: 30px; }
   .notes .step { grid-column: 1 / -1; justify-content: flex-end; margin-top: 6px; }
@@ -410,10 +411,10 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   <div class="wrap">
     <a class="mark" href="#top" aria-label="Freedom Group, back to the top">
       <img src="img/group-logo.png" alt="" width="40" height="40">
-      <span><b>Freedom Group</b>OpenAI DevDay</span>
+      <span><b>Freedom Group</b>Tom Letcher</span>
     </a>
     <nav aria-label="Sections">
-      <a href="#command-centre">Command Centre</a>
+      <a href="#command-centre">Freedom Hub</a>
       <a href="#built">What we've built</a>
       <a href="#next">What's next</a>
       <a href="#ask-tom">Ask Tom</a>
@@ -432,8 +433,8 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       <circle cx="555" cy="180" r="9" fill="#3ddc97"/><circle cx="168" cy="548" r="7" fill="#6cb4ff"/><circle cx="260" cy="302" r="4" fill="#ff2d8d"/>
     </svg>
     <div class="wrap">
-      <span class="kick"><span>OpenAI DevDay</span></span>
-      <h1>We're using <span class="ai">AI</span> to reinvent how a traditional fire-safety business operates</h1>
+      <span class="kick"><span>The Freedom Group</span></span>
+      <h1>We're using <span class="ai">AI</span> to reinvent how an e-commerce business operates</h1>
       <p class="tag">built by a young team <em>in Manchester.</em></p>
       <p class="lede">Freedom Fire &amp; Safety Limited sells extinguishers, blankets, signs and safety kit across the UK, on eBay, Temu and our own store. Where others buy software, we build it: our own operating system for the whole business, running the warehouse, answering any question about the company, and putting what matters in front of the right person the moment it matters.</p>
       <div class="ctas">
@@ -446,14 +447,14 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <div class="stat"><b>Next day</b><span>Free delivery, nationwide</span></div>
         <div class="stat"><b>2026</b><span>King's Awards for Enterprise nominee</span></div>
       </div>
-      <a class="cue" href="#command-centre"><i></i>Start with the Command Centre</a>
+      <a class="cue" href="#command-centre"><i></i>Start with the Freedom Hub</a>
     </div>
   </section>
 
   <section class="s" id="command-centre">
     <div class="wrap">
       <div class="s-head rv">
-        <div><span class="s-num">01 · The centrepiece</span><h2>Freedom Command <em>Centre</em></h2></div>
+        <div><span class="s-num">01 · The centrepiece</span><h2>Freedom <em>Hub</em></h2></div>
         <p>One screen for the whole operation, fed live from Linnworks, showing each person what matters now.</p>
       </div>
 
@@ -526,7 +527,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
           <p>Our own tracker for the containers we ship from China. Every order is followed from the factory, through the Chinese port, across the water and through UK customs to our warehouse in Bury, about 100 days door to door.</p>
           <ul>
             <li>Every container, its stage and its days, on one journey</li>
-            <li>Feeds stock cover in the Command Centre: what lands before what runs out</li>
+            <li>Feeds stock cover in the Freedom Hub: what lands before what runs out</li>
             <li>A public version for partners; costs stay internal</li>
           </ul>
           <div class="b-links"><a class="btn pink" href="https://freedomfreight.co.uk/" target="_blank" rel="noopener">Open Freedom Freight<svg class="i"><use href="#ext"/></svg></a></div>
@@ -601,12 +602,12 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     <div class="wrap">
       <div class="s-head rv">
         <div><span class="s-num">03 · Next</span><h2>What we're <em>building next</em></h2></div>
-        <p>The Command Centre is the start. This is where it goes: one company brain, agents that do the preparation, and our own tools in place of rented ones.</p>
+        <p>The Freedom Hub is the start. This is where it goes: one company brain, agents that do the preparation, and our own tools in place of rented ones.</p>
       </div>
       <div class="next" id="nextLine">
         <span class="line" aria-hidden="true"></span>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">01</span><h3>The Brain</h3><p class="k">Company knowledge layer</p><p>Everything the business knows in one place every tool can ask: guides, decisions, product facts and history.</p></div>
-        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">02</span><h3>Command Centre</h3><p class="k">Operational control system</p><p>From three workflows to the whole operation: rota, stock, returns, carrier claims and site visits.</p></div>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">02</span><h3>Freedom Hub</h3><p class="k">Operational control system</p><p>From three workflows to the whole operation: rota, stock, returns, carrier claims and site visits.</p></div>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">03</span><h3>AI Agents</h3><p class="k">Work, prepared</p><p>Customer service, product data, compliance, purchasing and workflows. Agents draft and check; a person signs off.</p></div>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">04</span><h3>Marketplace Intelligence</h3><p class="k">Every channel, one view</p><p>eBay, Temu and Shopify optimisation: pricing, listings and stock across every channel.</p></div>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">05</span><h3>Internal Tools</h3><p class="k">Built, not bought</p><p>Building our own systems instead of constantly buying SaaS, shaped to how we actually work.</p></div>
@@ -631,7 +632,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         </div>
         <div class="links">
           <a id="linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Tom%20Letcher%20Freedom" target="_blank" rel="noopener"><svg class="i"><use href="#in"/></svg><span>LinkedIn<small>Tom Letcher</small></span><svg class="i go"><use href="#arr"/></svg></a>
-          <a href="mailto:tom.letcher@freedomgroup.uk?subject=OpenAI%20DevDay"><svg class="i"><use href="#mail"/></svg><span>Email<small>tom.letcher@freedomgroup.uk</small></span><svg class="i go"><use href="#arr"/></svg></a>
+          <a href="mailto:tom.letcher@freedomgroup.uk?subject=Freedom%20Hub"><svg class="i"><use href="#mail"/></svg><span>Email<small>tom.letcher@freedomgroup.uk</small></span><svg class="i go"><use href="#arr"/></svg></a>
           <a href="#" id="vcard" download="Tom-Letcher.vcf"><svg class="i"><use href="#card"/></svg><span>Save contact<small>Add Tom to your phone</small></span><svg class="i go"><use href="#arr"/></svg></a>
           <a href="https://www.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#fire"/></svg><span>Freedom Fire<small>freedom-fire.co.uk</small></span><svg class="i go"><use href="#arr"/></svg></a>
           <a href="https://thewayin.freedom-fire.co.uk/" target="_blank" rel="noopener"><svg class="i"><use href="#door"/></svg><span>The Way In<small>The young team's story</small></span><svg class="i go"><use href="#arr"/></svg></a>
@@ -649,7 +650,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 <footer class="foot">
   <div class="wrap">
     <span>The Freedom Group · Bury, Greater Manchester</span>
-    <span>Command Centre demo uses sample data. <a href="https://www.tomletcher.co.uk/">tomletcher.co.uk</a></span>
+    <span>Freedom Hub demo uses sample data. <a href="https://www.tomletcher.co.uk/">tomletcher.co.uk</a></span>
   </div>
 </footer>
 
@@ -821,7 +822,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   // Save contact: a vCard made on the spot, so it works offline in a hall
   var vc = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Letcher;Tom;;;', 'FN:Tom Letcher', 'ORG:The Freedom Group', 'TITLE:Founder & Managing Director',
     'EMAIL;TYPE=WORK:tom.letcher@freedomgroup.uk', 'URL:https://www.tomletcher.co.uk/', 'URL:https://www.freedom-fire.co.uk/',
-    'ADR;TYPE=WORK:;;;Bury;Greater Manchester;;United Kingdom', 'NOTE:Met at OpenAI DevDay', 'END:VCARD'].join('\r\n');
+    'ADR;TYPE=WORK:;;;Bury;Greater Manchester;;United Kingdom', 'END:VCARD'].join('\r\n');
   document.getElementById('vcard').href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vc);
 })();
 </script>
@@ -856,6 +857,11 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     }
     f.addEventListener('click', swap);
     f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); swap(); } });
+  });
+  still.addEventListener('click', function () {
+    if (window.innerWidth > 600) return;
+    last = still; im.src = still.currentSrc || still.src; im.alt = still.alt; cap.textContent = still.getAttribute('data-cap') || '';
+    lb.classList.add('on'); document.body.style.overflow = 'hidden'; document.getElementById('lbX').focus();
   });
   lb.addEventListener('click', function (e) { if (e.target !== im) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('on')) close(); });
