@@ -44,7 +44,7 @@ svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-widt
 .bar.on { background: rgba(10,10,10,.88); border-color: var(--line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 .bar .wrap { display: flex; align-items: center; gap: 16px; height: 68px; }
 .mark { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.mark img { width: 40px; height: 40px; }
+.mark img { width: 58px; height: 58px; }
 .mark span { font: 500 11px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tx-2); }
 .mark span b { display: block; color: var(--tx); font-weight: 500; }
 .bar nav { margin-left: auto; display: flex; gap: 26px; font-size: 13px; }
@@ -410,7 +410,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   <div class="wrap">
     <a class="mark" href="#top" aria-label="Freedom Group, back to the top">
       <img src="img/group-logo.png" alt="" width="40" height="40">
-      <span><b>Freedom Group</b>OpenAI DevDay · 3 Nov 2026</span>
+      <span><b>Freedom Group</b>OpenAI DevDay</span>
     </a>
     <nav aria-label="Sections">
       <a href="#command-centre">Command Centre</a>
@@ -432,10 +432,10 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       <circle cx="555" cy="180" r="9" fill="#3ddc97"/><circle cx="168" cy="548" r="7" fill="#6cb4ff"/><circle cx="260" cy="302" r="4" fill="#ff2d8d"/>
     </svg>
     <div class="wrap">
-      <span class="kick"><span><span class="hide-s">Prepared for </span>OpenAI DevDay · 3 November 2026</span></span>
+      <span class="kick"><span>OpenAI DevDay</span></span>
       <h1>We're using <span class="ai">AI</span> to reinvent how a traditional fire-safety business operates</h1>
       <p class="tag">built by a young team <em>in Manchester.</em></p>
-      <p class="lede">Freedom Fire &amp; Safety sells extinguishers, blankets, signs and safety kit across the UK, on eBay, Amazon, Temu, TikTok Shop and our own store. We build our own software rather than buying more of it: one system that runs the warehouse, answers questions about the business, and puts what needs attention in front of the right person.</p>
+      <p class="lede">Freedom Fire &amp; Safety Limited sells extinguishers, blankets, signs and safety kit across the UK, on eBay, Temu and our own store. Where others buy software, we build it: our own operating system for the whole business, running the warehouse, answering any question about the company, and putting what matters in front of the right person the moment it matters.</p>
       <div class="ctas">
         <a class="btn pink" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener">Open the live demo<svg class="i"><use href="#ext"/></svg></a>
         <a class="btn" href="#built">See what we've built</a>
@@ -443,8 +443,8 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       <div class="stats">
         <div class="stat"><b data-to="3" data-pre="£" data-post="m">£3m</b><span>Revenue to date</span></div>
         <div class="stat"><b data-to="75000" data-post="+">75,000+</b><span>Customer reviews</span></div>
-        <div class="stat"><b data-to="782">782</b><span>Products run through our own system</span></div>
-        <div class="stat"><b>2019</b><span>First listing, at 23</span></div>
+        <div class="stat"><b>Next day</b><span>Free delivery, nationwide</span></div>
+        <div class="stat"><b>2026</b><span>King's Awards for Enterprise nominee</span></div>
       </div>
       <a class="cue" href="#command-centre"><i></i>Start with the Command Centre</a>
     </div>
@@ -462,7 +462,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <div class="screen-bar"><i></i><i></i><i></i><span class="url">hub-demo.freedom-fire.co.uk · War room</span><b class="live">Live demo</b></div>
         <div class="viewport" id="viewport">
           <div class="canvas" id="canvas">
-          <img class="still" src="img/hub-warroom.webp" alt="The Freedom Hub war room: a live 3D model of our office, with the AI agents at their desks and how many are working." width="1600" height="1000" id="still">
+          <img class="still" src="img/hub-warroom.webp" alt="The Freedom Hub war room: a live 3D model of our office, with the AI agents at their desks and how many are working." width="1600" height="1000" id="still" data-cap="War room · office">
           <a class="screen-go" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener" aria-label="Open the live demo"><span class="btn pink">Open the live demo<svg class="i"><use href="#ext"/></svg></span></a>
           <div class="pins" id="pins" role="group" aria-label="What is on this screen">
             <button class="pin" type="button" style="left:9%;top:30%" aria-pressed="false" data-t="One menu, one button per area" data-d="Workday, orders, alerts, stock, rota and the rest. Each area keeps its pages as tabs inside it.">1</button>
@@ -485,9 +485,9 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 
       <div class="gal hub-gal rv">
         <figure><img src="img/h-warehouse.webp" alt="The war room's warehouse view: racking, packing benches and the team at work in 3D." width="1600" height="1000" loading="lazy"><figcaption>War room · warehouse</figcaption></figure>
-        <figure><img src="img/hub-overview.webp" alt="Tom's overview: orders open, sales, who is in today, and the decisions waiting for him." width="1600" height="1000" loading="lazy"><figcaption>Tom's overview</figcaption></figure>
+        <figure><img src="img/h-jojo.webp" alt="Jojo's workday sheet: her day block by block, what is next, progress and points." width="1600" height="1000" loading="lazy"><figcaption>Jojo's workday sheet</figcaption></figure>
         <figure><img src="img/h-workday.webp" alt="Workday sheets: open orders, who is behind, and every carrier's collections today." width="1600" height="1000" loading="lazy"><figcaption>Workday sheets</figcaption></figure>
-        <figure><img src="img/h-orders.webp" alt="All orders from Linnworks: what to pick, check and send, by carrier and channel." width="1600" height="1000" loading="lazy"><figcaption>All orders</figcaption></figure>
+        <figure><img src="img/h-brain.webp" alt="The AI Brain: the whole Hub as one live map, every area showing what needs action." width="1600" height="1000" loading="lazy"><figcaption>AI Brain</figcaption></figure>
       </div>
 
       <div class="grow rv">
@@ -608,7 +608,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">01</span><h3>The Brain</h3><p class="k">Company knowledge layer</p><p>Everything the business knows in one place every tool can ask: guides, decisions, product facts and history.</p></div>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">02</span><h3>Command Centre</h3><p class="k">Operational control system</p><p>From three workflows to the whole operation: rota, stock, returns, carrier claims and site visits.</p></div>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">03</span><h3>AI Agents</h3><p class="k">Work, prepared</p><p>Customer service, product data, compliance, purchasing and workflows. Agents draft and check; a person signs off.</p></div>
-        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">04</span><h3>Marketplace Intelligence</h3><p class="k">Every channel, one view</p><p>eBay, Amazon and Shopify optimisation: pricing, listings and stock across every channel.</p></div>
+        <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">04</span><h3>Marketplace Intelligence</h3><p class="k">Every channel, one view</p><p>eBay, Temu and Shopify optimisation: pricing, listings and stock across every channel.</p></div>
         <div class="nx rv"><i class="dot" aria-hidden="true"></i><span class="n">05</span><h3>Internal Tools</h3><p class="k">Built, not bought</p><p>Building our own systems instead of constantly buying SaaS, shaped to how we actually work.</p></div>
       </div>
     </div>
@@ -796,7 +796,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     // on a phone the screenshot is wider than the screen: bring the note into view
     if (vp.scrollWidth > vp.clientWidth + 2 && (user || inView)) {
       var x = p.offsetLeft - vp.clientWidth / 2;
-      vp.scrollTo({ left: Math.max(0, x), behavior: reduce ? 'auto' : 'smooth' });
+      vp.scrollTo({ left: Math.max(0, x), behavior: (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth' });
     }
   }
   function tick() { clearTimeout(timer); if (held || reduce || !inView) return; timer = setTimeout(function () { show(at + 1); tick(); }, 4200); }
@@ -821,7 +821,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   // Save contact: a vCard made on the spot, so it works offline in a hall
   var vc = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Letcher;Tom;;;', 'FN:Tom Letcher', 'ORG:The Freedom Group', 'TITLE:Founder & Managing Director',
     'EMAIL;TYPE=WORK:tom.letcher@freedomgroup.uk', 'URL:https://www.tomletcher.co.uk/', 'URL:https://www.freedom-fire.co.uk/',
-    'ADR;TYPE=WORK:;;;Bury;Greater Manchester;;United Kingdom', 'NOTE:Met at OpenAI DevDay, 3 November 2026', 'END:VCARD'].join('\r\n');
+    'ADR;TYPE=WORK:;;;Bury;Greater Manchester;;United Kingdom', 'NOTE:Met at OpenAI DevDay', 'END:VCARD'].join('\r\n');
   document.getElementById('vcard').href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vc);
 })();
 </script>
@@ -832,13 +832,30 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   function close() { lb.classList.remove('on'); document.body.style.overflow = ''; if (last) last.focus(); }
   // every picture on the page opens full size (not the logo, the QR code or the live screen, which has its own notes)
   Array.prototype.forEach.call(document.querySelectorAll('main img, .hero img, section img'), function (i) {
-    if (i.id === 'still' || /group-logo|qr\.svg/.test(i.getAttribute('src') || '') || i.closest('a') || i.dataset.lb) return;
+    if (i.id === 'still' || i.closest('.hub-gal') || /group-logo|qr\.svg/.test(i.getAttribute('src') || '') || i.closest('a') || i.dataset.lb) return;
     i.dataset.lb = '1';
     var f = i.closest('figure') || i;
     f.tabIndex = 0; f.setAttribute('role', 'button'); f.classList.add('zoomable');
     function open() { last = f; im.src = i.currentSrc || i.src; im.alt = i.alt; var fc = f.querySelector && f.querySelector('figcaption'); cap.textContent = fc ? fc.textContent : (i.alt || ''); lb.classList.add('on'); document.body.style.overflow = 'hidden'; document.getElementById('lbX').focus(); }
     f.addEventListener('click', open);
     f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  // a Hub picture swaps places with the big screen (the notes only show on the war room)
+  var still = document.getElementById('still'), pinsBox = document.getElementById('pins'), notesBox = document.getElementById('notes'), url = document.querySelector('.screen-bar .url');
+  Array.prototype.forEach.call(document.querySelectorAll('.hub-gal figure'), function (f) {
+    f.tabIndex = 0; f.setAttribute('role', 'button'); f.classList.add('zoomable'); f.setAttribute('aria-label', 'Show on the big screen');
+    function swap() {
+      var i = f.querySelector('img'), c = f.querySelector('figcaption');
+      var s = { src: still.getAttribute('src'), alt: still.alt, cap: still.getAttribute('data-cap') };
+      still.setAttribute('src', i.getAttribute('src')); still.alt = i.alt; still.setAttribute('data-cap', c.textContent);
+      i.setAttribute('src', s.src); i.alt = s.alt; c.textContent = s.cap;
+      var war = /warroom/.test(still.getAttribute('src'));
+      pinsBox.style.display = war ? '' : 'none'; if (notesBox) notesBox.style.display = war ? '' : 'none';
+      if (url) url.textContent = 'hub-demo.freedom-fire.co.uk · ' + still.getAttribute('data-cap');
+      document.getElementById('screen').scrollIntoView({ behavior: (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth', block: 'center' });
+    }
+    f.addEventListener('click', swap);
+    f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); swap(); } });
   });
   lb.addEventListener('click', function (e) { if (e.target !== im) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('on')) close(); });
