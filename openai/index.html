@@ -490,41 +490,6 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <figure><img src="img/h-orders.webp" alt="All orders from Linnworks: what to pick, check and send, by carrier and channel." width="1600" height="1000" loading="lazy"><figcaption>All orders</figcaption></figure>
       </div>
 
-      <div class="flows">
-        <article class="flow rv">
-          <span class="n">01 · FOUNDER DASHBOARD</span>
-          <h3>Founder Dashboard</h3>
-          <p class="q">What needs me today?</p>
-          <p>Priorities, approvals and blockers on one page, most urgent first, each decision ready for a yes or a no.</p>
-          <a class="btn sm" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener">Open the founder view<svg class="i"><use href="#ext"/></svg></a>
-        </article>
-        <article class="flow rv">
-          <span class="n">02 · STAFF COMMAND VIEW</span>
-          <h3>Staff Command View</h3>
-          <p class="q">Who is doing what?</p>
-          <p>Every person's day plan and sheet. When a collection is at risk it works out who to move.</p>
-          <a class="btn sm" href="https://hub-demo.freedom-fire.co.uk/" target="_blank" rel="noopener">Open the staff view<svg class="i"><use href="#ext"/></svg></a>
-        </article>
-        <article class="flow rv">
-          <span class="n">03 · AI / BUSINESS INTELLIGENCE</span>
-          <h3>Ask the Business</h3>
-          <p class="q">Questions in, answers out.</p>
-          <p>Plain-English questions about orders, stock and the team, answered from the data with the working shown.</p>
-          <div class="ask-inline">
-            <form action="command-centre/" method="get" id="askInline">
-              <label class="sr" for="aq">Ask the business</label>
-              <input id="aq" name="q" maxlength="200" placeholder="What is about to run out?">
-              <button type="submit" aria-label="Ask"><svg class="i"><use href="#spark"/></svg></button>
-            </form>
-            <div class="chips">
-              <a href="command-centre/?q=Will%20we%20get%20everything%20out%20today%3F">Will we get everything out today?</a>
-              <a href="command-centre/?q=Which%20channel%20is%20growing%20fastest%3F">Fastest-growing channel</a>
-              <a href="command-centre/?q=Why%20are%20products%20coming%20back%3F">Why are products coming back?</a>
-            </div>
-          </div>
-        </article>
-      </div>
-
       <div class="grow rv">
         <div class="grow-h"><span class="s-num">Growing with AI</span><h3>More business, not more <em>busywork</em></h3><p>AI is how a small team keeps up as we grow. It already prepares Tom's decisions and answers questions from the data. Next it takes on more of the routine work, so new channels and more orders don't mean more paperwork.</p></div>
         <ol class="grow-list">
@@ -851,13 +816,6 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
     var c = document.createElement('span'); c.className = 'b-count'; c.setAttribute('aria-hidden', 'true');
     c.innerHTML = '<b>0' + (i + 1) + '</b> / 0' + builds.length;
     tag.parentNode.insertBefore(c, tag);
-  });
-
-  // the inline ask box opens the demo on the Ask view with the question
-  document.getElementById('askInline').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var q = document.getElementById('aq').value.trim();
-    location.href = 'command-centre/' + (q ? '?q=' + encodeURIComponent(q) : '') + '#ask';
   });
 
   // Save contact: a vCard made on the spot, so it works offline in a hall
