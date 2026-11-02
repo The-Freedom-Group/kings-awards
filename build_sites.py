@@ -44,7 +44,12 @@ def npx(tool, args, text):
     try:
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
             f.write(text); tmp = f.name
-        r = subprocess.run(["npx", "--yes", tool] + args + [tmp], capture_output=True, text=True, encoding="utf-8", shell=True, timeout=240)
+        # shell=True only on Windows, where it is what finds npx.cmd. On POSIX it
+        # would hand the list to `sh -c`, which runs a bare `npx` with the rest as
+        # positional parameters: minification is silently skipped and the build
+        # waits on npx's stdin. stdin is closed for the same reason.
+        r = subprocess.run(["npx", "--yes", tool] + args + [tmp], capture_output=True, text=True, encoding="utf-8",
+                           shell=(os.name == "nt"), stdin=subprocess.DEVNULL, timeout=240)
         os.unlink(tmp)
         if r.returncode == 0 and r.stdout.strip():
             return r.stdout
