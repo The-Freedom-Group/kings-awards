@@ -134,6 +134,11 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 .gal figure { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-2); background: var(--bg-3); }
 .gal img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
 .hub-gal { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 18px 0 8px; }
+.hub-gal figure { position: relative; }
+/* each Hub picture links to that very screen, live, as the person whose screen it is */
+.hub-gal .go { position: absolute; z-index: 2; top: 8px; right: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; font: 600 11px/1 var(--sans); text-decoration: none; color: #fff; background: rgba(10,10,10,.72); border: 1px solid rgba(255,255,255,.22); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: background .2s, border-color .2s; }
+.hub-gal .go:hover { background: var(--pink); border-color: var(--pink); }
+.hub-gal .go .i { width: 12px; height: 12px; }
 .lb { position: fixed; inset: 0; z-index: 200; display: none; place-items: center; padding: 56px 16px 16px; background: rgba(5,5,7,.92); }
 .lb.on { display: grid; }
 .lb img { max-width: min(1600px, 100%); max-height: calc(100vh - 110px); width: auto; height: auto; border-radius: 12px; border: 1px solid var(--line-2); }
@@ -463,8 +468,8 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
         <div class="screen-bar"><i></i><i></i><i></i><span class="url">hub-demo.freedom-fire.co.uk · War room</span><b class="live">Hub demo</b></div>
         <div class="viewport" id="viewport">
           <div class="canvas" id="canvas">
-          <img class="still" src="img/hub-warroom.webp" alt="The Freedom Hub war room: a live 3D model of our office, with the AI agents at their desks and how many are working." width="1600" height="1000" id="still" data-cap="War room · office">
-          <a class="screen-go" href="hub/" target="_blank" rel="noopener" aria-label="Open the Hub demo"><span class="btn pink">Open the Hub demo<svg class="i"><use href="#ext"/></svg></span></a>
+          <img class="still" data-go="hub/?as=tom&amp;to=%2Fwar-room%3Fview%3Doffice&amp;label=the+war+room" src="img/hub-warroom.webp" alt="The Freedom Hub war room: a live 3D model of our office, with the AI agents at their desks and how many are working." width="1600" height="1000" id="still" data-cap="War room · office">
+          <a class="screen-go" href="hub/?as=tom&amp;to=%2Fwar-room%3Fview%3Doffice&amp;label=the+war+room" target="_blank" rel="noopener" aria-label="Open this screen in the Hub"><span class="btn pink">Open this screen<svg class="i"><use href="#ext"/></svg></span></a>
           <div class="pins" id="pins" role="group" aria-label="What is on this screen">
             <button class="pin" type="button" style="left:9%;top:30%" aria-pressed="false" data-t="One menu, one button per area" data-d="Workday, orders, alerts, stock, rota and the rest. Each area keeps its pages as tabs inside it.">1</button>
             <button class="pin" type="button" style="left:75.6%;top:13%" aria-pressed="false" data-t="Agents at work" data-d="Twelve AI agents run the Hub's checks and jobs. The war room shows how many are working right now, and which have stopped.">2</button>
@@ -485,10 +490,10 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       </div>
 
       <div class="gal hub-gal rv">
-        <figure><img src="img/h-warehouse.webp" alt="The war room's warehouse view: racking, packing benches and the team at work in 3D." width="1600" height="1000" loading="lazy"><figcaption>War room · warehouse</figcaption></figure>
-        <figure><img src="img/h-jojo.webp" alt="Jojo's workday sheet: her day block by block, what is next, progress and points." width="1600" height="1000" loading="lazy"><figcaption>Jojo's workday sheet</figcaption></figure>
-        <figure><img src="img/h-workday.webp" alt="Workday sheets: open orders, who is behind, and every carrier's collections today." width="1600" height="1000" loading="lazy"><figcaption>Workday sheets</figcaption></figure>
-        <figure><img src="img/h-brain.webp" alt="The AI Brain: the whole Hub as one live map, every area showing what needs action." width="1600" height="1000" loading="lazy"><figcaption>AI Brain</figcaption></figure>
+        <figure><a class="go" href="hub/?as=tom&amp;to=%2Fwar-room%3Fview%3Dwarehouse&amp;label=the+war+room%2C+warehouse+view" target="_blank" rel="noopener">Open<svg class="i"><use href="#ext"/></svg></a><img data-go="hub/?as=tom&amp;to=%2Fwar-room%3Fview%3Dwarehouse&amp;label=the+war+room%2C+warehouse+view" src="img/h-warehouse.webp" alt="The war room's warehouse view: racking, packing benches and the team at work in 3D." width="1600" height="1000" loading="lazy"><figcaption>War room · warehouse</figcaption></figure>
+        <figure><a class="go" href="hub/?as=jojo&amp;to=%2Fworkday&amp;label=Jojo%27s+workday+sheet" target="_blank" rel="noopener">Open<svg class="i"><use href="#ext"/></svg></a><img data-go="hub/?as=jojo&amp;to=%2Fworkday&amp;label=Jojo%27s+workday+sheet" src="img/h-jojo.webp" alt="Jojo's workday sheet: her day block by block, what is next, progress and points." width="1600" height="1000" loading="lazy"><figcaption>Jojo's workday sheet</figcaption></figure>
+        <figure><a class="go" href="hub/?as=tom&amp;to=%2Fworkday%2Fteam&amp;label=the+workday+sheets" target="_blank" rel="noopener">Open<svg class="i"><use href="#ext"/></svg></a><img data-go="hub/?as=tom&amp;to=%2Fworkday%2Fteam&amp;label=the+workday+sheets" src="img/h-workday.webp" alt="Workday sheets: open orders, who is behind, and every carrier's collections today." width="1600" height="1000" loading="lazy"><figcaption>Workday sheets</figcaption></figure>
+        <figure><a class="go" href="hub/?as=tom&amp;to=%2Fbrain&amp;label=the+AI+Brain" target="_blank" rel="noopener">Open<svg class="i"><use href="#ext"/></svg></a><img data-go="hub/?as=tom&amp;to=%2Fbrain&amp;label=the+AI+Brain" src="img/h-brain.webp" alt="The AI Brain: the whole Hub as one live map, every area showing what needs action." width="1600" height="1000" loading="lazy"><figcaption>AI Brain</figcaption></figure>
       </div>
 
       <div class="grow rv">
@@ -845,18 +850,26 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
   var still = document.getElementById('still'), pinsBox = document.getElementById('pins'), notesBox = document.getElementById('notes'), url = document.querySelector('.screen-bar .url');
   Array.prototype.forEach.call(document.querySelectorAll('.hub-gal figure'), function (f) {
     f.tabIndex = 0; f.setAttribute('role', 'button'); f.classList.add('zoomable'); f.setAttribute('aria-label', 'Show on the big screen');
-    function swap() {
-      var i = f.querySelector('img'), c = f.querySelector('figcaption');
-      var s = { src: still.getAttribute('src'), alt: still.alt, cap: still.getAttribute('data-cap') };
+    function swap(e) {
+      if (e && e.target && e.target.closest && e.target.closest('.go')) return; // the Open link is not a swap
+      var i = f.querySelector('img'), c = f.querySelector('figcaption'), go = f.querySelector('.go');
+      var s = { src: still.getAttribute('src'), alt: still.alt, cap: still.getAttribute('data-cap'), go: still.getAttribute('data-go') };
       still.setAttribute('src', i.getAttribute('src')); still.alt = i.alt; still.setAttribute('data-cap', c.textContent);
-      i.setAttribute('src', s.src); i.alt = s.alt; c.textContent = s.cap;
+      still.setAttribute('data-go', i.getAttribute('data-go'));
+      i.setAttribute('src', s.src); i.alt = s.alt; c.textContent = s.cap; i.setAttribute('data-go', s.go);
+      if (go) go.setAttribute('href', i.getAttribute('data-go'));
+      var sgo = document.querySelector('.screen-go');
+      if (sgo) sgo.setAttribute('href', still.getAttribute('data-go'));
       var war = /warroom/.test(still.getAttribute('src'));
       pinsBox.style.display = war ? '' : 'none'; if (notesBox) notesBox.style.display = war ? '' : 'none';
       if (url) url.textContent = 'hub-demo.freedom-fire.co.uk · ' + still.getAttribute('data-cap');
       document.getElementById('screen').scrollIntoView({ behavior: (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth', block: 'center' });
     }
     f.addEventListener('click', swap);
-    f.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); swap(); } });
+    f.addEventListener('keydown', function (e) {
+      if (e.target && e.target.closest && e.target.closest('.go')) return;
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); swap(); }
+    });
   });
   still.addEventListener('click', function () {
     if (window.innerWidth > 600) return;

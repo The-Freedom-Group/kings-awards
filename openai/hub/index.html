@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Starting the Freedom Hub demo</title>
-<meta name="description" content="Waking the Freedom Hub demo. It runs on a server that sleeps when nobody is using it, so the first visit takes about a minute.">
+<meta name="description" content="Waking the Freedom Hub demo. It runs on a server that sleeps when nobody is using it, so the first visit can take about a minute.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="../img/group-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,13 +51,11 @@ h1 span { color: var(--pink); }
   border-radius: 999px; transition: width .9s linear; }
 .state { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-3); }
 
-/* ------------------------------------------------------------ login --- */
-.creds { margin: 34px 0 0; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-2); }
-.creds h2 { margin: 0 0 14px; font: italic 400 22px/1.1 var(--serif); color: var(--tx); }
-.creds dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 18px; align-items: baseline; }
-.creds dt { font: 500 11px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--tx-3); }
-.creds dd { margin: 0; font: 500 15px/1.4 var(--mono); color: var(--tx); }
-.creds p { margin: 14px 0 0; font-size: 13px; color: var(--tx-3); }
+/* ------------------------------------------------------------- card --- */
+.card { margin: 34px 0 0; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-2); }
+.card h2 { margin: 0 0 10px; font: italic 400 22px/1.1 var(--serif); color: var(--tx); }
+.card p { margin: 0; font-size: 14.5px; color: var(--tx-2); }
+.card p + p { margin-top: 10px; font-size: 13px; color: var(--tx-3); }
 
 /* ------------------------------------------------------------- ctas --- */
 .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
@@ -67,10 +65,7 @@ h1 span { color: var(--pink); }
   cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
 .btn:hover { border-color: var(--tx-2); }
 .btn:active { transform: translateY(1px); }
-.btn.pink { background: var(--pink); border-color: var(--pink); color: #fff; }
-.btn.pink:hover { background: #ff4a9e; border-color: #ff4a9e; }
 
-/* A quieter note that only appears if the wake takes much longer than it should. */
 .stall { display: none; margin: 30px 0 0; padding: 18px 20px; border: 1px solid var(--pink-line);
   border-radius: 14px; background: var(--pink-bg); }
 .stall.on { display: block; }
@@ -78,9 +73,7 @@ h1 span { color: var(--pink); }
 .stall p { margin: 0; font-size: 14px; color: var(--tx-2); }
 .stall a { color: var(--pink-2); }
 
-@media (prefers-reduced-motion: reduce) {
-  .bar i { transition: none; }
-}
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
 </style>
 </head>
 <body>
@@ -92,18 +85,16 @@ h1 span { color: var(--pink); }
 
   <span class="kick"><span>Freedom Hub</span></span>
   <h1>Starting the <span>demo</span></h1>
-  <p class="lede">The demo runs on a small server that sleeps when nobody is using it, so
-    the first visit takes about a minute to wake. This page opens the Hub the moment it answers.</p>
+  <p class="lede" id="lede">The demo runs on a small server that sleeps when nobody is using it, so
+    the first visit can take about a minute to wake. This page opens the Hub the moment it answers.</p>
 
   <div class="bar" role="presentation"><i id="fill"></i></div>
   <p class="state" id="state" role="status" aria-live="polite">Waking the server</p>
 
-  <div class="creds">
-    <h2>Signing in</h2>
-    <dl>
-      <dt>User</dt><dd>tom</dd>
-      <dt>Password</dt><dd>freedom-demo</dd>
-    </dl>
+  <div class="card">
+    <h2 id="cardTitle">Getting in</h2>
+    <p id="cardBody">No password needed. On the sign-in page, press any of the team and you will see
+      the Hub exactly as that person does.</p>
     <p>Sample data throughout &mdash; invented orders, claims and money. Nothing here is a real
       customer, a real order or a real figure.</p>
   </div>
@@ -130,6 +121,17 @@ h1 span { color: var(--pink); }
   // hub-demo.freedom-fire.co.uk once that record points at it.
   var DEMO = 'https://freedom-hub-demo.onrender.com/';
 
+  // A picture on the page can ask for a particular person and screen:
+  //   hub/?as=jojo&to=%2Fworkday&label=Jojo's+workday+sheet
+  // Only a bare username and a path on the demo itself are accepted, and the
+  // demo checks both again at its end before it signs anybody in.
+  var q = new URLSearchParams(window.location.search);
+  var who = (q.get('as') || '').toLowerCase().replace(/[^a-z]/g, '').slice(0, 24);
+  var to = q.get('to') || '';
+  if (!/^\/[^/\\]/.test(to)) to = '';
+  var label = (q.get('label') || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+  var TARGET = who ? DEMO + 'demo/in/' + who + (to ? '?to=' + encodeURIComponent(to) : '') : DEMO;
+
   // Render wakes a sleeping free service in about a minute, so the bar is paced for 60s
   // and the apology only appears well after that.
   var EXPECTED = 60;
@@ -139,11 +141,19 @@ h1 span { color: var(--pink); }
   var fill  = document.getElementById('fill');
   var state = document.getElementById('state');
   var stall = document.getElementById('stall');
-  document.getElementById('direct').href = DEMO;
+  document.getElementById('direct').href = TARGET;
+
+  if (label) {
+    document.getElementById('lede').textContent =
+      'Opening ' + label + '. The demo runs on a small server that sleeps when nobody is using it, '
+      + 'so the first visit can take about a minute to wake.';
+    document.getElementById('cardTitle').textContent = 'Where you are going';
+    document.getElementById('cardBody').textContent =
+      'Straight to ' + label + ', signed in as the person whose screen it is. No password needed.';
+  }
 
   var started = Date.now();
   var done = false;
-
   function seconds() { return (Date.now() - started) / 1000; }
 
   // The first request is what wakes the server; it is cross-origin and we cannot read
@@ -169,7 +179,7 @@ h1 span { color: var(--pink); }
     done = true;
     fill.style.width = '100%';
     state.textContent = 'Ready — opening the Hub';
-    setTimeout(function () { window.location.replace(DEMO); }, 300);
+    setTimeout(function () { window.location.replace(TARGET); }, 300);
   }
 
   function tick() {
@@ -177,8 +187,7 @@ h1 span { color: var(--pink); }
     var s = seconds();
     // Creeps towards 95% over the expected minute, then holds: a full bar that keeps
     // waiting is a worse lie than a slow one.
-    var pct = Math.min(95, (s / EXPECTED) * 95);
-    fill.style.width = pct.toFixed(1) + '%';
+    fill.style.width = Math.min(95, (s / EXPECTED) * 95).toFixed(1) + '%';
 
     if (s > GIVE_UP) {
       state.textContent = 'Still waiting';
