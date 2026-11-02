@@ -136,9 +136,11 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
 .hub-gal { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 18px 0 8px; }
 .hub-gal figure { position: relative; }
 /* each Hub picture links to that very screen, live, as the person whose screen it is */
-.hub-gal .go { position: absolute; z-index: 2; top: 8px; right: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; font: 600 11px/1 var(--sans); text-decoration: none; color: #fff; background: rgba(10,10,10,.72); border: 1px solid rgba(255,255,255,.22); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: background .2s, border-color .2s; }
-.hub-gal .go:hover { background: var(--pink); border-color: var(--pink); }
-.hub-gal .go .i { width: 12px; height: 12px; }
+.hub-gal .go, .screen-open { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; font: 600 11px/1 var(--sans); text-decoration: none; color: #fff; background: rgba(10,10,10,.72); border: 1px solid rgba(255,255,255,.22); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: background .2s, border-color .2s; }
+.hub-gal .go { top: 8px; right: 8px; }
+.screen-open { top: 48px; right: 12px; }
+.hub-gal .go:hover, .screen-open:hover { background: var(--pink); border-color: var(--pink); }
+.hub-gal .go .i, .screen-open .i { width: 12px; height: 12px; }
 .lb { position: fixed; inset: 0; z-index: 200; display: none; place-items: center; padding: 56px 16px 16px; background: rgba(5,5,7,.92); }
 .lb.on { display: grid; }
 .lb img { max-width: min(1600px, 100%); max-height: calc(100vh - 110px); width: auto; height: auto; border-radius: 12px; border: 1px solid var(--line-2); }
@@ -466,6 +468,7 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       <div class="stage rv">
       <div class="screen" id="screen">
         <div class="screen-bar"><i></i><i></i><i></i><span class="url">hub-demo.freedom-fire.co.uk · War room</span><b class="live">Hub demo</b></div>
+        <a class="screen-open" href="hub/?as=tom&amp;to=%2Fwar-room%3Fview%3Doffice&amp;label=the+war+room" target="_blank" rel="noopener">Open<svg class="i"><use href="#ext"/></svg></a>
         <div class="viewport" id="viewport">
           <div class="canvas" id="canvas">
           <img class="still" data-go="hub/?as=tom&amp;to=%2Fwar-room%3Fview%3Doffice&amp;label=the+war+room" src="img/hub-warroom.webp" alt="The Freedom Hub war room: a live 3D model of our office, with the AI agents at their desks and how many are working." width="1600" height="1000" id="still" data-cap="War room · office">
@@ -858,8 +861,9 @@ section.s { padding: 110px 0; border-top: 1px solid var(--line); }
       still.setAttribute('data-go', i.getAttribute('data-go'));
       i.setAttribute('src', s.src); i.alt = s.alt; c.textContent = s.cap; i.setAttribute('data-go', s.go);
       if (go) go.setAttribute('href', i.getAttribute('data-go'));
-      var sgo = document.querySelector('.screen-go');
-      if (sgo) sgo.setAttribute('href', still.getAttribute('data-go'));
+      Array.prototype.forEach.call(document.querySelectorAll('.screen-go, .screen-open'), function (a) {
+        a.setAttribute('href', still.getAttribute('data-go'));
+      });
       var war = /warroom/.test(still.getAttribute('src'));
       pinsBox.style.display = war ? '' : 'none'; if (notesBox) notesBox.style.display = war ? '' : 'none';
       if (url) url.textContent = 'hub-demo.freedom-fire.co.uk · ' + still.getAttribute('data-cap');
