@@ -1,0 +1,51 @@
+# Keeps the Freedom Hub demo awake.
+#
+# The demo (freedom-hub-demo.onrender.com) is a free Render service, and Render
+# puts a free service to sleep after 15 minutes without traffic. Waking it takes
+# about a minute, which tomletcher.co.uk/openai/hub/ covers with a waiting
+# screen - fine normally, but not while the page is being shown to people.
+#
+# This pings it every five minutes so it never sleeps, and so the pictures on
+# the OpenAI page open instantly.
+#
+# The cost is Render instance-hours: a free workspace gets 750 a calendar month
+# and a month is at most 744 hours, so one always-awake service fits - as long
+# as it is the only free service in the workspace. If others are added, this
+# will eat the shared allowance and Render suspends every free service until
+# the 1st.
+#
+# TO TURN IT OFF when the demo no longer needs to be instant: delete this file,
+# or Actions -> Keep the Hub demo awake -> ... -> Disable workflow. Then the
+# demo simply sleeps when nobody is looking and the waiting screen covers the
+# first visitor, which is the cheaper way to run it the rest of the time.
+
+name: Keep the Hub demo awake
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+# A ping is pointless if it piles up behind an earlier one.
+concurrency:
+  group: keep-demo-awake
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wake the demo and check it answers
+        run: |
+          # --retry covers the case where this is the request that wakes it:
+          # the first one can take the best part of a minute to come back.
+          code=$(curl -sS -o /dev/null -m 90 --retry 3 --retry-delay 15 --retry-all-errors \
+                   -w '%{http_code}' https://freedom-hub-demo.onrender.com/healthz || echo 000)
+          echo "healthz -> $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::The Hub demo did not answer (HTTP $code). It may be suspended, or Render may be down."
+            exit 1
+          fi
