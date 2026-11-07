@@ -1,0 +1,12 @@
+/* Copy protection styles, inlined with guard.js */
+html { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+input, textarea, select, [contenteditable=""], [contenteditable="true"] { -webkit-user-select: text; user-select: text; }
+img, picture, video, svg, canvas { -webkit-user-drag: none; user-drag: none; }
+.ffg-lock { position: fixed; inset: 0; z-index: 2147483647; display: flex; align-items: center; justify-content: center; padding: 24px; background: #0b0b0d; color: #fff; text-align: center; font-family: Archivo, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.ffg-lock__box { max-width: 36rem; }
+.ffg-lock__brand { display: block; color: #E10600; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; font-size: .95rem; margin-bottom: 1rem; }
+.ffg-lock p { margin: 0 0 .75rem; font-size: 1.5rem; font-weight: 700; line-height: 1.25; }
+.ffg-lock p.ffg-lock__small { font-size: 1rem; font-weight: 400; color: #cfcfd4; }
+.ffg-lock a { color: #fff; }
+html.ffg-locked, html.ffg-locked body { overflow: hidden !important; }
+@media print { body { display: none !important; } html::after { content: "Printing is disabled on this site."; display: block; padding: 2rem; font: 16px system-ui, sans-serif; } }

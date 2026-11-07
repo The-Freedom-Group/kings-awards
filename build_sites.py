@@ -89,12 +89,28 @@ def fingerprint(path):
     root, ext = os.path.splitext(path)
     return "%s.%s%s" % (root, h, ext)
 
+def page_guard(src):
+    """The copy protection for a page folder: _guard/guard.css and _guard/guard.js
+    beside the pages (never copied: _ names are left out), minified and inlined
+    straight after <meta charset> in every page, so they run before anything else
+    and the charset still sits inside the first 1024 bytes."""
+    d = os.path.join(src, "_guard")
+    if not os.path.isdir(d):
+        return ""
+    css = minify_css(open(os.path.join(d, "guard.css"), encoding="utf-8").read()).strip()
+    js = minify_js(open(os.path.join(d, "guard.js"), encoding="utf-8").read()).strip()
+    assert "</style" not in css.lower() and "</script" not in js.lower()
+    return "<style>%s</style><script>%s</script>" % (css, js)
+
 def copy_pages(src, dst):
     """Copy a self-contained page folder (e.g. openai/, served at /openai/) as it is,
     except that every local script and stylesheet a page loads gets ?v=<hash of its
     content>. The site's _headers cache *.js for a year as immutable, so without the
-    stamp a changed script would never reach a browser that had the old one."""
+    stamp a changed script would never reach a browser that had the old one.
+    Every page then gets the folder's copy protection (page_guard) and is minified,
+    so what is served carries no comments or readable inline code."""
     shutil.copytree(src, dst, ignore=shutil.ignore_patterns("_*", "*.py"))
+    guard = page_guard(src)
     for dp, _, fs in os.walk(dst):
         for fn in fs:
             if not fn.endswith(".html"):
@@ -109,6 +125,10 @@ def copy_pages(src, dst):
                 h = hashlib.sha1(open(f, "rb").read()).hexdigest()[:8]
                 return '%s="%s?v=%s"' % (m.group(1), ref, h)
             text = re.sub(r'\b(src|href)="([^"?#]+\.(?:js|css))"', stamp, text)
+            if guard:
+                assert text.count('<meta charset="utf-8">') == 1, p
+                text = text.replace('<meta charset="utf-8">', '<meta charset="utf-8">' + guard, 1)
+            text = minify_html(text)
             open(p, "w", encoding="utf-8").write(text)
 
 def build(name, cfg):
@@ -198,8 +218,14 @@ def build(name, cfg):
         "compatibility_date": COMPAT,
         "assets": {"directory": "./public", "not_found_handling": "404-page"},
     }
+    if cfg.get("pages"):
+        # sites/<name>/worker.mjs (kept in git, not generated) runs first for the
+        # page folders: site-copying and scripting tools are refused there.
+        wrangler["main"] = "./worker.mjs"
+        wrangler["assets"]["binding"] = "ASSETS"
+        wrangler["assets"]["run_worker_first"] = ["/%s/*" % p for p in cfg["pages"]]
     with open(os.path.join(out, "wrangler.jsonc"), "w", encoding="utf-8") as f:
-        f.write("// Static-asset Worker: Cloudflare serves ./public and nothing else.\n"
+        f.write("// Static-asset Worker: Cloudflare serves ./public" + (", with worker.mjs in front of the page folders" if cfg.get("pages") else " and nothing else") + ".\n"
                 "// Deployed by Workers Builds from The-Freedom-Group/kings-awards with\n"
                 "// the root directory set to sites/%s. Custom domain: %s\n" % (name, cfg["self"]))
         json.dump(wrangler, f, indent=2)

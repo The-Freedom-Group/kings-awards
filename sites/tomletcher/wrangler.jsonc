@@ -1,4 +1,4 @@
-// Static-asset Worker: Cloudflare serves ./public and nothing else.
+// Static-asset Worker: Cloudflare serves ./public, with worker.mjs in front of the page folders.
 // Deployed by Workers Builds from The-Freedom-Group/kings-awards with
 // the root directory set to sites/tomletcher. Custom domain: https://www.tomletcher.co.uk/
 {
@@ -6,6 +6,11 @@
   "compatibility_date": "2026-09-01",
   "assets": {
     "directory": "./public",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/openai/*"
+    ]
+  },
+  "main": "./worker.mjs"
 }
