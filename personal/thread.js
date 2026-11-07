@@ -2091,10 +2091,10 @@
 
   /* ── the group map ────────────────────────────────────────── */
   var DATA = {
-    /* the companies as the group sets them out at freedomgroup.uk: one holding company, one active
+    /* the companies as the group sets them out at thefreedomgroup.global: one holding company, one active
        operation, two planned, four for later */
     group:   { n: "Freedom Group Enterprise Ltd", t: "The holding company. Brands · IP · Strategy · Capital.",
-               b: "Owns the group's brands, trademarks and intellectual property, sets the strategy and holds the capital. The operating model the trading company runs on today, and the shape the next companies take: direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.freedomgroup.uk" },
+               b: "Owns the group's brands, trademarks and intellectual property, sets the strategy and holds the capital. The operating model the trading company runs on today, and the shape the next companies take: direct sourcing, one warehouse, shared technology, marketplaces, trade supply and on-site services.", u: "https://www.thefreedomgroup.global" },
     global:  { n: "Freedom Global Ltd", t: "Active. Consumer ecommerce · D2C. Currently trading as Freedom Fire & Safety Ltd.",
                b: "The group's established commercial engine, scaling owned brands across marketplaces, ecommerce channels and specialist online storefronts. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay, Temu and Amazon, with Shopify and OnBuy in preparation; servicing and contracted site work nationwide. Incorporated as Freedom Fire & Safety Ltd on 27 August 2021.",
                u: "https://www.freedom-fire.co.uk" },
