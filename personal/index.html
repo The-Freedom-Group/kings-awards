@@ -1004,7 +1004,7 @@ details.story summary:hover .st{color:var(--pink)}
 .badges{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
 .bd{border:1px solid var(--rule);padding:14px 14px 12px;display:grid;gap:8px;align-content:start;background:rgba(0,0,0,.02)}
 .bd img{width:auto;height:76px;max-width:100%;object-fit:contain;justify-self:start}
-.bd{grid-template-rows:100px auto}.bd img{align-self:center}.bd img.myta{height:60px}.bd img.kae{height:98px}.bd img.dc{height:84px}
+.bd{grid-template-rows:100px auto}.bd img{align-self:center}.bd img.myta{height:60px}.bd img.mima{height:58px}.bd.bd-wide{grid-column:1/-1}.bd img.kae{height:98px}.bd img.dc{height:84px}
 .bd small{font-size:10.5px;letter-spacing:.06em;line-height:1.45;color:var(--ink-3)}
 .bd.txt b{font-family:var(--disp);text-transform:uppercase;font-size:18px;line-height:1;color:var(--ink);font-weight:400;padding-top:4px}
 .bd.txt small{color:var(--pink);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:9.5px}
@@ -1467,6 +1467,22 @@ a.tl-link{color:var(--pink);font-weight:500}
   .bar .b1 img.men{height:46px;width:46px}.bar .b2 img{height:28px}.bar .b3 .lg-big{font-size:30px}.lg-ebay.xl{font-size:30px}
   .bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{white-space:normal;font-size:14px;line-height:1.1}.bar em{font-size:10.5px}
   .bar em .full{display:none}.bar em .brief{display:inline}}
+/* ── 14 Nov 2026: a fifth fact, the Made in Manchester Awards 2027 shortlist ── */
+/*    five side by side do not fit a laptop, so from 601px up each fact stands as the phone ones do: mark on top, words centred
+      below. Five across above 900px, two across on a tablet, and the odd fifth spans the last row below 900px. */
+@media(min-width:601px){
+  .bar>.wrap>div{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:54px auto;justify-items:center;align-content:center;text-align:center;
+    gap:12px;padding:22px clamp(10px,1.2vw,22px) 20px;min-height:0}
+  .bar>.wrap>div>:first-child{align-self:center}
+  .bar .bw{justify-items:center;gap:5px}
+  .bar .bw>b,.bar .b1 .bw>b,.bar .b2 .bw>b,.bar .b4 .bw>b{font-size:clamp(14px,1.15vw,18px);white-space:normal;text-wrap:balance}
+  .bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{white-space:normal;text-wrap:balance}
+  .bar .b1 img.men{height:50px;width:50px}.bar .b3 .lg-big{font-size:clamp(30px,2.6vw,40px)}.lg-ebay.xl{font-size:36px}}
+@media(min-width:901px){.bar .wrap{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(min-width:901px) and (max-width:1799px){.bar em .full{display:none}.bar em .brief{display:inline}}
+@media(max-width:900px){.bar>.wrap>div:last-child:nth-child(odd){grid-column:1/-1;border-left:0}}
+.bar .b5 img.mima{height:34px}                       /* the rough-edged mark reads heavier than the others, so it stands a size down */
+@media(max-width:820px){.bar .b5 img.mima{height:46px;width:112px;object-fit:contain}}   /* same 46px box as the other marks, so the dates stay level */
 /* ── on a phone the system shows too, above the list: squared up, smaller marks and words, the planets still turning ── */
 @media(max-width:760px){.grp{display:grid!important;grid-template-columns:1fr;gap:22px}
   .map{min-height:0;aspect-ratio:1/1.08}
@@ -1549,7 +1565,7 @@ a.tl-link{color:var(--pink);font-weight:500}
   .jy-head{border-top:1px solid var(--rule-d);padding-top:14px;margin-top:6px}
   .journey .yhead{color:var(--pink)}
   .jy-stage{border-top:0;margin-top:10px}
-  .jy-head .jy-count{display:none}          /* the moment's own 01 / 18 sits under its picture */
+  .jy-head .jy-count{display:none}          /* the moment's own 01 / 19 sits under its picture */
   .journey.carry .jy-btn{top:calc(24px + 27vw)}
 
   /* no line under the moments on a phone: the moments carry themselves */
@@ -1754,12 +1770,13 @@ a.tl-link{color:var(--pink);font-weight:500}
   </div>
 </section>
 
-<div class="bar" aria-label="Four snapshot facts">
+<div class="bar" aria-label="Five snapshot facts">
   <div class="wrap">
-    <div class="b1"><img class="men" src="../assets/men-mono.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em><span class="full">£150,000 Salboy competition&nbsp;· Runner&#8209;up</span><span class="brief">Salboy competition · Runner-up</span></em></span></div>
+    <div class="b1"><img class="men" src="../assets/men-mono.png" alt="Manchester Evening News" width="360" height="360" decoding="async"><span class="bw"><small>August 2019</small><b>Manchester Evening News</b><em><span class="full">£150,000 Salboy competition&nbsp;· Runner&#8209;up</span><span class="brief">Salboy competition&nbsp;· Runner&#8209;up</span></em></span></div>
     <div class="b3"><span class="lg-big" aria-hidden="true">500,000+</span><span class="bw"><small class="dt">2019 – 2026</small><b>Products sold</b><em><span class="full">No.1 fire extinguishers on eBay&nbsp;&amp; Temu</span><span class="brief">No.1 on eBay &amp; Temu</span></em></span></div>
-    <div class="b2"><img src="../assets/myta-mono.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent of Change · Shortlisted</em></span></div>
-    <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>April 2024</small><b>eBay UK Business Awards</b><em>Social Impact · Finalist</em></span></div>
+    <div class="b5"><img class="mima" src="../assets/mima-mono.png" alt="Made in Manchester Awards" width="640" height="207" decoding="async"><span class="bw"><small>November 2026</small><b>Made in Manchester Awards</b><em><span class="full">Entrepreneur of the Year&nbsp;· Shortlisted</span><span class="brief">Entrepreneur&nbsp;· Shortlisted</span></em></span></div>
+    <div class="b2"><img src="../assets/myta-mono.png" alt="Manchester Young Talent Awards" width="640" height="236" decoding="async"><span class="bw"><small>September 2026</small><b>Manchester Young Talent Awards</b><em>Agent&nbsp;of&nbsp;Change&nbsp;· Shortlisted</em></span></div>
+    <div class="b4"><span class="lg-ebay xl" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><span class="bw"><small>April 2024</small><b>eBay UK Business Awards</b><em>Social Impact&nbsp;· Finalist</em></span></div>
   </div>
 </div>
 
@@ -1810,81 +1827,85 @@ a.tl-link{color:var(--pink);font-weight:500}
 
 
     <div class="journey rv" id="timeline" aria-label="To Freedom and beyond, December 2019 to now">
-      <div class="jy-head"><div class="yhead">To Freedom and beyond · December 2019 to now</div><div class="jy-tools"><span class="jy-hint" id="jyHint">Scroll to travel the line</span><button type="button" class="jy-btn" id="jyPrev" data-cur-label="Back" aria-label="Previous moment">←</button><span class="jy-count" id="jyCount">01 / 18</span><button type="button" class="jy-btn" id="jyNext" data-cur-label="Next" aria-label="Next moment">→</button></div></div>
+      <div class="jy-head"><div class="yhead">To Freedom and beyond · December 2019 to now</div><div class="jy-tools"><span class="jy-hint" id="jyHint">Scroll to travel the line</span><button type="button" class="jy-btn" id="jyPrev" data-cur-label="Back" aria-label="Previous moment">←</button><span class="jy-count" id="jyCount">01 / 19</span><button type="button" class="jy-btn" id="jyNext" data-cur-label="Next" aria-label="Next moment">→</button></div></div>
       <div class="jy-stage" id="jyStage">
         <div class="jy-year" id="jyYear" aria-hidden="true">2019</div>
         <ol class="jy-strip" id="jyStrip">
         <li class="jy-card" data-when="December 2019" data-i="0">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch1-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch1-a.webp" srcset="../assets/journey/th/ch1-a.webp 400w, ../assets/journey/ch1-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">01 / 18</span><span class="jy-when">December 2019</span><b class="jy-title">One person, one listing.</b><p>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</p></div>
+          <div class="jy-copy"><span class="jy-idx">01 / 19</span><span class="jy-when">December 2019</span><b class="jy-title">One person, one listing.</b><p>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</p></div>
         </li>
         <li class="jy-card" data-when="June 2020" data-i="1">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch4-d.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch4-d.webp" srcset="../assets/journey/th/ch4-d.webp 400w, ../assets/journey/ch4-d.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">02 / 18</span><span class="jy-when">June 2020</span><b class="jy-title">Freedom Fire.</b><p>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</p></div>
+          <div class="jy-copy"><span class="jy-idx">02 / 19</span><span class="jy-when">June 2020</span><b class="jy-title">Freedom Fire.</b><p>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</p></div>
         </li>
         <li class="jy-card" data-when="August 2021" data-i="2">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ff-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ff-card.webp" srcset="../assets/journey/th/ff-card.webp 400w, ../assets/journey/ff-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">03 / 18</span><span class="jy-when">August 2021</span><b class="jy-title">The company.</b><p>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</p></div>
+          <div class="jy-copy"><span class="jy-idx">03 / 19</span><span class="jy-when">August 2021</span><b class="jy-title">The company.</b><p>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</p></div>
         </li>
         <li class="jy-card" data-when="November 2021" data-i="3">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/nbc-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/nbc-card.webp" srcset="../assets/journey/th/nbc-card.webp 400w, ../assets/journey/nbc-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">04 / 18</span><span class="jy-when">November 2021</span><b class="jy-title">The first placements.</b><p>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</p></div>
+          <div class="jy-copy"><span class="jy-idx">04 / 19</span><span class="jy-when">November 2021</span><b class="jy-title">The first placements.</b><p>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</p></div>
         </li>
         <li class="jy-card" data-when="May 2022" data-i="4">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch7-b.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch7-b.webp" srcset="../assets/journey/th/ch7-b.webp 400w, ../assets/journey/ch7-b.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">05 / 18</span><span class="jy-when">May 2022</span><b class="jy-title">A front door of its own.</b><p>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</p></div>
+          <div class="jy-copy"><span class="jy-idx">05 / 19</span><span class="jy-when">May 2022</span><b class="jy-title">A front door of its own.</b><p>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</p></div>
         </li>
         <li class="jy-card" data-when="December 2023" data-i="5">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch8-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch8-a.webp" srcset="../assets/journey/th/ch8-a.webp 400w, ../assets/journey/ch8-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">06 / 18</span><span class="jy-when">December 2023</span><b class="jy-title">The year of building.</b><p>After 18 months of building, thousands of products have been researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</p></div>
+          <div class="jy-copy"><span class="jy-idx">06 / 19</span><span class="jy-when">December 2023</span><b class="jy-title">The year of building.</b><p>After 18 months of building, thousands of products have been researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</p></div>
         </li>
         <li class="jy-card" data-when="April 2024" data-i="6">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch9-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch9-a.webp" srcset="../assets/journey/th/ch9-a.webp 400w, ../assets/journey/ch9-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">07 / 18</span><span class="jy-when">April 2024</span><b class="jy-title">The eBay awards.</b><p>Three months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</p></div>
+          <div class="jy-copy"><span class="jy-idx">07 / 19</span><span class="jy-when">April 2024</span><b class="jy-title">The eBay awards.</b><p>Three months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</p></div>
         </li>
         <li class="jy-card" data-when="August 2024" data-i="7">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch12-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch12-a.webp" srcset="../assets/journey/th/ch12-a.webp 400w, ../assets/journey/ch12-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">08 / 18</span><span class="jy-when">August 2024</span><b class="jy-title">FIRESTORM.</b><p>The company's own brand is born: the FIRESTORM trademark is filed in August and registered in November.</p></div>
+          <div class="jy-copy"><span class="jy-idx">08 / 19</span><span class="jy-when">August 2024</span><b class="jy-title">FIRESTORM.</b><p>The company's own brand is born: the FIRESTORM trademark is filed in August and registered in November.</p></div>
         </li>
         <li class="jy-card" data-when="October 2024" data-i="8">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch10-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch10-a.webp" srcset="../assets/journey/th/ch10-a.webp 400w, ../assets/journey/ch10-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">09 / 18</span><span class="jy-when">October 2024</span><b class="jy-title">Unit 19, the headquarters.</b><p>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</p></div>
+          <div class="jy-copy"><span class="jy-idx">09 / 19</span><span class="jy-when">October 2024</span><b class="jy-title">Unit 19, the headquarters.</b><p>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</p></div>
         </li>
         <li class="jy-card" data-when="December 2024" data-i="9">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch13-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch13-a.webp" srcset="../assets/journey/th/ch13-a.webp 400w, ../assets/journey/ch13-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">10 / 18</span><span class="jy-when">December 2024</span><b class="jy-title">The first container.</b><p>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</p></div>
+          <div class="jy-copy"><span class="jy-idx">10 / 19</span><span class="jy-when">December 2024</span><b class="jy-title">The first container.</b><p>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</p></div>
         </li>
         <li class="jy-card" data-when="August 2025" data-i="10">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/temu.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/temu.webp" srcset="../assets/journey/th/temu.webp 400w, ../assets/journey/temu.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">11 / 18</span><span class="jy-when">August 2025</span><b class="jy-title">Temu.</b><p>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</p></div>
+          <div class="jy-copy"><span class="jy-idx">11 / 19</span><span class="jy-when">August 2025</span><b class="jy-title">Temu.</b><p>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</p></div>
         </li>
         <li class="jy-card" data-when="October 2025" data-i="11">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/tlevel-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/tlevel-card.webp" srcset="../assets/journey/th/tlevel-card.webp 400w, ../assets/journey/tlevel-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">12 / 18</span><span class="jy-when">October 2025</span><b class="jy-title">T Level placements begin.</b><p>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from. The full programme is on <a class="tl-link" href="../staff/index.html">The Way In</a>.</p></div>
+          <div class="jy-copy"><span class="jy-idx">12 / 19</span><span class="jy-when">October 2025</span><b class="jy-title">T Level placements begin.</b><p>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from. The full programme is on <a class="tl-link" href="../staff/index.html">The Way In</a>.</p></div>
         </li>
         <li class="jy-card" data-when="March 2026" data-i="12">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/brands-five.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/brands-five.webp" srcset="../assets/journey/th/brands-five.webp 400w, ../assets/journey/brands-five.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">13 / 18</span><span class="jy-when">March 2026</span><b class="jy-title">Three brands.</b><p>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</p></div>
+          <div class="jy-copy"><span class="jy-idx">13 / 19</span><span class="jy-when">March 2026</span><b class="jy-title">Three brands.</b><p>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</p></div>
         </li>
         <li class="jy-card" data-when="April 2026" data-i="13">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch13-team.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch13-team.webp" srcset="../assets/journey/th/ch13-team.webp 400w, ../assets/journey/ch13-team.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">14 / 18</span><span class="jy-when">April 2026</span><b class="jy-title">Half a million products.</b><p>Sales across every channel pass 500,000 products since the first listing.</p></div>
+          <div class="jy-copy"><span class="jy-idx">14 / 19</span><span class="jy-when">April 2026</span><b class="jy-title">Half a million products.</b><p>Sales across every channel pass 500,000 products since the first listing.</p></div>
         </li>
         <li class="jy-card" data-when="July 2026" data-i="14">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/kings-crown.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/kings-crown.webp" srcset="../assets/journey/th/kings-crown.webp 400w, ../assets/journey/kings-crown.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">15 / 18</span><span class="jy-when">July 2026</span><b class="jy-title">The King's Awards for Enterprise.</b><p>Nominated for Promoting Opportunity by the Greater Manchester Growth Company, and entered for the Young Founder award.</p></div>
+          <div class="jy-copy"><span class="jy-idx">15 / 19</span><span class="jy-when">July 2026</span><b class="jy-title">The King's Awards for Enterprise.</b><p>Nominated for Promoting Opportunity by the Greater Manchester Growth Company, and entered for the Young Founder award.</p></div>
         </li>
         <li class="jy-card" data-when="August 2026" data-i="15">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ebay-ranked.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ebay-ranked.webp" srcset="../assets/journey/th/ebay-ranked.webp 400w, ../assets/journey/ebay-ranked.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">16 / 18</span><span class="jy-when">August 2026</span><b class="jy-title">Number one.</b><p>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</p></div>
+          <div class="jy-copy"><span class="jy-idx">16 / 19</span><span class="jy-when">August 2026</span><b class="jy-title">Number one.</b><p>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</p></div>
         </li>
         <li class="jy-card" data-when="September 2026" data-i="16">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/myta-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/myta-card.webp" srcset="../assets/journey/th/myta-card.webp 400w, ../assets/journey/myta-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">17 / 18</span><span class="jy-when">September 2026</span><b class="jy-title">Manchester Young Talent Awards.</b><p>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</p></div>
+          <div class="jy-copy"><span class="jy-idx">17 / 19</span><span class="jy-when">September 2026</span><b class="jy-title">Manchester Young Talent Awards.</b><p>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</p></div>
         </li>
         <li class="jy-card" data-when="October 2026" data-i="17">
           <button class="tl-view jy-pic" type="button" data-src="../assets/journey/oct2026-launch.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/oct2026-launch.webp" srcset="../assets/journey/th/oct2026-launch.webp 400w, ../assets/journey/oct2026-launch.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">18 / 18</span><span class="jy-when">October 2026</span><b class="jy-title">Amazon and the shop launch.</b><p>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</p></div>
+          <div class="jy-copy"><span class="jy-idx">18 / 19</span><span class="jy-when">October 2026</span><b class="jy-title">Amazon and the shop launch.</b><p>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</p></div>
+        </li>
+        <li class="jy-card" data-when="November 2026" data-i="18">
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/mima-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/mima-card.webp" srcset="../assets/journey/th/mima-card.webp 400w, ../assets/journey/mima-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">19 / 19</span><span class="jy-when">November 2026</span><b class="jy-title">Made in Manchester Awards.</b><p>Shortlisted for Business Owner / Entrepreneur of the Year at the Made in Manchester Awards 2027. The winners are named in February.</p></div>
         </li>
         </ol>
         <svg class="jy-track" id="jyTrack" aria-hidden="true"></svg>
@@ -1972,7 +1993,8 @@ a.tl-link{color:var(--pink);font-weight:500}
             <dt>Decision</dt><dd>Let the numbers speak first, then use every invitation to tell the story of how they were made.</dd>
             <dt>Implementation</dt><dd>One of five finalists, from hundreds of entrants, in the eBay UK Business Awards, Social Impact, 2024,
             with an invitation to Belfast to meet eBay's UK leadership.
-            Shortlisted for the Manchester Young Talent Awards' Agent of Change award in 2026. Approached by Temu UK to open its
+            Shortlisted for the Manchester Young Talent Awards' Agent of Change award in 2026, and for Business Owner / Entrepreneur
+            of the Year at the Made in Manchester Awards 2027. Approached by Temu UK to open its
             fire extinguisher category. A global producer that chose a small Greater Manchester warehouse as its first UK client.
             Entered for the King's Awards for Enterprise 2027.</dd>
             <dt>Result</dt><dd>Growth over two comparable years, recognition, and a seat in the conversations that decide
@@ -2176,6 +2198,7 @@ a.tl-link{color:var(--pink);font-weight:500}
         <div class="badges">
           <div class="bd"><img class="dc" src="../assets/disability-confident.png" width="525" height="261" alt="Disability Confident Committed" loading="lazy" decoding="async"><small>Disability Confident Committed, Level 1 · Level 2 Employer in progress</small></div>
           <div class="bd"><img src="../assets/tlevel-ambassador.png" width="250" height="115" alt="I'm a T Levels ambassador" loading="lazy" decoding="async"><small>T Level Ambassador Network · employer ambassador</small></div>
+          <div class="bd bd-wide"><img class="mima" src="../assets/mima.png" width="640" height="207" alt="Made in Manchester Awards" loading="lazy" decoding="async"><small>Made in Manchester Awards 2027 · Business Owner / Entrepreneur of the Year · shortlisted</small></div>
           <div class="bd"><img class="myta" src="../assets/myta.png" width="640" height="236" alt="Manchester Young Talent Awards" loading="lazy" decoding="async"><small>Manchester Young Talent Awards 2026 · Agent of Change · shortlisted</small></div>
           <div class="bd bd-ebay"><span class="lg-ebay bd-lg" aria-hidden="true"><b>e</b><b>b</b><b>a</b><b>y</b></span><small>eBay UK Business Awards 2024 · Social Impact · one of five finalists</small></div>
         </div>
