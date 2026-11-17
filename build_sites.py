@@ -151,7 +151,10 @@ def build(name, cfg):
             for fn in fs:
                 if fn.endswith(".json"):
                     p = os.path.join(dp, fn); data_texts[os.path.relpath(p, src)] = open(p, encoding="utf-8").read()
-    refs = sorted(set(ASSET_RE.findall(html) + ASSET_RE.findall(js) + sum([DATA_RE.findall(t) for t in data_texts.values()], [])))
+    # the share picture is an asset like any other, though the page names it by its full address
+    og_re = re.compile(r'(<meta (?:property|name)="(?:og|twitter):image" content=")' + re.escape(cfg["self"]) + r'assets/([^"]+)"')
+    refs = sorted(set(ASSET_RE.findall(html) + ASSET_RE.findall(js) + [m.group(2) for m in og_re.finditer(html)]
+                      + sum([DATA_RE.findall(t) for t in data_texts.values()], [])))
     refs = [r for r in refs if os.path.exists(os.path.join(ROOT, "assets", r.split("?")[0]))]
     named = {}
     for rel in refs:
@@ -166,6 +169,9 @@ def build(name, cfg):
     for rel in sorted(named, key=len, reverse=True):
         html = html.replace("../assets/" + rel, "../assets/" + named[rel])
         js = js.replace("../assets/" + rel, "../assets/" + named[rel])
+    # ... so its address has to carry the stamped name too. Left as the plain name it pointed at a file the
+    # build never writes, and a link to either site previewed with no picture.
+    html = og_re.sub(lambda m: m.group(1) + cfg["self"] + "assets/" + named.get(m.group(2), m.group(2)) + '"', html)
 
     # rewrite paths: assets beside the page, the sister site on its own domain,
     # the gateway on the awards domain, the canonical and social URLs on this domain

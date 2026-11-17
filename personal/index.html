@@ -19,7 +19,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,Times New Roman,serif' font-style='italic' font-size='34' fill='%23F4F1EB'%3ETL%3C/text%3E%3Cpath d='M14 54h36' stroke='%23FF2D8D' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#101010">
 <link rel="preconnect" href="https://customer-q4ck225vxqtshqms.cloudflarestream.com">
-<link rel="preload" as="image" href="../assets/tom-mono-sm.jpg" imagesrcset="../assets/tom-mono-sm.jpg 440w, ../assets/tom-mono.jpg 682w" imagesizes="(max-width:820px) 88vw, 46vw">
+<link rel="preload" as="image" href="../assets/tom-mono-sm.jpg" imagesrcset="../assets/tom-mono-sm.jpg 682w, ../assets/tom-mono-md.jpg 1024w, ../assets/tom-mono.jpg 1364w" imagesizes="(max-width:820px) 88vw, 46vw">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -1688,6 +1688,59 @@ a.tl-link{color:var(--pink);font-weight:500}
   .bar small,.bar .b3 small.dt,.bar em,.bar .b1 em,.bar .b2 em,.bar .b3 em,.bar .b4 em{font-size:11px}
   .ch-tag.sm,.jy-idx{font-size:11px}
 }
+/* ── Tom, 15 Nov: where a heading's words stack, the lines keep a slight space between them
+   (phones already do, in the 820px block above) ── */
+@media(min-width:821px){
+  h1,h2,h3{line-height:.96}
+  .hero-type h1{line-height:.91}
+  .scene .ph h3,.slab h2,.wayin .t,.bio-head h2{line-height:.96}
+  .film-t,.env-h,.panel h3,.chart figcaption h3{line-height:1.04}
+  .card .t{line-height:1.08}
+  .jy-when{line-height:.98}.jy-title{line-height:1.06}
+}
+/* ── real planets on the system map: once a planet's map is in, the drawn sphere stands in for the
+   painted one (which stays as the fallback), keeping the ring and glow that mark the chosen planet ── */
+.node .orb canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;display:block;max-width:none}
+.node .orb.real,.node.core .orb.real{background:none;overflow:visible;box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.node .orb.real::before,.node .orb.real::after{display:none}
+.node.sel .orb.real{box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--pink),0 0 40px 8px rgba(255,45,141,.5)}
+@media(max-width:820px){.node .orb.real{box-shadow:none}}
+/* ── Back to the start (Tom, 15 Nov): the arrow is drawn, and rides up through the pink disc; pressed, the
+   page does not scroll all the way back - the carbon closes over it from the button, the line winds back
+   through the chapters to 00, and the cover draws away into the TL mark with the opening playing again ── */
+.totop .arr{top:19px;width:54px;height:54px;margin-left:-27px;border-radius:50%;overflow:hidden}
+.totop .arr svg{width:26px;height:26px;display:block;fill:none;stroke:var(--carbon);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
+  animation:arrBob 2.4s cubic-bezier(.45,0,.3,1) infinite}
+@keyframes arrBob{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
+.totop:hover .arr{transform:none}
+.totop:hover .arr svg,.totop.go .arr svg{animation:arrRide .8s cubic-bezier(.5,0,.2,1) infinite}
+@keyframes arrRide{0%{transform:translateY(3px)}45%{transform:translateY(-34px)}45.01%{transform:translateY(34px)}100%{transform:translateY(3px)}}
+.totop.go .ring{animation:spin .9s linear infinite}
+.rewind{position:fixed;inset:0;z-index:240;background:var(--carbon);color:var(--porcelain);display:grid;place-content:center;
+  visibility:hidden;pointer-events:none;clip-path:circle(0 at 50% 100%)}
+.rewind.on{visibility:visible;pointer-events:auto}
+.rewind::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(255,45,141,.16),transparent 70%);pointer-events:none}
+body.rewinding .cur{opacity:0!important}
+.rw-in{position:relative;display:grid;justify-items:center;gap:22px}
+.rw-m{font-family:var(--serif);font-size:44px;line-height:1}
+.rewind svg{width:min(320px,58vw);height:2px;overflow:visible;display:block}
+.rewind path{stroke:var(--pink);stroke-width:1.8;fill:none;vector-effect:non-scaling-stroke;stroke-dasharray:320;stroke-dashoffset:0;
+  filter:drop-shadow(0 0 6px rgba(255,45,141,.8))}
+.rw-c{display:flex;align-items:baseline;gap:12px;min-height:34px}
+.rw-c b{font-family:var(--disp);font-weight:400;font-size:34px;line-height:1;color:var(--pink);font-variant-numeric:tabular-nums}
+.rw-c span{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--pale-2)}
+@media(prefers-reduced-motion:reduce){.totop .arr svg,.totop:hover .arr svg{animation:none}.rewind{display:none}}
+/* ── every planet's panel carries the way to its own page ── */
+.panel .go{display:inline-block;border:1px solid var(--pink);padding:11px 16px;letter-spacing:.18em;transition:background .25s,color .25s}
+.panel .go:hover{background:var(--pink);color:#fff}
+.ft-brand .ft-credit{margin-top:6px;font-size:10.5px;letter-spacing:.06em;color:var(--pale-3)}
+.ft-brand .ft-credit a,.ft-bot a{color:inherit;text-transform:none;font-size:inherit;font-weight:400;letter-spacing:inherit;padding:0;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:700px){.ft-brand .ft-credit{display:none}}
+/* ── the footer's Elsewhere: each place is a name with its address under it ── */
+.ft-else p a{display:block;padding:0 0 12px;line-height:1.3}
+.ft-else p a small{display:block;margin-top:2px;font-size:11.5px;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--pale-3);transition:color .2s}
+.ft-else p a:hover small{color:var(--pink)}
+@media(max-width:700px){.ft-else p a{padding-bottom:10px}}
 </style>
 </head>
 <body data-view="explore" data-grp="map">
@@ -1710,6 +1763,14 @@ a.tl-link{color:var(--pink);font-weight:500}
 <div class="enter" id="enter" aria-hidden="true">
   <div class="m">TL</div>
   <svg viewBox="0 0 320 2" preserveAspectRatio="none"><path d="M0 1 H320"/></svg>
+</div>
+
+<div class="rewind" id="rewind" aria-hidden="true">
+  <div class="rw-in">
+    <div class="rw-m">TL</div>
+    <svg viewBox="0 0 320 2" preserveAspectRatio="none"><path id="rwLine" d="M0 1 H320"/></svg>
+    <div class="rw-c"><b id="rwN">07</b><span id="rwT">Still Building</span></div>
+  </div>
 </div>
 
 <header class="chrome" id="chrome">
@@ -1756,9 +1817,9 @@ a.tl-link{color:var(--pink);font-weight:500}
         <img class="halo2 on" src="../assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
         <img class="halo on" src="../assets/tom-mono-sm.jpg" width="440" height="579" alt="" aria-hidden="true" decoding="async">
         <img id="shot" src="../assets/tom-mono.jpg"
-             srcset="../assets/tom-mono-sm.jpg 440w, ../assets/tom-mono.jpg 682w"
+             srcset="../assets/tom-mono-sm.jpg 682w, ../assets/tom-mono-md.jpg 1024w, ../assets/tom-mono.jpg 1364w"
              sizes="(max-width:820px) 88vw, 46vw"
-             width="682" height="897" alt="Tom Letcher" decoding="async">
+             width="1364" height="1794" alt="Tom Letcher" decoding="async">
       </div>
       <div class="hero-type"><h1><span>Tom</span><span>Letcher</span></h1></div>
       <div class="hero-sub"><p class="fob">Founder. Operator. Builder.</p><p class="fob-sub">Managing director of Freedom Fire &amp; Safety Ltd |<br class="mbr"> Freedom Group Enterprise Ltd</p></div>
@@ -1827,85 +1888,89 @@ a.tl-link{color:var(--pink);font-weight:500}
 
 
     <div class="journey rv" id="timeline" aria-label="To Freedom and beyond, December 2019 to now">
-      <div class="jy-head"><div class="yhead">To Freedom and beyond · December 2019 to now</div><div class="jy-tools"><span class="jy-hint" id="jyHint">Scroll to travel the line</span><button type="button" class="jy-btn" id="jyPrev" data-cur-label="Back" aria-label="Previous moment">←</button><span class="jy-count" id="jyCount">01 / 19</span><button type="button" class="jy-btn" id="jyNext" data-cur-label="Next" aria-label="Next moment">→</button></div></div>
+      <div class="jy-head"><div class="yhead">To Freedom and beyond · December 2019 to now</div><div class="jy-tools"><span class="jy-hint" id="jyHint">Scroll to travel the line</span><button type="button" class="jy-btn" id="jyPrev" data-cur-label="Back" aria-label="Previous moment">←</button><span class="jy-count" id="jyCount">01 / 20</span><button type="button" class="jy-btn" id="jyNext" data-cur-label="Next" aria-label="Next moment">→</button></div></div>
       <div class="jy-stage" id="jyStage">
         <div class="jy-year" id="jyYear" aria-hidden="true">2019</div>
         <ol class="jy-strip" id="jyStrip">
         <li class="jy-card" data-when="December 2019" data-i="0">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch1-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch1-a.webp" srcset="../assets/journey/th/ch1-a.webp 400w, ../assets/journey/ch1-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">01 / 19</span><span class="jy-when">December 2019</span><b class="jy-title">One person, one listing.</b><p>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch1-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch1-a.webp" srcset="../assets/journey/th/ch1-a.webp 800w, ../assets/journey/ch1-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">01 / 20</span><span class="jy-when">December 2019</span><b class="jy-title">One person, one listing.</b><p>One refurbished fire extinguisher sold from Bury through a Facebook Marketplace listing. No team, no plan, no company.</p></div>
         </li>
         <li class="jy-card" data-when="June 2020" data-i="1">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch4-d.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch4-d.webp" srcset="../assets/journey/th/ch4-d.webp 400w, ../assets/journey/ch4-d.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">02 / 19</span><span class="jy-when">June 2020</span><b class="jy-title">Freedom Fire.</b><p>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch4-d.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch4-d.webp" srcset="../assets/journey/th/ch4-d.webp 800w, ../assets/journey/ch4-d.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">02 / 20</span><span class="jy-when">June 2020</span><b class="jy-title">Freedom Fire.</b><p>Trading as Freedom Fire from a corner of the family warehouse. Students join to clean, refill and prepare hundreds of refurbished units a day, with pallets going out nationwide.</p></div>
         </li>
         <li class="jy-card" data-when="August 2021" data-i="2">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ff-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ff-card.webp" srcset="../assets/journey/th/ff-card.webp 400w, ../assets/journey/ff-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">03 / 19</span><span class="jy-when">August 2021</span><b class="jy-title">The company.</b><p>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ff-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ff-card.webp" srcset="../assets/journey/th/ff-card.webp 800w, ../assets/journey/ff-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">03 / 20</span><span class="jy-when">August 2021</span><b class="jy-title">The company.</b><p>Freedom Fire &amp; Safety Ltd incorporated. Engineers now service and install fire extinguishers on commercial sites alongside the online range.</p></div>
         </li>
         <li class="jy-card" data-when="November 2021" data-i="3">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/nbc-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/nbc-card.webp" srcset="../assets/journey/th/nbc-card.webp 400w, ../assets/journey/nbc-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">04 / 19</span><span class="jy-when">November 2021</span><b class="jy-title">The first placements.</b><p>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/nbc-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/nbc-card.webp" srcset="../assets/journey/th/nbc-card.webp 800w, ../assets/journey/nbc-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">04 / 20</span><span class="jy-when">November 2021</span><b class="jy-title">The first placements.</b><p>Learners from New Bridge College, including young people with additional needs, take placements in the business. One of the earliest, Jojo, goes on to full-time work.</p></div>
         </li>
         <li class="jy-card" data-when="May 2022" data-i="4">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch7-b.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch7-b.webp" srcset="../assets/journey/th/ch7-b.webp 400w, ../assets/journey/ch7-b.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">05 / 19</span><span class="jy-when">May 2022</span><b class="jy-title">A front door of its own.</b><p>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch7-b.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch7-b.webp" srcset="../assets/journey/th/ch7-b.webp 800w, ../assets/journey/ch7-b.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">05 / 20</span><span class="jy-when">May 2022</span><b class="jy-title">A front door of its own.</b><p>The first move: from rented space to a small warehouse, Unit 10, the first premises the company could call its own.</p></div>
         </li>
         <li class="jy-card" data-when="December 2023" data-i="5">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch8-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch8-a.webp" srcset="../assets/journey/th/ch8-a.webp 400w, ../assets/journey/ch8-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">06 / 19</span><span class="jy-when">December 2023</span><b class="jy-title">The year of building.</b><p>After 18 months of building, thousands of products have been researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch8-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch8-a.webp" srcset="../assets/journey/th/ch8-a.webp 800w, ../assets/journey/ch8-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">06 / 20</span><span class="jy-when">December 2023</span><b class="jy-title">The year of building.</b><p>After 18 months of building, thousands of products have been researched, photographed and written up by hand, ready for the eBay business store to open in January 2024.</p></div>
         </li>
         <li class="jy-card" data-when="April 2024" data-i="6">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch9-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch9-a.webp" srcset="../assets/journey/th/ch9-a.webp 400w, ../assets/journey/ch9-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">07 / 19</span><span class="jy-when">April 2024</span><b class="jy-title">The eBay awards.</b><p>Three months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch9-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch9-a.webp" srcset="../assets/journey/th/ch9-a.webp 800w, ../assets/journey/ch9-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">07 / 20</span><span class="jy-when">April 2024</span><b class="jy-title">The eBay awards.</b><p>Three months after the eBay business store opens, Freedom Fire is named runner-up in the eBay UK Business Awards for social impact, and tells the story in Belfast.</p></div>
         </li>
         <li class="jy-card" data-when="August 2024" data-i="7">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch12-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch12-a.webp" srcset="../assets/journey/th/ch12-a.webp 400w, ../assets/journey/ch12-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">08 / 19</span><span class="jy-when">August 2024</span><b class="jy-title">FIRESTORM.</b><p>The company's own brand is born: the FIRESTORM trademark is filed in August and registered in November.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch12-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch12-a.webp" srcset="../assets/journey/th/ch12-a.webp 800w, ../assets/journey/ch12-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">08 / 20</span><span class="jy-when">August 2024</span><b class="jy-title">FIRESTORM.</b><p>The company's own brand is born: the FIRESTORM trademark is filed in August and registered in November.</p></div>
         </li>
         <li class="jy-card" data-when="October 2024" data-i="8">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch10-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch10-a.webp" srcset="../assets/journey/th/ch10-a.webp 400w, ../assets/journey/ch10-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">09 / 19</span><span class="jy-when">October 2024</span><b class="jy-title">Unit 19, the headquarters.</b><p>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch10-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch10-a.webp" srcset="../assets/journey/th/ch10-a.webp 800w, ../assets/journey/ch10-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">09 / 20</span><span class="jy-when">October 2024</span><b class="jy-title">Unit 19, the headquarters.</b><p>The second move, to expand. An empty industrial shell becomes the HQ over six months: offices, a kitchen, fulfilment rooms and packing stations, fitted out by the team while orders kept shipping.</p></div>
         </li>
         <li class="jy-card" data-when="December 2024" data-i="9">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch13-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch13-a.webp" srcset="../assets/journey/th/ch13-a.webp 400w, ../assets/journey/ch13-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">10 / 19</span><span class="jy-when">December 2024</span><b class="jy-title">The first container.</b><p>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch13-a.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch13-a.webp" srcset="../assets/journey/th/ch13-a.webp 800w, ../assets/journey/ch13-a.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">10 / 20</span><span class="jy-when">December 2024</span><b class="jy-title">The first container.</b><p>On Christmas Eve the team unloads the first container of Firestorm fire extinguishers.</p></div>
         </li>
         <li class="jy-card" data-when="August 2025" data-i="10">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/temu.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/temu.webp" srcset="../assets/journey/th/temu.webp 400w, ../assets/journey/temu.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">11 / 19</span><span class="jy-when">August 2025</span><b class="jy-title">Temu.</b><p>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/temu.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/temu.webp" srcset="../assets/journey/th/temu.webp 800w, ../assets/journey/temu.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">11 / 20</span><span class="jy-when">August 2025</span><b class="jy-title">Temu.</b><p>Temu UK's first dedicated fire extinguisher seller, top of its category within three months with fewer than ten products listed.</p></div>
         </li>
         <li class="jy-card" data-when="October 2025" data-i="11">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/tlevel-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/tlevel-card.webp" srcset="../assets/journey/th/tlevel-card.webp 400w, ../assets/journey/tlevel-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">12 / 19</span><span class="jy-when">October 2025</span><b class="jy-title">T Level placements begin.</b><p>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from. The full programme is on <a class="tl-link" href="../staff/index.html">The Way In</a>.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/tlevel-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/tlevel-card.webp" srcset="../assets/journey/th/tlevel-card.webp 800w, ../assets/journey/tlevel-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">12 / 20</span><span class="jy-when">October 2025</span><b class="jy-title">T Level placements begin.</b><p>The first T Level industry placements start with Bury College. Bill, Harrison and Gabriel join, each with a named person to learn from. The full programme is on <a class="tl-link" href="../staff/index.html">The Way In</a>.</p></div>
         </li>
         <li class="jy-card" data-when="March 2026" data-i="12">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/brands-five.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/brands-five.webp" srcset="../assets/journey/th/brands-five.webp 400w, ../assets/journey/brands-five.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">13 / 19</span><span class="jy-when">March 2026</span><b class="jy-title">Three brands.</b><p>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/brands-five.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/brands-five.webp" srcset="../assets/journey/th/brands-five.webp 800w, ../assets/journey/brands-five.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">13 / 20</span><span class="jy-when">March 2026</span><b class="jy-title">Three brands.</b><p>FXL and SKYLINE are registered alongside FIRESTORM, the start of a brand portfolio covering alarms, batteries, gloves and cleaning products.</p></div>
         </li>
         <li class="jy-card" data-when="April 2026" data-i="13">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch13-team.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch13-team.webp" srcset="../assets/journey/th/ch13-team.webp 400w, ../assets/journey/ch13-team.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">14 / 19</span><span class="jy-when">April 2026</span><b class="jy-title">Half a million products.</b><p>Sales across every channel pass 500,000 products since the first listing.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ch13-team.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ch13-team.webp" srcset="../assets/journey/th/ch13-team.webp 800w, ../assets/journey/ch13-team.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">14 / 20</span><span class="jy-when">April 2026</span><b class="jy-title">Half a million products.</b><p>Sales across every channel pass 500,000 products since the first listing.</p></div>
         </li>
         <li class="jy-card" data-when="July 2026" data-i="14">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/kings-crown.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/kings-crown.webp" srcset="../assets/journey/th/kings-crown.webp 400w, ../assets/journey/kings-crown.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">15 / 19</span><span class="jy-when">July 2026</span><b class="jy-title">The King's Awards for Enterprise.</b><p>Nominated for Promoting Opportunity by the Greater Manchester Growth Company, and entered for the Young Founder award.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/kings-crown.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/kings-crown.webp" srcset="../assets/journey/th/kings-crown.webp 800w, ../assets/journey/kings-crown.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">15 / 20</span><span class="jy-when">July 2026</span><b class="jy-title">The King's Awards for Enterprise.</b><p>Nominated for Promoting Opportunity by the Greater Manchester Growth Company, and entered for the Young Founder award.</p></div>
         </li>
         <li class="jy-card" data-when="August 2026" data-i="15">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ebay-ranked.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ebay-ranked.webp" srcset="../assets/journey/th/ebay-ranked.webp 400w, ../assets/journey/ebay-ranked.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">16 / 19</span><span class="jy-when">August 2026</span><b class="jy-title">Number one.</b><p>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/ebay-ranked.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/ebay-ranked.webp" srcset="../assets/journey/th/ebay-ranked.webp 800w, ../assets/journey/ebay-ranked.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">16 / 20</span><span class="jy-when">August 2026</span><b class="jy-title">Number one.</b><p>Ranked first of 1,193 fire extinguisher sellers on eBay UK in eBay's own report, and number one on Temu. Containers arrive back to back, with the Amazon and Shopify launches in preparation.</p></div>
         </li>
         <li class="jy-card" data-when="September 2026" data-i="16">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/myta-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/myta-card.webp" srcset="../assets/journey/th/myta-card.webp 400w, ../assets/journey/myta-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">17 / 19</span><span class="jy-when">September 2026</span><b class="jy-title">Manchester Young Talent Awards.</b><p>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/myta-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/myta-card.webp" srcset="../assets/journey/th/myta-card.webp 800w, ../assets/journey/myta-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">17 / 20</span><span class="jy-when">September 2026</span><b class="jy-title">Manchester Young Talent Awards.</b><p>Shortlisted for the Manchester Young Talent Awards, Agent of Change, for the way the company opens its doors to young people.</p></div>
         </li>
         <li class="jy-card" data-when="October 2026" data-i="17">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/oct2026-launch.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/oct2026-launch.webp" srcset="../assets/journey/th/oct2026-launch.webp 400w, ../assets/journey/oct2026-launch.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">18 / 19</span><span class="jy-when">October 2026</span><b class="jy-title">Amazon and the shop launch.</b><p>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</p></div>
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/oct2026-launch.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/oct2026-launch.webp" srcset="../assets/journey/th/oct2026-launch.webp 800w, ../assets/journey/oct2026-launch.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">18 / 20</span><span class="jy-when">October 2026</span><b class="jy-title">Amazon and the shop launch.</b><p>The Amazon storefront and the company's own Shopify store open, so customers can buy direct and no single marketplace decides the future.</p></div>
         </li>
-        <li class="jy-card" data-when="November 2026" data-i="18">
-          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/mima-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/mima-card.webp" srcset="../assets/journey/th/mima-card.webp 400w, ../assets/journey/mima-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
-          <div class="jy-copy"><span class="jy-idx">19 / 19</span><span class="jy-when">November 2026</span><b class="jy-title">Made in Manchester Awards.</b><p>Shortlisted for Business Owner / Entrepreneur of the Year at the Made in Manchester Awards 2027. The winners are named in February.</p></div>
+        <li class="jy-card" data-when="October 2026" data-i="18">
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/bury-news.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/bury-news.webp" srcset="../assets/journey/th/bury-news.webp 800w, ../assets/journey/bury-news.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">19 / 20</span><span class="jy-when">October 2026</span><b class="jy-title">Bury College tells the story.</b><p>The college publishes the story of its first T Level students at Freedom Fire: a website and storefronts built by two of them, a warehouse run by the third, and all three now in permanent paid roles. <a class="tl-link" href="https://burycollege.ac.uk/news/bury-college-t-level-students-turn-industry-placements-into-careers-at-freedom-fire" target="_blank" rel="noopener">Read the article&nbsp;↗</a></p></div>
+        </li>
+        <li class="jy-card" data-when="November 2026" data-i="19">
+          <button class="tl-view jy-pic" type="button" data-src="../assets/journey/mima-card.webp" data-cur-label="View" aria-label="View the picture"><img src="../assets/journey/th/mima-card.webp" srcset="../assets/journey/th/mima-card.webp 800w, ../assets/journey/mima-card.webp 1400w" sizes="(max-width:700px) 86vw, 420px" width="400" height="300" alt="" loading="lazy" decoding="async"></button>
+          <div class="jy-copy"><span class="jy-idx">20 / 20</span><span class="jy-when">November 2026</span><b class="jy-title">Made in Manchester Awards.</b><p>Shortlisted for Business Owner / Entrepreneur of the Year at the Made in Manchester Awards 2027. The winners are named in February.</p></div>
         </li>
         </ol>
         <svg class="jy-track" id="jyTrack" aria-hidden="true"></svg>
@@ -1969,7 +2034,7 @@ a.tl-link{color:var(--pink);font-weight:500}
     </div>
     <div class="stories rv">
 
-      <details class="story" open>
+      <details class="story">
         <summary><span class="sn">01</span><span class="st">Rethinking a traditional category</span></summary>
         <div class="sb">
           <dl>
@@ -2162,7 +2227,7 @@ a.tl-link{color:var(--pink);font-weight:500}
         <div class="tagline" id="pTag">The holding company. Brands · IP · Strategy · Capital.</div>
         <p id="pBody">Owns the group's brands, trademarks and intellectual property, sets the strategy and holds the capital. The operating model the trading company runs on, and the shape the next companies take.
         Select a planet.</p>
-        <a class="go" id="pGo" href="https://www.freedomgroup.uk" target="_blank" rel="noopener" style="display:none">Explore ↗</a>
+        <a class="go" id="pGo" href="https://www.freedomgroup.uk" target="_blank" rel="noopener">Explore ↗</a>
       </div>
     </div>
 
@@ -2293,17 +2358,17 @@ a.tl-link{color:var(--pink);font-weight:500}
       <article class="bio-prose">
         <p>My dad loaned me the money to buy that first batch of chocolate and drinks. It was the first business loan I ever had, arranged without paperwork, credit checks or interest. It gave me my first lesson in business: somebody may help you begin, but what happens next is your responsibility.</p>
       <figure class="bio-fig one left">
-        <img src="../assets/bio-ph-2.webp" width="463" height="620" style="object-position:50% 20%" alt="Tom as a small boy in a Manchester City shirt" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-2.webp" width="926" height="1240" style="object-position:50% 20%" alt="Tom as a small boy in a Manchester City shirt" loading="lazy" decoding="async">
       </figure>
       <p>From August 2005, throughout childhood and into university, I kept starting small ventures: selling at school, cleaning neighbours' cars for money, car boot sales growing up, and side hustles alongside my studies. Each did well in its own respect, and every one taught me something about customers, margins, risk and resilience. Business was never something I discovered later in life. The instinct had always been there.</p>
         
       <figure class="bio-fig one right">
-        <img src="../assets/bio-ph-3.webp" width="481" height="620" style="object-position:50% 18%" alt="Tom's school portrait, in blazer and tie" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-3.webp" width="962" height="1240" style="object-position:50% 18%" alt="Tom's school portrait, in blazer and tie" loading="lazy" decoding="async">
       </figure>
       <p>Life beyond those early ventures was turbulent. I attended St.&nbsp;Monica's High School. In March 2012, when I was 15, I lost my mum, Michele, to breast cancer. I left school that July and carried the loss into adulthood, and in September 2014 into the University of Salford, where I began studying architecture.</p>
 
       <figure class="bio-fig one left">
-        <img src="../assets/bio-ph-mum.webp" width="1015" height="742" style="object-position:40% 42%" alt="Tom as a boy with his mum, Michele" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-mum.webp" width="2030" height="1484" style="object-position:40% 42%" alt="Tom as a boy with his mum, Michele" loading="lazy" decoding="async">
       </figure>
         <p>Architecture taught me far more than how to design buildings. It trained me to respect detail, understand how systems connect and transform an empty space into a workable vision. It taught me research, presentation, problem solving and the discipline of revising an idea repeatedly until every element served a purpose.</p>
         <p>In July 2015, at 19, my best friend died in a motorbike accident. Grief derailed my second year and I came close to losing my place at university. But I recovered, graduated in July 2017 and continued directly into a two-year Master's.</p>
@@ -2317,7 +2382,7 @@ a.tl-link{color:var(--pink);font-weight:500}
         <p class="bio-close-line">To anybody else, it was an old piece of equipment.<br><em>To me, it looked like the beginning of something.</em></p>
         
       <figure class="bio-fig one left">
-        <img src="../assets/bio-ph-4.webp" width="383" height="620" style="object-position:50% 12%" alt="Tom today" loading="lazy" decoding="async">
+        <img src="../assets/bio-ph-4.webp" width="766" height="1240" style="object-position:50% 12%" alt="Tom today" loading="lazy" decoding="async">
       </figure>
       <p class="bio-after">From that point I built Freedom Fire as a sole trader, and on 27 August 2021 it became a limited company. Over the years that followed we went on to establish rapid ecommerce growth, becoming number one for fire extinguishers on eBay and number one on Temu.</p>
         <p class="bio-after">We endured more loss along the way: another close friend when I was 27, and my sister-in-law when I was 28. Through the hardship, even when the chips were down, we carried on, and became the start of what we like to call a £100 million enterprise.</p>
@@ -2333,7 +2398,7 @@ a.tl-link{color:var(--pink);font-weight:500}
   <div class="wrap">
     <div class="ft-top">
       <a class="totop" href="#top" id="totop" data-cur-label="Top" data-mag aria-label="Back to the start of the page">
-        <span class="ring"></span><span class="arr">↑</span><span class="lbl">Back to the start</span>
+        <span class="ring"></span><span class="arr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.5V5M5.6 11.4 12 5l6.4 6.4"/></svg></span><span class="lbl">Back to the start</span>
       </a>
       <div class="acts">
         <a class="act" href="https://www.freedomgroup.uk" data-mag>Explore Freedom Group ↗</a>
@@ -2345,11 +2410,12 @@ a.tl-link{color:var(--pink);font-weight:500}
       <div class="ft-brand"><img src="../assets/group-logo-white.png" alt="The Freedom Group" width="900" height="910" loading="lazy" decoding="async">
         <p class="ft-addr">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p>
         <p class="ft-legal-in">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</p>
+        <p class="ft-credit">Planet maps: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a>, CC BY 4.0</p>
 </div>
       <div><h4>Contact</h4><p><a href="mailto:tom.letcher@freedomgroup.uk">tom.letcher@freedomgroup.uk</a><br><a href="tel:+443337722723">0333 772 2723</a></p></div>
       <div><h4>The story</h4><p><a href="#c01">Story</a><br><a href="#c02">Proof</a><br><a href="#c03">Method</a><br><a href="#c05">Future</a><br><a href="#c07">Next</a></p></div>
-      <div><h4>Elsewhere</h4><p><a href="https://www.freedomgroup.uk">Freedom Group</a><br><a href="https://www.freedom-fire.co.uk">Freedom Fire</a></p><p class="ft-addr-m">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p></div>
-      <div class="ft-bot">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467</div>
+      <div class="ft-else"><h4>Elsewhere</h4><p><a href="https://www.thefreedomgroup.global">The Freedom Group<small>thefreedomgroup.global</small></a><a href="https://www.freedomgroup.uk">Investor proposal<small>freedomgroup.uk</small></a><a href="../staff/index.html">The Way In<small>How people join the company</small></a></p><p class="ft-addr-m">Unit 19, Pilsworth Industrial Estate, Bury BL9 8RE</p></div>
+      <div class="ft-bot">© 2026 Freedom Fire &amp; Safety Ltd · Company no. 13589467<br>Planet maps: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a>, CC BY 4.0</div>
     </div>
   </div>
 </footer>

@@ -309,13 +309,167 @@
     counters.forEach(function (c) { setCount(c, 0); ioc.observe(c.el); });
   }
 
+  /* ── real planets ───────────────────────────────────────────
+     A planet is a sphere drawn pixel by pixel on a 2D canvas from a map of its whole surface: every pixel of
+     the disc knows which point of the globe it shows (worked out once, when the planet is sized), so a frame
+     is only a shift along the map and a multiply by the light. Lit from the upper left: the terminator, the
+     darkening toward the limb, the air glowing along the lit edge and, for the Earth, the lights of its
+     night side. Maps: Solar System Scope, CC BY 4.0, the same ones the group site flies round. */
+  var TAU = Math.PI * 2;
+  var SUN = (function () { var v = [-0.56, 0.6, 0.57], m = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]); return [v[0] / m, v[1] / m, v[2] / m]; })();
+  function mapData(img, sx, sy, sw, sh, w, h) {
+    var c = document.createElement("canvas"); c.width = w; c.height = h;
+    var x = c.getContext("2d", { willReadFrequently: true }); x.imageSmoothingQuality = "high";
+    x.drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
+    return { w: w, h: h, d: x.getImageData(0, 0, w, h).data };
+  }
+  function sstep(a, b, x) { var t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+  /* o: R (radius in canvas pixels), tex, tilt (the north pole leaning toward us), roll (the axis leaning in the
+     picture), atmo [r,g,b], amb, limb, haze (the air's depth, in radii), lights (the night side's map), ring */
+  function makeBall(o) {
+    var R = o.R, haze = o.haze == null ? 0.07 : o.haze, reach = o.ring ? o.ring.b : 1 + haze;
+    var S = Math.ceil(R * reach * 2 + 4), c = S / 2, hw = Math.max(1.5, R * haze);
+    var tex = o.tex, tw = tex.w, th = tex.h, td = tex.d;
+    var ct = Math.cos(o.tilt || 0), st = Math.sin(o.tilt || 0), cr = Math.cos(o.roll || 0), sr = Math.sin(o.roll || 0);
+    var amb = o.amb == null ? 0.07 : o.amb, limbK = o.limb == null ? 0.5 : o.limb, atmo = o.atmo || [255, 255, 255], aK = o.atmoK == null ? 0.55 : o.atmoK;
+    var cv = document.createElement("canvas"); cv.width = cv.height = S;
+    var cx = cv.getContext("2d"), im = cx.createImageData(S, S), out = im.data;
+    var lt = o.lights || null, haloK = o.haloK == null ? 0.5 : o.haloK, cap = S * S, n = 0;
+    var pix = new Int32Array(cap), row = new Int32Array(cap), u0 = new Float32Array(cap), lit = new Uint16Array(cap), add = new Uint8Array(cap * 3);
+    var nk = lt ? new Uint8Array(cap) : null, lrow = lt ? new Int32Array(cap) : null;
+    for (var j = 0; j < S; j++) for (var i = 0; i < S; i++) {
+      var dx = i + 0.5 - c, dy = c - (j + 0.5), dist = Math.sqrt(dx * dx + dy * dy), p = (j * S + i) * 4;
+      if (dist > R + hw) continue;
+      var toSun = dist > 0 ? (dx * SUN[0] + dy * SUN[1]) / dist : 0;
+      var halo = dist >= R - 0.5 ? Math.pow(clamp(1 - (dist - R) / hw, 0, 1), 2) * haloK * clamp(toSun * 0.85 + 0.42, 0.06, 1) : 0;
+      if (dist > R + 0.5) { out[p] = atmo[0]; out[p + 1] = atmo[1]; out[p + 2] = atmo[2]; out[p + 3] = Math.round(halo * 255); continue; }
+      var x = dx / R, y = dy / R, r2 = x * x + y * y;
+      if (r2 > 1) { var rr = Math.sqrt(r2); x /= rr; y /= rr; r2 = 1; }
+      var z = Math.sqrt(1 - r2);
+      /* back from the picture to the planet's own frame: undo the roll, then the tilt */
+      var qx = x * cr + y * sr, qy = -x * sr + y * cr, oy = qy * ct + z * st, oz = -qy * st + z * ct;
+      var lat = Math.asin(clamp(oy, -1, 1)), lon = Math.atan2(qx, oz);
+      var diff = x * SUN[0] + y * SUN[1] + z * SUN[2], day = Math.pow(clamp(diff * 1.25 + 0.14, 0, 1), 0.85);
+      var rim = Math.pow(1 - z, 2.6) * clamp(diff * 0.9 + 0.45, 0, 1) * aK;
+      var cover = clamp(R + 0.5 - dist, 0, 1);
+      pix[n] = p;
+      row[n] = Math.min(th - 1, Math.floor((0.5 - lat / Math.PI) * th)) * tw * 4;
+      u0[n] = (((lon / TAU + 0.5) % 1) + 1) % 1 * tw;
+      lit[n] = Math.round((amb + (1 - amb) * day) * (1 - limbK * Math.pow(1 - z, 1.5)) * (1 - rim * 0.35) * 256);
+      add[n * 3] = Math.round(atmo[0] * rim); add[n * 3 + 1] = Math.round(atmo[1] * rim); add[n * 3 + 2] = Math.round(atmo[2] * rim);
+      if (lt) { nk[n] = Math.round((1 - sstep(-0.32, 0.06, diff)) * Math.pow(z, 0.35) * 255); lrow[n] = Math.min(lt.h - 1, Math.floor((0.5 - lat / Math.PI) * lt.h)) * lt.w * 4; }
+      out[p + 3] = Math.round((cover + (1 - cover) * halo) * 255);
+      n++;
+    }
+    var ld = lt ? lt.d : null, lsc = lt ? lt.w / tw : 0, lw = lt ? lt.w : 0;
+    /* the rings: two still layers, the half behind the planet and the half in front, with the planet's shadow across them */
+    var show = cv, sx = null, rb = null, rf = null;
+    if (o.ring) {
+      var g = o.ring, Q = S * 2, mk = function () { var k = document.createElement("canvas"); k.width = k.height = Q; return k; };
+      rb = mk(); rf = mk();
+      var bx = rb.getContext("2d"), fx = rf.getContext("2d"), bi = bx.createImageData(Q, Q), fi = fx.createImageData(Q, Q);
+      var Ax = -sr * ct, Ay = cr * ct, Az = st || 0.001, sd = g.strip ? g.strip.d : null, sw2 = g.strip ? g.strip.w : 0, tone = g.tone || 1;
+      for (var jj = 0; jj < Q; jj++) for (var ii = 0; ii < Q; ii++) {
+        var X = (ii + 0.5 - Q / 2) / (R * 2), Y = (Q / 2 - (jj + 0.5)) / (R * 2), Z = -(Ax * X + Ay * Y) / Az, rad = Math.sqrt(X * X + Y * Y + Z * Z);
+        if (rad < g.a || rad > g.b) continue;
+        var t = (rad - g.a) / (g.b - g.a), cr2, cg2, cb2, ca2;
+        if (sd) { var si = Math.min(sw2 - 1, Math.floor(t * sw2)) * 4; cr2 = sd[si]; cg2 = sd[si + 1]; cb2 = sd[si + 2]; ca2 = sd[si + 3] / 255; }
+        else { var gc = g.rgb || [226, 206, 162]; cr2 = gc[0]; cg2 = gc[1]; cb2 = gc[2]; ca2 = (g.alpha == null ? 0.7 : g.alpha) * sstep(0, 0.3, t) * sstep(1, 0.7, t); }
+        var sdot = X * SUN[0] + Y * SUN[1] + Z * SUN[2], ex = X - sdot * SUN[0], ey = Y - sdot * SUN[1], ez = Z - sdot * SUN[2];
+        var shade = sdot < 0 ? 0.18 + 0.82 * sstep(0.86, 1.06, Math.sqrt(ex * ex + ey * ey + ez * ez)) : 1;
+        var dst = Z > 0 ? fi.data : bi.data, q = (jj * Q + ii) * 4;
+        dst[q] = cr2 * tone * shade; dst[q + 1] = cg2 * tone * shade; dst[q + 2] = cb2 * tone * shade; dst[q + 3] = ca2 * 255;
+      }
+      bx.putImageData(bi, 0, 0); fx.putImageData(fi, 0, 0);
+      show = document.createElement("canvas"); show.width = show.height = S; sx = show.getContext("2d");
+    }
+    function draw(rot) {
+      var sh = (rot / TAU * tw) % tw; if (sh < 0) sh += tw;
+      for (var k = 0, k3 = 0; k < n; k++, k3 += 3) {
+        var u = u0[k] - sh; if (u < 0) u += tw;
+        var i0 = u | 0, f = u - i0, i1 = i0 + 1; if (i1 >= tw) i1 = 0;
+        var a = row[k] + (i0 << 2), b = row[k] + (i1 << 2), L = lit[k], q = pix[k], v0 = td[a], v1 = td[a + 1], v2 = td[a + 2];
+        var r = ((v0 + (td[b] - v0) * f) * L >> 8) + add[k3], g2 = ((v1 + (td[b + 1] - v1) * f) * L >> 8) + add[k3 + 1], bl = ((v2 + (td[b + 2] - v2) * f) * L >> 8) + add[k3 + 2];
+        if (ld && nk[k]) { var e = ld[lrow[k] + (((u * lsc) | 0) % lw << 2)] * nk[k] >> 8; r += e; g2 += e * 0.8; bl += e * 0.52; }
+        out[q] = r; out[q + 1] = g2; out[q + 2] = bl;
+      }
+      cx.putImageData(im, 0, 0);
+      if (sx) { sx.clearRect(0, 0, S, S); sx.drawImage(rb, 0, 0, S, S); sx.drawImage(cv, 0, 0); sx.drawImage(rf, 0, 0, S, S); }
+    }
+    return { el: show, S: S, draw: draw };
+  }
+
+  /* ── the system's planets: the group's eight worlds as real, turning planets ── */
+  (function () {
+    var mapBox = $("#map"); if (!mapBox || !document.createElement("canvas").getContext) return;
+    /* one strip of the atlas each, in the group site's own colours */
+    var WORLDS = {
+      group:   { row: 0, tilt: 0.34, roll: -0.3,  spin: 0.10, atmo: [255, 120, 185], limb: 0.42 },
+      global:  { row: 1, tilt: 0.22, roll: 0.24,  spin: 0.16, atmo: [125, 190, 255] },
+      fac:     { row: 2, tilt: 0.2,  roll: -0.16, spin: 0.08, atmo: [95, 240, 180], limb: 0.38, atmoK: 0.45 },
+      dist:    { row: 3, tilt: 0.24, roll: 0.42,  spin: 0.09, atmo: [255, 165, 115], limb: 0.38, atmoK: 0.4 },
+      form:    { row: 4, tilt: 0.4,  roll: 0.3,   spin: 0.2,  atmo: [255, 230, 165], atmoK: 0.35, ring: { a: 1.3, b: 2.25, tone: 1.05, strip: true } },
+      freight: { row: 5, tilt: 0.12, roll: -0.08, spin: 0.22, atmo: [255, 228, 195], atmoK: 0.35 },
+      fly:     { row: 6, tilt: 0.3,  roll: 0.3,   spin: 0.2,  atmo: [190, 135, 255] },
+      fuel:    { row: 7, tilt: 0.16, roll: 1.15,  spin: 0.12, atmo: [135, 145, 255], ring: { a: 1.62, b: 1.78, rgb: [208, 214, 255], alpha: 0.62 } }
+    };
+    var atlas = null, strip = null, balls = [], seen = false, raf = null, last = 0, sizes = "", asked = false;
+    function build() {
+      if (!atlas) return;
+      var dpr = Math.min(2, window.devicePixelRatio || 1), key = "";
+      var nodes = $$(".node", mapBox).map(function (nd) { var orb = $(".orb", nd); return { nd: nd, orb: orb, os: orb ? orb.offsetWidth : 0 }; });
+      nodes.forEach(function (q) { key += q.os + ","; });
+      if (key + dpr === sizes) return;
+      sizes = key + dpr;
+      balls.forEach(function (b) { if (b.el.parentNode) b.el.parentNode.removeChild(b.el); });
+      balls = [];
+      nodes.forEach(function (q) {
+        var w = WORLDS[q.nd.dataset.k]; if (!w || !q.os) return;
+        var R = q.os * dpr / 2, tw = clamp(Math.round(Math.PI * R * 2 / 16) * 16, 96, 512);
+        var ring = w.ring ? { a: w.ring.a, b: w.ring.b, tone: w.ring.tone, rgb: w.ring.rgb, alpha: w.ring.alpha, strip: w.ring.strip ? strip : null } : null;
+        var b = makeBall({ R: R, tex: mapData(atlas, 0, w.row * 256, 512, 256, tw, tw / 2), tilt: w.tilt, roll: w.roll, atmo: w.atmo, atmoK: w.atmoK, limb: w.limb, amb: 0.09, ring: ring });
+        b.spin = w.spin; b.rot = (w.row * 1.7) % TAU;
+        b.el.style.width = b.el.style.height = (b.S / dpr) + "px";
+        q.orb.appendChild(b.el); q.orb.classList.add("real");
+        b.draw(b.rot); balls.push(b);
+      });
+    }
+    function frame(now) {
+      raf = null;
+      if (!seen || document.hidden) return;
+      /* about twenty-four frames a second is plenty for a planet turning this slowly */
+      if (now - last >= 40) {
+        var dt = last ? Math.min(0.1, (now - last) / 1000) : 0.04; last = now;
+        for (var i = 0; i < balls.length; i++) { balls[i].rot += balls[i].spin * dt; balls[i].draw(balls[i].rot); }
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (!raf && seen && !reduce && balls.length) { last = 0; raf = requestAnimationFrame(frame); } }
+    function ask() {
+      if (asked) return; asked = true;
+      var a = new Image(), s = new Image(), left = 2, done = function () { if (--left) return; if (a.naturalWidth) { atlas = a; strip = s.naturalWidth ? mapData(s, 0, 0, s.naturalWidth, 1, 256, 1) : null; build(); kick(); } };
+      a.onload = a.onerror = s.onload = s.onerror = done;
+      a.src = "../assets/planets/worlds.webp"; s.src = "../assets/planets/ring.png";
+    }
+    if ("IntersectionObserver" in window) {
+      /* the maps are fetched as the system comes within a screen or so; the planets turn only while it is in view */
+      new IntersectionObserver(function (es) { if (es[0].isIntersecting) ask(); }, { rootMargin: "150% 0px" }).observe(mapBox);
+      new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) kick(); }, { threshold: 0 }).observe(mapBox);
+    } else { seen = true; ask(); }
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) kick(); });
+    var rz = null;
+    window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { build(); kick(); }, 220); }, { passive: true });
+  })();
+
   /* ── the carbon planet ─────────────────────────────────────── */
-  /* a globe drawn from the world map: the land as bright dots, the sea as a faint grid, turning slowly, with
-     the sea routes the containers take drawn as arcs from Bury to the suppliers and a light running each one.
-     Drag to turn it. It draws only while it is on screen. */
+  /* the Earth as it is: the day side under its weather, the night side with its lights, the air along the
+     limb, turning slowly, with the sea routes the containers take drawn as arcs from Bury to the suppliers
+     and a light running each one. Drag to turn it; as the line laps it, it turns with the line. It draws only
+     while it is on screen. */
+  var globeLap = 0;      /* how far round the planet the line has gone, 0 to 1: set by the thread, read here */
   (function () {
     var box = $("#globe"), cv = $("#globeC"); if (!box || !cv) return;
-    var ctx = cv.getContext("2d"), dots = [], ready = false, rot = 0, spin = 0.0028, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false;
+    var ctx = cv.getContext("2d"), ball = null, earth = null, lights = null, rot = -0.12, spin = 0.05, dragX = null, W0 = 0, dpr = 1, raf = null, seen = false, asked = false, builtFor = 0;
     /* a phone: the globe holds on the screen while the reader scrolls on, and the scroll turns it, once
        round, before the page moves on. It sits in a taller track (the travel) and is sticky inside it. */
     var gTrack = null, gTravel = 0, gTop = 0, gTurn = 0, gW = -1;
@@ -343,41 +497,43 @@
       return f * Math.PI * 2;
     }
     pinGlobe();
-    /* a phone draws fewer dots, without the glow round each one, at half the rate: the turn is smooth */
-    var lite = coarse, lastDraw = 0, frameMs = lite ? 30 : 0;
-    var TILT = 20 * Math.PI / 180, HOME = [53.6, -2.3];
+    /* a phone draws a lighter planet, at half the rate: the turn is still smooth */
+    var lite = coarse, lastDraw = 0, lastT = 0, lapWas = 0;
+    var TILT = 20 * Math.PI / 180, HOME = [53.6, -2.3], turnNow = 0;
     var ROUTES = [[22.5, 114.1], [31.2, 121.5], [29.9, 121.6], [39.9, 116.4], [23.1, 113.3], [1.35, 103.8], [41.0, 28.9], [52.4, 4.9]];
     function vec(lat, lon) { var la = lat * Math.PI / 180, lo = lon * Math.PI / 180; return [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)]; }
     /* the globe's spin about its axis, then its tilt towards us; y up on the sphere is up on the screen */
     function turn(v) {
-      var c = Math.cos(rot), s = Math.sin(rot), x = v[0] * c + v[2] * s, z = -v[0] * s + v[2] * c, y = v[1], ct = Math.cos(TILT), st = Math.sin(TILT);
+      var c = Math.cos(turnNow), s = Math.sin(turnNow), x = v[0] * c + v[2] * s, z = -v[0] * s + v[2] * c, y = v[1], ct = Math.cos(TILT), st = Math.sin(TILT);
       return { x: x, y: -(y * ct - z * st), z: y * st + z * ct };
     }
-    var img = new Image(); img.src = "../assets/world-white.webp";
-    img.onload = function () {
-      var w = 720, h = 360, oc = document.createElement("canvas"); oc.width = w; oc.height = h;
-      var o2 = oc.getContext("2d"); o2.drawImage(img, 0, 0, w, h);
-      var d = o2.getImageData(0, 0, w, h).data;
-      for (var lat = -80; lat <= 84; lat += (lite ? 4.6 : 3.1)) {
-        var cl = Math.cos(lat * Math.PI / 180), n = Math.max(8, Math.round((lite ? 78 : 116) * cl));
-        for (var k = 0; k < n; k++) {
-          var lon = -180 + (k + 0.5) * 360 / n, px = Math.min(w - 1, Math.floor((lon + 180) / 360 * w)), py = Math.min(h - 1, Math.floor((90 - lat) / 180 * h)), i = (py * w + px) * 4;
-          dots.push({ v: vec(lat, lon), land: d[i + 3] > 90 && d[i] + d[i + 1] + d[i + 2] > 330 });
-        }
+    function ask() {
+      if (asked) return; asked = true;
+      var a = new Image(), b = new Image(), left = 2, done = function () { if (--left) return; if (a.naturalWidth) { earth = a; lights = b.naturalWidth ? b : null; W0 = 0; kick(); } };
+      a.onload = a.onerror = b.onload = b.onerror = done;
+      if (lite) a.src = "../assets/planets/earth-1k.webp"; else a.src = "../assets/planets/earth-2k.webp";
+      b.src = "../assets/planets/earth-lights.webp";
+    }
+    function size() {
+      var r = box.getBoundingClientRect(); W0 = Math.max(120, Math.round(r.width || box.offsetWidth)); dpr = Math.min(lite ? 1.5 : 2, window.devicePixelRatio || 1, (lite ? 560 : 900) / W0);
+      cv.width = Math.round(W0 * dpr); cv.height = cv.width;
+      if (earth && builtFor !== cv.width) {
+        builtFor = cv.width;
+        var R = W0 * 0.45 * dpr, tw = Math.min(earth.naturalWidth, Math.max(512, Math.round(Math.PI * R * 2 / 64) * 64));
+        ball = makeBall({ R: R, tex: mapData(earth, 0, 0, earth.naturalWidth, earth.naturalHeight, tw, tw / 2), tilt: TILT, roll: 0, atmo: [110, 170, 255], atmoK: 0.75, haloK: 0.6, haze: 0.085, amb: 0.045, limb: 0.42,
+          lights: lights ? mapData(lights, 0, 0, lights.naturalWidth, lights.naturalHeight, Math.min(1024, tw), Math.min(512, tw / 2)) : null });
       }
-      ready = true; kick();
-    };
-    function size() { var r = box.getBoundingClientRect(); W0 = Math.max(120, Math.round(r.width || box.offsetWidth)); dpr = Math.min(lite ? 1.5 : 2, window.devicePixelRatio || 1); cv.width = Math.round(W0 * dpr); cv.height = cv.width; }
+    }
     function arc(a, b, cx0, cy0, R0, t) {
       var n = lite ? 18 : 44, prev = null, pts2 = [];
-      if (lite) { ctx.strokeStyle = "rgba(255,45,141,.42)"; ctx.lineWidth = 1; ctx.beginPath(); }
+      if (lite) { ctx.strokeStyle = "rgba(255,45,141,.6)"; ctx.lineWidth = 1.2; ctx.beginPath(); }
       for (var i = 0; i <= n; i++) {
         var k = i / n, x = a[0] * (1 - k) + b[0] * k, y = a[1] * (1 - k) + b[1] * k, z = a[2] * (1 - k) + b[2] * k, m = Math.sqrt(x * x + y * y + z * z) || 1, lift = 1 + 0.2 * Math.sin(k * Math.PI);
         var q = turn([x / m * lift, y / m * lift, z / m * lift]), pt = { x: cx0 + q.x * R0, y: cy0 + q.y * R0, z: q.z };
         if (prev && prev.z > -0.04 && pt.z > -0.04) {
           if (lite) { ctx.moveTo(prev.x, prev.y); ctx.lineTo(pt.x, pt.y); }
           else {
-            ctx.strokeStyle = "rgba(255,45,141," + (0.1 + 0.5 * Math.max(0, Math.min(1, pt.z + 0.2))).toFixed(3) + ")"; ctx.lineWidth = 1;
+            ctx.strokeStyle = "rgba(255,62,150," + (0.22 + 0.62 * Math.max(0, Math.min(1, pt.z + 0.2))).toFixed(3) + ")"; ctx.lineWidth = 1.3;
             ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(pt.x, pt.y); ctx.stroke();
           }
         }
@@ -390,53 +546,41 @@
     function draw(now) {
       raf = null;
       var tn = now || performance.now();
-      if (frameMs && tn - lastDraw < frameMs) { if (seen && !reduce) kick(); return; }
+      /* turning by itself it is drawn thirty times a second; turned by the line, a finger or the scroll, every frame */
+      var busy = dragX !== null || Math.abs(globeLap - lapWas) > 0.00005 || (gTrack && Math.abs(scrollTurn() - gTurn) > 0.002);
+      if (tn - lastDraw < (busy && !lite ? 0 : 30)) { if (seen && !reduce) kick(); return; }
+      lapWas = globeLap;
+      var dt = lastT ? Math.min(0.1, (tn - lastT) / 1000) : 0.016; lastT = tn;
       lastDraw = tn;
       if (!W0) size();
       var R0 = W0 * 0.45, cx0 = W0 / 2, cy0 = W0 / 2, t = tn / 1000;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W0, W0);
-      /* the body of the planet, lit from the upper left, and the light on its limb */
-      var g = ctx.createRadialGradient(cx0 - R0 * 0.4, cy0 - R0 * 0.45, R0 * 0.05, cx0, cy0, R0);
-      g.addColorStop(0, "#33161f"); g.addColorStop(0.65, "#151014"); g.addColorStop(1, "#0a0a0a");
-      ctx.beginPath(); ctx.arc(cx0, cy0, R0, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
-      ctx.save(); if (!lite) { ctx.shadowColor = "rgba(255,45,141,.6)"; ctx.shadowBlur = W0 * 0.09; } ctx.strokeStyle = "rgba(255,45,141,.55)"; ctx.lineWidth = lite ? 1.6 : 1.2; ctx.stroke(); ctx.restore();
-      if (ready) {
-        if (lite) {
-          /* a phone paints the land in four shades: one colour set per shade instead of one per dot,
-             squares instead of circles, and no grid over the sea */
-          var band = [[], [], [], []], sq = W0 * 0.0072;
-          for (var i = 0; i < dots.length; i++) {
-            if (!dots[i].land) continue;
-            var q = turn(dots[i].v); if (q.z < 0) continue;
-            band[Math.min(3, (q.z * 4) | 0)].push(cx0 + q.x * R0, cy0 + q.y * R0);
-          }
-          for (var bi = 0; bi < 4; bi++) {
-            var xy = band[bi]; if (!xy.length) continue;
-            ctx.fillStyle = "rgba(255,45,141," + (0.3 + bi * 0.22).toFixed(2) + ")";
-            var s2 = sq * (0.62 + bi * 0.13);
-            for (var k2 = 0; k2 < xy.length; k2 += 2) ctx.fillRect(xy[k2] - s2 / 2, xy[k2 + 1] - s2 / 2, s2, s2);
-          }
-        } else for (var i = 0; i < dots.length; i++) {
-          var q = turn(dots[i].v); if (q.z < -0.12) continue;
-          var sx = cx0 + q.x * R0, sy = cy0 + q.y * R0, f = q.z < 0 ? 0.1 : 0.22 + 0.78 * q.z;
-          if (dots[i].land) { ctx.fillStyle = "rgba(255,45,141," + (f * 0.95).toFixed(3) + ")"; ctx.beginPath(); ctx.arc(sx, sy, W0 * 0.0058 * (0.55 + 0.45 * Math.max(0, q.z)), 0, Math.PI * 2); ctx.fill(); }
-          else if (q.z > 0.05) { ctx.fillStyle = "rgba(255,255,255," + (f * 0.12).toFixed(3) + ")"; ctx.fillRect(sx - 0.5, sy - 0.5, 1, 1); }
-        }
-        var hv = vec(HOME[0], HOME[1]), home = turn(hv);
-        ROUTES.forEach(function (r, ri) { if (lite && ri % 2) return; arc(hv, vec(r[0], r[1]), cx0, cy0, R0, (t * 0.09 + ri * 0.125) % 1); });
-        if (home.z > 0) {
-          var hx = cx0 + home.x * R0, hy = cy0 + home.y * R0, pu = (t % 2.4) / 2.4;
-          ctx.strokeStyle = "rgba(255,255,255," + (0.7 * (1 - pu)).toFixed(3) + ")"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(hx, hy, 2 + pu * W0 * 0.06, 0, Math.PI * 2); ctx.stroke();
-          ctx.fillStyle = "#fff"; if (!lite) { ctx.shadowColor = "rgba(255,255,255,.9)"; ctx.shadowBlur = 8; } ctx.beginPath(); ctx.arc(hx, hy, W0 * 0.012, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-        }
+      /* the planet turns of itself, with a drag, with a phone's scroll - and with the line as it laps it */
+      turnNow = rot + globeLap * TAU;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
+      if (ball) { ball.draw(turnNow); ctx.drawImage(ball.el, Math.round((cv.width - ball.S) / 2), Math.round((cv.height - ball.S) / 2)); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (!ball) {
+        /* until the map is in: the body of the planet, lit from the upper left */
+        var g = ctx.createRadialGradient(cx0 - R0 * 0.4, cy0 - R0 * 0.45, R0 * 0.05, cx0, cy0, R0);
+        g.addColorStop(0, "#1c2740"); g.addColorStop(0.65, "#0e1320"); g.addColorStop(1, "#07080c");
+        ctx.beginPath(); ctx.arc(cx0, cy0, R0, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
       }
-      if (dragX === null && !reduce) rot += spin;
+      var hv = vec(HOME[0], HOME[1]), home = turn(hv);
+      ROUTES.forEach(function (r, ri) { if (lite && ri % 2) return; arc(hv, vec(r[0], r[1]), cx0, cy0, R0, (t * 0.09 + ri * 0.125) % 1); });
+      if (home.z > 0) {
+        var hx = cx0 + home.x * R0, hy = cy0 + home.y * R0, pu = (t % 2.4) / 2.4;
+        ctx.strokeStyle = "rgba(255,255,255," + (0.8 * (1 - pu)).toFixed(3) + ")"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(hx, hy, 2 + pu * W0 * 0.06, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = "#fff"; if (!lite) { ctx.shadowColor = "rgba(255,45,141,.95)"; ctx.shadowBlur = 10; } ctx.beginPath(); ctx.arc(hx, hy, W0 * 0.011, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+      }
+      if (dragX === null && !reduce) rot += spin * dt;
       if (gTrack) { var tt = scrollTurn(), dT = (tt - gTurn) * 0.3; gTurn += dT; rot += dT; }   /* the scroll's own turn, eased */
       if (seen && !reduce) kick();
     }
     function kick() { if (!raf) raf = requestAnimationFrame(draw); }
-    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) kick(); }, { threshold: 0.05 }).observe(box);
-    else seen = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) { if (es[0].isIntersecting) ask(); }, { rootMargin: "200% 0px" }).observe(box);
+      new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) { lastT = 0; kick(); } }, { threshold: 0.05 }).observe(box);
+    } else { seen = true; ask(); }
     kick();
     box.addEventListener("pointerdown", function (e) { dragX = e.clientX; try { box.setPointerCapture(e.pointerId); } catch (e2) {} });
     box.addEventListener("pointermove", function (e) { if (dragX === null) return; rot += (e.clientX - dragX) * 0.006; dragX = e.clientX; kick(); });
@@ -647,7 +791,10 @@
     var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     if (holdActive) {
       if (e.cancelable) e.preventDefault();
-      if (holdActive.phase === "hold") { holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02); holdActive.fedAt = performance.now(); }
+      /* the scroll that arrives while the page is still gliding onto a lock is kept, not thrown away: the line
+         carries straight on - round the planet, round the system, along the charts - instead of standing for a
+         moment first (the timeline keeps its own stepping) */
+      if (holdActive.phase === "hold" || (holdActive.phase === "approach" && holdActive.id !== "journey")) { holdActive.prog = clamp(holdActive.prog + d / holdActive.px, -0.02, 1.02); holdActive.fedAt = performance.now(); }
       return;
     }
     if (!vs.on) return;
@@ -793,6 +940,11 @@
     if (heroEl && !phone) {
       var hT = heroEl.offsetTop, hH = heroEl.offsetHeight;
       var yMain  = hT + hH * 0.81;           // the long horizontal
+      /* it underlines the managing director line and never runs through it: with more air between the two
+         lines of the name the words sit lower, so the rule is taken from where they end */
+      var fsub = heroEl.querySelector(".fob-sub"), fsy = 0, fse = fsub;
+      while (fse && fse !== document.body && fse !== document.documentElement) { fsy += fse.offsetTop; fse = fse.offsetParent; }
+      if (fsub && fsub.offsetHeight) yMain = Math.max(yMain, fsy + fsub.offsetHeight + 9);
       var yTop   = hT + hH * 0.545;          // the lifted horizontal
       var xLift  = W * 0.665;                // where it starts to rise
       var xTrunk = W * 0.822;                // the descending trunk
@@ -1010,7 +1162,12 @@
            smooth rise that follows the bars' shape rather than their steps and clears every bar and its label,
            and level again past the last bar. Each bar stands as the road passes over its left edge. */
         var LIFT = 32, Y1 = years[yrs[0]], Yn = years[yrs[yrs.length - 1]];
-        var origin = { x: FB.ox + 40 * FB.sx, y: FB.oy + (Y1.top - LIFT) * FB.sy, origin: true };
+        /* it comes in between two of the scale's figures, never across one: level with the first bar it ran
+           straight through "£7m" and its head stood on the figure while the page held. It now takes the middle
+           of the first clear gap in the scale above that height, and stops on the axis itself. */
+        var inY = Y1.top - LIFT, scaleYs = $$("text.al", svgB).map(function (tx) { return parseFloat(tx.getAttribute("y")) - 4; }).filter(function (v) { return !isNaN(v); }).sort(function (a2, b2) { return a2 - b2; });
+        for (var li = scaleYs.length - 1; li > 0; li--) { var gapMid = (scaleYs[li] + scaleYs[li - 1]) / 2; if (gapMid <= inY + 6) { inY = gapMid; break; } }
+        var origin = { x: FB.ox + 58 * FB.sx, y: FB.oy + inY * FB.sy, origin: true };
         var crest = { x: FB.ox + (Yn.x1 + 4) * FB.sx, y: FB.oy + (Yn.top - LIFT) * FB.sy, crest: true }, Wr = crest.x - origin.x;
         crest.c1 = { x: origin.x + Wr * 0.5, y: origin.y }; crest.c2 = { x: crest.x - Wr * 0.38, y: crest.y };
         ridePts.push(origin, crest);
@@ -1130,10 +1287,13 @@
           if (gLock < eo.y) gLock = eo.y;
           /* the wrap is the planet's equator seen from a little above: an ellipse round the middle of the globe,
              its near half in front of the planet and its far half behind, where the planet hides it */
-          var ring = [], NR = 96, ry = rg * 0.34;
-          for (var gi = 1; gi <= NR; gi++) { var th = gi / NR * Math.PI * 2; ring.push({ x: gcx + rg * Math.cos(th), y: gcy + ry * Math.sin(th) }); }
+          /* on a wide screen the line meets the planet on its left and crosses the near side from left to right,
+             the way the Earth itself turns, so the planet can turn with it; a phone keeps the right-hand side,
+             where its margin is */
+          var ring = [], NR = 96, ry = rg * 0.34, gSide = phone ? 1 : -1;
+          for (var gi = 1; gi <= NR; gi++) { var th = gi / NR * Math.PI * 2; ring.push({ x: gcx + gSide * rg * Math.cos(th), y: gcy + ry * Math.sin(th) }); }
           orbitBack = { cx: gcx, cy: gcy, r: gw * 0.45 };
-          var gIn = { x: gcx + rg, y: gcy }, gOutY = oo.y + orbit.offsetHeight + 48;
+          var gIn = { x: gcx + gSide * rg, y: gcy }, gOutY = oo.y + orbit.offsetHeight + 48;
           if (phone) {
             /* the globe has the width of the screen to itself: the line comes down the right and drops
                straight onto the ring's side, wraps it, and carries on down beneath it */
@@ -1146,11 +1306,11 @@
           }
           pts.push({ x: SIDE.R, y: yBand - rb, id: "globeBand", el: el, noKnot: true });
           pts.push({ x: SIDE.R - rb, y: yBand, id: "globeTurn", el: el, noKnot: true, cpIn: { x: SIDE.R - rb * 0.45, y: yBand } });
-          pts.push({ x: gcx + rg + rb2, y: yBand, id: "globeLeft", el: el, noKnot: true, out: { x: gcx + rg + rb2 * 0.45, y: yBand } });
-          pts.push({ x: gcx + rg, y: yBand + rb2, id: "globeDrop", el: el, noKnot: true, cpIn: { x: gcx + rg, y: yBand + rb2 * 0.45 } });
+          pts.push({ x: gIn.x + rb2, y: yBand, id: "globeLeft", el: el, noKnot: true, out: { x: gIn.x + rb2 * 0.45, y: yBand } });
+          pts.push({ x: gIn.x, y: yBand + rb2, id: "globeDrop", el: el, noKnot: true, cpIn: { x: gIn.x, y: yBand + rb2 * 0.45 } });
           pts.push({ x: gIn.x, y: gIn.y, id: p.id, el: el, noKnot: true,
-                     loop: { id: "globe", pts: ring, end: gIn, yA: gcy, yB: gcy, lock: gLock, px: 2000, cpOut: { x: gcx + rg, y: gcy + (gOutY - gcy) * 0.5 } } });
-          pts.push({ x: gcx + rg, y: gOutY, id: "globeOut", el: el, noKnot: true, cpIn: { x: gcx + rg, y: gOutY - (gOutY - gcy) * 0.5 } });
+                     loop: { id: "globe", pts: ring, end: gIn, yA: gcy, yB: gcy, lock: gLock, px: 2000, cpOut: { x: gIn.x, y: gcy + (gOutY - gcy) * 0.5 } } });
+          pts.push({ x: gIn.x, y: gOutY, id: "globeOut", el: el, noKnot: true, cpIn: { x: gIn.x, y: gOutY - (gOutY - gcy) * 0.5 } });
           return;
         }
         pts.push({ x: SIDE[p.side], y: el.offsetTop + el.offsetHeight * p.y, id: p.id, el: el, noKnot: false });
@@ -1304,12 +1464,24 @@
        virtual height: the approach, the lap and the exit are spread evenly over a window either side
        of the ring, and the samples just after the exit hold at the window's foot */
     loopA = loopB = 0; hasHold = false;
+    /* the holds are fitted in the order the line meets them: each one's exit re-paces the line after it from
+       its real geometry, so a hold further down has to be fitted after the ones above it. The ride through the
+       charts sits between the system and the planet; fitted last, its exit undid the planet's arrival and the
+       head reached the planet a hundred pixels of scroll early and stood there waiting. */
+    rideA = rideB = 0;
+    var pr4 = document.createElementNS("http://www.w3.org/2000/svg", "path"), rIn = 0, rOut = 0, rideDone = false;
+    if (rideMeta && dRideOut) {
+      svg.appendChild(pr4);
+      try { pr4.setAttribute("d", dRideIn); rIn = pr4.getTotalLength(); pr4.setAttribute("d", dRideOut); rOut = pr4.getTotalLength(); } catch (e) { rIn = rOut = 0; }
+      svg.removeChild(pr4);
+    }
     loops.forEach(function (lp) {
       var pr3 = document.createElementNS("http://www.w3.org/2000/svg", "path"), lIn = 0, lOut = 0;
       svg.appendChild(pr3);
       try { pr3.setAttribute("d", lp.dIn); lIn = pr3.getTotalLength(); pr3.setAttribute("d", lp.dOut); lOut = pr3.getTotalLength(); } catch (e) { lIn = lOut = 0; }
       svg.removeChild(pr3);
       if (lOut < lIn) return;
+      if (!rideDone && rOut > rIn && lIn > rIn) { rideDone = true; paceRide(); }
       var lA = lIn;
       for (var si = 0; si < samples.length; si++) { if (samples[si].l <= lIn && samples[si].y >= lp.meta.yA) { lA = samples[si].l; break; } }
       /* the head lands on the hold's point exactly as the page takes hold: the rail, the planet. On a phone
@@ -1336,14 +1508,10 @@
       if (lp.meta.id === "journey" && !vs.on) return;          /* on touch the strip scrolls itself */
       holdDefs.push({ id: lp.meta.id, lock: lp.meta.lock, a: fa, b: fb, px: lp.meta.px || 3400, r1: lp.meta.r1, r2: lp.meta.r2 });
     });
+    if (!rideDone && rOut > rIn) { rideDone = true; paceRide(); }
     /* the ride climbs, so its samples take a virtual height too: a window below its entry point */
-    rideA = rideB = 0;
-    if (rideMeta && dRideOut) {
-      var pr4 = document.createElementNS("http://www.w3.org/2000/svg", "path"), rIn = 0, rOut = 0;
-      svg.appendChild(pr4);
-      try { pr4.setAttribute("d", dRideIn); rIn = pr4.getTotalLength(); pr4.setAttribute("d", dRideOut); rOut = pr4.getTotalLength(); } catch (e) { rIn = rOut = 0; }
-      svg.removeChild(pr4);
-      if (rOut > rIn) {
+    function paceRide() {
+      {
         /* the head reaches the chart's edge as the page takes hold, rides while it holds, and the exit is paced
            from where the page sits as the hold lets go: nothing waits and nothing jumps */
         var yLockR = (rideMeta.lock || 0) + window.innerHeight * 0.62;
@@ -1622,6 +1790,9 @@
     var lapping = !!(mapHold && mapHold.phase === "hold");
     orbitBoostTarget = lapping ? 1 : 0;
     var gHold = holds.filter(function (h) { return h.id === "globe"; })[0];
+    /* the planet turns with the line: once round as the line goes once round (a whole turn, so before and
+       after the lap it stands the same way) */
+    globeLap = !gHold ? 0 : gHold.phase === "hold" ? clamp(gHold.shown, 0, 1) : (gHold.phase === "after" || (gHold.phase === "approach" && gHold.dir)) ? 1 : 0;
     thread.classList.toggle("lap", lapping || !!(gHold && gHold.phase === "hold"));
     if (orbitThread) orbitThread.classList.toggle("lap", !!(gHold && gHold.phase === "hold"));
     /* the carbon planet's chapter is off-white until the page takes hold on the planet; then it goes to night
@@ -2099,17 +2270,17 @@
                b: "The group's established commercial engine, scaling owned brands across marketplaces, ecommerce channels and specialist online storefronts. Owned brands Firestorm, FXL and Skyline; direct manufacturing; one warehouse in Bury; storefronts on eBay, Temu and Amazon, with Shopify and OnBuy in preparation; servicing and contracted site work nationwide. Incorporated as Freedom Fire & Safety Ltd on 27 August 2021.",
                u: "https://www.freedom-fire.co.uk" },
     fac:     { n: "Freedom Facilities Ltd", t: "Planned, 24 to 36 months. Compliance · Servicing · Facilities.",
-               b: "A recurring revenue operation delivering fire safety servicing, installation, compliance and facilities support, taking the existing servicing work out of the trading company once it justifies its own management and accounts." },
+               b: "A recurring revenue operation delivering fire safety servicing, installation, compliance and facilities support, taking the existing servicing work out of the trading company once it justifies its own management and accounts.", u: "https://www.thefreedomgroup.global/facilities/" },
     dist:    { n: "Freedom Distribution Ltd", t: "Planned, 24 to 36 months. Trade distribution · B2B.",
-               b: "A wholesale operation supplying the group's owned brands to national retailers, trade partners and commercial distributors. Depends on the brand portfolio and direct sourcing already in place." },
+               b: "A wholesale operation supplying the group's owned brands to national retailers, trade partners and commercial distributors. Depends on the brand portfolio and direct sourcing already in place.", u: "https://www.thefreedomgroup.global/distribution/" },
     form:    { n: "Freedom Form Ltd", t: "Future, 2029. Property · Development · Design.",
-               b: "A future commercial property platform for the group's premises, acquisitions and growth." },
+               b: "A future commercial property platform for the group's premises, acquisitions and growth.", u: "https://www.thefreedomgroup.global/form/" },
     freight: { n: "Freedom Freight Ltd", t: "Future, 2029. Freight · Imports · Logistics.",
-               b: "A future logistics arm for imports, freight control and supply chain efficiency. The in-house consignment tracker is the only part of this that exists today." },
+               b: "A future logistics arm for imports, freight control and supply chain efficiency. The in-house consignment tracker is the only part of this that exists today.", u: "https://freedomfreight.co.uk/" },
     fly:     { n: "Freedom Fly Ltd", t: "Future, 2030 and beyond. Drone tech · Aerial services.",
-               b: "A future specialist business focused on surveying, inspection and aerial visual services." },
+               b: "A future specialist business focused on surveying, inspection and aerial visual services.", u: "https://www.thefreedomgroup.global/fly/" },
     fuel:    { n: "Freedom Fuel Ltd", t: "Future, 2030 and beyond. Forecourts · Energy · Retail.",
-               b: "A long-term ambition to develop or acquire petrol stations, forecourts and convenience-retail locations." }
+               b: "A long-term ambition to develop or acquire petrol stations, forecourts and convenience-retail locations.", u: "https://www.thefreedomgroup.global/fuel/" }
   };
   var pN = $("#pName"), pT = $("#pTag"), pB = $("#pBody"), pG = $("#pGo"), panel = $("#panel");
   $$(".node").forEach(function (nd) {
@@ -2163,11 +2334,54 @@
   });
 
   /* ── back to the start, in either view ── */
-  var totopA = $("#totop");
-  if (totopA) totopA.addEventListener("click", function (ev) {
-    ev.preventDefault();
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-  });
+  /* the way back is not seventeen thousand pixels of scrolling: the carbon closes over the page from the
+     button, the line winds back through the chapters to 00, the page is put at the top underneath, and the
+     cover draws away into the TL mark while the opening plays again */
+  var totopA = $("#totop"), rw = $("#rewind"), rwLine = $("#rwLine"), rwN = $("#rwN"), rwT = $("#rwT"), rewinding = false;
+  var RW_NAMES = ["Tom Letcher", "The Spark", "Proof, Not Promise", "How I Build", "Built With People", "The Next Ten Years", "The Company", "Still Building"];
+  function toTop() { try { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, 0); } }
+  function replayOpening() {
+    var t0 = null;
+    heroIn = 0;
+    if (heroType) { heroType.classList.remove("in"); setTimeout(function () { heroType.classList.add("in"); }, 380); }
+    requestAnimationFrame(function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / 1500);
+      heroIn = 1 - Math.pow(1 - k, 3);
+      if (k < 1) requestAnimationFrame(step);
+    });
+  }
+  function circleAt(el) {
+    var r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    return { x: x, y: y, far: Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y)) + 60 };
+  }
+  function rewind() {
+    if (rewinding) return;
+    if (reduce || !rw || !rw.animate || document.body.dataset.view === "record") { toTop(); return; }
+    rewinding = true; document.body.classList.add("rewinding");
+    var a = circleAt($(".ring", totopA) || totopA), ease = "cubic-bezier(.7,0,.25,1)";
+    totopA.classList.add("go");
+    if (rwLine) rwLine.style.strokeDashoffset = "0";
+    if (rwN) rwN.textContent = "07"; if (rwT) rwT.textContent = RW_NAMES[7];
+    rw.classList.add("on");
+    rw.animate([{ clipPath: "circle(0px at " + a.x + "px " + a.y + "px)" }, { clipPath: "circle(" + a.far + "px at " + a.x + "px " + a.y + "px)" }],
+      { duration: 620, easing: ease, fill: "forwards" }).onfinish = function () {
+      toTop(); totopA.classList.remove("go");
+      /* the line winds back, and the chapters count down with it */
+      var t0 = performance.now(), dur = 900;
+      (function wind(now) {
+        var k = Math.min(1, (now - t0) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, n = Math.max(0, Math.min(7, Math.ceil(7 * (1 - e) - 0.001)));
+        if (rwLine) rwLine.style.strokeDashoffset = (320 * e).toFixed(1);
+        if (rwN && rwN.textContent !== "0" + n) { rwN.textContent = "0" + n; if (rwT) rwT.textContent = RW_NAMES[n]; }
+        if (k < 1) { requestAnimationFrame(wind); return; }
+        var b = circleAt($(".mono-mark") || document.body);
+        replayOpening();
+        rw.animate([{ clipPath: "circle(" + b.far + "px at " + b.x + "px " + b.y + "px)" }, { clipPath: "circle(0px at " + b.x + "px " + b.y + "px)" }],
+          { duration: 760, easing: ease, fill: "forwards", delay: 140 }).onfinish = function () { rw.classList.remove("on"); document.body.classList.remove("rewinding"); rewinding = false; };
+      })(t0);
+    };
+  }
+  if (totopA) totopA.addEventListener("click", function (ev) { ev.preventDefault(); rewind(); });
 
   /* ── "View the verified record" and "View evidence" open the record view directly ── */
   $$("[data-view-record], #skipRec").forEach(function (a) {
